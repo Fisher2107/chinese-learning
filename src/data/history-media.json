@@ -1,0 +1,523 @@
+{
+  "map-xia": {
+    "src": "history/map-xia.webp",
+    "caption": "夏的可能分布范围示意图。考古资料还无法确定夏的疆界。",
+    "creator": "Gurdjieff（Lamassu Design）",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Xia_dynasty.svg",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "map-shang": {
+    "src": "history/map-shang.webp",
+    "caption": "商代在黄河中下游一带的主要活动区域示意图。",
+    "creator": "Yu Ninjie",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:China_1.jpg",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "map-west-zhou": {
+    "src": "history/map-west-zhou.webp",
+    "caption": "西周的主要活动区域与封国分布示意图。",
+    "creator": "Yu Ninjie",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:China_2a.jpg",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "map-spring": {
+    "src": "history/map-spring.webp",
+    "caption": "春秋时期主要诸侯国与周边政权的示意图，各国势力随时间变化。",
+    "creator": "玖巧仔",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E6%98%A5%E7%A7%8B%E8%AF%B8%E4%BE%AF%E5%A4%A7%E5%9B%BD%E7%AE%80%E5%9B%BE.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "map-warring": {
+    "src": "history/map-warring.webp",
+    "caption": "约公元前260年，战国七雄和周边地区的形势。",
+    "creator": "Philg88",
+    "license": "CC BY 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:ZH-%E6%88%98%E5%9B%BD%E4%B8%83%E9%9B%84%E5%9C%B0%E5%9B%BE.jpg",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+  },
+  "map-qin": {
+    "src": "history/map-qin.webp",
+    "caption": "约公元前210年，秦朝控制范围示意图。",
+    "creator": "Itsmine",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Qin_empire_210_BCE.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "map-west-han": {
+    "src": "history/map-west-han.webp",
+    "caption": "公元2年，西汉的郡和诸侯王国。",
+    "creator": "Jack Yuan（Yu Ninjie）",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Han_commanderies_and_kingdoms_CE_2.jpg",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "map-xin": {
+    "src": "history/map-xin.webp",
+    "caption": "新朝时期（公元8—23年）的政区示意图。",
+    "creator": "SS",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Xin_Dynasty.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  "map-east-han": {
+    "src": "history/map-east-han.webp",
+    "caption": "公元189年，东汉的州和其他主要行政区域。",
+    "creator": "Jack Yuan（Yu Ninjie）；Itsmine、Meidosensei（修订）",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Han_provinces-zh-classical.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "map-three": {
+    "src": "history/map-three.webp",
+    "caption": "公元262年，魏、蜀、吴三国和周边地区。",
+    "creator": "SY",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Three_Kingdoms.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  "map-west-jin": {
+    "src": "history/map-west-jin.webp",
+    "caption": "约公元280年，西晋灭吴后各州的分布。",
+    "creator": "Zunkir；Kanguole（底图）",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jin_occidentaux_280.svg",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  "map-east-jin": {
+    "src": "history/map-east-jin.webp",
+    "caption": "公元376年，东晋、前秦和周边地区。",
+    "creator": "Ian Kiu",
+    "license": "CC BY 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Eastern_Jin_Dynasty_376_CE.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+  },
+  "map-north-south": {
+    "src": "history/map-north-south.webp",
+    "caption": "公元560年，北周、北齐、陈等政权的分布。",
+    "creator": "Ian Kiu",
+    "license": "CC BY 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Northern_and_Southern_Dynasties_560_CE.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+  },
+  "map-sui": {
+    "src": "history/map-sui.webp",
+    "caption": "公元610年，隋朝的行政区划。",
+    "creator": "SY",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sui_Dynasty.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  "map-tang": {
+    "src": "history/map-tang.webp",
+    "caption": "公元742年，唐朝的各道和周边政权。",
+    "creator": "Yug",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:China%2C_742.svg",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "map-wu-zhou": {
+    "src": "history/map-wu-zhou.webp",
+    "caption": "约公元700年武周时期的形势。图上沿用英文的“唐”来标示这一时期。",
+    "creator": "Ian Kiu",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tang_Dynasty_circa_700_CE.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "map-five": {
+    "src": "history/map-five.webp",
+    "caption": "五代十国末期的后周（951—960年）和周边政权。",
+    "creator": "SS",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Later_Zhou.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  "map-north-song": {
+    "src": "history/map-north-song.webp",
+    "caption": "公元1111年，北宋的各路和周边政权。",
+    "creator": "SY",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Northern_Song_Circuits.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  "map-south-song": {
+    "src": "history/map-south-song.webp",
+    "caption": "公元1142年，南宋、金、西夏和周边地区。",
+    "creator": "Yu Ninjie",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Map_of_China_1142.jpg",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "map-yuan": {
+    "src": "history/map-yuan.webp",
+    "caption": "公元1294年，元朝控制范围示意图。",
+    "creator": "Ian Kiu",
+    "license": "CC BY 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yuan_Dynasty_1294.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+  },
+  "map-ming": {
+    "src": "history/map-ming.webp",
+    "caption": "约公元1580年，明朝控制范围和周边地区。",
+    "creator": "Michal Klajban（底图）、Jann（改绘）、Manlleus（加泰罗尼亚语译本）",
+    "license": "CC BY-SA 3.0 CZ",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ming_Empire_cca_1580_(en).svg",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/cz/"
+  },
+  "map-qing": {
+    "src": "history/map-qing.webp",
+    "caption": "公元1820年，清朝的疆域与行政区划。原图也绘有现代边界和领土主张作为参考。",
+    "creator": "Pryaltonian（原图）、Wengier（改绘）",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Qing_China_1820.png",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "map-republic": {
+    "src": "history/map-republic.webp",
+    "caption": "1930年出版的中华民国地图，体现了当时制图者绘出的疆域与主张。",
+    "creator": "中华民国",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:1930_Map_of_the_Republic_of_China.JPG"
+  },
+  "tang-shang": {
+    "src": "history/tang-shang.webp",
+    "caption": "宋代画家马麟笔下的商汤，距商代已两千多年。",
+    "creator": "马麟",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:King_Tang_of_Shang.jpg"
+  },
+  "fuhao": {
+    "src": "history/fuhao.webp",
+    "caption": "河南安阳殷墟妇好墓附近的现代妇好塑像。",
+    "creator": "Gary Todd",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fu_Hao_Tomb_and_Statue,_c._1200_BC,_Reign_of_King_Wu_Ding,_Shang_Dynasty_(10197821303).jpg",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+  },
+  "king-wu": {
+    "src": "history/king-wu.webp",
+    "caption": "宋代画家马麟笔下的周武王。",
+    "creator": "马麟",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:King_Wu_of_Zhou.jpg"
+  },
+  "duke-zhou": {
+    "src": "history/duke-zhou.webp",
+    "caption": "清代乾隆年间绘制的周公像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Duke_of_Zhou.png"
+  },
+  "wen-jin": {
+    "src": "history/wen-jin.webp",
+    "caption": "宋代画作中想象的重耳归晋场景局部，传为李唐所绘。",
+    "creator": "传李唐",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Duke_Wen_of_Jin_(%E6%99%89%E6%96%87%E5%85%AC).jpg"
+  },
+  "sunbin": {
+    "src": "history/sunbin.webp",
+    "caption": "明代人绘制的孙膑像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sun_Bin.jpg"
+  },
+  "baiqi": {
+    "src": "history/baiqi.webp",
+    "caption": "明代人绘制的白起像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bai_Qi.jpg"
+  },
+  "first-emperor": {
+    "src": "history/first-emperor.webp",
+    "caption": "19世纪绘制的秦始皇像，临摹自明代旧图。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:QinShiHuang19century.jpg"
+  },
+  "xiangyu": {
+    "src": "history/xiangyu.webp",
+    "caption": "19世纪至20世纪初绘制的一幅项羽像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Portraits_of_Famous_Men_-_Xiang_Wang.jpg"
+  },
+  "liubang": {
+    "src": "history/liubang.webp",
+    "caption": "明代人绘制的汉高祖刘邦像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Liu-bang.jpg"
+  },
+  "wudi": {
+    "src": "history/wudi.webp",
+    "caption": "明代《三才图会》中的汉武帝像。",
+    "creator": "王圻",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E4%B8%89%E6%89%8D%E5%9C%96%E6%9C%83_%E6%BC%A2%E6%AD%A6%E5%B8%9D%E5%8A%89%E5%BE%B9%E7%9B%B8.jpg"
+  },
+  "huo": {
+    "src": "history/huo.webp",
+    "caption": "1928年的插画《渡河受款》，画的是霍去病。",
+    "creator": "马骀",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E6%B8%A1%E6%B2%B3%E5%8F%97%E6%AC%BE.jpg"
+  },
+  "wangmang": {
+    "src": "history/wangmang.webp",
+    "caption": "古籍《新镌绘像东西汉全传》中的王莽插图。",
+    "creator": "钟惺（原书署名），插画作者不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:WUL-he21_01467_%E6%96%B0%E9%90%AB%E7%B9%AA%E5%83%8F%E6%9D%B1%E8%A5%BF%E6%BC%A2%E5%85%A8%E5%82%B3_01_(%E7%8E%8B%E8%8E%BD).jpg"
+  },
+  "liuxiu": {
+    "src": "history/liuxiu.webp",
+    "caption": "传为唐代阎立本所绘的汉光武帝刘秀像。",
+    "creator": "传阎立本",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Han_Guangwu_Di.jpg"
+  },
+  "caocao": {
+    "src": "history/caocao.webp",
+    "caption": "明代《三才图会》中的曹操像。",
+    "creator": "王圻",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cao_Cao_scth.jpg"
+  },
+  "sunquan": {
+    "src": "history/sunquan.webp",
+    "caption": "传为唐代阎立本所绘的孙权像。",
+    "creator": "传阎立本",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sun_Quan_Tang.jpg"
+  },
+  "liubei": {
+    "src": "history/liubei.webp",
+    "caption": "传为唐代阎立本所绘的刘备像。",
+    "creator": "传阎立本",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Liu_Bei_Tang.jpg"
+  },
+  "luxun": {
+    "src": "history/luxun.webp",
+    "caption": "清代吴县陆氏族谱中的陆逊像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E5%90%B4%E9%80%B2%E5%B0%81%E5%A9%81%E7%8E%8B%E4%BC%AF%E8%A8%80%E5%83%8F.png"
+  },
+  "zhouyu": {
+    "src": "history/zhouyu.webp",
+    "caption": "清代刊本《三国演义》中的周瑜像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:ZhouYu.jpg"
+  },
+  "zhugeliang": {
+    "src": "history/zhugeliang.webp",
+    "caption": "明代绘制、现藏中国国家博物馆的诸葛亮像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E6%98%8E%E4%BA%BA%E7%BB%98_%E3%80%8A%E8%AF%B8%E8%91%9B%E4%BA%AE%E5%83%8F%E3%80%8B%EF%BC%88%E5%8D%97%E8%96%B0%E6%AE%BF%E6%9C%AC%EF%BC%89.jpg"
+  },
+  "simayan": {
+    "src": "history/simayan.webp",
+    "caption": "传为唐代阎立本所绘的晋武帝司马炎像。",
+    "creator": "传阎立本",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jin_Wu_Di.jpg"
+  },
+  "xiean": {
+    "src": "history/xiean.webp",
+    "caption": "福建漳州的谢安塑像，照片摄于2008年。",
+    "creator": "GnuDoyng（摄影）",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Statue_of_xie_an.JPG"
+  },
+  "fujian": {
+    "src": "history/fujian.webp",
+    "caption": "1893年刊本《绣像三国演义续编》中的苻坚像。",
+    "creator": "插画作者不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Harvard_drs_49802792_%E7%B9%A1%E5%83%8F%E4%B8%89%E5%9C%8B%E6%BC%94%E7%BE%A9%E7%BA%8C%E7%B7%A8_v.1_(%E8%8B%BB%E5%A0%85).jpg"
+  },
+  "yuwenyong": {
+    "src": "history/yuwenyong.webp",
+    "caption": "传为唐代阎立本所绘的北周武帝宇文邕像。",
+    "creator": "传阎立本",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zhou_Wu_Tang.jpg"
+  },
+  "suiwen": {
+    "src": "history/suiwen.webp",
+    "caption": "传为唐代阎立本所绘的隋文帝杨坚像。",
+    "creator": "传阎立本",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sui_Wendi_Tang.jpg"
+  },
+  "suiyang": {
+    "src": "history/suiyang.webp",
+    "caption": "传为唐代阎立本所绘的隋炀帝杨广像。",
+    "creator": "传阎立本",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sui_Yangdi_Tang.jpg"
+  },
+  "taizong": {
+    "src": "history/taizong.webp",
+    "caption": "传为阎立本所绘的《步辇图》局部，画中是唐太宗和宫女。",
+    "creator": "传阎立本",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Emperor_Taizong_Receiving_the_Tibetan_Envoy_crop.png"
+  },
+  "guoziyi": {
+    "src": "history/guoziyi.webp",
+    "caption": "清代绘制的郭子仪像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E5%94%90%E5%B0%9A%E7%88%B6%E6%B1%BE%E9%98%B3%E5%BF%A0%E6%AD%A6%E7%8E%8B%E5%83%8F.jpg"
+  },
+  "wuzetian": {
+    "src": "history/wuzetian.webp",
+    "caption": "《唐后行从图》局部，画中皇后常被认作武则天。",
+    "creator": "传张萱",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E5%94%90%E5%90%8E%E8%A1%8C%E5%BE%9E%E5%9C%96_(%E5%B1%80%E9%83%A8)_-_%E6%AD%A6%E5%89%87%E5%A4%A9.png"
+  },
+  "chairong": {
+    "src": "history/chairong.webp",
+    "caption": "清代绘制的后周世宗柴荣像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chai_Rong_(Zhou_Shizong).jpg"
+  },
+  "songtaizu": {
+    "src": "history/songtaizu.webp",
+    "caption": "宋代绘制的宋太祖赵匡胤坐像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Song_Taizu.jpg"
+  },
+  "zhenzong": {
+    "src": "history/zhenzong.webp",
+    "caption": "北宋绘制的宋真宗坐像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Portrait_assis_de_l%27empereur_Song_Zhenzong.jpg"
+  },
+  "xiaotaihou": {
+    "src": "history/xiaotaihou.webp",
+    "caption": "1892年刊本小说中的萧太后像。",
+    "creator": "熊大木（原书作者），插画作者不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Empress_Dowager_Xiao_1892.jpg"
+  },
+  "huizong": {
+    "src": "history/huizong.webp",
+    "caption": "南薰殿旧藏的宋徽宗坐像局部。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Huizong_(head).jpg"
+  },
+  "yuefei": {
+    "src": "history/yuefei.webp",
+    "caption": "明代人绘制的岳飞像，衣着采用了明代式样。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E6%98%8E%E4%BA%BA%E3%80%8A%E5%B2%B3%E9%A3%9E%E5%83%8F%E3%80%8B%E8%BD%B4.jpg"
+  },
+  "kublai": {
+    "src": "history/kublai.webp",
+    "caption": "忽必烈去世后于1294年前后绘制的画像。",
+    "creator": "阿尼哥",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:YuanEmperorAlbumKhubilaiPortrait.jpg"
+  },
+  "wentianxiang": {
+    "src": "history/wentianxiang.webp",
+    "caption": "1829年刊本《吴郡名贤图传赞》中的文天祥像。",
+    "creator": "顾沅（原书编者），插画作者不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E6%96%87%E5%A4%A9%E7%A5%A5-%E5%90%B3%E9%83%A1%E5%90%8D%E8%B3%A2%E5%9C%96%E5%82%B3%E8%B4%8A.jpg"
+  },
+  "hongwu": {
+    "src": "history/hongwu.webp",
+    "caption": "明代绘制的明太祖朱元璋坐像。",
+    "creator": "画家不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Portrait_assis_de_l%27empereur_Ming_Taizu.jpg"
+  },
+  "yuqian": {
+    "src": "history/yuqian.webp",
+    "caption": "17世纪顾见龙绘制的于谦像。",
+    "creator": "顾见龙",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yu_Qian_by_Gu_Jianlong.jpg"
+  },
+  "kangxi": {
+    "src": "history/kangxi.webp",
+    "caption": "康熙晚年绘制的康熙皇帝朝服像。",
+    "creator": "清宫画家，姓名不详",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E6%B8%85%E5%9C%A3%E7%A5%96%E5%BA%B7%E7%86%99%E7%9A%87%E5%B8%9D%E6%9C%9D%E6%9C%8D%E5%83%8F.jpg"
+  },
+  "qianlong": {
+    "src": "history/qianlong.webp",
+    "caption": "郎世宁于1736年绘制的乾隆皇帝朝服像。",
+    "creator": "郎世宁",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E4%B9%BE%E9%9A%86%E7%9A%87%E5%B8%9D%E6%9C%9D%E6%9C%8D%E5%83%8F%E8%BD%B4.png"
+  },
+  "linzexu": {
+    "src": "history/linzexu.webp",
+    "caption": "19世纪关乔昌绘制的林则徐像。",
+    "creator": "关乔昌（Lam Qua）",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Portrait_of_Lin_Zexu.jpeg"
+  },
+  "elliot": {
+    "src": "history/elliot.webp",
+    "caption": "约1855年的查理·义律肖像。",
+    "creator": "作者不详，特立尼达总理办公室提供",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Charles_Elliot.png"
+  },
+  "hongxiuquan": {
+    "src": "history/hongxiuquan.webp",
+    "caption": "1853年出版的插图，据称描绘洪秀全，人物身份未经证实。",
+    "creator": "Ford & West Lith.",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hong_Xiuquan.jpg"
+  },
+  "yixin": {
+    "src": "history/yixin.webp",
+    "caption": "1860年11月2日，费利斯·比托拍摄的恭亲王奕䜣。",
+    "creator": "费利斯·比托（Felice Beato）",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Felice_Beato_(British%2C_born_Italy_-_Portrait_of_Prince_Kung%2C_Brother_of_the_Emperor_of_China%2C_Who_Signed_the_Treaty_-_Google_Art_Project.jpg"
+  },
+  "sunyat": {
+    "src": "history/sunyat.webp",
+    "caption": "1922年11月15日，孙中山在上海拍摄的肖像。",
+    "creator": "上海波尔照相馆",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E5%AD%99%E4%B8%AD%E5%B1%B1%E8%82%96%E5%83%8F.jpg"
+  },
+  "chiang": {
+    "src": "history/chiang.webp",
+    "caption": "1955年5月18日的蒋介石官方肖像。",
+    "creator": "中华民国总统府（Office of the President of the Republic of China），摄影者不详",
+    "license": "署名许可",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E8%94%A3%E4%B8%AD%E6%AD%A3%E7%B8%BD%E7%B5%B1%E7%8E%89%E7%85%A7.png",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/File:%E8%94%A3%E4%B8%AD%E6%AD%A3%E7%B8%BD%E7%B5%B1%E7%8E%89%E7%85%A7.png#Licensing"
+  },
+  "mao": {
+    "src": "history/mao.webp",
+    "caption": "1950年毛泽东官方肖像，取自陈正青拍摄的合影。",
+    "creator": "陈正青",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mao_Zedong_1950_Portrait_(3x4_cropped)(2).jpg"
+  }
+}

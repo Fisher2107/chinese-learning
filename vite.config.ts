@@ -43,7 +43,7 @@ export default defineConfig({
           },
           {
             // Photos: fetch each once and keep it (a different photo gets a new ?v=, so a new cache entry)
-            urlPattern: ({ url }) => url.pathname.includes('/img/'),
+            urlPattern: ({ url }) => (url.pathname.includes('/img/') || (url.pathname.includes('/history/') && url.pathname.endsWith('.webp'))),
             handler: 'CacheFirst',
             options: { cacheName: 'zh-photos', expiration: { maxEntries: 600 }, cacheableResponse: { statuses: [0, 200] } },
           },

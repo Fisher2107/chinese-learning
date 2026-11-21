@@ -3,7 +3,7 @@ import type { Para, Token } from './types.ts'
 
 /** Where a saved word was found, so the card can link back to it. */
 export interface WordSource {
-  kind: 'episode' | 'text' | 'import' | 'ai' | 'place' | 'feed' | 'review'
+  kind: 'episode' | 'text' | 'import' | 'ai' | 'place' | 'feed' | 'history' | 'review'
   /** route to reopen the spot, e.g. "series/pangdonglai/3" */
   route: string
   title: string
