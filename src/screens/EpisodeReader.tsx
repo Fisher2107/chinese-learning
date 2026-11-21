@@ -1,3 +1,4 @@
+import { Photo } from '../components/Photo.tsx'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLiveQuery } from '../lib/live.ts'
 import { motion } from 'motion/react'
@@ -191,6 +192,7 @@ function Reader({
         <div className="mt-1 mb-6 font-ui text-sm font-bold text-mute">
           约{ep.chars}字 · {Math.max(1, Math.round(ep.chars / 260))}分钟
         </div>
+        <Photo k={[`series/${series.id}/${String(ep.n).padStart(2, '0')}`, `series/${series.id}`]} className="-mx-5 mb-6 sm:mx-0 sm:rounded-2xl" />
 
         {ep.blocks.map((b, bi) => (
           <div key={bi} data-block={bi} className="mb-[0.9em]">

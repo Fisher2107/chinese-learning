@@ -1,0 +1,14 @@
+# Every current prefecture-level division of China (地级市, 自治州, 地区, 盟) with its
+# coordinates, population and labels. Run at https://query.wikidata.org/ and save the JSON
+# result as data/raw/wikidata-cities.json (Wikidata is CC0).
+SELECT ?item ?zh ?en ?coord ?pop ?py ?prov ?type WHERE {
+  VALUES ?type { wd:Q748149 wd:Q788104 wd:Q250811 wd:Q288653 wd:Q1045608 wd:Q1050126 wd:Q4056396 }
+  ?item wdt:P31 ?type .
+  FILTER NOT EXISTS { ?item wdt:P576 ?end }
+  ?item wdt:P625 ?coord .
+  OPTIONAL { ?item wdt:P131 ?prov }
+  OPTIONAL { ?item rdfs:label ?zh FILTER(lang(?zh)="zh-cn") }
+  OPTIONAL { ?item rdfs:label ?en FILTER(lang(?en)="en") }
+  OPTIONAL { ?item wdt:P1082 ?pop }
+  OPTIONAL { ?item wdt:P1721 ?py }
+}

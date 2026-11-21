@@ -1,0 +1,233 @@
+# Photos for places, cities and stories.
+#
+# Each key gets one photo: the main image (P18) of a Wikidata item, hosted on Wikimedia Commons.
+# A value can be
+#   - a Chinese name, looked up on Wikidata:          city/leshan: 乐山大佛
+#   - a Wikidata id:                                  place/beijing: Q80290
+#   - a Commons file:                                 text/lun-leifengta: File:Leifeng Pagoda ruins.jpg
+#   - "none" for no photo
+# Cities not listed here use their own Wikidata photo.
+#
+# Run `npm run images` after editing; it only downloads what changed and writes content/images.lock.json
+# (who took each photo and its licence). Only CC0, public domain, CC BY and CC BY-SA photos are kept.
+
+# ---- 省 ----
+place/beijing: 故宫
+place/tianjin: 天津之眼
+place/hebei: 赵州桥
+place/shanxi: 云冈石窟
+place/neimenggu: 呼伦贝尔草原
+place/liaoning: 红海滩
+place/jilin: 长白山天池
+place/heilongjiang: Zhalong National Nature Reserve
+place/shanghai: 外滩
+place/jiangsu: 拙政园
+place/zhejiang: 西湖
+place/anhui: 黄山
+place/fujian: 福建土楼
+place/jiangxi: 三清山
+place/shandong: Mount Tai
+place/henan: 少林寺
+place/hubei: 黄鹤楼
+place/hunan: 张家界国家森林公园
+place/guangdong: 开平碉楼
+place/guangxi: 漓江
+place/hainan: 亚龙湾
+place/chongqing: 洪崖洞
+place/sichuan: 大熊猫
+place/guizhou: 梵净山
+place/yunnan: 红河哈尼梯田
+place/xizang: 布达拉宫
+place/shaanxi: 华山
+place/gansu: 月牙泉
+place/qinghai: 青海湖
+place/ningxia: 西夏王陵
+place/xinjiang: 天山天池
+place/taiwan: 阿里山
+place/xianggang: 维多利亚港
+place/aomen: 大三巴牌坊
+
+# ---- 省会 ----
+city/shijiazhuang: 隆兴寺
+city/taiyuan: 晋祠
+city/huhehaote: 大召寺
+city/shenyang: 沈阳故宫
+city/changchun: 伪满皇宫
+city/haerbin: 圣索菲亚教堂 (哈尔滨)
+city/nanjing: 中山陵
+city/hangzhou: 灵隐寺
+city/hefei: 包公园
+city/fuzhou: 三坊七巷
+city/nanchang: 滕王阁
+city/jinan: 趵突泉
+city/zhengzhou: 二七纪念塔
+city/wuhan: 武汉长江大桥
+city/changsha: 橘子洲
+city/guangzhou: 广州塔
+city/chengdu: 宽窄巷子
+city/guiyang: 甲秀楼
+city/kunming: Stone Forest
+city/lasa: 大昭寺
+city/xian: 大雁塔
+city/lanzhou: 中山桥 (兰州)
+city/xining: 塔尔寺
+city/wulumuqi: 新疆国际大巴扎
+city/taibei: 台北101
+
+# ---- 北方 ----
+city/chengde: 避暑山庄
+city/qinhuangdao: 山海关
+city/baoding: 直隶总督署
+city/datong: 悬空寺
+city/yuncheng: 解州关帝庙
+city/eerduosi: 成吉思汗陵
+city/hulunbeier: Q537374
+city/dalian: 星海广场
+city/dandong: 鸭绿江断桥
+city/jilinshi: File:吉林雾凇 Frosty Pines in Jilin - panoramio.jpg
+city/qiqihaer: 丹顶鹤
+city/mohe: 北极村
+
+# ---- 东边 ----
+city/suzhou: 虎丘
+city/wuxi: 灵山大佛
+city/yangzhou: 瘦西湖
+city/zhenjiang: 金山寺
+city/ningbo: 天一阁
+city/wenzhou: 雁荡山
+city/shaoxing: 鲁迅故里
+city/zhoushan: 普陀山
+city/jiaxing: 南湖 (嘉兴)
+city/huangshan: 迎客松
+city/xiamen: 鼓浪屿
+city/quanzhou: 开元寺 (泉州)
+city/jiujiang: 鄱阳湖
+city/qingdao: 栈桥
+city/taian: 岱庙
+city/yantai: 蓬莱阁
+city/weifang: 风筝
+
+# ---- 中部 ----
+city/luoyang: 龙门石窟
+city/kaifeng: 开封铁塔
+city/anyang: 甲骨文
+city/yichang: 三峡大坝
+city/xiangyang: 古隆中
+city/jingzhou: 荆州古城
+city/shiyan: 武当山
+city/enshi: File:Enshi grand canyon.jpg
+city/zhangjiajie: Tianmen Mountain
+city/yueyang: 岳阳楼
+city/xiangtan: 毛泽东故居
+city/xiangxi: 芙蓉镇
+
+# ---- 南方 ----
+city/foshan: 佛山祖庙
+city/chaozhou: 广济桥
+city/zhuhai: 港珠澳大桥
+city/guilin: 象鼻山
+city/beihai: 涠洲岛
+city/sanya: 天涯海角
+
+# ---- 西南 ----
+city/leshan: 乐山大佛
+city/zigong: 自贡恐龙博物馆
+city/yibin: File:Shunan Bamboo Forest (31924833097).jpg
+city/aba: 黄龙风景名胜区
+city/ganzi: 贡嘎山
+city/zunyi: 遵义会议会址
+city/qiandongnan: 西江千户苗寨
+city/anshun: 黄果树瀑布
+city/dali: 崇圣寺三塔
+city/lijiang: 丽江古城
+city/diqing: 梅里雪山
+city/puer: 普洱茶
+city/rikaze: 珠穆朗玛峰
+city/linzhi: 南迦巴瓦峰
+
+# ---- 西北 ----
+city/yanan: 延安宝塔
+city/tianshui: 麦积山石窟
+city/zhangye: Q17638329
+city/jiayuguan: 嘉峪关
+city/haixi: 茶卡盐湖
+city/zhongwei: 沙坡头
+city/kashi: 艾提尕尔清真寺
+city/yili: File:Nalati Grassland 1.jpg
+city/tulufan: 火焰山
+city/aletai: 喀纳斯湖
+
+# ---- 台湾 ----
+city/gaoxiong: 莲池潭
+city/tainan: 赤崁楼
+city/taizhong: Q15622440
+city/hualian: 太鲁阁国家公园
+city/xinzhu: 新竹市
+
+# ---- 小城 · 名胜 ----
+city/dunhuang: 莫高窟
+city/pingyao: 平遥古城
+city/wuzhen: 乌镇
+city/wuyuan: 婺源县
+city/yangshuo: 阳朔县
+city/fenghuang: 凤凰古城
+city/yiwu: 义乌国际商贸城
+city/qufu: 曲阜孔庙
+city/daocheng: 亚丁国家级自然保护区
+city/dujiangyan: Dujiangyan
+city/jiuzhaigou: 九寨沟
+city/manzhouli: 满洲里市
+city/huoerguosi: 霍尔果斯市
+city/wuyishan: 武夷山
+city/lushan: 庐山
+city/hongcun: 宏村
+city/sanxingdui: Sanxingdui
+city/kunshan: 周庄
+city/ruili: 瑞丽市
+
+# ---- 刷一刷 ----
+feed/biangbiang: Q213105
+feed/bingmayong-1974: 秦始皇兵马俑
+feed/changcheng-haohan: 八达岭长城
+feed/chilege: File:Ewenki Grasslands and Yurt Scene (19785364532).jpg
+feed/doufunao: 豆腐花
+feed/duanqiao: 断桥 (杭州)
+feed/huguang-sichuan: 湖广会馆 (重庆)
+feed/jingdezhen-china: 青花瓷
+feed/jiuquan: 酒泉卫星发射中心
+feed/jiutouniao: 曾侯乙编钟
+feed/lebusishu: 成都武侯祠
+feed/liziba: 李子坝站
+feed/luosifen: 螺蛳粉
+feed/luoyang-zhigui: 应天门
+feed/macau-tart: 葡式蛋挞
+feed/min-chong: Q7800231
+feed/modu: 陆家嘴
+feed/pangdonglai-queue: 胖东来
+feed/qianlv: 驴
+feed/qinling-huaihe: 秦岭
+feed/rooster-map: none
+feed/saishang-jiangnan: File:Wuzhong yellow river planet labs inc satellite image.jpg
+feed/sanzhuang-jiangsu: 江苏省
+feed/sushi-hainan: 苏轼
+feed/taishan: Mount Tai
+feed/tianjin-xiangsheng: 相声
+feed/xiaogang: 小岗村
+feed/xiaotudou: 哈尔滨冰雪大世界
+feed/xinjiang-time: 赛里木湖
+feed/yelang: 万峰林
+feed/yu-elephant: 亚洲象
+feed/yunnan-mushroom: Lanmaoa asiatica
+feed/zaocha: 点心
+feed/zibo-bbq: 烧烤
+
+# ---- 故事 ----
+series/baishezhuan: 雷峰塔
+series/baishezhuan/01: 断桥 (杭州)
+series/baishezhuan/02: 西湖
+series/baishezhuan/03: 金山寺
+series/baishezhuan/04: 雷峰塔
+series/pangdonglai: 胖东来
+text/bai-niangzi: 雷峰塔
+text/guxiang: 鲁迅故里
+text/lun-leifengta: 雷峰塔

@@ -81,6 +81,20 @@ export interface PlaceProgress {
   /** the user said they read the page (我读完了) */
   read?: number
   stamp?: number
+  /** marked 学会了 on the map: it goes into the 认地图 test */
+  learnt?: number
+  /** last 认地图 answer */
+  tested?: { at: number; right: boolean }
+  updated: number
+}
+
+/** A city on the map: same marks as a province, without the stamp. */
+export interface CityProgress {
+  id: string
+  visited?: number
+  read?: number
+  learnt?: number
+  tested?: { at: number; right: boolean }
   updated: number
 }
 
@@ -124,6 +138,7 @@ export const db = new Dexie('zhongguotong') as Dexie & {
   places: EntityTable<PlaceProgress, 'id'>
   feed: EntityTable<FeedSeen, 'id'>
   days: EntityTable<DayLog, 'day'>
+  cities: EntityTable<CityProgress, 'id'>
 }
 
 db.version(1).stores({
@@ -140,6 +155,9 @@ db.version(2).stores({
   places: 'id, updated',
   feed: 'id, seen',
   days: 'day',
+})
+db.version(3).stores({
+  cities: 'id, updated',
 })
 
 export async function getSetting<T>(key: string, fallback: T): Promise<T> {

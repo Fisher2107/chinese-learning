@@ -40,6 +40,12 @@ export default defineConfig({
             options: { cacheName: 'zh-index', networkTimeoutSeconds: 4 },
           },
           {
+            // Photos: fetch each once and keep it (a different photo gets a new ?v=, so a new cache entry)
+            urlPattern: ({ url }) => url.pathname.includes('/img/'),
+            handler: 'CacheFirst',
+            options: { cacheName: 'zh-photos', expiration: { maxEntries: 600 }, cacheableResponse: { statuses: [0, 200] } },
+          },
+          {
             // Stories, texts and the dictionary: use the cached copy, refresh in the background
             urlPattern: ({ url }) => url.pathname.includes('/content/') || url.pathname.includes('/data/'),
             handler: 'StaleWhileRevalidate',

@@ -1,10 +1,14 @@
-// Builds src/data/china-map.json: the 34 provincial-level divisions as SVG paths, with label
-// points and neighbours, from Natural Earth (public domain).
+// Builds the maps, run by hand when they need to change (the output is committed):
+//
+//   src/data/china-map.json     the 34 provincial-level divisions, coarse, with label points and
+//                               neighbours: for locator maps and the feed (small)
+//   src/data/china-detail.json  the explorable map: finer provinces, every prefecture-level city,
+//                               rivers, lakes, neighbouring countries and landform labels
 //
 //   node scripts/build-map.mjs
 //
-// Run by hand when the map needs to change; the output is committed. It downloads the
-// Natural Earth files into data/raw/ne/ the first time.
+// Sources: Natural Earth (public domain), downloaded into data/raw/ne/ the first time; cities
+// from Wikidata (CC0), saved in data/raw/wikidata-cities.json by the query in scripts/map/cities.rq.
 import { existsSync } from 'node:fs'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import mapshaper from 'mapshaper'
@@ -94,6 +98,8 @@ const provinces = fc.features.map((f, i) => {
 if (provinces.length !== 34) throw new Error(`expected 34 divisions, got ${provinces.length}`)
 await mkdir('src/data', { recursive: true })
 const json = JSON.stringify({ width: WIDTH, height: HEIGHT, provinces })
+const detail = await import('./map/detail.mjs')
+await detail.build({ features, fc, projection, WIDTH, HEIGHT, get })
 await writeFile('src/data/china-map.json', json)
 console.log(`map: ${provinces.length} divisions, ${WIDTH}×${HEIGHT}, ${(json.length / 1024).toFixed(0)} KB`)
 for (const p of provinces) console.log(`  ${p.id.padEnd(13)} ${p.small ? 'small ' : '      '}${p.neighbours.join(', ')}`)

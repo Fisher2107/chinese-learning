@@ -1,3 +1,4 @@
+import { Photo } from '../components/Photo.tsx'
 import { useEffect, useMemo, useState } from 'react'
 import { useLiveQuery } from '../lib/live.ts'
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, TrashIcon } from '@phosphor-icons/react'
@@ -27,11 +28,13 @@ interface Props {
   old?: boolean
   license?: string
   sourceUrl?: string
+  /** photo key, shown at the start of the first sitting */
+  photo?: string
   onDelete?: () => void
 }
 
 /** A long text read in sittings, with progress saved. Used for full texts and imports. */
-function SittingReader({ progressId, route, title, byline, parts, glossary, sitting, old, license, sourceUrl, onDelete }: Props) {
+function SittingReader({ progressId, route, title, byline, parts, glossary, sitting, old, license, sourceUrl, photo, onDelete }: Props) {
   const settings = useSettings()
   const [tips, setTips] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
@@ -69,6 +72,7 @@ function SittingReader({ progressId, route, title, byline, parts, glossary, sitt
       />
       <article className="mx-auto max-w-xl px-5 pb-24" style={{ fontSize: FONT_PX[settings.fontSize] }}>
         <div className="font-ui text-sm font-bold text-mute">{byline}</div>
+        {i === 0 && <Photo k={photo} className="-mx-5 mt-4 sm:mx-0 sm:rounded-2xl" />}
         {parts.length > 1 && (
           <div className="mt-3 flex items-center gap-3 font-ui">
             <ProgressBar value={(i + 1) / parts.length} className="h-3 flex-1" />
@@ -138,6 +142,7 @@ export function TextReader({ id, sitting }: { id: string; sitting: number }) {
       old={text.year < 1900}
       license={text.license}
       sourceUrl={text.source}
+      photo={`text/${id}`}
     />
   )
 }

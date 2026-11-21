@@ -107,6 +107,22 @@ export interface Place {
   series: string[]
 }
 
+/** A city on the map: facts for every one, an intro and 聊天彩蛋 for the ones with a page. */
+export interface CityContent {
+  id: string
+  /** 别称, e.g. 蓉城 for 成都 */
+  nickname: string
+  facts: Sentence[]
+  intro: Para[]
+  eggs: Para[]
+  chars: number
+}
+
+export interface CitiesFile {
+  cities: CityContent[]
+  glossary: Record<string, string>
+}
+
 export type Region = '华北' | '东北' | '华东' | '华中' | '华南' | '西南' | '西北'
 
 export interface PlacesFile {
@@ -132,3 +148,19 @@ export interface FeedFile {
   cards: FeedCard[]
   glossary: Record<string, string>
 }
+
+/** A photo from Wikimedia Commons, credited as its licence asks. */
+export interface Photo {
+  src: string
+  w: number
+  h: number
+  /** who took it */
+  by: string
+  /** licence, e.g. "CC BY-SA 4.0" */
+  lic: string
+  /** its Commons page */
+  page: string
+}
+
+/** Photos by key: place/<id>, city/<id>, feed/<id>, series/<id>, series/<id>/<ep>, text/<id> */
+export type PhotosFile = Record<string, Photo>

@@ -9,7 +9,8 @@
     "check:content": "node scripts/build-content.mjs --check",
     "dev": "npm run data && npm run content && vite",
     "build": "npm run data && npm run content && tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "images": "node scripts/fetch-images.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "2.1.10",
