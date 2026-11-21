@@ -376,7 +376,7 @@ function EndCard({ onAgain }: { onAgain: () => void }) {
         <h2 className="mt-4 text-[26px] font-black">今天刷完了</h2>
         <p className="mt-1 max-w-xs text-[16px] font-bold text-mute">今天读完了 {day.cards} 张卡片。没点“读完了”的卡片以后还会再来，新的卡片每天也会来。明天见！</p>
         <div className="mt-8 w-full max-w-sm space-y-3">
-          <Button tone="lv" className="w-full" onClick={() => go('map')}>
+          <Button tone="lv" className="w-full" onClick={() => go('map/china')}>
             <MapTrifoldIcon size={20} weight="fill" /> 去地图点亮省份 <ArrowRightIcon size={18} weight="bold" />
           </Button>
           <Button tone="plain" className="w-full" onClick={onAgain}>

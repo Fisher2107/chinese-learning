@@ -108,12 +108,12 @@ export function MapTest() {
   if (!qs.length)
     return (
       <div className="mx-auto max-w-md px-6">
-        <PageHeader close fallback="map" />
+        <PageHeader close fallback="map/china" />
         <div className="pt-16 text-center">
           <ExamIcon size={64} weight="fill" className="mx-auto text-mute" />
           <h1 className="mt-3 text-[22px] font-black">还没有学会的地方</h1>
           <p className="mt-1 font-bold text-mute">在地图上点一个省或者城市，按“学会了”，它就会出现在这里。</p>
-          <Button tone="lv" className="mt-6 w-full" onClick={() => go('map', true)}>
+          <Button tone="lv" className="mt-6 w-full" onClick={() => go('map/china', true)}>
             去地图
           </Button>
         </div>
@@ -142,7 +142,7 @@ export function MapTest() {
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-xl flex-col">
-      <PageHeader close fallback="map" title={<ProgressBar value={i / qs.length} color="#ED5126" />} />
+      <PageHeader close fallback="map/china" title={<ProgressBar value={i / qs.length} color="#ED5126" />} />
       <div className="flex-1 px-4 pb-56">
         <div className="flex items-center justify-between text-sm font-black text-zhu">
           <span className="flex items-center gap-1.5">
@@ -243,7 +243,7 @@ function Done({ log, onAgain }: { log: { q: Q; right: boolean }[]; onAgain: (ids
   const missed = log.filter((l) => !l.right)
   return (
     <div className="mx-auto max-w-md px-6 pb-12">
-      <PageHeader close fallback="map" />
+      <PageHeader close fallback="map/china" />
       <div className="pt-6 text-center">
         <motion.div initial={{ scale: 0.6, rotate: -8 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 260, damping: 14 }}>
           <ExamIcon size={80} weight="fill" className="mx-auto text-zhu" />
@@ -270,7 +270,7 @@ function Done({ log, onAgain }: { log: { q: Q; right: boolean }[]; onAgain: (ids
             再考一遍错的
           </Button>
         )}
-        <Button tone="plain" className="w-full border-2 border-line" onClick={() => go('map', true)}>
+        <Button tone="plain" className="w-full border-2 border-line" onClick={() => go('map/china', true)}>
           回地图
         </Button>
       </div>

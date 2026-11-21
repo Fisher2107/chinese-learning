@@ -5,6 +5,7 @@ import {
   ArrowRightIcon,
   CornersOutIcon,
   ExamIcon,
+  GlobeHemisphereEastIcon,
   MagnifyingGlassIcon,
   MagnifyingGlassPlusIcon,
   MinusIcon,
@@ -101,6 +102,7 @@ export function MapScreen({ focus }: { focus?: Selection }) {
             [PlusIcon, '放大', () => api.current?.zoomBy(2)],
             [MinusIcon, '缩小', () => api.current?.zoomBy(0.5)],
             [CornersOutIcon, '看全国', () => api.current?.reset()],
+            [GlobeHemisphereEastIcon, '世界地图', () => go('map')],
           ] as const
         ).map(([Icon, label, onClick]) => (
           <button key={label} aria-label={label} onClick={onClick} className="tile grid size-11 place-items-center shadow-[0_2px_8px_rgba(0,0,0,0.08)] active:scale-95">
@@ -361,7 +363,7 @@ export function StampBook() {
   const stamped = places.filter((p) => stats.get(p.id)?.stamp)
   return (
     <div className="pb-12">
-      <PageHeader title="集章册" fallback="map" right={<span className="pr-2 text-sm font-extrabold text-mute">{stamped.length}/34</span>} />
+      <PageHeader title="集章册" fallback="map/china" right={<span className="pr-2 text-sm font-extrabold text-mute">{stamped.length}/34</span>} />
       <div className="mx-auto max-w-xl px-4">
         <div className="tile p-4">
           <div className="text-[15px] font-black">怎么点亮一个地方</div>

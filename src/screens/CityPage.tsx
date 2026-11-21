@@ -25,7 +25,7 @@ export function CityPage({ id }: { id: string }) {
     visitCity(id)
   }, [id])
 
-  if (!city) return <PageHeader title="找不到这个城市" fallback="map" />
+  if (!city) return <PageHeader title="找不到这个城市" fallback="map/china" />
   if (!file || !placesFile) return <Loading />
   const content = file.cities.find((c) => c.id === id)
   const prov = placesFile.places.find((p) => p.id === city.prov)
@@ -37,7 +37,7 @@ export function CityPage({ id }: { id: string }) {
 
   return (
     <div className="pb-12">
-      <PageHeader title={city.full} fallback="map" />
+      <PageHeader title={city.full} fallback="map/china" />
       <div className="mx-auto max-w-xl px-4">
         <div className="tile overflow-hidden">
           <div className="p-5 text-white" style={{ background: color }}>

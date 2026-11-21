@@ -15,6 +15,7 @@ import { Review } from './screens/Review.tsx'
 import { Loading } from './components/ui.tsx'
 
 // The map, province pages and feed carry the map geometry: load them when first opened
+const WorldMapScreen = lazy(() => import('./screens/WorldMapScreen.tsx').then((m) => ({ default: m.WorldMapScreen })))
 const MapScreen = lazy(() => import('./screens/MapScreen.tsx').then((m) => ({ default: m.MapScreen })))
 const StampBook = lazy(() => import('./screens/MapScreen.tsx').then((m) => ({ default: m.StampBook })))
 const CityPage = lazy(() => import('./screens/CityPage.tsx').then((m) => ({ default: m.CityPage })))
@@ -42,7 +43,8 @@ function Screen({ route }: { route: string[] }): { tab?: string; el: React.React
       if (a === 'stamps') return { el: <StampBook /> }
       if (a === 'test') return { el: <MapTest /> }
       if ((a === 'city' || a === 'place') && b) return { tab: 'map', el: <MapScreen key={`${a}/${b}`} focus={{ kind: a === 'city' ? 'city' : 'province', id: b }} /> }
-      return { tab: 'map', el: <MapScreen /> }
+      if (a === 'china') return { tab: 'map', el: <MapScreen /> }
+      return { tab: 'map', el: <WorldMapScreen /> }
     case 'city':
       return { el: <CityPage key={a} id={a} /> }
     case 'place':

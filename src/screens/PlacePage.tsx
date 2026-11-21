@@ -30,7 +30,7 @@ export function PlacePage({ id }: { id: string }) {
   }, [id])
   if (!placesFile) return <Loading />
   const place = placesFile.places.find((p) => p.id === id)
-  if (!place) return <PageHeader title="找不到这个地方" fallback="map" />
+  if (!place) return <PageHeader title="找不到这个地方" fallback="map/china" />
 
   const color = regionColor(place.region)
   const source: WordSource = { kind: 'place', route: `place/${id}`, title: `${place.name} · 地图` }
@@ -43,7 +43,7 @@ export function PlacePage({ id }: { id: string }) {
 
   return (
     <div className="pb-12">
-      <PageHeader title={place.full} fallback="map" />
+      <PageHeader title={place.full} fallback="map/china" />
       <div className="mx-auto max-w-xl px-4">
         <div className="tile relative overflow-hidden">
           <div className="flex items-center gap-4 p-5 text-white" style={{ background: color }}>
@@ -264,7 +264,7 @@ function StampDone({ id, name, short, coins }: { id: string; name: string; short
         )}
       </motion.div>
       <div className="mt-10 w-full space-y-3">
-        <Button tone="lv" className="w-full" onClick={() => go('map')}>
+        <Button tone="lv" className="w-full" onClick={() => go('map/china')}>
           回到地图
         </Button>
         <Button tone="plain" className="w-full" onClick={() => back(`place/${id}`)}>
