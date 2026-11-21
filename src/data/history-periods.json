@@ -777,5 +777,55 @@
         ]
       }
     ]
+  },
+  {
+    "id": "prc",
+    "title": "中华人民共和国",
+    "dates": "公元1949年至今",
+    "mapCaption": "1967年的中国行政区划与周边地区。图上沿用当时原图的地名和边界画法。",
+    "overview": "中华人民共和国于1949年成立。此后，中国参加了朝鲜战争，也先后与印度和越南发生边境战争。几场冲突平息后，各地的停战安排和边界谈判各有不同。",
+    "events": [
+      {
+        "date": "公元1950—1953年",
+        "title": "朝鲜战争与中国参战",
+        "place": "朝鲜半岛、鸭绿江与板门店",
+        "story": "1950年，朝鲜军队越过三八线进攻韩国。以美国为主的联合国军参战并向北推进，接近中朝边境。中国随后派志愿军入朝参战。1953年，朝鲜人民军、中国人民志愿军和联合国军签署停战协定，在半岛划出军事分界线和非军事区。",
+        "figures": [
+          { "id": "pengdehuai", "name": "彭德怀", "role": "中国人民志愿军司令员，代表志愿军签署停战协定" },
+          { "id": "mao", "name": "毛泽东", "role": "参与决定出兵，下令组建中国人民志愿军" }
+        ],
+        "sources": [
+          { "title": "威斯康星大学麦迪逊分校｜朝鲜战争教学资料", "url": "https://eastasia.wisc.edu/wp-content/uploads/sites/544/2020/11/The-Korean-War-CEAS-Curriculum-Guide-with-Appendix-Documents.pdf" },
+          { "title": "美国国家档案馆｜《朝鲜停战协定》原文", "url": "https://www.archives.gov/milestone-documents/armistice-agreement-restoration-south-korean-state" }
+        ]
+      },
+      {
+        "date": "公元1962年10—11月",
+        "title": "中印边境战争",
+        "place": "中印边境东段及西段的阿克赛钦一带",
+        "story": "中印两国长期对边界有不同主张，谈判也没有达成一致。1962年，东、西两段边境都发生交战。中国宣布单方面停火，从东段战时占领的地区撤军，继续控制西段的阿克赛钦。双方没有就正式边界达成协议。",
+        "figures": [
+          { "id": "zhouenlai", "name": "周恩来", "role": "在战前与印度总理会谈，交战后提出停火和谈判方案" }
+        ],
+        "sources": [
+          { "title": "《耶鲁国际事务期刊》｜战后撤军与边境争议", "url": "https://www.yalejournal.org/publications/a-battle-for-barren-land-rethinking-chinese-interests-in-the-sino-indian-border-dispute" },
+          { "title": "《国务院公报》｜1962年中印边界问题文件", "url": "https://www.gov.cn/gongbao/shuju/1962/gwyb196212.pdf" }
+        ]
+      },
+      {
+        "date": "公元1979年2—3月",
+        "title": "中越边境战争",
+        "place": "中国广西、云南与越南北部交界一带",
+        "story": "中越边境关系已经紧张，越南出兵柬埔寨后，双方关系进一步恶化。1979年，中国军队进入越南北部，随后撤回。边境冲突又持续了多年。1999年，两国通过谈判签署陆地边界条约。",
+        "figures": [
+          { "id": "dengxiaoping", "name": "邓小平", "role": "在中国决定向越南出兵时发挥重要作用" }
+        ],
+        "sources": [
+          { "title": "香港中文大学《二十一世纪》｜1979年中越战争与外交", "url": "https://www.cuhk.edu.hk/ics/21c/media/articles/c195-202112026.pdf" },
+          { "title": "北卡罗来纳大学出版社｜中越战争及后续冲突", "url": "https://academic.oup.com/north-carolina-scholarship-online/book/44769" },
+          { "title": "中国外交部｜中越签署陆地边界条约", "url": "https://www.fmprc.gov.cn/eng/gjhdq_665435/2675_665437/2792_663578/2793_663580/202406/t20240607_11414425.html" }
+        ]
+      }
+    ]
   }
 ]

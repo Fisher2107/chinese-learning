@@ -519,5 +519,34 @@
     "creator": "陈正青",
     "license": "公有领域",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mao_Zedong_1950_Portrait_(3x4_cropped)(2).jpg"
+  },
+  "map-prc": {
+    "src": "history/map-prc.webp",
+    "caption": "1967年11月的中国行政区划与周边地区。边界和地名按当时原图绘制。",
+    "creator": "美国中央情报局（美国国会图书馆藏）",
+    "license": "公有领域",
+    "sourceUrl": "https://www.loc.gov/item/2013591031/"
+  },
+  "pengdehuai": {
+    "src": "history/pengdehuai.webp",
+    "caption": "1955年，新华社记者郑景康拍摄的彭德怀元帅肖像。",
+    "creator": "郑景康（新华社）",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:General_Peng_Dehuai.jpg"
+  },
+  "zhouenlai": {
+    "src": "history/zhouenlai.webp",
+    "caption": "1960年4月21日，周恩来抵达新德里时的照片局部。",
+    "creator": "Anefo，摄影者不详（荷兰国家档案馆藏）",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Aankomst_premier_tsjou_en_lai_te_new_delhi_prem_mehroe%2C_Bestanddeelnr_911-1819.jpg",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+  },
+  "dengxiaoping": {
+    "src": "history/dengxiaoping.webp",
+    "caption": "1979年1月29日，邓小平访美期间的照片局部。",
+    "creator": "摄影者不详（美国国家档案馆藏）",
+    "license": "公有领域",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Deng_Xiaoping_(cropped).jpg"
   }
 }
