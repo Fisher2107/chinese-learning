@@ -119,6 +119,17 @@
   "w": 640,
   "h": 478
  },
+ "city/guangzhou": {
+  "spec": "File:Canton Tower.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Canton Tower.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Canton_Tower.jpg",
+  "artist": "Chinatravelsavvy",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 853
+ },
  "city/guiyang": {
   "spec": "甲秀楼",
   "qid": "Q15934153",
@@ -237,6 +248,17 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 425
+ },
+ "city/lasa": {
+  "spec": "File:Jokhang Temple.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Jokhang Temple.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Jokhang_Temple.jpg",
+  "artist": "Mountain Wave Project",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 481
  },
  "city/mohe": {
   "spec": "北极村",
@@ -454,6 +476,28 @@
   "w": 640,
   "h": 426
  },
+ "city/zhenjiang": {
+  "spec": "File:Jinshan temple.JPG",
+  "label": "",
+  "desc": "",
+  "file": "Jinshan temple.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Jinshan_temple.JPG",
+  "artist": "Gisling",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 850
+ },
+ "feed/taishan": {
+  "spec": "File:Mount Tai.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Mount Tai.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Mount_Tai.jpg",
+  "artist": "https://www.flickr.com/photos/kanegen/",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 425
+ },
  "place/anhui": {
   "spec": "黄山",
   "qid": "Q36034",
@@ -501,6 +545,17 @@
   "license": "CC BY 2.0",
   "w": 640,
   "h": 426
+ },
+ "place/fujian": {
+  "spec": "File:Fujian Tulou.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Fujian Tulou.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Fujian_Tulou.jpg",
+  "artist": "Apana4u",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 853
  },
  "place/gansu": {
   "spec": "月牙泉",
@@ -575,7 +630,15 @@
   "h": 426
  },
  "place/heilongjiang": {
-  "spec": "五大连池"
+  "spec": "File:Zhalong.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Zhalong.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zhalong.jpg",
+  "artist": "Fanghong",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 760
  },
  "place/henan": {
   "spec": "少林寺",
@@ -709,6 +772,17 @@
   "w": 640,
   "h": 960
  },
+ "place/shandong": {
+  "spec": "File:Mount Tai.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Mount Tai.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Mount_Tai.jpg",
+  "artist": "https://www.flickr.com/photos/kanegen/",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 425
+ },
  "place/shanghai": {
   "spec": "外滩",
   "qid": "Q125474",
@@ -746,7 +820,15 @@
   "h": 425
  },
  "place/taiwan": {
-  "spec": "日月潭"
+  "spec": "File:Alishan.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Alishan.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Alishan.jpg",
+  "artist": "16jchen2",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 427
  },
  "place/tianjin": {
   "spec": "天津之眼",

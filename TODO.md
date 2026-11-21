@@ -5,14 +5,14 @@ Left over from the map work on branch `map-explore` (2026-11-21).
 ## Photos
 
 - [ ] **Finish downloading.** Run `npm run images`. It picks up where it stopped and skips what's already there.
-  - So far: 68 of about 430 photos are in, all provinces done except 黑龙江, 福建, 山东 and 台湾.
+  - So far: 76 of about 430 photos are in. The four remaining provincial photos named below have now been added; other photos are still pending.
   - Order: provinces, written cities, feed and stories first, then each remaining city's own Wikidata photo.
   - Commons throttles bulk downloads, so it's slow. The script waits between files, and skips any file Commons refuses so a later run can retry it.
-- [ ] **Retry the refusals.** Commons refused the thumbnails for `place/fujian`, `city/guangzhou`, `city/lasa` and `city/zhenjiang`. If they keep failing, give them a different subject or a `File:` in `content/images.yml`.
-- [ ] **Re-fetch the changed subjects.** The next run handles these automatically:
-  - `place/shandong` and `feed/taishan` are now `Mount Tai`. The old match was a mythological figure called 泰山.
-  - `place/heilongjiang` is now the 扎龙 crane reserve (`Zhalong National Nature Reserve`). 镜泊湖 was hazy and 五大连池 matched nothing. If this misses too, use a `Q…` id or a `File:`.
-  - `place/taiwan` is now 阿里山. The 日月潭 file was a satellite image under a licence we don't accept.
+- [x] **Retry the refusals.** Replaced the subjects for `place/fujian`, `city/guangzhou`, `city/lasa` and `city/zhenjiang` with explicit Commons files in `content/images.yml`. All four downloaded successfully; attribution and accepted CC BY-SA licences are recorded in `content/images.lock.json`.
+- [x] **Re-fetch the changed subjects.** Updated and fetched the named replacements with credits in `content/images.lock.json`:
+  - `place/shandong` and `feed/taishan` use the same verified `File:Mount Tai.jpg` photo, depicting the summit (玉皇顶).
+  - `place/heilongjiang` uses `File:Zhalong.jpg`, depicting the Zhalong Nature Reserve entrance.
+  - `place/taiwan` uses `File:Alishan.jpg`, a trail in Alishan National Forest Recreation Area.
 - [ ] **Review every photo once downloaded.** Ambiguous names can match the wrong thing, as 泰山 did.
   - Check the label and description of each entry in `content/images.lock.json`, or look at them on the place and city pages.
   - Fix any wrong match in `content/images.yml` and run `npm run images` again.

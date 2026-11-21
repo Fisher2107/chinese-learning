@@ -4,6 +4,7 @@
 //
 //   npm run images            fetch what's new or changed
 //   npm run images -- --force fetch everything again
+//   npm run images -- --only place/fujian,city/guangzhou fetch selected keys only
 //
 // Only CC0, public-domain, CC BY and CC BY-SA photos are kept.
 import { readFile, writeFile, mkdir, unlink } from 'node:fs/promises'
@@ -17,6 +18,10 @@ const WIDTH = 640
 const QUALITY = '50'
 const LOCK = 'content/images.lock.json'
 const FORCE = process.argv.includes('--force')
+const onlyArg = process.argv.indexOf('--only')
+const ONLY = onlyArg >= 0
+  ? new Set((process.argv[onlyArg + 1] ?? '').split(',').map((key) => key.trim()).filter(Boolean))
+  : null
 const FREE = /^(cc0|public domain|pd\b|pd-|cc[ -]by(-sa)?[ -]\d)/i
 /** A city's own Wikidata photo is sometimes a map or a coat of arms: skip those. */
 const NOT_A_PHOTO = /map|location|locator|flag|emblem|logo|seal|administrative|montage-map|\.svg$|地图|位置|区划/i
@@ -178,6 +183,11 @@ async function fileInfo(files) {
 
 // hand-picked photos first, a city's own default photo last
 const todo = [...jobs].filter(([key, spec]) => FORCE || lock[key]?.spec !== spec).sort(([, a], [, b]) => Number(a.endsWith('?')) - Number(b.endsWith('?')))
+if (ONLY) {
+  const unknown = [...ONLY].filter((key) => !jobs.has(key))
+  if (!ONLY.size || unknown.length) throw new Error(`--only needs known image keys${unknown.length ? `; unknown: ${unknown.join(', ')}` : ''}`)
+  todo.splice(0, todo.length, ...todo.filter(([key]) => ONLY.has(key)))
+}
 console.log(`${todo.length} of ${jobs.size} photos to fetch`)
 const save = () => writeFile(LOCK, `${JSON.stringify(Object.fromEntries(Object.entries(lock).sort(([a], [b]) => a.localeCompare(b))), null, 1)}\n`)
 
@@ -233,11 +243,18 @@ for (const [key, spec] of todo) {
   const tmp = `${out}.orig`
   await writeFile(tmp, Buffer.from(await r.arrayBuffer()))
   const width = String(Math.min(WIDTH, info.width || WIDTH))
-  execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', QUALITY, '--resampleWidth', width, tmp, '--out', out], { stdio: 'ignore' })
+  if (process.platform === 'darwin') {
+    execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', QUALITY, '--resampleWidth', width, tmp, '--out', out], { stdio: 'ignore' })
+  } else {
+    execFileSync('magick', [tmp, '-resize', `${width}x`, '-quality', QUALITY, out], { stdio: 'ignore' })
+  }
   await unlink(tmp)
-  const dims = execFileSync('sips', ['-g', 'pixelWidth', '-g', 'pixelHeight', out]).toString()
-  const w = Number(dims.match(/pixelWidth: (\d+)/)[1])
-  const h = Number(dims.match(/pixelHeight: (\d+)/)[1])
+  const dims = process.platform === 'darwin'
+    ? execFileSync('sips', ['-g', 'pixelWidth', '-g', 'pixelHeight', out]).toString()
+    : execFileSync('magick', ['identify', '-format', '%w %h', out]).toString()
+  const [w, h] = process.platform === 'darwin'
+    ? [Number(dims.match(/pixelWidth: (\d+)/)[1]), Number(dims.match(/pixelHeight: (\d+)/)[1])]
+    : dims.split(' ').map(Number)
   lock[key] = { spec, qid: c.qid, label: c.label, desc: c.desc, file: c.file, page: info.page, artist: info.artist, license: info.license, w, h }
   console.log(`  ${new Date().toTimeString().slice(0, 8)} ${key}`)
   if (++got % 5 === 0) {

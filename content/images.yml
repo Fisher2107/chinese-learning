@@ -19,14 +19,14 @@ place/shanxi: 云冈石窟
 place/neimenggu: 呼伦贝尔草原
 place/liaoning: 红海滩
 place/jilin: 长白山天池
-place/heilongjiang: Zhalong National Nature Reserve
+place/heilongjiang: File:Zhalong.jpg
 place/shanghai: 外滩
 place/jiangsu: 拙政园
 place/zhejiang: 西湖
 place/anhui: 黄山
-place/fujian: 福建土楼
+place/fujian: File:Fujian Tulou.jpg
 place/jiangxi: 三清山
-place/shandong: Mount Tai
+place/shandong: File:Mount Tai.jpg
 place/henan: 少林寺
 place/hubei: 黄鹤楼
 place/hunan: 张家界国家森林公园
@@ -43,7 +43,7 @@ place/gansu: 月牙泉
 place/qinghai: 青海湖
 place/ningxia: 西夏王陵
 place/xinjiang: 天山天池
-place/taiwan: 阿里山
+place/taiwan: File:Alishan.jpg
 place/xianggang: 维多利亚港
 place/aomen: 大三巴牌坊
 
@@ -63,11 +63,11 @@ city/jinan: 趵突泉
 city/zhengzhou: 二七纪念塔
 city/wuhan: 武汉长江大桥
 city/changsha: 橘子洲
-city/guangzhou: 广州塔
+city/guangzhou: File:Canton Tower.jpg
 city/chengdu: 宽窄巷子
 city/guiyang: 甲秀楼
 city/kunming: Stone Forest
-city/lasa: 大昭寺
+city/lasa: File:Jokhang Temple.jpg
 city/xian: 大雁塔
 city/lanzhou: 中山桥 (兰州)
 city/xining: 塔尔寺
@@ -92,7 +92,7 @@ city/mohe: 北极村
 city/suzhou: 虎丘
 city/wuxi: 灵山大佛
 city/yangzhou: 瘦西湖
-city/zhenjiang: 金山寺
+city/zhenjiang: File:Jinshan temple.JPG
 city/ningbo: 天一阁
 city/wenzhou: 雁荡山
 city/shaoxing: 鲁迅故里
@@ -210,7 +210,7 @@ feed/rooster-map: none
 feed/saishang-jiangnan: File:Wuzhong yellow river planet labs inc satellite image.jpg
 feed/sanzhuang-jiangsu: 江苏省
 feed/sushi-hainan: 苏轼
-feed/taishan: Mount Tai
+feed/taishan: File:Mount Tai.jpg
 feed/tianjin-xiangsheng: 相声
 feed/xiaogang: 小岗村
 feed/xiaotudou: 哈尔滨冰雪大世界
