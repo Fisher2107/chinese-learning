@@ -45,7 +45,9 @@ Pinyin never appears over the text: it only shows in the word card when a word i
 has to be right, so check the readings `npm run content` reports.
 
 The map outline (`src/data/china-map.json`) comes from Natural Earth and is committed. Rebuild it
-only if the borders need to change: `node scripts/build-map.mjs`.
+only if the borders need to change: `node scripts/build-map.mjs`. The world overview
+(`src/data/world-map.json`) uses public-domain [Natural Earth 1:50m Admin 0 Countries](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/).
+Rebuild it with `node scripts/build-world-map.mjs`.
 
 Markup in stories:
 
