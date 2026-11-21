@@ -427,7 +427,7 @@ export function ExploreMap({
       ]
       for (const [x, y, anchor] of positions) {
         const box = textBox(x, y, text, size, anchor)
-        if (cityHits.some((dot) => dot.id !== c.id &&
+        if (!active && cityHits.some((dot) => dot.id !== c.id &&
           dot.x + dot.r > box[0] && dot.x - dot.r < box[2] &&
           dot.y + dot.r > box[1] && dot.y - dot.r < box[3])) continue
         if (!fits(box)) continue
