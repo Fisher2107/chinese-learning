@@ -13,9 +13,11 @@
     "images": "node scripts/fetch-images.mjs"
   },
   "dependencies": {
+    "@fontsource/nunito": "^5.3.0",
     "@phosphor-icons/react": "2.1.10",
     "dexie": "4.4.7",
     "dexie-react-hooks": "4.4.0",
+    "lxgw-wenkai-screen-webfont": "^1.7.0",
     "motion": "14.14.0",
     "openai": "7.62.0",
     "pinyin-pro": "3.29.5",

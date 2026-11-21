@@ -33,7 +33,14 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        // Works offline: on first open, everything the app needs downloads once (about 30 MB): code, fonts,
+        // stories and cards, the dictionary, maps, photos and the atlas pictures. A new version only re-downloads files that changed.
+        // Only the AI features need the internet.
+        globPatterns: ['**/*.{js,css,html,svg,png,woff2,json,jpg,webp}'],
+        // the dictionary is one ~9 MB file
+        maximumFileSizeToCacheInBytes: 16 * 1024 * 1024,
+        // photos are linked as img/….jpg?v=<hash>: that's the same file as the downloaded one
+        ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^v$/],
         runtimeCaching: [
           {
             // Small lists that change daily (new 刷一刷 cards, new episodes): fresh when online, cached offline

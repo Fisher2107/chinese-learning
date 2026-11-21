@@ -1,6 +1,46 @@
+import { useSyncExternalStore } from 'react'
 import { registerSW } from 'virtual:pwa-register'
 
 let reg: ServiceWorkerRegistration | undefined
+
+/**
+ * Whether everything the app needs offline is on this device:
+ * 'downloading' the first time (the app works online meanwhile), 'ready' once it's all there,
+ * 'updating' while a new version downloads (the old one still works offline).
+ */
+export type OfflineState = 'starting' | 'downloading' | 'ready' | 'updating' | 'unsupported'
+let offline: OfflineState = typeof navigator !== 'undefined' && 'serviceWorker' in navigator ? 'starting' : 'unsupported'
+const listeners = new Set<() => void>()
+function watchOffline(r: ServiceWorkerRegistration) {
+  const refresh = () => {
+    const next: OfflineState = r.installing || r.waiting ? (r.active ? 'updating' : 'downloading') : r.active ? 'ready' : 'starting'
+    if (next === offline) return
+    offline = next
+    listeners.forEach((l) => l())
+  }
+  refresh()
+  r.addEventListener('updatefound', () => {
+    refresh()
+    r.installing?.addEventListener('statechange', refresh)
+  })
+  r.installing?.addEventListener('statechange', refresh)
+  r.waiting?.addEventListener('statechange', refresh)
+  navigator.serviceWorker.addEventListener('controllerchange', refresh)
+}
+
+export function useOffline(): OfflineState {
+  return useSyncExternalStore(
+    (cb) => {
+      listeners.add(cb)
+      return () => listeners.delete(cb)
+    },
+    () => offline,
+  )
+}
+
+/** Opened from the home screen rather than in a browser tab. */
+export const isInstalled = () =>
+  window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true
 
 /** When this copy of the app was built. */
 export const BUILT = new Date(__BUILT__)
@@ -22,6 +62,7 @@ export function startUpdates() {
     onRegisteredSW(_url, r) {
       reg = r
       if (!r) return
+      watchOffline(r)
       let last = Date.now()
       const check = () => {
         if (!navigator.onLine || Date.now() - last < 60_000) return

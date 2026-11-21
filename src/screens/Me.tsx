@@ -1,5 +1,5 @@
 import { useRef, useState, type ReactNode } from 'react'
-import { BookOpenTextIcon, CaretRightIcon, CardsIcon, CoinsIcon, DownloadSimpleIcon, FireIcon, KeyIcon, PlantIcon, UploadSimpleIcon } from '@phosphor-icons/react'
+import { BookOpenTextIcon, CaretRightIcon, CheckCircleIcon, CloudArrowDownIcon, DeviceMobileIcon, WarningCircleIcon, CardsIcon, CoinsIcon, DownloadSimpleIcon, FireIcon, KeyIcon, PlantIcon, UploadSimpleIcon } from '@phosphor-icons/react'
 import { db } from '../lib/db.ts'
 import { describeError, testKey } from '../lib/ai.ts'
 import { saveSetting, useSettings, type FontSize } from '../lib/settings.ts'
@@ -7,7 +7,7 @@ import { useStats } from '../lib/stats.ts'
 import { reviveCard } from '../lib/srs.ts'
 import { Button, Section } from '../components/ui.tsx'
 import { go } from '../lib/router.ts'
-import { builtLabel, checkForUpdate } from '../lib/update.ts'
+import { builtLabel, checkForUpdate, isInstalled, useOffline } from '../lib/update.ts'
 
 function Segmented<T extends string>({ value, options, onChange }: { value: T; options: [T, string][]; onChange: (v: T) => void }) {
   return (
@@ -139,6 +139,10 @@ export function Me() {
         <CaretRightIcon size={20} weight="bold" className="text-mute" />
       </button>
 
+      <Section title="离线使用">
+        <OfflineCard />
+      </Section>
+
       <Section title="设置">
         <div className="tile divide-y-2 divide-line">
           <Row title="OpenAI 密钥" hint="用来问AI、解释和翻译。密钥只保存在这台设备上，直接发给 OpenAI。">
@@ -237,6 +241,41 @@ export function Me() {
           <p>字体：霞鹜文楷（SIL OFL）、Nunito（SIL OFL）。图标：Phosphor（MIT）。</p>
         </div>
       </Section>
+    </div>
+  )
+}
+
+/** Whether the app works without internet yet, and how to put it on the home screen. */
+function OfflineCard() {
+  const state = useOffline()
+  const installed = isInstalled()
+  const line = {
+    ready: [<CheckCircleIcon key="i" size={24} weight="fill" className="shrink-0 text-lv" />, '都下载好了：没网的时候也能用。只有AI功能要联网。'],
+    downloading: [<CloudArrowDownIcon key="i" size={24} weight="fill" className="shrink-0 animate-pulse text-dai" />, '正在下载故事、词典、地图和照片（几十MB），下载好以后没网也能用。最好连着 Wi-Fi。'],
+    updating: [<CloudArrowDownIcon key="i" size={24} weight="fill" className="shrink-0 animate-pulse text-dai" />, '正在下载新版本。现在的版本没网也能用。'],
+    starting: [<CloudArrowDownIcon key="i" size={24} weight="fill" className="shrink-0 text-mute" />, '正在准备离线内容…'],
+    unsupported: [<WarningCircleIcon key="i" size={24} weight="fill" className="shrink-0 text-zhu" />, '这个浏览器不能离线使用，请用 Safari 或 Chrome 打开。'],
+  }[state]
+  return (
+    <div className="tile p-4">
+      <div className="flex items-start gap-3 text-[15px] font-bold">
+        {line[0]}
+        <span>{line[1]}</span>
+      </div>
+      {!installed && (
+        <div className="mt-4 rounded-xl bg-sunken p-3 text-[15px] font-bold">
+          <div className="flex items-center gap-2 font-extrabold">
+            <DeviceMobileIcon size={20} weight="fill" className="text-dai" /> 放到主屏幕上，像App一样用
+          </div>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            <li>Safari：点下面的“分享”按钮，再点“添加到主屏幕”。</li>
+            <li>Chrome：点地址栏右边的“分享”按钮，再点“添加到主屏幕”。</li>
+          </ul>
+          <div className="mt-2 text-sm text-mute">
+            注意：主屏幕上的App跟浏览器里的数据是分开的。先在下面“备份”里点“导出”，再在主屏幕App里点“恢复”，生词和进度就都过去了。
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -31,6 +31,8 @@ export class AiError extends Error {
 async function client() {
   const s = await readSettings()
   if (!s.apiKey) throw new NoKeyError()
+  // The rest of the app works offline; answers asked before are kept and still show (see ask's cacheKey)
+  if (navigator.onLine === false) throw new AiError('现在没有网络。AI功能要联网才能用，别的功能没网也能用。')
   const { default: OpenAI, APIConnectionError } = await import('openai')
   const key = s.apiKey.trim()
   return { openai: new OpenAI({ apiKey: key, dangerouslyAllowBrowser: true, maxRetries: 1 }), model: s.model.trim(), key, APIConnectionError }
