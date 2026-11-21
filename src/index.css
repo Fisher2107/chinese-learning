@@ -232,23 +232,24 @@
   }
   .map-city {
     fill: var(--map-ink);
-    font-weight: 700;
+    font-weight: 800;
   }
   .map-capital {
     fill: var(--text);
     font-weight: 900;
   }
-  .map-selected {
-    fill: var(--color-zhu);
-    font-weight: 900;
-  }
   .map-province {
     fill: var(--map-ink);
     font-weight: 900;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
   }
-  .map-faded {
-    opacity: 0.45;
+  .map-city,
+  .map-province {
+    stroke-width: 4px;
+  }
+  .map-selected {
+    fill: var(--color-zhu);
+    font-weight: 900;
   }
   .map-sea {
     fill: #4a86b0;
