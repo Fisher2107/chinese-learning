@@ -102,6 +102,8 @@ export interface Place {
   intro: Para[]
   /** 聊天彩蛋: things worth knowing to start a conversation */
   eggs: Para[]
+  /** characters in the intro and 聊天彩蛋, counted when the page is marked read */
+  chars: number
   series: string[]
 }
 

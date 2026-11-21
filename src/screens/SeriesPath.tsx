@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from '../lib/live.ts'
 import { motion } from 'motion/react'
 import { ArrowLeftIcon, BookOpenTextIcon, CheckIcon, LockIcon, StampIcon, StarIcon } from '@phosphor-icons/react'
 import { db, seriesProgress } from '../lib/db.ts'

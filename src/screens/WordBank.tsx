@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from '../lib/live.ts'
 import { ArrowSquareOutIcon, DropIcon, MagnifyingGlassIcon, PlantIcon, SpeakerHighIcon, TrashIcon } from '@phosphor-icons/react'
 import { db, type SavedWord } from '../lib/db.ts'
 import { formatInterval, unsaveWord } from '../lib/srs.ts'

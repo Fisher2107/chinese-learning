@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from '../lib/live.ts'
 import { motion } from 'motion/react'
 import {
   ArrowRightIcon,
@@ -16,7 +16,7 @@ import {
 } from '@phosphor-icons/react'
 import { db, seriesProgress, type WordSource } from '../lib/db.ts'
 import { loadSeries, useLoad } from '../lib/content.ts'
-import { go } from '../lib/router.ts'
+import { back, go } from '../lib/router.ts'
 import { FONT_PX, saveSetting, useSettings, type FontSize } from '../lib/settings.ts'
 import { speak, stopSpeaking, canSpeak } from '../lib/speech.ts'
 import { finishEpisode, unlockEpisode } from '../lib/progress.ts'
@@ -173,7 +173,7 @@ function Reader({
     <div className="min-h-dvh bg-paper text-paper-text">
       <div className="safe-top sticky top-0 z-20 bg-paper/95 backdrop-blur-sm">
         <div className="mx-auto flex h-14 max-w-xl items-center gap-3 px-3">
-          <button aria-label="关闭" onClick={() => go(`series/${series.id}`)} className="grid size-10 place-items-center rounded-xl text-mute">
+          <button aria-label="关闭" onClick={() => back(`series/${series.id}`)} className="grid size-10 place-items-center rounded-xl text-mute">
             <XIcon size={24} weight="bold" />
           </button>
           <ProgressBar value={scroll} color={series.color} className="flex-1" />
@@ -215,7 +215,7 @@ function Reader({
             </Button>
           ) : nextOpen ? (
             <div className="space-y-3">
-              <Button tone="lv" className="w-full" onClick={() => go(`series/${series.id}/${ep.n + 1}`)}>
+              <Button tone="lv" className="w-full" onClick={() => go(`series/${series.id}/${ep.n + 1}`, true)}>
                 下一集：{next?.title} <ArrowRightIcon size={20} weight="bold" />
               </Button>
               {ep.gate.length > 0 && (

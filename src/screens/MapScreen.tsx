@@ -9,7 +9,7 @@ import { ChinaMap } from '../components/ChinaMap.tsx'
 import { Seal } from '../components/Seal.tsx'
 import { Button, Loading, ProgressBar, Section } from '../components/ui.tsx'
 
-const STEPS = ['打开看看', '考一考盖章', '读两篇', '存三个词']
+const STEPS = ['读完介绍', '考一考盖章', '再读两篇', '存三个词']
 
 /** Last selection survives switching tabs. */
 let remembered: { id?: string; region: Region | '' } = { region: '' }

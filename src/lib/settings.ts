@@ -1,4 +1,4 @@
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from './live.ts'
 import { db, setSetting } from './db.ts'
 
 export type FontSize = 's' | 'm' | 'l'

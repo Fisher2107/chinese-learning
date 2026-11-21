@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useLiveQuery } from '../lib/live.ts'
 import { motion } from 'motion/react'
-import { ArrowUpIcon, ArrowRightIcon, ArrowsClockwiseIcon, CardsIcon, CheckCircleIcon, HeartIcon, MapTrifoldIcon, PlayIcon, XCircleIcon } from '@phosphor-icons/react'
+import { ArrowDownIcon, ArrowUpIcon, ArrowRightIcon, ArrowsClockwiseIcon, CardsIcon, CaretRightIcon, CheckCircleIcon, CheckIcon, HeartIcon, MapTrifoldIcon, PlayIcon, XCircleIcon } from '@phosphor-icons/react'
 import { Rating } from 'ts-fsrs'
 import { db, setSetting, type SavedWord, type WordSource } from '../lib/db.ts'
 import { loadFeed, loadIndex, loadPlaces, useLoad } from '../lib/content.ts'
-import { buildQueue, markSeen, quizAnswered, toggleLike, type FeedItem } from '../lib/feed.ts'
-import { regionColor, type QuizQuestion } from '../lib/places.ts'
+import { buildQueue, markRead, markSeen, quizAnswered, toggleLike, type FeedItem } from '../lib/feed.ts'
+import { explored, regionColor, type QuizQuestion } from '../lib/places.ts'
 import { go } from '../lib/router.ts'
 import { dueWords, grade } from '../lib/srs.ts'
 import { today, useToday } from '../lib/stats.ts'
@@ -40,7 +40,7 @@ export function Feed({ start }: { start?: string }) {
           seen,
           due,
           places: placesFile.places,
-          explored: new Set(visited.map((p) => p.id)),
+          explored: explored(visited),
           start,
           again: round > 0,
         }),
@@ -65,9 +65,9 @@ export function Feed({ start }: { start?: string }) {
   useEffect(() => {
     const root = box.current
     if (!root || !items) return
-    let active: { id?: string; chars?: number; since: number } = { since: Date.now() }
+    let active: { id?: string; since: number } = { since: Date.now() }
     const flush = () => {
-      if (active.id) markSeen(active.id, Date.now() - active.since, active.chars)
+      if (active.id) markSeen(active.id, Date.now() - active.since)
       active = { since: Date.now() }
     }
     const io = new IntersectionObserver(
@@ -76,7 +76,7 @@ export function Feed({ start }: { start?: string }) {
           if (!e.isIntersecting) continue
           flush()
           const item = items[Number((e.target as HTMLElement).dataset.i)]
-          active = item?.kind === 'card' ? { id: item.card.id, chars: item.card.chars, since: Date.now() } : { since: Date.now() }
+          active = item?.kind === 'card' ? { id: item.card.id, since: Date.now() } : { since: Date.now() }
         }
       },
       { root, threshold: 0.6 },
@@ -104,7 +104,7 @@ export function Feed({ start }: { start?: string }) {
     >
       {items.map((item, i) => (
         <section key={`${round}-${i}`} data-i={i} className="relative h-full snap-start snap-always overflow-hidden">
-          {item.kind === 'card' && <StoryCard card={item.card} feed={feed} place={places.get(item.card.province)} series={series.get(item.card.series)} first={i === 0} />}
+          {item.kind === 'card' && <StoryCard card={item.card} feed={feed} place={places.get(item.card.province)} series={series.get(item.card.series)} first={i === 0} onNext={next} />}
           {item.kind === 'review' && <ReviewCard word={item.word} onDone={next} />}
           {item.kind === 'quiz' && <QuizCard place={item.place} q={item.q} onDone={next} />}
           {item.kind === 'end' && <EndCard onAgain={() => setRound((r) => r + 1)} />}
@@ -122,32 +122,103 @@ function Frame({ color, children, dark = true }: { color: string; children: Reac
   )
 }
 
-function StoryCard({ card, feed, place, series, first }: { card: FeedCard; feed: FeedFile; place?: Place; series?: SeriesSummary; first: boolean }) {
-  const liked = useLiveQuery(async () => !!(await db.feed.get(card.id))?.liked, [card.id], false)
+/**
+ * Shrinks the text a step at a time (18px down to 15px) until the card fits the screen. If it
+ * still doesn't, the panel scrolls, and the swipe passes on to the next card at its end.
+ */
+function useFitText(sizes = [18, 17, 16, 15]) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [more, setMore] = useState(false)
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const check = () => setMore(el.scrollHeight - el.scrollTop - el.clientHeight > 8)
+    const fit = () => {
+      for (const px of sizes) {
+        el.style.fontSize = `${px}px`
+        if (el.scrollHeight <= el.clientHeight + 1) break
+      }
+      check()
+    }
+    fit()
+    const ro = new ResizeObserver(fit)
+    ro.observe(el)
+    document.fonts?.ready.then(fit)
+    el.addEventListener('scroll', check, { passive: true })
+    return () => {
+      ro.disconnect()
+      el.removeEventListener('scroll', check)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  return { ref, more }
+}
+
+function StoryCard({
+  card,
+  feed,
+  place,
+  series,
+  first,
+  onNext,
+}: {
+  card: FeedCard
+  feed: FeedFile
+  place?: Place
+  series?: SeriesSummary
+  first: boolean
+  onNext: () => void
+}) {
+  const row = useLiveQuery(() => db.feed.get(card.id), [card.id])
+  const liked = !!row?.liked
+  const read = !!row?.read
   const color = place ? regionColor(place.region) : NO_PLACE
   const source: WordSource = { kind: 'feed', route: `feed/${card.id}`, title: `刷一刷 · ${titleText(card)}` }
+  const { ref, more } = useFitText()
   return (
     <Frame color={color}>
       <div className="flex h-12 items-center gap-1.5 text-xs font-extrabold">
         <span className="mr-auto text-[15px] font-black opacity-90">刷一刷</span>
-        {place && <span className="rounded-full bg-white/20 px-2.5 py-1">{place.name}</span>}
-        {card.tags.slice(0, 2).map((t) => (
-          <span key={t} className="rounded-full bg-black/15 px-2.5 py-1">
-            {t}
+        {read && (
+          <span className="flex items-center gap-1 rounded-full bg-white/25 px-2.5 py-1">
+            <CheckIcon size={12} weight="bold" /> 读过
           </span>
-        ))}
+        )}
+        {series && (
+          <button onClick={() => go(`series/${series.id}`)} className="flex h-7 items-center gap-1 rounded-full bg-white px-2.5 text-[#333]">
+            <PlayIcon size={12} weight="fill" style={{ color: series.color }} /> 追剧
+          </button>
+        )}
+        {place && (
+          <button onClick={() => go(`place/${place.id}`)} className="flex h-7 items-center gap-0.5 rounded-full bg-white/20 pr-1.5 pl-2.5">
+            {place.name} <CaretRightIcon size={12} weight="bold" />
+          </button>
+        )}
+        {!series &&
+          card.tags.slice(0, 1).map((t) => (
+            <span key={t} className="rounded-full bg-black/15 px-2.5 py-1">
+              {t}
+            </span>
+          ))}
       </div>
       <ZhText ui id={`feed-t-${card.id}`} paras={[{ kind: 'p', sentences: card.title }]} glossary={feed.glossary} source={source} className="mt-1 text-[25px] !leading-snug font-black" />
-      <div className="no-scrollbar mt-4 min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-[20px] bg-paper px-4 pt-4 pb-2 text-[18px] text-paper-text shadow-[0_4px_0_rgba(0,0,0,0.15)]">
-        <ZhText id={`feed-${card.id}`} paras={card.body} glossary={feed.glossary} source={source} />
-        <div className="mt-1 mb-2 flex flex-wrap gap-x-3 font-ui text-xs font-bold text-mute">
-          来源：
-          {card.sources.map((s) => (
-            <a key={s.url} href={s.url} target="_blank" rel="noreferrer" className="underline">
-              {s.title}
-            </a>
-          ))}
+      <div className="relative mt-4 min-h-0 flex-1">
+        <div ref={ref} className="no-scrollbar h-full overflow-y-auto rounded-[20px] bg-paper px-4 pt-4 pb-2 text-paper-text shadow-[0_4px_0_rgba(0,0,0,0.15)]">
+          <ZhText id={`feed-${card.id}`} paras={card.body} glossary={feed.glossary} source={source} />
+          <div className="mt-1 mb-2 flex flex-wrap gap-x-3 font-ui text-xs font-bold text-mute">
+            来源：
+            {card.sources.map((s) => (
+              <a key={s.url} href={s.url} target="_blank" rel="noreferrer" className="underline">
+                {s.title}
+              </a>
+            ))}
+          </div>
         </div>
+        {more && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-12 items-end justify-center rounded-b-[20px] bg-gradient-to-t from-paper to-transparent pb-1.5 text-xs font-extrabold text-mute">
+            <ArrowDownIcon size={14} weight="bold" /> 下面还有
+          </div>
+        )}
       </div>
       <div className="mt-3 flex items-center gap-3">
         <button
@@ -160,18 +231,21 @@ function StoryCard({ card, feed, place, series, first }: { card: FeedCard; feed:
             <HeartIcon size={28} weight={liked ? 'fill' : 'bold'} color={liked ? '#ED5126' : '#7d7d78'} />
           </motion.span>
         </button>
-        {series ? (
-          <Button tone="plain" className="min-w-0 flex-1 !border-0" onClick={() => go(`series/${series.id}`)}>
-            <PlayIcon size={20} weight="fill" style={{ color: series.color }} />
-            <span className="truncate">追剧：{series.title}</span>
-          </Button>
-        ) : place ? (
-          <Button tone="plain" className="min-w-0 flex-1 !border-0" onClick={() => go(`place/${place.id}`)}>
-            <MapTrifoldIcon size={20} weight="fill" style={{ color }} />
-            <span className="truncate">去{place.name}看看</span>
+        {read ? (
+          <Button tone="plain" className="min-w-0 flex-1 !border-0" onClick={onNext}>
+            <CheckCircleIcon size={22} weight="fill" className="text-lv" /> 读过了 · 下一张
           </Button>
         ) : (
-          <div className="flex-1" />
+          <Button
+            tone="plain"
+            className="min-w-0 flex-1 !border-0"
+            onClick={async () => {
+              await markRead(card.id, card.chars)
+              setTimeout(onNext, 350)
+            }}
+          >
+            <CheckIcon size={22} weight="bold" style={{ color }} /> 读完了
+          </Button>
         )}
       </div>
       {first && (
@@ -292,7 +366,7 @@ function EndCard({ onAgain }: { onAgain: () => void }) {
           <CheckCircleIcon size={88} weight="fill" className="text-lv" />
         </motion.div>
         <h2 className="mt-4 text-[26px] font-black">今天刷完了</h2>
-        <p className="mt-1 max-w-xs text-[16px] font-bold text-mute">今天看了 {day.cards} 张卡片。新的卡片每天都会来，明天见！</p>
+        <p className="mt-1 max-w-xs text-[16px] font-bold text-mute">今天读完了 {day.cards} 张卡片。没点“读完了”的卡片以后还会再来，新的卡片每天也会来。明天见！</p>
         <div className="mt-8 w-full max-w-sm space-y-3">
           <Button tone="lv" className="w-full" onClick={() => go('map')}>
             <MapTrifoldIcon size={20} weight="fill" /> 去地图点亮省份 <ArrowRightIcon size={18} weight="bold" />

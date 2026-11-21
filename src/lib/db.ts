@@ -76,7 +76,10 @@ export interface Known {
 /** A province the user has opened; `stamp` is when its 集章 quiz was passed. */
 export interface PlaceProgress {
   id: string
+  /** first opened. Opening is not reading: see `read`. */
   visited: number
+  /** the user said they read the page (我读完了) */
+  read?: number
   stamp?: number
   updated: number
 }
@@ -88,6 +91,8 @@ export interface FeedSeen {
   /** total milliseconds on screen */
   dwell: number
   liked?: boolean
+  /** the user said they read it (读完了). Unread cards keep coming back. */
+  read?: number
 }
 
 /** What happened on one day, for the morning routine and the day summary. */

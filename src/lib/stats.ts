@@ -1,4 +1,4 @@
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from './live.ts'
 import { db, getSetting, setSetting, type DayLog } from './db.ts'
 
 /**

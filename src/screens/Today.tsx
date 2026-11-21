@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from '../lib/live.ts'
 import { motion } from 'motion/react'
 import {
   ArrowRightIcon,
@@ -46,9 +46,9 @@ function greeting() {
   return h < 11 ? '早上好' : h < 14 ? '中午好' : h < 18 ? '下午好' : '晚上好'
 }
 
-/** Today's place to meet: one the user hadn't opened before today, the same all day. */
-function placeOfTheDay(places: Place[], visitedBefore: Set<string>): Place | undefined {
-  const pool = places.filter((p) => !visitedBefore.has(p.id))
+/** Today's place to meet: one the user hadn't read about before today, the same all day. */
+function placeOfTheDay(places: Place[], readBefore: Set<string>): Place | undefined {
+  const pool = places.filter((p) => !readBefore.has(p.id))
   const list = pool.length ? pool : places
   if (!list.length) return undefined
   const seed = [...today()].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7)
@@ -69,22 +69,22 @@ export function Today() {
   const season = SEASON[term.season]
 
   const start = startOfDay()
-  // Opened a new place today already? That counts, whichever it was.
-  const met = places?.find((p) => visits.some((v) => v.id === p.id && v.visited >= start))
-  const place = met ?? (places && placeOfTheDay(places, new Set(visits.filter((v) => v.visited < start).map((v) => v.id))))
+  // Read about a place today already (pressed 我读完了)? That counts, whichever it was.
+  const met = places?.find((p) => visits.some((v) => v.id === p.id && (v.read ?? 0) >= start))
+  const place = met ?? (places && placeOfTheDay(places, new Set(visits.filter((v) => v.read && v.read < start).map((v) => v.id))))
   const steps: Step[] = [
     stats.words === 0
       ? { Icon: DropIcon, color: '#3D8FB8', title: '种下第一个生词', sub: '读的时候点一个词，加入生词本', done: false, to: 'feed' }
       : stats.due > 0
         ? { Icon: DropIcon, color: '#3D8FB8', title: `浇水：复习 ${stats.due} 个词`, sub: '复习就是给生词浇水', done: false, to: 'review' }
         : { Icon: DropIcon, color: '#3D8FB8', title: '生词都浇过水了', sub: '去花园看看它们', done: true, to: 'words' },
-    { Icon: CardsThreeIcon, color: '#8E5BB5', title: '刷 5 张卡片', sub: `${Math.min(day.cards, 5)}/5`, done: day.cards >= 5, to: 'feed' },
+    { Icon: CardsThreeIcon, color: '#8E5BB5', title: '读 5 张卡片', sub: `读完一张就点“读完了” · ${Math.min(day.cards, 5)}/5`, done: day.cards >= 5, to: 'feed' },
     place
       ? {
           Icon: MapTrifoldIcon,
           color: '#F7A43A',
           title: `认识一个地方：${place.name}`,
-          sub: `${place.region} · 简称“${place.short}”`,
+          sub: met ? `${place.region} · 简称“${place.short}”` : `读完点“我读完了” · ${place.region}`,
           done: !!met,
           to: `place/${place.id}`,
         }

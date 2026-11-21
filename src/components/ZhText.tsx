@@ -1,5 +1,5 @@
 import { memo, type MouseEvent } from 'react'
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from '../lib/live.ts'
 import type { Para } from '../lib/types.ts'
 import { db, type WordSource } from '../lib/db.ts'
 import { useWordSheet } from './word-context.ts'

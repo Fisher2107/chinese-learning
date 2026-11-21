@@ -1,4 +1,4 @@
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from '../lib/live.ts'
 import { BookOpenTextIcon, CaretRightIcon, ClipboardTextIcon, PlusIcon } from '@phosphor-icons/react'
 import { db } from '../lib/db.ts'
 import { loadIndex, useLoad } from '../lib/content.ts'

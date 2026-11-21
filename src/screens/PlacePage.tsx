@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'motion/react'
 import { ChatCircleDotsIcon, CheckCircleIcon, InfoIcon, LightbulbIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from '../lib/live.ts'
 import { db, type WordSource } from '../lib/db.ts'
 import { loadFeed, loadIndex, loadPlaces, useLoad } from '../lib/content.ts'
-import { earnStamp, makeQuiz, MAP_BY_ID, regionColor, visitPlace, type QuizQuestion } from '../lib/places.ts'
+import { earnStamp, makeQuiz, MAP_BY_ID, markPlaceRead, markPlaceUnread, regionColor, visitPlace, type QuizQuestion } from '../lib/places.ts'
 import { back, go } from '../lib/router.ts'
 import { LocatorMap } from '../components/ChinaMap.tsx'
+import { ReadMark } from '../components/ReadMark.tsx'
 import { Seal } from '../components/Seal.tsx'
 import { FeedbackBanner } from '../components/chrome.tsx'
 import { Button, Loading, PageHeader, Pill, ProgressBar, Section } from '../components/ui.tsx'
@@ -98,6 +99,10 @@ export function PlacePage({ id }: { id: string }) {
             </div>
           </div>
         )}
+
+        <div className="mt-6">
+          <ReadMark readAt={progress?.read} onRead={() => markPlaceRead(id, place.chars ?? 0)} onUnread={() => markPlaceUnread(id)} />
+        </div>
 
         {(series.length > 0 || cards.length > 0) && (
           <Section title={`跟${place.name}有关`}>
