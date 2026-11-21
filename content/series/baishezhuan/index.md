@@ -2,6 +2,7 @@
 title: 杭州 · 白蛇传
 subtitle: 一把伞，一座塔，四百年
 place: 浙江 · 杭州 / 江苏 · 镇江
+provinces: [zhejiang, jiangsu]
 kind: 传说
 color: "#2BAE85"
 sources:

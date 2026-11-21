@@ -97,7 +97,6 @@ function WordView({ target, canBack, onBack, onChat }: { target: WordTarget; can
   const [gloss, setGloss] = useState(target.gloss)
   const [extra, setExtra] = useState<Extra>()
   const saved = useLiveQuery(() => db.words.where('word').equals(token.t).first(), [token.t])
-  const known = useLiveQuery(() => db.known.get(token.t), [token.t])
   const text = sentenceText(sentence)
 
   useEffect(() => {
@@ -107,11 +106,6 @@ function WordView({ target, canBack, onBack, onChat }: { target: WordTarget; can
   async function toggleSave() {
     if (saved) return unsaveWord(token.t)
     await saveWord({ word: token.t, p: token.p ?? '', d: gloss ?? '', sentence, source })
-  }
-
-  async function toggleKnown() {
-    if (known) await db.known.delete(token.t)
-    else await db.known.put({ word: token.t, at: Date.now() })
   }
 
   async function runExtra(kind: Extra['kind']) {
@@ -195,9 +189,6 @@ function WordView({ target, canBack, onBack, onChat }: { target: WordTarget; can
           <ChatCircleDotsIcon size={20} weight="fill" /> 问AI
         </Button>
       </div>
-      <button onClick={toggleKnown} className="mt-4 w-full text-center text-sm font-bold text-mute">
-        {known ? '已标为“认识” · 点这里撤销' : '我认识这个词，以后不显示拼音'}
-      </button>
     </div>
   )
 }

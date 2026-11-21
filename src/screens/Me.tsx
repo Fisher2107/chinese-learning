@@ -1,11 +1,12 @@
 import { useRef, useState, type ReactNode } from 'react'
-import { BookOpenTextIcon, CardsIcon, CoinsIcon, DownloadSimpleIcon, FireIcon, KeyIcon, UploadSimpleIcon } from '@phosphor-icons/react'
+import { BookOpenTextIcon, CaretRightIcon, CardsIcon, CoinsIcon, DownloadSimpleIcon, FireIcon, KeyIcon, PlantIcon, UploadSimpleIcon } from '@phosphor-icons/react'
 import { db } from '../lib/db.ts'
 import { describeError, testKey } from '../lib/ai.ts'
-import { saveSetting, useSettings, type FontSize, type PinyinMode } from '../lib/settings.ts'
+import { saveSetting, useSettings, type FontSize } from '../lib/settings.ts'
 import { useStats } from '../lib/stats.ts'
 import { reviveCard } from '../lib/srs.ts'
 import { Button, Section } from '../components/ui.tsx'
+import { go } from '../lib/router.ts'
 
 function Segmented<T extends string>({ value, options, onChange }: { value: T; options: [T, string][]; onChange: (v: T) => void }) {
   return (
@@ -33,7 +34,7 @@ function Row({ title, hint, children }: { title: string; hint?: ReactNode; child
   )
 }
 
-const TABLES = ['words', 'reviews', 'series', 'texts', 'imports', 'known', 'ai'] as const
+const TABLES = ['words', 'reviews', 'series', 'texts', 'imports', 'known', 'ai', 'places', 'feed', 'days'] as const
 
 export function Me() {
   const stats = useStats()
@@ -115,6 +116,15 @@ export function Me() {
         ))}
       </div>
 
+      <button onClick={() => go('words')} className="tile mt-3 flex w-full items-center gap-3 p-4 text-left">
+        <PlantIcon size={30} weight="fill" className="shrink-0 text-lv" />
+        <div className="min-w-0 flex-1">
+          <div className="text-[17px] font-extrabold">生词花园</div>
+          <div className="text-sm font-bold text-mute">{stats.due > 0 ? `${stats.due} 个词该浇水了` : '看看你的生词长多高了'}</div>
+        </div>
+        <CaretRightIcon size={20} weight="bold" className="text-mute" />
+      </button>
+
       <Section title="设置">
         <div className="tile divide-y-2 divide-line">
           <Row title="OpenAI 密钥" hint="用来问AI、解释和翻译。密钥只保存在这台设备上，直接发给 OpenAI。">
@@ -150,17 +160,6 @@ export function Me() {
                 className="w-40 rounded-lg bg-sunken px-2 py-1 font-mono text-[14px] text-text outline-none"
               />
             </div>
-          </Row>
-          <Row title="拼音" hint="自动：只给 HSK 5 以上、你还没标“认识”的词标拼音。">
-            <Segmented<PinyinMode>
-              value={settings.pinyin}
-              onChange={(v) => saveSetting('pinyin', v)}
-              options={[
-                ['auto', '自动'],
-                ['all', '全部'],
-                ['off', '关'],
-              ]}
-            />
           </Row>
           <Row title="字号">
             <Segmented<FontSize>

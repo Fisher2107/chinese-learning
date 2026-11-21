@@ -32,3 +32,227 @@
 - { w: 雷峰夕照, p: léi fēng xī zhào, d: "\"Leifeng Pagoda in the Evening Glow\", one of West Lake's ten views" }
 - { w: 冯梦龙, p: féng mèng lóng, d: "Feng Menglong (1574–1646), Ming-dynasty writer and editor" }
 - { w: 戴孝, p: dài xiào, d: "to wear mourning (white clothes) after a death in the family" }
+
+# ---- provinces (content/places) ----
+- { w: 徽州, p: huī zhōu, d: "Huizhou, historic prefecture in southern Anhui" }
+- { w: 皖南, p: wǎn nán, d: "southern Anhui" }
+- { w: 白墙黑瓦, p: bái qiáng hēi wǎ, d: "white walls and black tiles, the look of Huizhou houses" }
+- { w: 徽派, p: huī pài, d: "Huizhou style (of architecture)" }
+- { w: 徽商, p: huī shāng, d: "Huizhou merchants of the Ming and Qing" }
+- { w: 小岗村, p: xiǎo gǎng cūn, d: "Xiaogang Village, Anhui, where household farming began in 1978" }
+- { w: 风投, p: fēng tóu, d: "venture capital (short for 风险投资)" }
+- { w: 徽菜, p: huī cài, d: "Anhui cuisine" }
+- { w: 葡式, p: pú shì, d: "Portuguese-style" }
+- { w: 赌城, p: dǔ chéng, d: "gambling city" }
+- { w: 妈阁, p: mā gé, d: "A-Ma Temple, Macau (source of the name Macau)" }
+- { w: 猪扒包, p: zhū bā bāo, d: "pork chop bun (Macau snack)" }
+- { w: 建城史, p: jiàn chéng shǐ, d: "history as a city" }
+- { w: 双奥之城, p: shuāng ào zhī chéng, d: "city of both Olympics (Beijing: 2008 summer, 2022 winter)" }
+- { w: 儿化音, p: ér huà yīn, d: "the -r ending of Beijing speech (erhua)" }
+- { w: 蒙哥, p: méng gē, d: "Möngke Khan (r. 1251–1259)" }
+- { w: 上帝折鞭处, p: shàng dì zhé biān chù, d: "\"where God's whip broke\": Diaoyu Fortress, where Möngke Khan died" }
+- { w: 雄起, p: xióng qǐ, d: "(Sichuan/Chongqing) come on! stand up and fight!" }
+- { w: 闽越, p: mǐn yuè, d: "Minyue, the ancient people of Fujian" }
+- { w: 靠海吃海, p: kào hǎi chī hǎi, d: "those by the sea live off the sea" }
+- { w: 南靖, p: nán jìng, d: "Nanjing County, Fujian (Hakka earthen houses)" }
+- { w: 土楼, p: tǔ lóu, d: "tulou, Hakka earthen communal house" }
+- { w: 聚族而居, p: jù zú ér jū, d: "to live together as a whole clan" }
+- { w: 湄洲岛, p: méi zhōu dǎo, d: "Meizhou Island, Putian, home of Mazu" }
+- { w: 沙县, p: shā xiàn, d: "Shaxian County, Fujian, famous for its snack shops" }
+- { w: 爱拼才会赢, p: ài pīn cái huì yíng, d: "\"Only Those Who Fight Will Win\", 1988 Hokkien song" }
+- { w: 肃州, p: sù zhōu, d: "Suzhou, old name of Jiuquan, Gansu" }
+- { w: 三红四绿五黄, p: sān hóng sì lǜ wǔ huáng, d: "red chili oil, green herbs, yellow noodles (Lanzhou beef noodle rules)" }
+- { w: 虎门销烟, p: hǔ mén xiāo yān, d: "Lin Zexu's destruction of opium at Humen, 1839" }
+- { w: 一盅两件, p: yì zhōng liǎng jiàn, d: "one pot of tea and two dim sum (Cantonese morning tea)" }
+- { w: 香山, p: xiāng shān, d: "Xiangshan, old name of Zhongshan, Guangdong (Sun Yat-sen's home)" }
+- { w: 火遍, p: huǒ biàn, d: "to become hugely popular everywhere" }
+- { w: 歌节, p: gē jié, d: "song festival" }
+- { w: 刘三姐, p: liú sān jiě, d: "Liu Sanjie, legendary Zhuang folk singer" }
+- { w: 嗦粉, p: suō fěn, d: "(Guangxi) to slurp rice noodles" }
+- { w: 标配, p: biāo pèi, d: "standard equipment; the usual thing to have" }
+- { w: 天无三日晴, p: tiān wú sān rì qíng, d: "no three sunny days in a row (said of Guizhou)" }
+- { w: 地无三尺平, p: dì wú sān chǐ píng, d: "no three feet of flat land (said of Guizhou)" }
+- { w: 夜郎国, p: yè láng guó, d: "Yelang, an ancient kingdom in today's Guizhou" }
+- { w: 榕江, p: róng jiāng, d: "Rongjiang County, Guizhou (village football)" }
+- { w: 村超, p: cūn chāo, d: "\"Village Super League\", Guizhou football tournament" }
+- { w: 台盘村, p: tái pán cūn, d: "Taipan Village, Guizhou (village basketball)" }
+- { w: 仁怀, p: rén huái, d: "Renhuai, Guizhou, home of Moutai" }
+- { w: 平塘, p: píng táng, d: "Pingtang County, Guizhou (FAST telescope)" }
+- { w: 儋州, p: dān zhōu, d: "Danzhou, Hainan, where Su Shi was exiled" }
+- { w: 海瑞, p: hǎi ruì, d: "Hai Rui (1514–1587), famously honest Ming official" }
+- { w: 燕赵, p: yān zhào, d: "Yan and Zhao, ancient states in today's Hebei" }
+- { w: 易水, p: yì shuǐ, d: "the Yi River, Hebei" }
+- { w: 驴肉火烧, p: lǘ ròu huǒ shao, d: "donkey meat in flatbread (Baoding)" }
+- { w: 驴肉, p: lǘ ròu, d: "donkey meat" }
+- { w: 龙肉, p: lóng ròu, d: "dragon meat" }
+- { w: 锅包肉, p: guō bāo ròu, d: "Harbin sweet-and-sour fried pork" }
+- { w: 红肠, p: hóng cháng, d: "Harbin red sausage" }
+- { w: 大列巴, p: dà liè ba, d: "big Russian-style loaf (Harbin)" }
+- { w: 名吃, p: míng chī, d: "famous local food" }
+- { w: 呼兰河传, p: hū lán hé zhuàn, d: "Tales of Hulan River (Xiao Hong, 1940)" }
+- { w: 唐宫夜宴, p: táng gōng yè yàn, d: "\"Tang Palace Night Banquet\", Henan TV dance (2021)" }
+- { w: 千湖之省, p: qiān hú zhī shěng, d: "province of a thousand lakes (Hubei)" }
+- { w: 崔颢, p: cuī hào, d: "Cui Hao (704–754), Tang poet" }
+- { w: 茶颜悦色, p: chá yán yuè sè, d: "Chayan Yuese, Changsha milk tea brand" }
+- { w: 鸭血粉丝汤, p: yā xuè fěn sī tāng, d: "duck blood and vermicelli soup (Nanjing)" }
+- { w: 散装江苏, p: sǎn zhuāng jiāng sū, d: "\"Jiangsu sold loose\": joke that its cities don't act like one province" }
+- { w: 滕王阁序, p: téng wáng gé xù, d: "Preface to the Pavilion of Prince Teng (Wang Bo)" }
+- { w: 孤鹜, p: gū wù, d: "a lone wild duck" }
+- { w: 老表, p: lǎo biǎo, d: "cousin; (Jiangxi) friendly name for Jiangxi people" }
+- { w: 拌粉, p: bàn fěn, d: "mixed rice noodles (Nanchang)" }
+- { w: 瓦罐汤, p: wǎ guàn tāng, d: "clay-pot soup (Nanchang)" }
+- { w: 界湖, p: jiè hú, d: "border lake" }
+- { w: 一汽, p: yī qì, d: "FAW, First Automobile Works (Changchun)" }
+- { w: 赵本山, p: zhào běn shān, d: "Zhao Benshan, comedian from Liaoning" }
+- { w: 铁岭, p: tiě lǐng, d: "Tieling, Liaoning" }
+- { w: 嘎哈, p: gà há, d: "(Northeast dialect) what are you doing?" }
+- { w: 干啥, p: gàn shá, d: "(dialect) what are you doing? why?" }
+- { w: 男儿三艺, p: nán ér sān yì, d: "the three manly skills: wrestling, horse racing, archery" }
+- { w: 好客, p: hào kè, d: "hospitable" }
+- { w: 哈达, p: hǎ dá, d: "khata, ceremonial scarf given as a welcome" }
+- { w: 党项, p: dǎng xiàng, d: "the Tangut people, founders of Western Xia" }
+- { w: 中宁, p: zhōng níng, d: "Zhongning County, Ningxia (goji berries)" }
+- { w: 镇北堡, p: zhèn běi bǎo, d: "Zhenbeibao, old fort turned film studio, Ningxia" }
+- { w: 大话西游, p: dà huà xī yóu, d: "A Chinese Odyssey (1995 Stephen Chow film)" }
+- { w: 手抓羊肉, p: shǒu zhuā yáng ròu, d: "hand-held boiled mutton" }
+- { w: 硬菜, p: yìng cài, d: "hearty meat dish, the main dish of a meal" }
+- { w: 贵德, p: guì dé, d: "Guide County, Qinghai" }
+- { w: 茶卡盐湖, p: chá kǎ yán hú, d: "Chaka Salt Lake, Qinghai" }
+- { w: 天空之镜, p: tiān kōng zhī jìng, d: "mirror of the sky" }
+- { w: 临潼, p: lín tóng, d: "Lintong, Xi'an (Terracotta Army)" }
+- { w: 华清池, p: huá qīng chí, d: "Huaqing Pool, Xi'an" }
+- { w: 孔府, p: kǒng fǔ, d: "Kong Family Mansion, Qufu" }
+- { w: 孔林, p: kǒng lín, d: "Cemetery of Confucius, Qufu" }
+- { w: 五岳之首, p: wǔ yuè zhī shǒu, d: "first of the Five Great Mountains (Mount Tai)" }
+- { w: 考编, p: kǎo biān, d: "to sit exams for a stable state job" }
+- { w: 主陪, p: zhǔ péi, d: "main host at a banquet" }
+- { w: 副陪, p: fù péi, d: "second host at a banquet" }
+- { w: 生煎, p: shēng jiān, d: "pan-fried pork buns (Shanghai)" }
+- { w: 三家分晋, p: sān jiā fēn jìn, d: "the partition of Jin by three families (403 BC)" }
+- { w: 晋商, p: jìn shāng, d: "Shanxi merchants" }
+- { w: 应县木塔, p: yìng xiàn mù tǎ, d: "Yingxian Wooden Pagoda (1056)" }
+- { w: 黑神话, p: hēi shén huà, d: "Black Myth (video game series)" }
+- { w: 老陈醋, p: lǎo chén cù, d: "Shanxi aged vinegar" }
+- { w: 李冰, p: lǐ bīng, d: "Li Bing, Qin official who built Dujiangyan" }
+- { w: 刘禅, p: liú shàn, d: "Liu Shan (207–271), last ruler of Shu Han" }
+- { w: 蜀道难, p: shǔ dào nán, d: "\"The Hard Road to Shu\", poem by Li Bai" }
+- { w: 巴适, p: bā shì, d: "(Sichuan) comfortable, great" }
+- { w: 理塘, p: lǐ táng, d: "Litang County, Sichuan" }
+- { w: 丁真, p: dīng zhēn, d: "Ding Zhen, Tibetan herder from Litang who went viral in 2020" }
+- { w: 煎饼馃子, p: jiān bing guǒ zi, d: "Tianjin crepe wrapped around fried dough" }
+- { w: 港片, p: gǎng piàn, d: "Hong Kong films" }
+- { w: 喀纳斯湖, p: kā nà sī hú, d: "Kanas Lake, Xinjiang" }
+- { w: 焉得虎子, p: yān dé hǔ zǐ, d: "(how else) can you catch the tiger cub?" }
+- { w: 亚克西, p: yà kè xī, d: "(Uyghur) good!" }
+- { w: 世居, p: shì jū, d: "to have lived in a place for generations" }
+- { w: 春城, p: chūn chéng, d: "Spring City (Kunming)" }
+- { w: 追象, p: zhuī xiàng, d: "following the elephants (online, 2021)" }
+- { w: 鲜花饼, p: xiān huā bǐng, d: "flower cake (Yunnan)" }
+- { w: 古称, p: gǔ chēng, d: "ancient name" }
+- { w: 看潮, p: kàn cháo, d: "to watch the tidal bore" }
+- { w: 南方小土豆, p: nán fāng xiǎo tǔ dòu, d: "\"little southern potatoes\": Harbin's 2024 nickname for southern tourists" }
+- { w: 夏都, p: xià dū, d: "summer capital" }
+- { w: 轻轨, p: qīng guǐ, d: "light rail" }
+- { w: 俄式, p: é shì, d: "Russian-style" }
+- { w: 酥皮, p: sū pí, d: "flaky pastry" }
+- { w: 日出, p: rì chū, d: "sunrise" }
+- { w: 网红, p: wǎng hóng, d: "internet-famous; online celebrity" }
+- { w: 卫视, p: wèi shì, d: "satellite TV channel" }
+- { w: 唠嗑, p: lào kē, d: "(Northeast dialect) to chat" }
+- { w: 膻味, p: shān wèi, d: "the strong smell of mutton" }
+- { w: 渔村, p: yú cūn, d: "fishing village" }
+- { w: 早茶, p: zǎo chá, d: "morning tea: Cantonese breakfast of tea and dim sum" }
+- { w: 落霞, p: luò xiá, d: "sunset clouds" }
+- { w: 车手, p: chē shǒu, d: "racer, rider" }
+- { w: 酒桌, p: jiǔ zhuō, d: "the table at a dinner with drinking" }
+- { w: 木塔, p: mù tǎ, d: "wooden pagoda" }
+- { w: 入关, p: rù guān, d: "to enter China proper through Shanhaiguan" }
+- { w: 出使, p: chū shǐ, d: "to go abroad as an envoy" }
+- { w: 魔幻, p: mó huàn, d: "magical, surreal" }
+- { w: 蛋挞, p: dàn tà, d: "egg tart" }
+- { w: 雾凇, p: wù sōng, d: "rime: frost that coats trees white" }
+- { w: 辽代, p: liáo dài, d: "the Liao dynasty (916–1125)" }
+- { w: 天苍苍, p: tiān cāng cāng, d: "the sky is vast and blue" }
+- { w: 野茫茫, p: yě máng máng, d: "the wilds stretch endlessly" }
+- { w: 漓江, p: lí jiāng, d: "the Li River, Guilin" }
+- { w: 祝英台, p: zhù yīng tái, d: "Zhu Yingtai, heroine of the Butterfly Lovers" }
+- { w: 梁山伯, p: liáng shān bó, d: "Liang Shanbo, hero of the Butterfly Lovers" }
+- { w: 漠河, p: mò hé, d: "Mohe, China's northernmost county (Heilongjiang)" }
+- { w: 淄博, p: zī bó, d: "Zibo, Shandong (barbecue craze of 2023)" }
+- { w: 丽江, p: lì jiāng, d: "Lijiang, Yunnan" }
+- { w: 义乌, p: yì wū, d: "Yiwu, Zhejiang, world's biggest small-goods market" }
+- { w: 三亚, p: sān yà, d: "Sanya, Hainan" }
+- { w: 运城, p: yùn chéng, d: "Yuncheng, Shanxi" }
+- { w: 登封, p: dēng fēng, d: "Dengfeng, Henan (Shaolin Temple)" }
+- { w: 外滩, p: wài tān, d: "the Bund, Shanghai" }
+- { w: 王勃, p: wáng bó, d: "Wang Bo (650–676), Tang poet" }
+- { w: 晋国, p: jìn guó, d: "the state of Jin (Spring and Autumn period)" }
+- { w: 悟空, p: wù kōng, d: "Wukong, the Monkey King" }
+- { w: 春晚, p: chūn wǎn, d: "CCTV Spring Festival Gala" }
+- { w: 魔都, p: mó dū, d: "\"magic city\": nickname for Shanghai" }
+- { w: 雾都, p: wù dū, d: "\"fog city\": nickname for Chongqing" }
+- { w: 帝都, p: dì dū, d: "imperial capital; online nickname for Beijing" }
+- { w: 瓷都, p: cí dū, d: "porcelain capital (Jingdezhen)" }
+- { w: 三都赋, p: sān dū fù, d: "Rhapsody on the Three Capitals (Zuo Si, 3rd century)" }
+- { w: 干嘛, p: gàn má, d: "what are you doing? why?" }
+- { w: 清平乐, p: qīng píng yuè, d: "Qing Ping Yue, a classical ci tune pattern" }
+- { w: 六盘山, p: liù pán shān, d: "Liupan Mountains, Ningxia" }
+- { w: 段子, p: duàn zi, d: "joke; short funny story (online)" }
+- { w: 逗哏, p: dòu gén, d: "the funny man in a crosstalk duo" }
+- { w: 捧哏, p: pěng gén, d: "the straight man in a crosstalk duo" }
+- { w: 哏儿, p: génr, d: "(Tianjin) funny, amusing" }
+- { w: 野生菌, p: yě shēng jùn, d: "wild mushrooms" }
+- { w: 见手青, p: jiàn shǒu qīng, d: "\"turns blue when touched\": a Yunnan bolete, toxic if undercooked" }
+- { w: 鸡枞, p: jī zōng, d: "termite mushroom (Yunnan delicacy)" }
+- { w: 牛肝菌, p: niú gān jùn, d: "bolete mushroom" }
+- { w: 松茸, p: sōng róng, d: "matsutake mushroom" }
+- { w: 酸笋, p: suān sǔn, d: "fermented bamboo shoots" }
+- { w: 额济纳旗, p: é jì nà qí, d: "Ejin Banner, Inner Mongolia (site of the Jiuquan launch centre)" }
+- { w: 路环, p: lù huán, d: "Coloane, Macau" }
+- { w: 安德鲁, p: ān dé lǔ, d: "Andrew (Andrew Stow, who made Macau's egg tarts famous)" }
+- { w: 村松梢风, p: cūn sōng shāo fēng, d: "Muramatsu Shōfū (1889–1961), Japanese writer" }
+- { w: 樟湖, p: zhāng hú, d: "Zhanghu, a town in Nanping, Fujian" }
+- { w: 蛇王节, p: shé wáng jié, d: "Snake King Festival (Zhanghu, Fujian)" }
+- { w: 瓦神爷, p: wǎ shén yé, d: "\"god of tiles\": what villagers first took the terracotta heads for" }
+- { w: 麻城, p: má chéng, d: "Macheng, Hubei" }
+- { w: 孝感乡, p: xiào gǎn xiāng, d: "Xiaogan Township, Macheng: ancestral home claimed by many Sichuan families" }
+- { w: 李子坝, p: lǐ zi bà, d: "Liziba, Chongqing (light rail through a building)" }
+- { w: 徽京, p: huī jīng, d: "joke name for Nanjing, as if it were Anhui's capital" }
+- { w: 苏超, p: sū chāo, d: "Jiangsu city football league (2025)" }
+- { w: 尔滨, p: ěr bīn, d: "affectionate 2024 nickname for Harbin" }
+- { w: 好汉证, p: hǎo hàn zhèng, d: "\"hero certificate\" for climbing the Great Wall" }
+- { w: 沙坡头, p: shā pō tóu, d: "Shapotou, Ningxia, where desert meets the Yellow River" }
+- { w: 一盅两件, p: yì zhōng liǎng jiàn, d: "one pot of tea and two dim sum" }
+- { w: 甜党, p: tián dǎng, d: "\"sweet party\": people who like the sweet version" }
+- { w: 咸党, p: xián dǎng, d: "\"salty party\": people who like the salty version" }
+- { w: 走之底, p: zǒu zhī dǐ, d: "the 辶 radical" }
+- { w: 立刀, p: lì dāo, d: "the 刂 radical" }
+- { w: 昌南, p: chāng nán, d: "Changnan, old name of Jingdezhen" }
+- { w: 蜀地, p: shǔ dì, d: "the land of Shu (Sichuan)" }
+- { w: 兹游奇绝, p: zī yóu qí jué, d: "this journey was wondrous" }
+- { w: 敕勒歌, p: chì lè gē, d: "Song of the Chile, a northern folk song (6th century)" }
+- { w: 郭德纲, p: guō dé gāng, d: "Guo Degang (b. 1973), crosstalk comedian from Tianjin" }
+- { w: 滇国, p: diān guó, d: "the ancient Dian kingdom (Yunnan)" }
+- { w: 景德, p: jǐng dé, d: "Jingde, Song reign name (1004–1007)" }
+- { w: 黔驴, p: qián lǘ, d: "the donkey of Guizhou (from a Liu Zongyuan fable)" }
+- { w: 缺医少药, p: quē yī shǎo yào, d: "short of doctors and medicine" }
+- { w: 水漫金山, p: shuǐ màn jīn shān, d: "flooding Jinshan Temple (scene in the White Snake story)" }
+- { w: 十景, p: shí jǐng, d: "the ten famous views" }
+- { w: 陶片, p: táo piàn, d: "pottery shard" }
+- { w: 袋装, p: dài zhuāng, d: "packaged in a bag" }
+- { w: 观景, p: guān jǐng, d: "to view the scenery" }
+- { w: 蘸料, p: zhàn liào, d: "dipping sauce" }
+- { w: 三件套, p: sān jiàn tào, d: "three-piece set" }
+- { w: 好汉, p: hǎo hàn, d: "hero; true man" }
+- { w: 螺蛳, p: luó sī, d: "river snail" }
+- { w: 左思, p: zuǒ sī, d: "Zuo Si (c. 250–305), Jin-dynasty writer" }
+- { w: 夜郎, p: yè láng, d: "Yelang, ancient kingdom in today's Guizhou" }
+- { w: 秦汉, p: qín hàn, d: "the Qin and Han dynasties" }
+- { w: 长队, p: cháng duì, d: "long queue" }
+- { w: 专列, p: zhuān liè, d: "special train" }
+- { w: 公交, p: gōng jiāo, d: "public transport; bus" }
+- { w: 减震, p: jiǎn zhèn, d: "to reduce vibration" }
+- { w: 字库, p: zì kù, d: "character set; font library" }
+- { w: 冻梨, p: dòng lí, d: "frozen pear (Northeast winter snack)" }
+- { w: 号线, p: hào xiàn, d: "(metro) line number" }
+- { w: 九死南荒, p: jiǔ sǐ nán huāng, d: "nearly dying in the wild south" }

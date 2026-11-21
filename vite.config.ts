@@ -34,6 +34,12 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
         runtimeCaching: [
           {
+            // Small lists that change daily (new 刷一刷 cards, new episodes): fresh when online, cached offline
+            urlPattern: ({ url }) => /\/content\/(index|feed|places|jieqi)\.json$/.test(url.pathname),
+            handler: 'NetworkFirst',
+            options: { cacheName: 'zh-index', networkTimeoutSeconds: 4 },
+          },
+          {
             // Stories, texts and the dictionary: use the cached copy, refresh in the background
             urlPattern: ({ url }) => url.pathname.includes('/content/') || url.pathname.includes('/data/'),
             handler: 'StaleWhileRevalidate',
