@@ -7,6 +7,7 @@ import { useStats } from '../lib/stats.ts'
 import { reviveCard } from '../lib/srs.ts'
 import { Button, Section } from '../components/ui.tsx'
 import { go } from '../lib/router.ts'
+import { builtLabel, checkForUpdate } from '../lib/update.ts'
 
 function Segmented<T extends string>({ value, options, onChange }: { value: T; options: [T, string][]; onChange: (v: T) => void }) {
   return (
@@ -42,6 +43,19 @@ export function Me() {
   const [key, setKey] = useState<string>()
   const [keyStatus, setKeyStatus] = useState<{ ok: boolean; text: string }>()
   const [backupMsg, setBackupMsg] = useState<string>()
+  const [updateMsg, setUpdateMsg] = useState<string>()
+
+  async function update() {
+    setUpdateMsg('正在检查…')
+    const r = await checkForUpdate()
+    if (r === 'offline') setUpdateMsg('连不上网，有网的时候再试。')
+    else if (r === 'latest') setUpdateMsg('已经是最新版了。')
+    else {
+      setUpdateMsg('有新版本！正在下载，好了会自动重新打开。')
+      // in case the phone doesn't reopen it by itself
+      setTimeout(() => location.reload(), 8000)
+    }
+  }
   const file = useRef<HTMLInputElement>(null)
   const keyValue = key ?? settings.apiKey
 
@@ -171,6 +185,14 @@ export function Me() {
                 ['l', '大'],
               ]}
             />
+          </Row>
+          <Row title="版本" hint={`这台设备上的版本：${builtLabel()}`}>
+            <div className="flex items-center gap-3">
+              <Button tone="plain" size="sm" onClick={update}>
+                检查更新
+              </Button>
+              {updateMsg && <span className="text-sm font-bold text-mute">{updateMsg}</span>}
+            </div>
           </Row>
         </div>
       </Section>

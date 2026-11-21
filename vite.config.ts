@@ -8,6 +8,8 @@ const base = process.env.BASE_PATH ?? '/chinese-learning/'
 
 export default defineConfig({
   base,
+  // shown in 我的 → 版本, so you can tell which version a phone is running
+  define: { __BUILT__: JSON.stringify(new Date().toISOString()) },
   plugins: [
     react(),
     tailwindcss(),
