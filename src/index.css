@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+/* 中国传统色 palette, with semantic surfaces that flip in dark mode */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --sunken: #f4f4f2;
+  --text: #2b2b2b;
+  --mute: #7d7d78;
+  --line: #e6e5e0;
+  --paper: #f9f4dc;
+  --paper-text: #2b2b2b;
+  --hl: #ffe9a8;
+  --lv-soft: #dcf4ea;
+  --zhu-soft: #fde6df;
+  --lv-ink: #1e8a68;
+  --zhu-ink: #c23d16;
+  --dai: #425066;
+  --dai-dark: #2c3646;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15181c;
+    --surface: #1e2227;
+    --sunken: #262b31;
+    --text: #eceae4;
+    --mute: #9a9a94;
+    --line: #343a41;
+    --paper: #1f1d17;
+    --paper-text: #e8e2cc;
+    --hl: #5b4a12;
+    --lv-soft: #12362b;
+    --zhu-soft: #431d14;
+    --lv-ink: #5fd3a9;
+    --zhu-ink: #ff8a66;
+    --dai: #6a7d9b;
+    --dai-dark: #4a5a73;
+    color-scheme: dark;
+  }
+}
+
+@theme {
+  --color-zhu: #ed5126;
+  --color-zhu-dark: #c23d16;
+  --color-zhu-soft: var(--zhu-soft);
+  --color-zhu-ink: var(--zhu-ink);
+  --color-lv: #2bae85;
+  --color-lv-dark: #1e8a68;
+  --color-lv-soft: var(--lv-soft);
+  --color-lv-ink: var(--lv-ink);
+  --color-huang: #ffd111;
+  --color-huang-dark: #d6a800;
+  --color-dai: var(--dai);
+  --color-dai-dark: var(--dai-dark);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-sunken: var(--sunken);
+  --color-text: var(--text);
+  --color-mute: var(--mute);
+  --color-line: var(--line);
+  --color-paper: var(--paper);
+  --color-paper-text: var(--paper-text);
+  --color-hl: var(--hl);
+  --font-ui:
+    "Nunito", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC",
+    "Microsoft YaHei", system-ui, sans-serif;
+  --font-book: "LXGW WenKai Screen", "Kaiti SC", "STKaiti", "KaiTi", serif;
+  --radius-card: 16px;
+}
+
+@layer base {
+  html,
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: none;
+  }
+  body {
+    margin: 0;
+    min-height: 100dvh;
+  }
+  button {
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+  }
+}
+
+@layer components {
+  /* Duolingo-style chunky button: a darker 4px edge that presses down */
+  .chunky {
+    --edge: rgba(0, 0, 0, 0.18);
+    box-shadow: 0 4px 0 var(--edge);
+    transform: translateY(0);
+    transition:
+      transform 80ms ease,
+      box-shadow 80ms ease,
+      filter 120ms;
+  }
+  .chunky:active:not(:disabled) {
+    box-shadow: 0 0 0 var(--edge);
+    transform: translateY(4px);
+  }
+  .chunky:disabled {
+    cursor: default;
+  }
+  .tile {
+    border: 2px solid var(--line);
+    box-shadow: 0 3px 0 var(--line);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+  }
+  button.tile:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--line);
+  }
+
+  /* Reading text */
+  .zh {
+    font-family: var(--font-book);
+    line-height: 2.05;
+    letter-spacing: 0.02em;
+    text-align: justify;
+    word-break: break-all;
+  }
+  .zh .w {
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 120ms;
+  }
+  .zh .w:hover {
+    background: color-mix(in oklab, var(--hl) 50%, transparent);
+  }
+  .zh .w.on {
+    background: var(--hl);
+  }
+  .zh .w.saved {
+    text-decoration: underline 2px
+      color-mix(in oklab, var(--color-zhu) 55%, transparent);
+    text-underline-offset: 5px;
+  }
+  .zh .s.speaking {
+    background: color-mix(in oklab, var(--color-lv) 18%, transparent);
+    border-radius: 4px;
+  }
+  .zh ruby {
+    ruby-align: center;
+  }
+  .zh rt {
+    font-family: var(--font-ui);
+    font-size: 0.48em;
+    font-weight: 700;
+    color: var(--mute);
+    letter-spacing: 0;
+    line-height: 1;
+  }
+  .zh-ui {
+    font-family: var(--font-ui);
+    text-align: left;
+    line-height: 1.75;
+    word-break: normal;
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  [data-vaul-drawer] {
+    outline: none;
+  }
+}

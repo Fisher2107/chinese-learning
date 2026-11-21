@@ -1,0 +1,34 @@
+# Names and words the dictionary lacks or gets wrong. w = word, p = pinyin, d = gloss
+- { w: 胖东来, p: pàng dōng lái, d: "Pangdonglai, a supermarket chain from Xuchang, Henan" }
+- { w: 于东来, p: yú dōng lái, d: "Yu Donglai, founder of Pangdonglai" }
+- { w: 望月楼胖子店, p: wàng yuè lóu pàng zi diàn, d: "Wangyuelou Fatty's Shop, Yu Donglai's first shop (1995)" }
+- { w: 不开心假, p: bù kāi xīn jià, d: "\"unhappy leave\": days off you can take just because you're not happy" }
+- { w: 委屈奖, p: wěi qu jiǎng, d: "\"grievance award\": money for staff treated unfairly at work" }
+- { w: 许都, p: xǔ dū, d: "Xudu, Cao Cao's capital, today's Xuchang" }
+- { w: 调改, p: tiáo gǎi, d: "to overhaul (a store): adjust and reform" }
+- { w: 永辉, p: yǒng huī, d: "Yonghui, a big Chinese supermarket chain" }
+- { w: 角黄素, p: jiǎo huáng sù, d: "canthaxanthin, a colouring that makes egg yolks redder" }
+- { w: 打假, p: dǎ jiǎ, d: "to fight fakes; to expose fake or substandard goods" }
+- { w: 擀面皮, p: gǎn miàn pí, d: "ganmianpi, Shaanxi-style cold rolled noodles" }
+- { w: 延津, p: yán jīn, d: "Yanjin, a county in Henan" }
+- { w: 灞陵桥, p: bà líng qiáo, d: "Baling Bridge in Xuchang, where Guan Yu took his leave of Cao Cao" }
+- { w: 鄢陵, p: yān líng, d: "Yanling, a county of Xuchang famous for flowers and plants" }
+- { w: 胡辣汤, p: hú là tāng, d: "hulatang, Henan's peppery breakfast soup" }
+- { w: 烩面, p: huì miàn, d: "huimian, Henan's wide hand-pulled noodles in broth" }
+- { w: 许宣, p: xǔ xuān, d: "Xu Xuan, the young man in the 1624 version of the White Snake (later 许仙)" }
+- { w: 许仙, p: xǔ xiān, d: "Xu Xian, the hero of the Legend of the White Snake" }
+- { w: 白娘子, p: bái niáng zǐ, d: "Lady White, the white snake" }
+- { w: 白素贞, p: bái sù zhēn, d: "Bai Suzhen, the white snake's name in modern versions" }
+- { w: 小青, p: xiǎo qīng, d: "Xiaoqing, the white snake's companion" }
+- { w: 青青, p: qīng qīng, d: "Qingqing, the maid's name in the 1624 version" }
+- { w: 金山寺, p: jīn shān sì, d: "Jinshan Temple in Zhenjiang" }
+- { w: 保叔塔, p: bǎo shū tǎ, d: "Baoshu Pagoda, on a hill by West Lake" }
+- { w: 邵太尉, p: shào tài wèi, d: "Grand Commandant Shao (a character)" }
+- { w: 蟹和尚, p: xiè hé shang, d: "\"crab monk\": the cone-shaped membrane inside a crab shell" }
+- { w: 义妖传, p: yì yāo zhuàn, d: "The Tale of the Righteous Demon, a Qing-era sung version of the story" }
+- { w: 新白娘子传奇, p: xīn bái niáng zǐ chuán qí, d: "New Legend of Madame White Snake (1992 TV series)" }
+- { w: 法海你不懂爱, p: fǎ hǎi nǐ bù dǒng ài, d: "\"Fahai, You Don't Understand Love\" (viral 2012 song)" }
+- { w: 断桥残雪, p: duàn qiáo cán xuě, d: "\"Lingering Snow on the Broken Bridge\", one of West Lake's ten views" }
+- { w: 雷峰夕照, p: léi fēng xī zhào, d: "\"Leifeng Pagoda in the Evening Glow\", one of West Lake's ten views" }
+- { w: 冯梦龙, p: féng mèng lóng, d: "Feng Menglong (1574–1646), Ming-dynasty writer and editor" }
+- { w: 戴孝, p: dài xiào, d: "to wear mourning (white clothes) after a death in the family" }
