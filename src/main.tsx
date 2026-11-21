@@ -1,12 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { registerSW } from 'virtual:pwa-register'
 import App from './App.tsx'
 import { ErrorBoundary } from './components/ErrorBoundary.tsx'
 import { watchConnection } from './lib/live.ts'
+import { startUpdates } from './lib/update.ts'
 import './index.css'
 
-registerSW({ immediate: true })
+startUpdates()
 watchConnection()
 
 // Ask the browser to keep IndexedDB (saved words, progress) even when storage is low.
