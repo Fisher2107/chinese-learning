@@ -2,6 +2,7 @@
 title: 许昌 · 胖东来
 subtitle: 来许昌，必须做的一件事
 place: 河南 · 许昌
+provinces: [henan]
 kind: 家乡必做
 color: "#ED5126"
 sources:

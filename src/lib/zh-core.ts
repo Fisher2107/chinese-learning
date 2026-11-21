@@ -111,7 +111,7 @@ export function segmentWords(text: string, lookup: Lookup): string[] {
   const merged: string[] = []
   for (let i = 0; i < pieces.length; ) {
     let took = 1
-    for (let n = Math.min(4, pieces.length - i); n > 1; n--) {
+    for (let n = Math.min(MAX_WORD, pieces.length - i); n > 1; n--) {
       const joined = pieces.slice(i, i + n).join('')
       if (joined.length <= MAX_WORD && lookup.term(joined)) {
         took = n
@@ -120,11 +120,16 @@ export function segmentWords(text: string, lookup: Lookup): string[] {
     }
     // 儿化: 一点 + 儿 → 一点儿, 哪 + 儿 → 哪儿
     if (took === 1 && pieces[i + 1] === '儿' && isHan(pieces[i]) && lookup.entries(pieces[i] + '儿')) took = 2
-    // ICU sometimes splits longer dictionary words: 兵马 + 俑 → 兵马俑
-    if (took === 1 && i + 1 < pieces.length && isHan(pieces[i]) && isHan(pieces[i + 1])) {
-      const joined = pieces[i] + pieces[i + 1]
-      if (joined.length >= 3 && joined.length <= 4 && lookup.entries(joined) && !SPLIT[joined]) took = 2
+    // ICU sometimes splits longer dictionary words: 兵马 + 俑 → 兵马俑, 莫 + 高 + 窟 → 莫高窟
+    for (let n = Math.min(4, pieces.length - i); took === 1 && n > 1; n--) {
+      const parts = pieces.slice(i, i + n)
+      const joined = parts.join('')
+      if (joined.length >= 3 && joined.length <= MAX_WORD && parts.every(isHan) && lookup.entries(joined) && !SPLIT[joined]) took = n
     }
+    // …and two single characters that make an everyday (HSK) word: 车 + 牌 → 车牌. Not with
+    // grammar words, so 说 + 的话 and 到 + 了 keep their own split.
+    const [a, b] = [pieces[i], pieces[i + 1]]
+    if (took === 1 && a?.length === 1 && b?.length === 1 && isHan(a) && isHan(b) && !GLUE.test(a) && !GLUE.test(b) && lookup.hsk(a + b) && !SPLIT[a + b]) took = 2
     merged.push(pieces.slice(i, i + took).join(''))
     i += took
   }
@@ -145,7 +150,10 @@ export function readings(word: string, lookup: Lookup): string[] {
 }
 
 /** Dictionary words that are almost always two words in running text (快到了 = 到 + 了). */
-const SPLIT: Record<string, string[]> = { 到了: ['到', '了'], 好了: ['好', '了'], 完了: ['完', '了'], 一个人: ['一个', '人'] }
+/** Grammar characters that ICU is right to keep on their own. */
+const GLUE = /^[的了着过地得都还也就是在有和与把被给对从到为这那个一不很最又更才只让叫说做去来上下里中前后多大小人会能要可吗呢吧啊么没他她它我你们]$/
+
+const SPLIT: Record<string, string[]> = { 到了: ['到', '了'], 好了: ['好', '了'], 完了: ['完', '了'], 一个人: ['一个', '人'], 又来了: ['又', '来', '了'] }
 
 const COUNTING = /[一二两三四五六七八九十几这那哪每各某多半整]$/
 const PRONOUN = /^(我|你|他|她|它|我们|你们|他们|她们|咱们)$/

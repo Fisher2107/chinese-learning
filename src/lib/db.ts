@@ -3,7 +3,7 @@ import type { Para, Token } from './types.ts'
 
 /** Where a saved word was found, so the card can link back to it. */
 export interface WordSource {
-  kind: 'episode' | 'text' | 'import' | 'ai'
+  kind: 'episode' | 'text' | 'import' | 'ai' | 'place' | 'feed' | 'review'
   /** route to reopen the spot, e.g. "series/pangdonglai/3" */
   route: string
   title: string
@@ -39,6 +39,8 @@ export interface SeriesProgress {
   done: number[]
   /** the 读后 page has been seen */
   finished?: boolean
+  /** how many episodes the series had when the user last opened it, for the 更新 badge */
+  known?: number
   updated: number
 }
 
@@ -71,6 +73,35 @@ export interface Known {
   at: number
 }
 
+/** A province the user has opened; `stamp` is when its 集章 quiz was passed. */
+export interface PlaceProgress {
+  id: string
+  visited: number
+  stamp?: number
+  updated: number
+}
+
+/** A 刷一刷 card the user has seen: how long they stayed, and whether they liked it. */
+export interface FeedSeen {
+  id: string
+  seen: number
+  /** total milliseconds on screen */
+  dwell: number
+  liked?: boolean
+}
+
+/** What happened on one day, for the morning routine and the day summary. */
+export interface DayLog {
+  /** local date, YYYY-MM-DD */
+  day: string
+  reviews: number
+  saved: number
+  cards: number
+  chars: number
+  /** the morning routine was finished at this time */
+  morning?: number
+}
+
 export interface Setting {
   key: string
   value: unknown
@@ -85,6 +116,9 @@ export const db = new Dexie('zhongguotong') as Dexie & {
   imports: EntityTable<ImportDoc, 'id'>
   known: EntityTable<Known, 'word'>
   settings: EntityTable<Setting, 'key'>
+  places: EntityTable<PlaceProgress, 'id'>
+  feed: EntityTable<FeedSeen, 'id'>
+  days: EntityTable<DayLog, 'day'>
 }
 
 db.version(1).stores({
@@ -96,6 +130,11 @@ db.version(1).stores({
   imports: '++id, created',
   known: 'word',
   settings: 'key',
+})
+db.version(2).stores({
+  places: 'id, updated',
+  feed: 'id, seen',
+  days: 'day',
 })
 
 export async function getSetting<T>(key: string, fallback: T): Promise<T> {

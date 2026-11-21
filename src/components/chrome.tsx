@@ -1,30 +1,44 @@
 import type { ReactNode } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { BooksIcon, CardsIcon, CheckCircleIcon, CoinsIcon, FireIcon, HouseIcon, UserIcon, XCircleIcon } from '@phosphor-icons/react'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { BooksIcon, CardsIcon, CardsThreeIcon, CheckCircleIcon, CoinsIcon, FireIcon, HouseIcon, MapTrifoldIcon, UserIcon, XCircleIcon } from '@phosphor-icons/react'
+import { db, getSetting } from '../lib/db.ts'
+import { loadIndex, useLoad } from '../lib/content.ts'
 import { go } from '../lib/router.ts'
 import { useStats } from '../lib/stats.ts'
 import { Button } from './ui.tsx'
 
 const TABS = [
   { route: '', label: '今天', Icon: HouseIcon, color: 'var(--color-zhu)' },
+  { route: 'feed', label: '刷一刷', Icon: CardsThreeIcon, color: '#8E5BB5' },
+  { route: 'map', label: '地图', Icon: MapTrifoldIcon, color: '#F7A43A' },
   { route: 'shelf', label: '书架', Icon: BooksIcon, color: 'var(--color-lv)' },
-  { route: 'words', label: '生词本', Icon: CardsIcon, color: 'var(--color-dai)' },
   { route: 'me', label: '我的', Icon: UserIcon, color: 'var(--color-huang-dark)' },
 ]
 
+/** True when there are cards the user hasn't seen that arrived after their last visit to 刷一刷. */
+function useNewCards() {
+  const index = useLoad(loadIndex, 'index').data
+  const state = useLiveQuery(async () => ({ visited: await getSetting('feedVisited', ''), seen: new Set(await db.feed.toCollection().primaryKeys()) }), [])
+  if (!index || !state) return false
+  return (index.feed ?? []).some((c) => c.date > state.visited && !state.seen.has(c.id))
+}
+
 export function TabBar({ current }: { current: string }) {
+  const fresh = useNewCards()
   return (
     <nav className="safe-bottom fixed inset-x-0 bottom-0 z-30 border-t-2 border-line bg-bg">
-      <div className="mx-auto grid h-16 max-w-xl grid-cols-4">
+      <div className="mx-auto grid h-16 max-w-xl" style={{ gridTemplateColumns: `repeat(${TABS.length}, 1fr)` }}>
         {TABS.map(({ route, label, Icon, color }) => {
           const on = current === route
           return (
             <button key={label} onClick={() => go(route)} className="flex flex-col items-center justify-center gap-0.5">
               <span
-                className="grid h-9 w-12 place-items-center rounded-xl border-2 transition-colors"
+                className="relative grid h-9 w-12 place-items-center rounded-xl border-2 transition-colors"
                 style={{ borderColor: on ? color : 'transparent', background: on ? `color-mix(in oklab, ${color} 12%, transparent)` : undefined }}
               >
                 <Icon size={26} weight={on ? 'fill' : 'bold'} color={on ? color : 'var(--mute)'} />
+                {route === 'feed' && fresh && !on && <span aria-label="有新卡片" className="absolute -top-0.5 -right-0.5 size-3 rounded-full border-2 border-bg bg-zhu" />}
               </span>
               <span className="text-[11px] font-extrabold" style={{ color: on ? color : 'var(--mute)' }}>
                 {label}

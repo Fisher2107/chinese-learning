@@ -122,7 +122,7 @@
   /* Reading text */
   .zh {
     font-family: var(--font-book);
-    line-height: 2.05;
+    line-height: 1.85;
     letter-spacing: 0.02em;
     text-align: justify;
     word-break: break-all;
@@ -146,17 +146,6 @@
   .zh .s.speaking {
     background: color-mix(in oklab, var(--color-lv) 18%, transparent);
     border-radius: 4px;
-  }
-  .zh ruby {
-    ruby-align: center;
-  }
-  .zh rt {
-    font-family: var(--font-ui);
-    font-size: 0.48em;
-    font-weight: 700;
-    color: var(--mute);
-    letter-spacing: 0;
-    line-height: 1;
   }
   .zh-ui {
     font-family: var(--font-ui);

@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { motion } from 'motion/react'
 import { ArrowLeftIcon, BookOpenTextIcon, CheckIcon, LockIcon, StampIcon, StarIcon } from '@phosphor-icons/react'
-import { seriesProgress } from '../lib/db.ts'
+import { db, seriesProgress } from '../lib/db.ts'
 import { loadSeries, useLoad } from '../lib/content.ts'
 import { back, go } from '../lib/router.ts'
 import { Loading } from '../components/ui.tsx'
@@ -14,6 +14,14 @@ export function SeriesPath({ id }: { id: string }) {
   const { data: series, error } = useLoad(() => loadSeries(id), `series:${id}`)
   const progress = useLiveQuery(() => seriesProgress(id), [id])
   const [toast, setToast] = useState<string>()
+  // Seen the latest episode list: clears the 更新 badge on 今天
+  const count = series?.episodes.length
+  useEffect(() => {
+    if (!count) return
+    db.series.get(id).then((p) => {
+      if (p && p.known !== count) db.series.update(id, { known: count })
+    })
+  }, [id, count])
   if (error) return <div className="p-8 text-center font-bold text-mute">找不到这个系列。</div>
   if (!series || !progress) return <Loading />
 

@@ -4,7 +4,9 @@
 //   content/series/<id>/after.md     读后: key words, 聊天工具包, 聊天彩蛋…
 //   content/texts/<id>.md            public-domain full texts
 //   content/terms.yml                names and words the dictionary lacks
-// Output: public/content/{index.json, series/<id>.json, texts/<id>.json}
+//   content/places/<id>.md           one page per province: intro, then ## 聊天彩蛋 bullets
+//   content/feed/<slug>.md           刷一刷 cards: title is the hook question, body 150–300 字
+// Output: public/content/{index.json, series/<id>.json, texts/<id>.json, places.json, feed.json}
 //
 // Markup inside stories:
 //   {假|jià}                  force a reading
@@ -202,6 +204,7 @@ async function buildSeries(id, index) {
     place: meta.place ?? '',
     kind: meta.kind ?? '',
     color: meta.color ?? PALETTE[index % PALETTE.length],
+    provinces: meta.provinces ?? [],
     episodes: full.map(({ n, title, beat }) => ({ n, title, beat })),
   }
   return {
@@ -230,6 +233,68 @@ const seriesOut = []
 for (const [i, id] of seriesIds.entries()) seriesOut.push(await buildSeries(id, i))
 const textOut = Object.keys(texts).map(buildText)
 
+// ---------- places (provinces) ----------
+const placeIds = new Set()
+const places = []
+const placesGlossary = {}
+for (const file of (await readdir('content/places')).filter((f) => f.endsWith('.md')).sort()) {
+  const where = `places/${file}`
+  const { meta, body } = splitFrontmatter(await readFile(`content/places/${file}`, 'utf8'), where)
+  for (const k of ['id', 'name', 'full', 'type', 'short', 'region']) if (!meta[k]) errors.push(`${where}: missing ${k}`)
+  if (`${meta.id}.md` !== file) errors.push(`${where}: id should match the file name`)
+  if (meta.short && [...meta.short].length !== 1) errors.push(`${where}: short should be one character (put a second one in alias)`)
+  const [intro, eggs = ''] = body.split(/^## 聊天彩蛋\s*$/m)
+  placeIds.add(meta.id)
+  places.push({
+    id: meta.id,
+    name: meta.name,
+    full: meta.full,
+    type: meta.type,
+    short: meta.short,
+    alias: meta.alias ?? '',
+    capital: meta.capital ?? '',
+    region: meta.region,
+    note: meta.note ? makeSentences(meta.note, placesGlossary, where) : [],
+    intro: parseBlocks(intro, placesGlossary, where),
+    eggs: parseBlocks(eggs, placesGlossary, where),
+    series: seriesOut.filter((s) => s.summary.provinces.includes(meta.id)).map((s) => s.summary.id),
+  })
+}
+for (const s of seriesOut)
+  for (const pid of s.summary.provinces) if (!placeIds.has(pid)) errors.push(`series ${s.summary.id}: unknown province "${pid}"`)
+
+// ---------- 刷一刷 feed ----------
+const feed = []
+const feedGlossary = {}
+const feedDir = 'content/feed'
+for (const file of existsSync(feedDir) ? (await readdir(feedDir)).filter((f) => f.endsWith('.md')).sort() : []) {
+  const where = `feed/${file}`
+  const { meta, body } = splitFrontmatter(await readFile(`${feedDir}/${file}`, 'utf8'), where)
+  const id = meta.id ?? file.slice(0, -3)
+  if (!meta.title) errors.push(`${where}: missing title (the hook question)`)
+  if (meta.province && !placeIds.has(meta.province)) errors.push(`${where}: unknown province "${meta.province}"`)
+  if (meta.series && !seriesIds.includes(meta.series)) errors.push(`${where}: unknown series "${meta.series}"`)
+  if (!Array.isArray(meta.sources) || meta.sources.length === 0) errors.push(`${where}: needs at least one source`)
+  const chars = charCount(body)
+  if (chars < 100 || chars > 360) errors.push(`${where}: body is ${chars} 字, aim for 150–300`)
+  feed.push({
+    id,
+    date: meta.date ? String(meta.date) : '',
+    title: makeSentences(String(meta.title ?? ''), feedGlossary, where),
+    province: meta.province ?? '',
+    series: meta.series ?? '',
+    tags: meta.tags ?? [],
+    chars,
+    body: parseBlocks(body, feedGlossary, where),
+    sources: meta.sources ?? [],
+    inspiration: meta.inspiration ?? [],
+  })
+}
+
+// 节气 hooks for the home banner, tokenized so every word can be tapped
+const jieqiGlossary = {}
+const jieqi = Object.fromEntries(JIEQI.map((j) => [j.name, makeSentences(j.hook, jieqiGlossary, `jieqi/${j.name}`)]))
+
 if (ambiguous.size) {
   console.log(`\nWords with several readings (add {字|pinyin} if a guess is wrong):`)
   for (const [key, ctx] of ambiguous) {
@@ -249,12 +314,13 @@ if (!CHECK) {
   const index = {
     series: seriesOut.map((s) => s.summary),
     texts: textOut.map(({ id, title, author, year, from, chars, sittings }) => ({ id, title, author, year, from, chars, sittings })),
+    // small summary so the tab bar can show a dot for new cards without loading feed.json
+    feed: feed.map(({ id, date, province, series }) => ({ id, date, province, series })),
   }
   await writeFile('public/content/index.json', JSON.stringify(index))
   await writeFile('public/content/terms.json', JSON.stringify(terms))
-  // 节气 hooks for the home banner, tokenized so every word can be tapped
-  const jieqiGlossary = {}
-  const jieqi = Object.fromEntries(JIEQI.map((j) => [j.name, makeSentences(j.hook, jieqiGlossary, `jieqi/${j.name}`)]))
   await writeFile('public/content/jieqi.json', JSON.stringify({ hooks: jieqi, glossary: jieqiGlossary }))
+  await writeFile('public/content/places.json', JSON.stringify({ places, glossary: placesGlossary }))
+  await writeFile('public/content/feed.json', JSON.stringify({ cards: feed, glossary: feedGlossary }))
 }
-console.log(`\n${seriesOut.length} series, ${textOut.length} texts ${CHECK ? 'checked' : 'built'}.`)
+console.log(`\n${seriesOut.length} series, ${textOut.length} texts, ${places.length} places, ${feed.length} feed cards ${CHECK ? 'checked' : 'built'}.`)

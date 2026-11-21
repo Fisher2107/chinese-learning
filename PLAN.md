@@ -169,9 +169,9 @@ The sketches below are rough. The symbols stand in for icons.
 ……
 ▸ 原文片段 · 新华社 · 阅读全文 →
 ──────────────────────────────────────────
- 🔊 朗读      拼 拼音      Aa 字号      ☰ 目录
+ 🔊 朗读      Aa 字号      ☰ 目录
 ```
-Story text is set in a book-like font on cream paper, with pinyin only over the hard words.
+Story text is set in a book-like font on cream paper. Pinyin never shows over the text: tap a word and its card shows the pinyin.
 
 **4 · Word card** (a half-height bottom sheet; swipe down to close)
 ```
@@ -236,7 +236,7 @@ Chats use WeChat-style bubbles, and every word is tappable. Friends also post �
 🌱 生词园      🏮 集章册      📖 书架
 成语图鉴 · 美食图鉴 · 诗词本 · 生词本
 本周：读了 4,200 字 · 回忆 86 次 · 🔥 13
-设置：OpenAI 密钥 · 拼音 · 通知 · 备份
+设置：OpenAI 密钥 · 通知 · 备份
 ```
 
 **12 · Reviews and poems**
@@ -643,7 +643,7 @@ Modern topics come with a **聊天提示 (conversation tip)**: what's a point of
 | Word splitting | `Intl.Segmenter`, plus manual fixes for committed texts | Built into browsers, so it also works on imports and tutor messages |
 | Traditional → simplified | OpenCC | Many public-domain sources are in traditional characters |
 | Dictionary | CC-CEDICT | Free, about 120k entries (CC BY-SA, credited in the app) |
-| Difficulty | HSK word lists | "% above HSK 5" and which words get pinyin |
+| Difficulty | HSK word lists | "% above HSK 5" and each word's level in its card |
 | Map | d3-geo + province boundaries from Natural Earth (public domain), simplified | Clickable SVG provinces that are light enough for a phone |
 | Audio | Browser text-to-speech (zh-CN); browser speech recognition for answering aloud | Free and needs no setup |
 | AI | OpenAI `gpt-6-luna` via the official `openai` SDK, your own key | See §11 |
@@ -685,6 +685,42 @@ points:            # 知识点 the tutor grades against, written when the text i
 One paragraph per line, converted to simplified characters.
 Manual fixes where needed: [[闰土]] makes a wiki link, {长|zhǎng} forces a pinyin reading.
 ```
+
+A province page (`content/places/<id>.md`, one per province) and a 刷一刷 card (`content/feed/<slug>.md`):
+
+```markdown
+---
+id: henan
+name: 河南
+full: 河南省
+type: 省            # 省 / 自治区 / 直辖市 / 特别行政区
+short: 豫
+alias: 秦           # optional second 简称
+capital: 郑州       # left out for 直辖市 and 特别行政区
+region: 华中        # 华北 东北 华东 华中 华南 西南 西北
+---
+The intro paragraph.
+
+## 聊天彩蛋
+- One conversation starter per bullet.
+```
+
+```markdown
+---
+id: zaocha          # same as the file name
+date: 2026-11-21
+title: "在广东喝早茶，为什么要用手指敲桌子？"
+province: guangdong # optional
+series: pangdonglai # optional
+tags: [美食, 民俗]
+sources:
+  - { title: "维基百科：飲茶", url: "https://zh.wikipedia.org/wiki/飲茶" }
+inspiration: []     # reel URLs, as links only
+---
+150–300 字 in our own words, ending on an open question.
+```
+
+Series link to provinces with `provinces: [henan]` in their index.md.
 
 A build script turns each file into JSON: it splits the text into sittings and words, adds pinyin, attaches dictionary meanings, checks every link points to a real page, and measures difficulty.
 

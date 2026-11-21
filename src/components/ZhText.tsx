@@ -1,18 +1,10 @@
 import { memo, type MouseEvent } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
-import type { Para, Token } from '../lib/types.ts'
+import type { Para } from '../lib/types.ts'
 import { db, type WordSource } from '../lib/db.ts'
-import { useKnown, useSettings, type PinyinMode } from '../lib/settings.ts'
 import { useWordSheet } from './word-context.ts'
 
 const HAN = /[㐀-鿿]/
-
-/** Above HSK 5 (or outside the lists) and not marked as known → show pinyin in 自动 mode. */
-export function needsPinyin(t: Token, mode: PinyinMode, known: Set<string>) {
-  if (!t.p || mode === 'off') return false
-  if (mode === 'all') return true
-  return (t.l === undefined || t.l > 5) && !known.has(t.t)
-}
 
 export function useSavedWords(): Set<string> {
   const words = useLiveQuery(() => db.words.orderBy('word').uniqueKeys(), [], [])
@@ -30,17 +22,12 @@ interface Props {
   /** use the interface font instead of the book font (AI replies, UI text) */
   ui?: boolean
   className?: string
-  /** force a pinyin mode (e.g. flashcard backs) */
-  pinyin?: PinyinMode
 }
 
-/** Chinese text where every word can be tapped to open its word card. */
-export const ZhText = memo(function ZhText({ paras, glossary, source, id, speaking, ui, className = '', pinyin }: Props) {
-  const settings = useSettings()
-  const known = useKnown()
+/** Chinese text where every word can be tapped to open its word card. Pinyin only ever shows in that card. */
+export const ZhText = memo(function ZhText({ paras, glossary, source, id, speaking, ui, className = '' }: Props) {
   const saved = useSavedWords()
   const sheet = useWordSheet()
-  const mode = pinyin ?? settings.pinyin
 
   function onClick(e: MouseEvent) {
     const el = (e.target as HTMLElement).closest<HTMLElement>('[data-k]')
@@ -49,16 +36,6 @@ export const ZhText = memo(function ZhText({ paras, glossary, source, id, speaki
     const sentence = paras[pi].sentences[si].tokens
     const token = sentence[ti]
     sheet.open({ token, gloss: glossary?.[`${token.t}|${token.p}`], sentence, source, key: `${id}:${el.dataset.k}` })
-  }
-
-  // In 自动 mode a word gets pinyin only the first time it appears in this passage
-  const seen = new Set<string>()
-  const ruby = (t: Token) => {
-    if (!needsPinyin(t, mode, known)) return false
-    if (mode === 'all') return true
-    if (seen.has(t.t)) return false
-    seen.add(t.t)
-    return true
   }
 
   return (
@@ -72,14 +49,7 @@ export const ZhText = memo(function ZhText({ paras, glossary, source, id, speaki
               const cls = `w ${sheet.active === `${id}:${k}` ? 'on' : ''} ${saved.has(t.t) ? 'saved' : ''}`
               return (
                 <span key={ti} data-k={k} className={cls}>
-                  {ruby(t) ? (
-                    <ruby>
-                      {t.t}
-                      <rt>{t.p}</rt>
-                    </ruby>
-                  ) : (
-                    t.t
-                  )}
+                  {t.t}
                 </span>
               )
             })}

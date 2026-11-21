@@ -17,7 +17,7 @@ import {
 import { db, seriesProgress, type WordSource } from '../lib/db.ts'
 import { loadSeries, useLoad } from '../lib/content.ts'
 import { go } from '../lib/router.ts'
-import { FONT_PX, saveSetting, useSettings, type FontSize, type PinyinMode } from '../lib/settings.ts'
+import { FONT_PX, saveSetting, useSettings, type FontSize } from '../lib/settings.ts'
 import { speak, stopSpeaking, canSpeak } from '../lib/speech.ts'
 import { finishEpisode, unlockEpisode } from '../lib/progress.ts'
 import { addCoins, useStats } from '../lib/stats.ts'
@@ -167,8 +167,6 @@ function Reader({
     setSpeaking(undefined)
   }
 
-  const pinyinModes: PinyinMode[] = ['auto', 'all', 'off']
-  const pinyinLabel = { auto: '自动', all: '全部', off: '关' }[settings.pinyin]
   const sizes: FontSize[] = ['s', 'm', 'l']
 
   return (
@@ -242,20 +240,13 @@ function Reader({
       </article>
 
       <nav className="safe-bottom fixed inset-x-0 bottom-0 z-20 border-t-2 border-line bg-paper">
-        <div className="mx-auto grid h-16 max-w-xl grid-cols-3 font-ui text-[13px] font-extrabold text-mute">
+        <div className="mx-auto grid h-16 max-w-xl auto-cols-fr grid-flow-col font-ui text-[13px] font-extrabold text-mute">
           {canSpeak && (
             <button onClick={toggleSpeak} className="flex flex-col items-center justify-center gap-0.5" style={{ color: speaking ? series.color : undefined }}>
               {speaking ? <PauseIcon size={24} weight="fill" /> : <SpeakerHighIcon size={24} weight="fill" />}
               {speaking ? '暂停' : '朗读'}
             </button>
           )}
-          <button
-            onClick={() => saveSetting('pinyin', pinyinModes[(pinyinModes.indexOf(settings.pinyin) + 1) % 3])}
-            className="flex flex-col items-center justify-center gap-0.5"
-          >
-            <span className="font-book text-[19px] leading-6">拼</span>
-            拼音 · {pinyinLabel}
-          </button>
           <button
             onClick={() => saveSetting('fontSize', sizes[(sizes.indexOf(settings.fontSize) + 1) % 3])}
             className="flex flex-col items-center justify-center gap-0.5"

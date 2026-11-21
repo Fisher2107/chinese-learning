@@ -32,12 +32,25 @@ content/
   series/<id>/index.md      title, subtitle, place, kind, color, sources; description in the body
   series/<id>/01.md …       episodes: title, beat, gate (recall questions); story in the body
   series/<id>/after.md      读后: ## headings and - bullets (关键词, 聊天工具包, 聊天彩蛋)
+  places/<id>.md            one per province (34): id, name, full, type, short, alias?, capital?, region, note?;
+                            body = intro paragraph, then `## 聊天彩蛋` with - bullets
+  feed/<slug>.md            刷一刷 cards: id (= file name), date, title (the hook question), province?, series?,
+                            tags, sources [{ title, url }], inspiration; body 150–300 字 ending on a question
 ```
+
+A series lists the provinces it's about with `provinces: [henan]` in its index.md; those link the
+series to the map and light the province up as it's read.
+
+Pinyin never appears over the text: it only shows in the word card when a word is tapped. It still
+has to be right, so check the readings `npm run content` reports.
+
+The map outline (`src/data/china-map.json`) comes from Natural Earth and is committed. Rebuild it
+only if the borders need to change: `node scripts/build-map.mjs`.
 
 Markup in stories:
 
 - `::原文[bai-niangzi#8:10-19]` drops in sentences 10–19 of paragraph 8 of a full text. The paragraph number is 1-based, and `:a-b` is optional.
-- `{假|jià}` forces a reading. `npm run content` lists every word with several readings, so a wrong guess can be fixed this way.
+- `{假|jià}` forces a reading, and `{魔都|módū}` forces a whole word. `npm run content` lists every word with several readings, so a wrong guess can be fixed this way. Names that get split into single characters belong in `terms.yml`.
 - Every episode except the last needs at least 2 `gate` questions: `{ q, options: [...], answer: <index> }`.
 
 `npm run check:content` validates everything without writing files.

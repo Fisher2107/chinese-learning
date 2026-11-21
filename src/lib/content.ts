@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { ContentIndex, SeriesFile, TextFile } from './types.ts'
+import type { ContentIndex, FeedFile, PlacesFile, SeriesFile, TextFile } from './types.ts'
 
 const BASE = import.meta.env.BASE_URL
 const cache = new Map<string, Promise<unknown>>()
@@ -20,6 +20,8 @@ function getJson<T>(path: string): Promise<T> {
 export const loadIndex = () => getJson<ContentIndex>('content/index.json')
 export const loadSeries = (id: string) => getJson<SeriesFile>(`content/series/${id}.json`)
 export const loadText = (id: string) => getJson<TextFile>(`content/texts/${id}.json`)
+export const loadPlaces = () => getJson<PlacesFile>('content/places.json')
+export const loadFeed = () => getJson<FeedFile>('content/feed.json')
 
 /** Loads something once per key; returns undefined while loading. */
 export function useLoad<T>(load: () => Promise<T>, key: string): { data?: T; error?: string } {

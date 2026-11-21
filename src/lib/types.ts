@@ -48,6 +48,8 @@ export interface SeriesSummary {
   place: string
   kind: string
   color: string
+  /** ids of the provinces the series is about (content/places) */
+  provinces: string[]
   episodes: { n: number; title: string; beat: string }[]
 }
 
@@ -80,4 +82,51 @@ export interface TextFile extends TextSummary {
 export interface ContentIndex {
   series: SeriesSummary[]
   texts: TextSummary[]
+  feed: { id: string; date: string; province: string; series: string }[]
+}
+
+/** One provincial-level division (content/places/<id>.md). */
+export interface Place {
+  id: string
+  name: string
+  full: string
+  type: '省' | '自治区' | '直辖市' | '特别行政区'
+  short: string
+  /** a second 简称, e.g. 蜀 for 四川 */
+  alias: string
+  /** 省会; empty for 直辖市 and 特别行政区 */
+  capital: string
+  region: Region
+  /** how to handle a sensitive topic in conversation */
+  note: Sentence[]
+  intro: Para[]
+  /** 聊天彩蛋: things worth knowing to start a conversation */
+  eggs: Para[]
+  series: string[]
+}
+
+export type Region = '华北' | '东北' | '华东' | '华中' | '华南' | '西南' | '西北'
+
+export interface PlacesFile {
+  places: Place[]
+  glossary: Record<string, string>
+}
+
+/** A 刷一刷 card (content/feed/<slug>.md): a hook question, then 150–300 字. */
+export interface FeedCard {
+  id: string
+  date: string
+  title: Sentence[]
+  province: string
+  series: string
+  tags: string[]
+  chars: number
+  body: Para[]
+  sources: SourceLink[]
+  inspiration: string[]
+}
+
+export interface FeedFile {
+  cards: FeedCard[]
+  glossary: Record<string, string>
 }

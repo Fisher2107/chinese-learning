@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { useRoute } from './lib/router.ts'
 import { WordSheetProvider } from './components/WordSheet.tsx'
 import { TabBar } from './components/chrome.tsx'
@@ -12,6 +12,13 @@ import { AfterPage } from './screens/AfterPage.tsx'
 import { TextReader, ImportReader } from './screens/TextReader.tsx'
 import { ImportNew } from './screens/ImportNew.tsx'
 import { Review } from './screens/Review.tsx'
+import { Loading } from './components/ui.tsx'
+
+// The map, province pages and feed carry the map geometry: load them when first opened
+const MapScreen = lazy(() => import('./screens/MapScreen.tsx').then((m) => ({ default: m.MapScreen })))
+const PlacePage = lazy(() => import('./screens/PlacePage.tsx').then((m) => ({ default: m.PlacePage })))
+const StampQuiz = lazy(() => import('./screens/PlacePage.tsx').then((m) => ({ default: m.StampQuiz })))
+const Feed = lazy(() => import('./screens/Feed.tsx').then((m) => ({ default: m.Feed })))
 
 const num = (s: string | undefined, fallback: number) => (s && /^\d+$/.test(s) ? Number(s) : fallback)
 
@@ -23,9 +30,16 @@ function Screen({ route }: { route: string[] }): { tab?: string; el: React.React
     case 'shelf':
       return { tab: 'shelf', el: <Shelf /> }
     case 'words':
-      return { tab: 'words', el: <WordBank /> }
+      return { tab: 'me', el: <WordBank /> }
+    case 'feed':
+      return { tab: 'feed', el: <Feed key={a ?? ''} start={a} /> }
     case 'me':
       return { tab: 'me', el: <Me /> }
+    case 'map':
+      return { tab: 'map', el: <MapScreen /> }
+    case 'place':
+      if (b === 'stamp') return { el: <StampQuiz key={a} id={a} /> }
+      return { el: <PlacePage key={a} id={a} /> }
     case 'review':
       return { el: <Review /> }
     case 'series':
@@ -51,7 +65,9 @@ export default function App() {
   const { tab, el } = Screen({ route })
   return (
     <WordSheetProvider>
-      <main className={tab !== undefined ? 'pb-24' : ''}>{el}</main>
+      <main className={tab !== undefined ? 'pb-24' : ''}>
+        <Suspense fallback={<Loading />}>{el}</Suspense>
+      </main>
       {tab !== undefined && <TabBar current={tab} />}
     </WordSheetProvider>
   )

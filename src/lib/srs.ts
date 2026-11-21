@@ -1,7 +1,7 @@
 import { DefaultScheduler, Rating } from 'ts-fsrs'
 import { db, type SavedWord, type WordSource } from './db.ts'
 import type { Token } from './types.ts'
-import { addCoins, recordActivity } from './stats.ts'
+import { addCoins, bumpDay, recordActivity } from './stats.ts'
 
 type Scheduler = Awaited<ReturnType<typeof DefaultScheduler>>
 let scheduler: Promise<Scheduler> | undefined
@@ -22,12 +22,14 @@ export async function saveWord(input: { word: string; p: string; d: string; sent
   const s = await getScheduler()
   const now = new Date()
   const card = s.newCard({ now }) as unknown as CardLike
-  return db.words.add({
+  const id = await db.words.add({
     ...input,
     created: now.getTime(),
     due: card.dueAt.getTime(),
     card: card as unknown as Record<string, unknown>,
   })
+  await bumpDay('saved')
+  return id
 }
 
 export async function unsaveWord(word: string) {
@@ -59,6 +61,7 @@ export async function grade(word: SavedWord, rating: Rating) {
   await db.words.update(word.id!, { card: card as unknown as Record<string, unknown>, due: card.dueAt.getTime() })
   await db.reviews.add({ wordId: word.id!, rating, at: now.getTime() })
   if (rating !== Rating.Again) await addCoins(2)
+  await bumpDay('reviews')
   await recordActivity()
 }
 

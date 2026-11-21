@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { db, getSetting, setSetting } from './db.ts'
+import { db, getSetting, setSetting, type DayLog } from './db.ts'
 
 /**
  * Streak with one grace day: missing a single day doesn't break it
@@ -70,6 +70,25 @@ export async function addChars(n: number) {
     s.chars += n
     await setSetting('stats', s)
   })
+  await bumpDay('chars', n)
+}
+
+type Counter = 'reviews' | 'saved' | 'cards' | 'chars'
+
+export const emptyDay = (day = today()): DayLog => ({ day, reviews: 0, saved: 0, cards: 0, chars: 0 })
+
+/** Adds to one of today's counters (for the morning routine and the day summary). */
+export async function bumpDay(field: Counter, n = 1) {
+  await db.transaction('rw', db.days, async () => {
+    const d = (await db.days.get(today())) ?? emptyDay()
+    d[field] += n
+    await db.days.put(d)
+  })
+}
+
+export function useToday(): DayLog {
+  const day = today()
+  return useLiveQuery(async () => (await db.days.get(day)) ?? emptyDay(day), [day], emptyDay(day))
 }
 
 export function useStats() {
@@ -77,4 +96,18 @@ export function useStats() {
   const words = useLiveQuery(() => db.words.count(), [], 0)
   const due = useLiveQuery(() => db.words.where('due').belowOrEqual(Date.now()).count(), [], 0)
   return { ...s, streak: liveStreak(s), streakDoneToday: s.lastDay === today(), words, due }
+}
+
+/** The morning routine's three steps are done: mark the day and pay out once. Returns coins earned. */
+export async function finishMorning(): Promise<number> {
+  const fresh = await db.transaction('rw', db.days, async () => {
+    const d = (await db.days.get(today())) ?? emptyDay()
+    if (d.morning) return false
+    d.morning = Date.now()
+    await db.days.put(d)
+    return true
+  })
+  if (!fresh) return 0
+  await addCoins(10)
+  return 10
 }
