@@ -1,0 +1,7 @@
+node_modules
+dist
+data/raw
+public/data
+public/content
+*.tsbuildinfo
+.DS_Store
