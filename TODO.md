@@ -20,13 +20,12 @@ Left over from the map work on branch `map-explore` (2026-11-21).
 
 ## City pages
 
-- [ ] **Write more city pages.** 138 of 359 cities have a written page in `content/cities/<id>.md` with an intro and 聊天彩蛋. The rest show only basic facts (province, population).
-  - Write the most-visited ones next, e.g. 汕尾, 惠州, 中山, 江门, 湛江, 绵阳, 南充, 曲靖, 大庆, 包头.
-  - Run `npm run content` after adding pages and check the "several readings" warnings it prints.
+- [x] **Write more city pages.** 148 of 359 cities now have a written page in `content/cities/<id>.md` with an intro and 聊天彩蛋. Added 汕尾, 惠州, 中山, 江门, 湛江, 绵阳, 南充, 曲靖, 大庆 and 包头.
+  - `npm run content` completed; reviewed its several-readings warnings for these additions.
 
 ## Ship it
 
-- [ ] **Commit and open a PR for `map-explore`.** It contains:
+- [x] **Commit and open a PR for `map-explore`.** PR #6 was merged into `main` (2026-11-21). It contains:
   - the explorable map, city pages and 认地图 test;
   - 学会了 marks;
   - photos with credits.
