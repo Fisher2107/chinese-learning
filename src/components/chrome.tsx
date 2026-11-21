@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from '../lib/live.ts'
 import { BooksIcon, CardsIcon, CardsThreeIcon, CheckCircleIcon, CoinsIcon, FireIcon, HouseIcon, MapTrifoldIcon, UserIcon, XCircleIcon } from '@phosphor-icons/react'
 import { db, getSetting } from '../lib/db.ts'
 import { loadIndex, useLoad } from '../lib/content.ts'

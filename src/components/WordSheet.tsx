@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Drawer } from 'vaul'
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from '../lib/live.ts'
 import {
   ArrowLeftIcon,
   ChatCircleDotsIcon,

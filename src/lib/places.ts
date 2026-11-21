@@ -1,7 +1,7 @@
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from './live.ts'
 import MAP from '../data/china-map.json'
 import { db } from './db.ts'
-import { addCoins, recordActivity } from './stats.ts'
+import { addChars, addCoins, recordActivity } from './stats.ts'
 import type { FeedCard, Place, Region, SeriesSummary } from './types.ts'
 
 export { MAP }
@@ -37,13 +37,16 @@ export function boxOf(ids: string[], pad = 24): [number, number, number, number]
 }
 
 export interface PlaceStat {
+  /** opened the page at least once */
   visited: boolean
+  /** said 我读完了 on the page */
+  intro: boolean
   stamp: boolean
-  /** feed cards seen + series episodes finished about this place */
+  /** feed cards read + series episodes finished about this place */
   read: number
   /** saved words found on this place's page, its feed cards or its series */
   words: number
-  /** 0–4: one point each for visiting, the stamp, reading 2+ things, saving 3+ words */
+  /** 0–4: one point each for reading the page, the stamp, reading 2+ more things, saving 3+ words */
   light: number
 }
 
@@ -68,34 +71,54 @@ export function usePlaceStats(feedCards: FeedCard[] = [], seriesList: SeriesSumm
   const out = new Map<string, PlaceStat>()
   const get = (id: string) => {
     let s = out.get(id)
-    if (!s) out.set(id, (s = { visited: false, stamp: false, read: 0, words: 0, light: 0 }))
+    if (!s) out.set(id, (s = { visited: false, intro: false, stamp: false, read: 0, words: 0, light: 0 }))
     return s
   }
   for (const p of places) {
     get(p.id).visited = true
+    if (p.read) get(p.id).intro = true
     if (p.stamp) get(p.id).stamp = true
   }
   for (const f of seen) {
-    const pid = feed.get(f.id)?.province
+    const pid = f.read && feed.get(f.id)?.province
     if (pid) get(pid).read++
   }
   for (const p of progress) for (const pid of series.get(p.id)?.provinces ?? []) get(pid).read += p.done.length
   for (const r of sources) for (const pid of provinceOfRoute(r, feed, series)) get(pid).words++
-  for (const s of out.values()) s.light = +s.visited + +s.stamp + +(s.read >= 2) + +(s.words >= 3)
+  for (const s of out.values()) s.light = +s.intro + +s.stamp + +(s.read >= 2) + +(s.words >= 3)
   return out
 }
 
+/** Opening a page only notes the visit; it doesn't count as reading or as activity for the day. */
 export async function visitPlace(id: string) {
   const prev = await db.places.get(id)
   if (!prev) await db.places.put({ id, visited: Date.now(), updated: Date.now() })
-  await recordActivity()
 }
+
+/** 我读完了 on a place page. Returns coins earned (5, only the first time). */
+export async function markPlaceRead(id: string, chars: number): Promise<number> {
+  const prev = await db.places.get(id)
+  if (prev?.read) return 0
+  await db.places.put({ ...prev, id, visited: prev?.visited ?? Date.now(), read: Date.now(), updated: Date.now() })
+  await addChars(chars)
+  await addCoins(5)
+  await recordActivity()
+  return 5
+}
+
+export async function markPlaceUnread(id: string) {
+  const prev = await db.places.get(id)
+  if (prev) await db.places.put({ ...prev, read: undefined, updated: Date.now() })
+}
+
+/** Provinces the user has read about or stamped: what quizzes and the feed lean on. */
+export const explored = (rows: { id: string; read?: number; stamp?: number }[]) => new Set(rows.filter((p) => p.read || p.stamp).map((p) => p.id))
 
 /** Passing the 集章 quiz. Returns coins earned (only the first time). */
 export async function earnStamp(id: string): Promise<number> {
   const prev = await db.places.get(id)
   if (prev?.stamp) return 0
-  await db.places.put({ id, visited: prev?.visited ?? Date.now(), stamp: Date.now(), updated: Date.now() })
+  await db.places.put({ ...prev, id, visited: prev?.visited ?? Date.now(), stamp: Date.now(), updated: Date.now() })
   await addCoins(15)
   await recordActivity()
   return 15

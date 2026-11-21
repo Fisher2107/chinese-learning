@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useLiveQuery } from '../lib/live.ts'
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, TrashIcon } from '@phosphor-icons/react'
 import { db } from '../lib/db.ts'
 import { loadText, useLoad } from '../lib/content.ts'

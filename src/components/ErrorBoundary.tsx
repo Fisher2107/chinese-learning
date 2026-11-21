@@ -1,4 +1,5 @@
 import { Component, type ReactNode } from 'react'
+import { isLostConnection, reconnect } from '../lib/live.ts'
 
 /** Clears the service worker and its caches (not IndexedDB: saved words stay) and reloads. */
 export async function hardReload() {
@@ -11,15 +12,23 @@ export async function hardReload() {
   }
 }
 
-/** Shows what broke instead of a blank screen. */
-export class ErrorBoundary extends Component<{ children: ReactNode }, { error?: Error }> {
-  state: { error?: Error } = {}
+/**
+ * Shows what broke instead of a blank screen. A lost database connection (an iPhone browser
+ * quirk after the app sat in the background) is fixed by reconnecting, so try that first.
+ */
+export class ErrorBoundary extends Component<{ children: ReactNode }, { error?: Error; fixing?: boolean }> {
+  state: { error?: Error; fixing?: boolean } = {}
   static getDerivedStateFromError(error: Error) {
-    return { error }
+    return { error, fixing: isLostConnection(error) }
+  }
+  componentDidCatch(error: Error) {
+    if (!isLostConnection(error)) return
+    reconnect().then((ok) => this.setState(ok ? { error: undefined, fixing: false } : { fixing: false }))
   }
   render() {
-    const { error } = this.state
+    const { error, fixing } = this.state
     if (!error) return this.props.children
+    if (fixing) return <div className="grid min-h-dvh place-items-center font-bold text-mute">正在重新连接…</div>
     return (
       <div className="mx-auto max-w-md px-6 pt-16">
         <h1 className="text-[22px] font-black">出了点问题</h1>

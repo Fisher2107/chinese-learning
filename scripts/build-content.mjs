@@ -257,6 +257,7 @@ for (const file of (await readdir('content/places')).filter((f) => f.endsWith('.
     note: meta.note ? makeSentences(meta.note, placesGlossary, where) : [],
     intro: parseBlocks(intro, placesGlossary, where),
     eggs: parseBlocks(eggs, placesGlossary, where),
+    chars: charCount(intro) + charCount(eggs),
     series: seriesOut.filter((s) => s.summary.provinces.includes(meta.id)).map((s) => s.summary.id),
   })
 }
