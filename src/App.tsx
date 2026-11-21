@@ -17,6 +17,7 @@ import { Loading } from './components/ui.tsx'
 // The map, province pages and feed carry the map geometry: load them when first opened
 const MapScreen = lazy(() => import('./screens/MapScreen.tsx').then((m) => ({ default: m.MapScreen })))
 const StampBook = lazy(() => import('./screens/MapScreen.tsx').then((m) => ({ default: m.StampBook })))
+const ReadingCollection = lazy(() => import('./screens/ReadingCollections.tsx').then(m => ({ default: m.ReadingCollection })))
 const CityPage = lazy(() => import('./screens/CityPage.tsx').then((m) => ({ default: m.CityPage })))
 const MapTest = lazy(() => import('./screens/MapTest.tsx').then((m) => ({ default: m.MapTest })))
 const PlacePage = lazy(() => import('./screens/PlacePage.tsx').then((m) => ({ default: m.PlacePage })))
@@ -32,6 +33,8 @@ function Screen({ route }: { route: string[] }): { tab?: string; el: React.React
       return { tab: '', el: <Today /> }
     case 'shelf':
       return { tab: 'shelf', el: <Shelf /> }
+    case 'collection':
+      return { tab: 'shelf', el: <ReadingCollection id={a} /> }
     case 'words':
       return { tab: 'me', el: <WordBank /> }
     case 'feed':

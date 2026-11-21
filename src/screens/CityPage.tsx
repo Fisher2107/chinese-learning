@@ -2,7 +2,7 @@ import { Photo } from '../components/Photo.tsx'
 import { useEffect } from 'react'
 import { ChatCircleDotsIcon, LightbulbIcon, MapPinIcon } from '@phosphor-icons/react'
 import { db, type WordSource } from '../lib/db.ts'
-import { loadCities, loadPlaces, useLoad } from '../lib/content.ts'
+import { loadCities, loadFeed, loadPlaces, useLoad } from '../lib/content.ts'
 import { CITY_BY_ID, cityKind, citiesOf } from '../lib/cities.ts'
 import { markCityRead, markCityUnread, markKey, setLearnt, useMarks, visitCity } from '../lib/learn.ts'
 import { useLiveQuery } from '../lib/live.ts'
@@ -19,6 +19,8 @@ export function CityPage({ id }: { id: string }) {
   const city = CITY_BY_ID.get(id)
   const file = useLoad(loadCities, 'cities').data
   const placesFile = useLoad(loadPlaces, 'places').data
+  const feed = useLoad(loadFeed, 'feed').data
+  const stories = feed?.cards.filter(c => c.city === id) ?? []
   const marks = useMarks()
   const row = useLiveQuery(() => db.cities.get(id), [id])
   useEffect(() => {
@@ -93,6 +95,12 @@ export function CityPage({ id }: { id: string }) {
             <ReadMark readAt={row?.read} onRead={() => markCityRead(id, content!.chars)} onUnread={() => markCityUnread(id)} />
           </div>
         )}
+
+        {stories.length > 0 && <Section title="这里的故事">
+          <ul className="tile divide-y divide-line">{stories.map(c => <li key={c.id}>
+            <a href={'#/feed/' + c.id} className="block p-4 font-bold">{c.title.flatMap(s => s.tokens.map(t => t.t)).join('')}</a>
+          </li>)}</ul>
+        </Section>}
 
         {prov && (
           <Section

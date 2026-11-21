@@ -214,6 +214,11 @@ function StoryCard({
           <ZhText id={`feed-${card.id}`} paras={card.body} glossary={feed.glossary} source={source} />
           <div className="mt-1 mb-2 flex flex-wrap gap-x-3 font-ui text-xs font-bold text-mute">
             来源：
+            {card.inspiration?.map((url, i) => (
+              <a key={url} href={url} target="_blank" rel="noreferrer" className="underline">
+                {url.includes('instagram.com') ? '原视频' : '灵感来源'}{card.inspiration.length > 1 ? i + 1 : ''}
+              </a>
+            ))}
             {card.sources.map((s) => (
               <a key={s.url} href={s.url} target="_blank" rel="noreferrer" className="underline">
                 {s.title}

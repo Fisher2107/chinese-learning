@@ -136,6 +136,7 @@ export interface FeedCard {
   date: string
   title: Sentence[]
   province: string
+  city?: string
   series: string
   tags: string[]
   chars: number

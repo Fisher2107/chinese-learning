@@ -5,6 +5,8 @@ import { loadIndex, useLoad } from '../lib/content.ts'
 import { go } from '../lib/router.ts'
 import { Loading, Pill, ProgressBar, Section } from '../components/ui.tsx'
 
+import { collections } from '../lib/collections.ts'
+
 export function Shelf() {
   const { data: index } = useLoad(loadIndex, 'index')
   const progress = useLiveQuery(() => db.series.toArray(), [], [])
@@ -15,6 +17,15 @@ export function Shelf() {
   return (
     <div className="mx-auto max-w-xl px-4">
       <h1 className="safe-top pt-5 text-[28px] font-black">书架</h1>
+
+      <Section title="专题卡片">
+        <div className="tile divide-y divide-line">{collections.map(c => (
+          <a key={c.id} href={'#/collection/' + c.id} className="flex items-center justify-between gap-3 p-4">
+            <div><div className="text-lg font-black">{c.name}</div><div className="text-sm text-mute">{c.description}</div></div>
+            <CaretRightIcon size={18} weight="bold" className="shrink-0 text-mute" />
+          </a>
+        ))}</div>
+      </Section>
 
       <Section title="系列">
         <div className="space-y-3">
