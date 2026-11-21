@@ -16,6 +16,9 @@ import { Loading } from './components/ui.tsx'
 
 // The map, province pages and feed carry the map geometry: load them when first opened
 const MapScreen = lazy(() => import('./screens/MapScreen.tsx').then((m) => ({ default: m.MapScreen })))
+const StampBook = lazy(() => import('./screens/MapScreen.tsx').then((m) => ({ default: m.StampBook })))
+const CityPage = lazy(() => import('./screens/CityPage.tsx').then((m) => ({ default: m.CityPage })))
+const MapTest = lazy(() => import('./screens/MapTest.tsx').then((m) => ({ default: m.MapTest })))
 const PlacePage = lazy(() => import('./screens/PlacePage.tsx').then((m) => ({ default: m.PlacePage })))
 const StampQuiz = lazy(() => import('./screens/PlacePage.tsx').then((m) => ({ default: m.StampQuiz })))
 const Feed = lazy(() => import('./screens/Feed.tsx').then((m) => ({ default: m.Feed })))
@@ -36,7 +39,12 @@ function Screen({ route }: { route: string[] }): { tab?: string; el: React.React
     case 'me':
       return { tab: 'me', el: <Me /> }
     case 'map':
+      if (a === 'stamps') return { el: <StampBook /> }
+      if (a === 'test') return { el: <MapTest /> }
+      if ((a === 'city' || a === 'place') && b) return { tab: 'map', el: <MapScreen key={`${a}/${b}`} focus={{ kind: a === 'city' ? 'city' : 'province', id: b }} /> }
       return { tab: 'map', el: <MapScreen /> }
+    case 'city':
+      return { el: <CityPage key={a} id={a} /> }
     case 'place':
       if (b === 'stamp') return { el: <StampQuiz key={a} id={a} /> }
       return { el: <PlacePage key={a} id={a} /> }

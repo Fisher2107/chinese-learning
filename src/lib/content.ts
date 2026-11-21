@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { ContentIndex, FeedFile, PlacesFile, SeriesFile, TextFile } from './types.ts'
+import type { CitiesFile, ContentIndex, FeedFile, PhotosFile, PlacesFile, SeriesFile, TextFile } from './types.ts'
 
 const BASE = import.meta.env.BASE_URL
 const cache = new Map<string, Promise<unknown>>()
@@ -22,6 +22,8 @@ export const loadSeries = (id: string) => getJson<SeriesFile>(`content/series/${
 export const loadText = (id: string) => getJson<TextFile>(`content/texts/${id}.json`)
 export const loadPlaces = () => getJson<PlacesFile>('content/places.json')
 export const loadFeed = () => getJson<FeedFile>('content/feed.json')
+export const loadCities = () => getJson<CitiesFile>('content/cities.json')
+export const loadPhotos = () => getJson<PhotosFile>('content/photos.json')
 
 /** Loads something once per key; returns undefined while loading. */
 export function useLoad<T>(load: () => Promise<T>, key: string): { data?: T; error?: string } {

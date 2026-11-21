@@ -1,3 +1,4 @@
+import { Photo } from '../components/Photo.tsx'
 import { useEffect, useState } from 'react'
 import { useLiveQuery } from '../lib/live.ts'
 import { motion } from 'motion/react'
@@ -54,6 +55,7 @@ export function SeriesPath({ id }: { id: string }) {
           </div>
           <h1 className="text-[30px] leading-tight font-black">{series.title}</h1>
           <div className="text-[17px] font-bold opacity-95">{series.subtitle}</div>
+          <Photo k={`series/${series.id}`} className="mt-3 rounded-2xl" />
           <ZhText
             ui
             id={`desc-${id}`}

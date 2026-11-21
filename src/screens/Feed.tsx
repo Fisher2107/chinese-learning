@@ -1,3 +1,4 @@
+import { Photo } from '../components/Photo.tsx'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useLiveQuery } from '../lib/live.ts'
 import { motion } from 'motion/react'
@@ -125,6 +126,7 @@ function Frame({ color, children, dark = true }: { color: string; children: Reac
 /**
  * Shrinks the text a step at a time (18px down to 15px) until the card fits the screen. If it
  * still doesn't, the panel scrolls, and the swipe passes on to the next card at its end.
+ * A photo at the top doesn't count: it's fine to scroll past it, but not to shrink the text for it.
  */
 function useFitText(sizes = [18, 17, 16, 15]) {
   const ref = useRef<HTMLDivElement>(null)
@@ -136,13 +138,16 @@ function useFitText(sizes = [18, 17, 16, 15]) {
     const fit = () => {
       for (const px of sizes) {
         el.style.fontSize = `${px}px`
-        if (el.scrollHeight <= el.clientHeight + 1) break
+        const photo = el.querySelector('figure')?.offsetHeight ?? 0
+        if (el.scrollHeight - photo <= el.clientHeight + 1) break
       }
       check()
     }
     fit()
     const ro = new ResizeObserver(fit)
     ro.observe(el)
+    // the photo arrives after the text: fit again when the content grows
+    if (el.firstElementChild) ro.observe(el.firstElementChild)
     document.fonts?.ready.then(fit)
     el.addEventListener('scroll', check, { passive: true })
     return () => {
@@ -204,6 +209,8 @@ function StoryCard({
       <ZhText ui id={`feed-t-${card.id}`} paras={[{ kind: 'p', sentences: card.title }]} glossary={feed.glossary} source={source} className="mt-1 text-[25px] !leading-snug font-black" />
       <div className="relative mt-4 min-h-0 flex-1">
         <div ref={ref} className="no-scrollbar h-full overflow-y-auto rounded-[20px] bg-paper px-4 pt-4 pb-2 text-paper-text shadow-[0_4px_0_rgba(0,0,0,0.15)]">
+          <div>
+          <Photo k={`feed/${card.id}`} ratio="2 / 1" className="-mx-4 -mt-4 mb-3" />
           <ZhText id={`feed-${card.id}`} paras={card.body} glossary={feed.glossary} source={source} />
           <div className="mt-1 mb-2 flex flex-wrap gap-x-3 font-ui text-xs font-bold text-mute">
             来源：
@@ -212,6 +219,7 @@ function StoryCard({
                 {s.title}
               </a>
             ))}
+          </div>
           </div>
         </div>
         {more && (

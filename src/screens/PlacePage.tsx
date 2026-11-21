@@ -1,13 +1,18 @@
+import { Photo } from '../components/Photo.tsx'
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'motion/react'
-import { ChatCircleDotsIcon, CheckCircleIcon, InfoIcon, LightbulbIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
+import { ChatCircleDotsIcon, CheckCircleIcon, InfoIcon, LightbulbIcon, MapPinIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
 import { useLiveQuery } from '../lib/live.ts'
 import { db, type WordSource } from '../lib/db.ts'
-import { loadFeed, loadIndex, loadPlaces, useLoad } from '../lib/content.ts'
+import { loadCities, loadFeed, loadIndex, loadPlaces, useLoad } from '../lib/content.ts'
+import { citiesOf } from '../lib/cities.ts'
+import { markKey, setLearnt, useMarks } from '../lib/learn.ts'
 import { earnStamp, makeQuiz, MAP_BY_ID, markPlaceRead, markPlaceUnread, regionColor, visitPlace, type QuizQuestion } from '../lib/places.ts'
 import { back, go } from '../lib/router.ts'
 import { LocatorMap } from '../components/ChinaMap.tsx'
 import { ReadMark } from '../components/ReadMark.tsx'
+import { LearntButton } from '../components/LearntButton.tsx'
+import { CityChips } from './CityPage.tsx'
 import { Seal } from '../components/Seal.tsx'
 import { FeedbackBanner } from '../components/chrome.tsx'
 import { Button, Loading, PageHeader, Pill, ProgressBar, Section } from '../components/ui.tsx'
@@ -18,6 +23,8 @@ export function PlacePage({ id }: { id: string }) {
   const feed = useLoad(loadFeed, 'feed').data
   const index = useLoad(loadIndex, 'index').data
   const progress = useLiveQuery(() => db.places.get(id), [id])
+  const citiesFile = useLoad(loadCities, 'cities').data
+  const marks = useMarks()
   useEffect(() => {
     visitPlace(id)
   }, [id])
@@ -32,6 +39,7 @@ export function PlacePage({ id }: { id: string }) {
   const series = (index?.series ?? []).filter((s) => s.provinces?.includes(id))
   const cards = (feed?.cards ?? []).filter((c) => c.province === id)
   const stamped = !!progress?.stamp
+  const cities = citiesOf(id).filter((c) => c.kind !== 'muni')
 
   return (
     <div className="pb-12">
@@ -51,6 +59,7 @@ export function PlacePage({ id }: { id: string }) {
             </div>
             <LocatorMap id={id} color="#fff" rest="rgba(255,255,255,0.28)" edge="transparent" className="w-28 shrink-0" />
           </div>
+          <Photo k={`place/${id}`} />
           <div className="flex items-center gap-4 p-4">
             <Seal char={place.short} earned={stamped} size={56} />
             {stamped ? (
@@ -103,6 +112,19 @@ export function PlacePage({ id }: { id: string }) {
         <div className="mt-6">
           <ReadMark readAt={progress?.read} onRead={() => markPlaceRead(id, place.chars ?? 0)} onUnread={() => markPlaceUnread(id)} />
         </div>
+
+        <div className="mt-3 flex gap-2">
+          <LearntButton on={marks.learnt.has(markKey('province', id))} onToggle={() => setLearnt('province', id, !marks.learnt.has(markKey('province', id)))} />
+          <Button tone="plain" size="md" className="h-12 min-w-0 flex-1 border-2 border-line !px-2" onClick={() => go(`map/place/${id}`)}>
+            <MapPinIcon size={20} weight="fill" style={{ color }} /> 地图
+          </Button>
+        </div>
+
+        {cities.length > 0 && (
+          <Section title={`${place.name}的城市`}>
+            <CityChips ids={cities.map((c) => c.id)} learnt={marks.learnt} stories={new Set((citiesFile?.cities ?? []).filter((c) => c.intro.length).map((c) => c.id))} />
+          </Section>
+        )}
 
         {(series.length > 0 || cards.length > 0) && (
           <Section title={`跟${place.name}有关`}>

@@ -17,6 +17,13 @@
   --zhu-ink: #c23d16;
   --dai: #425066;
   --dai-dark: #2c3646;
+  --map-ocean: #dfeaf3;
+  --map-abroad: #eeece6;
+  --map-china: #ffffff;
+  --map-border: #c9c6bd;
+  --map-water: #7fb3d8;
+  --map-halo: #ffffff;
+  --map-ink: #3b4450;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -36,6 +43,13 @@
     --zhu-ink: #ff8a66;
     --dai: #6a7d9b;
     --dai-dark: #4a5a73;
+    --map-ocean: #0e151c;
+    --map-abroad: #191d22;
+    --map-china: #262b31;
+    --map-border: #3d444c;
+    --map-water: #2e6a92;
+    --map-halo: #15181c;
+    --map-ink: #c9d1da;
     color-scheme: dark;
   }
 }
@@ -169,5 +183,117 @@
 
   [data-vaul-drawer] {
     outline: none;
+  }
+
+  /* 地图 */
+  .map-ocean {
+    background: var(--map-ocean);
+  }
+  .map-abroad {
+    fill: var(--map-abroad);
+    stroke: var(--map-border);
+  }
+  .map-lake {
+    fill: var(--map-water);
+  }
+  .map-river {
+    stroke: var(--map-water);
+  }
+  .map-pulse {
+    fill: none;
+    stroke: var(--color-zhu);
+    stroke-width: 2.5;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: map-pulse 1.6s ease-out infinite;
+  }
+  @keyframes map-pulse {
+    from {
+      opacity: 0.9;
+      transform: scale(0.6);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.6);
+    }
+  }
+  .map-city,
+  .map-province,
+  .map-sea,
+  .map-country,
+  .map-water,
+  .map-land,
+  .map-shan {
+    font-family: var(--font-ui);
+    paint-order: stroke;
+    stroke: var(--map-halo);
+    stroke-width: 3px;
+    stroke-linejoin: round;
+  }
+  .map-city {
+    fill: var(--map-ink);
+    font-weight: 700;
+  }
+  .map-capital {
+    fill: var(--text);
+    font-weight: 900;
+  }
+  .map-selected {
+    fill: var(--color-zhu);
+    font-weight: 900;
+  }
+  .map-province {
+    fill: var(--map-ink);
+    font-weight: 900;
+    letter-spacing: 0.08em;
+  }
+  .map-faded {
+    opacity: 0.45;
+  }
+  .map-sea {
+    fill: #4a86b0;
+    font-weight: 800;
+    letter-spacing: 0.4em;
+    stroke: var(--map-ocean);
+  }
+  .map-country {
+    fill: var(--mute);
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    stroke: var(--map-abroad);
+  }
+  .map-water {
+    fill: #3f86b9;
+    font-weight: 700;
+  }
+  .map-land {
+    fill: #a08a6a;
+    font-weight: 800;
+    letter-spacing: 0.3em;
+    opacity: 0.85;
+  }
+  .map-shan {
+    fill: #8a6d4c;
+    font-weight: 700;
+  }
+}
+
+/* Photo credit: small, on the photo's bottom edge, readable on any picture */
+@layer components {
+  .photo-credit {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 10px 8px 3px 24px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: rgb(255 255 255 / 0.85);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background: linear-gradient(to right, transparent, rgb(0 0 0 / 0.45) 24px);
+    border-top-left-radius: 8px;
   }
 }

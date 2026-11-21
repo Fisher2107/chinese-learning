@@ -17,6 +17,7 @@
 // --check: validate only, and fail on errors.
 import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
+import { createHash } from 'node:crypto'
 import { parse as parseYaml } from 'yaml'
 import { splitSentences, tokenizeSentence, glossFor, isHan, readings, numericToMarks } from '../src/lib/zh-core.ts'
 import { JIEQI } from '../src/lib/jieqi.ts'
@@ -31,6 +32,28 @@ const hsk = JSON.parse(await readFile('public/data/hsk.json', 'utf8'))
 const terms = Object.fromEntries(
   (parseYaml(await readFile('content/terms.yml', 'utf8')) ?? []).map((t) => [t.w, { p: t.p.replace(/\s+/g, ''), d: t.d }]),
 )
+
+// Every city on the map is a term, so its name stays one word with its place-name reading
+// (六安 lù'ān, 蚌埠 bèngbù) and a gloss saying where it is. terms.yml still wins.
+const PROVINCE_EN = {
+  beijing: 'Beijing', tianjin: 'Tianjin', hebei: 'Hebei', shanxi: 'Shanxi', neimenggu: 'Inner Mongolia', liaoning: 'Liaoning',
+  jilin: 'Jilin', heilongjiang: 'Heilongjiang', shanghai: 'Shanghai', jiangsu: 'Jiangsu', zhejiang: 'Zhejiang', anhui: 'Anhui',
+  fujian: 'Fujian', jiangxi: 'Jiangxi', shandong: 'Shandong', henan: 'Henan', hubei: 'Hubei', hunan: 'Hunan',
+  guangdong: 'Guangdong', guangxi: 'Guangxi', hainan: 'Hainan', chongqing: 'Chongqing', sichuan: 'Sichuan', guizhou: 'Guizhou',
+  yunnan: 'Yunnan', xizang: 'Tibet (Xizang)', shaanxi: 'Shaanxi', gansu: 'Gansu', qinghai: 'Qinghai', ningxia: 'Ningxia',
+  xinjiang: 'Xinjiang', xianggang: 'Hong Kong', aomen: 'Macau', taiwan: 'Taiwan',
+}
+const mapDetail = JSON.parse(await readFile('src/data/china-detail.json', 'utf8'))
+for (const c of mapDetail.cities) {
+  if (terms[c.name] || c.kind === 'muni') continue
+  const entries = dict[c.name] ?? []
+  const numeric = (entries.find(([p]) => /^[A-Z]/.test(p)) ?? entries[0])?.[0] ?? [...c.name].map((ch) => dict[ch]?.[0]?.[0] ?? '').join(' ')
+  const en = c.pin.replace(/-.*/, '').replace(/^./, (m) => m.toUpperCase())
+  const where = PROVINCE_EN[c.prov]
+  const what = c.kind === 'capital' ? `capital of ${where}` : c.kind === 'spot' ? `a famous town in ${where}` : c.full.endsWith('自治州') ? `an autonomous prefecture in ${where}` : /(地区|盟)$/.test(c.full) ? `a prefecture in ${where}` : `a city in ${where}`
+  terms[c.name] = { p: numericToMarks(numeric).toLowerCase(), d: `${en}, ${what}` }
+}
+
 const lookup = {
   entries: (w) => dict[w],
   term: (w) => terms[w],
@@ -292,6 +315,51 @@ for (const file of existsSync(feedDir) ? (await readdir(feedDir)).filter((f) => 
   })
 }
 
+// ---------- cities on the map ----------
+// Every city on the map gets a line of facts from the map data (src/data/china-detail.json);
+// the ones with a page in content/cities/<id>.md also get an intro and 聊天彩蛋.
+const detail = mapDetail
+const mapCities = new Map(detail.cities.map((c) => [c.id, c]))
+const provName = Object.fromEntries(places.map((p) => [p.id, p.name]))
+const cities = []
+const citiesGlossary = {}
+const cityDir = 'content/cities'
+const written = new Map()
+for (const file of existsSync(cityDir) ? (await readdir(cityDir)).filter((f) => f.endsWith('.md')).sort() : []) {
+  const where = `cities/${file}`
+  const { meta, body } = splitFrontmatter(await readFile(`${cityDir}/${file}`, 'utf8'), where)
+  const c = mapCities.get(meta.id)
+  if (!c) errors.push(`${where}: "${meta.id}" is not a city on the map (see the ids printed by build-map)`)
+  else if (meta.name && meta.name !== c.name) errors.push(`${where}: name "${meta.name}" but the map calls it "${c.name}"`)
+  if (`${meta.id}.md` !== file) errors.push(`${where}: id should match the file name`)
+  const [intro, eggs = ''] = body.split(/^## 聊天彩蛋\s*$/m)
+  if (!eggs.trim()) errors.push(`${where}: needs a ## 聊天彩蛋 section`)
+  written.set(meta.id, { meta, intro, eggs, where })
+}
+const wan = (n) => (n >= 100 ? `${Math.round(n / 10) * 10}万` : `${n}万`)
+function cityFacts(c) {
+  const pn = provName[c.prov]
+  if (c.kind === 'spot') return `${c.name}在${pn}。`
+  if (c.prov === 'taiwan') return `${c.name}在台湾${c.kind === 'capital' ? '北部' : ''}。`
+  const pop = c.pop ? `，人口大约${wan(c.pop)}` : ''
+  const region = places.find((p) => p.id === c.prov)?.type === '自治区'
+  if (c.kind === 'capital') return `${c.full}是${pn}的${region ? '首府' : '省会'}${pop}。`
+  return `${c.full}在${pn}${pop}。`
+}
+for (const c of detail.cities) {
+  if (c.kind === 'muni') continue // their page is the province page
+  const w = written.get(c.id)
+  const where = w?.where ?? `cities/${c.id}`
+  cities.push({
+    id: c.id,
+    nickname: w?.meta.nickname ? String(w.meta.nickname) : '',
+    facts: makeSentences(cityFacts(c), citiesGlossary, where),
+    intro: w ? parseBlocks(w.intro, citiesGlossary, where) : [],
+    eggs: w ? parseBlocks(w.eggs, citiesGlossary, where) : [],
+    chars: w ? charCount(w.intro) + charCount(w.eggs) : 0,
+  })
+}
+
 // 节气 hooks for the home banner, tokenized so every word can be tapped
 const jieqiGlossary = {}
 const jieqi = Object.fromEntries(JIEQI.map((j) => [j.name, makeSentences(j.hook, jieqiGlossary, `jieqi/${j.name}`)]))
@@ -307,6 +375,21 @@ if (errors.length) {
   console.error(`\n${errors.length} content error(s):\n  ${errors.join('\n  ')}`)
   process.exit(1)
 }
+// ---------- Photos (fetched by `npm run images`; who took them and their licences are in images.lock.json) ----------
+const photos = {}
+if (existsSync('content/images.lock.json')) {
+  const lock = JSON.parse(await readFile('content/images.lock.json', 'utf8'))
+  // ?v= changes when a different photo is chosen, so the app's photo cache (kept forever) picks it up
+  const v = (file) => createHash('md5').update(file).digest('hex').slice(0, 8)
+  const entry = (e) => e?.file && existsSync(`public/img/${e.key}.jpg`) && { src: `img/${e.key}.jpg?v=${v(e.file)}`, w: e.w, h: e.h, by: e.artist, lic: e.license, page: e.page }
+  for (const [key, e] of Object.entries(lock)) {
+    // "=place/beijing": the city 北京 shows the province's photo
+    const target = e.spec?.startsWith('=') ? e.spec.slice(1) : key
+    const p = entry({ ...lock[target], key: target })
+    if (p) photos[key] = p
+  }
+}
+
 if (!CHECK) {
   await mkdir('public/content/series', { recursive: true })
   await mkdir('public/content/texts', { recursive: true })
@@ -323,5 +406,7 @@ if (!CHECK) {
   await writeFile('public/content/jieqi.json', JSON.stringify({ hooks: jieqi, glossary: jieqiGlossary }))
   await writeFile('public/content/places.json', JSON.stringify({ places, glossary: placesGlossary }))
   await writeFile('public/content/feed.json', JSON.stringify({ cards: feed, glossary: feedGlossary }))
+  await writeFile('public/content/cities.json', JSON.stringify({ cities, glossary: citiesGlossary }))
+  await writeFile('public/content/photos.json', JSON.stringify(photos))
 }
-console.log(`\n${seriesOut.length} series, ${textOut.length} texts, ${places.length} places, ${feed.length} feed cards ${CHECK ? 'checked' : 'built'}.`)
+console.log(`\n${seriesOut.length} series, ${textOut.length} texts, ${places.length} places, ${written.size}/${cities.length} city pages, ${feed.length} feed cards ${CHECK ? 'checked' : 'built'}.`)
