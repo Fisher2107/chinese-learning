@@ -1,0 +1,14 @@
+---
+id: huizhou
+name: 惠州
+nickname: 鹅城
+sources:
+  - https://mzj.huizhou.gov.cn/bmfw/qhdm/content/post_5602999.html
+  - https://mzj.huizhou.gov.cn/bmfw/qhdm/content/post_5454227.html
+---
+惠州在广东东部，东江穿城而过。市区的西湖山水相连，苏东坡曾在惠州生活，留下不少诗文和故事。
+
+## 聊天彩蛋
+- 惠州西湖旧名“丰湖”，苏东坡到惠州后，这座湖也渐渐出了名。
+- 苏东坡在惠州写过“日啖荔枝三百颗，不辞长作岭南人”，荔枝也成了惠州的招牌水果之一。
+- 惠州有客家围屋，也有海边的大亚湾；在一个城市里能遇见山、湖、江和海。
