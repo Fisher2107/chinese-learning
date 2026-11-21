@@ -290,6 +290,7 @@ for (const s of seriesOut)
 // ---------- 刷一刷 feed ----------
 const feed = []
 const feedGlossary = {}
+const cityProvinces = new Map(mapDetail.cities.map(c => [c.id, c.prov]))
 const feedDir = 'content/feed'
 for (const file of existsSync(feedDir) ? (await readdir(feedDir)).filter((f) => f.endsWith('.md')).sort() : []) {
   const where = `feed/${file}`
@@ -297,6 +298,7 @@ for (const file of existsSync(feedDir) ? (await readdir(feedDir)).filter((f) => 
   const id = meta.id ?? file.slice(0, -3)
   if (!meta.title) errors.push(`${where}: missing title (the hook question)`)
   if (meta.province && !placeIds.has(meta.province)) errors.push(`${where}: unknown province "${meta.province}"`)
+  if (meta.city && (!cityProvinces.has(meta.city) || cityProvinces.get(meta.city) !== meta.province)) errors.push(`${where}: city "${meta.city}" must belong to the card's province`)
   if (meta.series && !seriesIds.includes(meta.series)) errors.push(`${where}: unknown series "${meta.series}"`)
   if (!Array.isArray(meta.sources) || meta.sources.length === 0) errors.push(`${where}: needs at least one source`)
   const chars = charCount(body)
@@ -306,6 +308,7 @@ for (const file of existsSync(feedDir) ? (await readdir(feedDir)).filter((f) => 
     date: meta.date ? String(meta.date) : '',
     title: makeSentences(String(meta.title ?? ''), feedGlossary, where),
     province: meta.province ?? '',
+    city: meta.city ?? '',
     series: meta.series ?? '',
     tags: meta.tags ?? [],
     chars,
