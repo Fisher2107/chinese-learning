@@ -1,0 +1,831 @@
+[
+  {
+    "id": "xia",
+    "title": "夏",
+    "dates": "约公元前21世纪—前16世纪",
+    "mapCaption": "夏可能的活动范围示意图。考古资料还无法确定夏的疆界。",
+    "overview": "后世文献把夏放在商之前。河南二里头发现了宫殿遗址和青铜器，有学者认为那里与夏有关。是否能把遗址和文献里的夏对应起来，学界仍在讨论。",
+    "events": [
+      {
+        "date": "约公元前16世纪（传统说法）",
+        "title": "商汤灭夏的传说",
+        "place": "鸣条（古地名，具体位置有争议）",
+        "story": "《史记》说，商汤在鸣条打败夏桀，商取代了夏。这是后世对王朝更替的记载。今天，我们能从遗址看出当时出现了新的中心，但还无法确认这场战争的经过。",
+        "figures": [
+          { "id": "tang-shang", "name": "商汤", "role": "传统记载中推翻夏桀、建立商朝的人" }
+        ],
+        "sources": [
+          { "title": "《史记·夏本纪》", "url": "https://cn.jic.io/topic/shiji/002" },
+          { "title": "史密森尼学会｜中国古代考古", "url": "https://asia-archive.si.edu/wp-content/uploads/2020/05/Art-and-Archaeology-of-Ancient-China.pdf" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "shang",
+    "title": "商",
+    "dates": "约公元前1600—前1046年",
+    "mapCaption": "商的活动中心位于黄河中下游，殷墟在今天的河南安阳。",
+    "overview": "商晚期的王都在今天的河南安阳。当地出土的甲骨文让我们知道，商王常与周边的方国交战。后来，西边兴起的周夺走了商的王位。",
+    "events": [
+      {
+        "date": "约公元前13世纪末",
+        "title": "妇好出征",
+        "place": "殷（今河南安阳）及商的周边地区",
+        "story": "甲骨文留下了妇好带兵出征的记录。商王室多次和周边的方国交战，派妇好领兵。把安阳放在地图上看，那里既是王都，也是商向周边派兵的中心。",
+        "figures": [
+          { "id": "fuhao", "name": "妇好", "role": "商王武丁的妻子，也是多次领兵的将领" }
+        ],
+        "sources": [
+          { "title": "河南博物院｜妇好与她的时代", "url": "https://english.chnmus.net/en/events/details.html?id=418174936788036138" },
+          { "title": "华盛顿大学｜商代妇好墓", "url": "https://depts.washington.edu/chinaciv/archae/tfuhmain.htm" }
+        ]
+      },
+      {
+        "date": "约公元前1046年",
+        "title": "牧野之战",
+        "place": "牧野（今河南北部、淇县以南一带）",
+        "story": "周武王联合其他势力向东进军，在牧野打败商军。商王朝结束，周成为新的统治者。周的早期政治中心在关中，后来又加强了在东方的控制。",
+        "figures": [
+          { "id": "king-wu", "name": "周武王", "role": "带领联军灭商的周王" }
+        ],
+        "sources": [
+          { "title": "中国国家博物馆｜周武王征商的利簋", "url": "https://www.chnmuseum.cn/zp/zpml/kgfjp/202108/t20210802_250931.shtml" },
+          { "title": "国家地理学会｜中国古代王朝", "url": "https://education.nationalgeographic.org/resource/imperial-chinas-dynasties/6th-grade/" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "west-zhou",
+    "title": "西周",
+    "dates": "约公元前1046—前771年",
+    "mapCaption": "西周以关中的丰镐为中心，并在东方设置据点、分封诸侯。",
+    "overview": "周王把土地分给亲族和功臣，让他们在各地建立诸侯国。这个办法扩大了周的影响，但也让周王需要依靠地方势力。",
+    "events": [
+      {
+        "date": "约公元前11世纪中叶",
+        "title": "三监之乱与周公东征",
+        "place": "原商都一带至奄（今山东曲阜）",
+        "story": "周武王死后，商王的儿子武庚联合不满周公的人起兵。周公带兵向东平乱。周因此稳定了原商统治区，也进一步把影响扩大到今天的山东一带。",
+        "figures": [
+          { "id": "duke-zhou", "name": "周公", "role": "代年幼的周成王管理国事，带兵东征" }
+        ],
+        "sources": [
+          { "title": "中国国家博物馆｜记录周公东征的禽簋", "url": "https://www.chnmuseum.cn/zp/zpml/csp/202008/t20200826_247371.shtml" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "spring",
+    "title": "春秋",
+    "dates": "公元前770—前476年",
+    "mapCaption": "周王室在洛邑。晋、楚、齐、秦等诸侯国在不同地区争夺影响力。",
+    "overview": "周平王把都城迁到洛邑后，周王仍有名义上的地位，实际力量却越来越有限。晋、楚等诸侯国靠结盟和战争争当诸侯的领头人。",
+    "events": [
+      {
+        "date": "公元前632年",
+        "title": "城濮之战",
+        "place": "城濮（一般认为在今山东鄄城附近）",
+        "story": "楚国对宋国用兵，宋国向晋国求援。晋文公争取到其他诸侯的支持，在城濮打败楚军。晋文公随后召集诸侯会盟，晋在中原的影响明显上升，楚仍是南方强国。",
+        "figures": [
+          { "id": "wen-jin", "name": "晋文公", "role": "联合诸侯抗楚的晋国国君" }
+        ],
+        "sources": [
+          { "title": "中国文化研究院｜城濮之战", "url": "https://www.chiculture.org.hk/en/node/3975" },
+          { "title": "剑桥大学出版社｜《左传》的预测与历史叙事", "url": "https://www.cambridge.org/core/services/aop-cambridge-core/content/view/83E78D98C76B20EA6B2447DB2832AF6A/S0362502818000214a.pdf/history_as_futuretime_prediction_and_historical_narrative_in_the_zuo_zhuan.pdf" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "warring",
+    "title": "战国",
+    "dates": "约公元前475—前221年",
+    "mapCaption": "约公元前260年。秦在西边，齐在东边，楚占据南方大片地区。",
+    "overview": "几百年间，许多小国被兼并，秦、楚、齐、燕、韩、赵、魏成为主要强国。各国不只争影响力，也争对土地和人口的直接控制。",
+    "events": [
+      {
+        "date": "约公元前341年",
+        "title": "马陵之战",
+        "place": "马陵（具体位置有争议）",
+        "story": "魏国攻打韩国，韩国向齐国求援。孙膑为齐军出谋划策，魏军在马陵大败。魏在中原的影响受到打击，齐在东方的地位上升。",
+        "figures": [
+          { "id": "sunbin", "name": "孙膑", "role": "帮助齐军打败魏军的军事顾问" }
+        ],
+        "sources": [
+          { "title": "《史记·孙子吴起列传》", "url": "https://www.shidianguji.com/book/CADAL01027342/chapter/1mbbmryj6pjca" },
+          { "title": "山东地情档案｜马陵古战场的不同说法", "url": "https://shandong-chorography.org/database/zzmj/section/16/article/13/" }
+        ]
+      },
+      {
+        "date": "公元前260年",
+        "title": "长平之战",
+        "place": "长平（今山西高平一带）",
+        "story": "秦、赵两国为争夺上党发生大战。白起指挥秦军打败赵军，大量赵兵在投降后被杀，具体人数仍有争议。赵国元气大伤，秦与其他各国的实力差距随之扩大。",
+        "figures": [
+          { "id": "baiqi", "name": "白起", "role": "在长平之战后期指挥秦军的将领" }
+        ],
+        "sources": [
+          { "title": "悉尼科技大学研究库｜长平之战研究", "url": "https://opus.lib.uts.edu.au/bitstream/10453/183828/3/A%20Study%20on%20the%20Battle%20of%20Changping.pdf" },
+          { "title": "山东大学历史文化学院｜长平之战纪念馆", "url": "https://www.history.sdu.edu.cn/history/info/1308/20051.htm" }
+        ],
+        "rank": 3,
+        "hook": "为什么一次大战，就让一个能和秦对抗的强国失去了优势？"
+      },
+      {
+        "date": "公元前230—前221年",
+        "title": "秦灭六国",
+        "place": "自关中向东、向南，最后到齐国",
+        "story": "秦先灭韩国，再陆续灭掉赵、魏、楚、燕，最后接受齐国投降。秦王嬴政称皇帝，把原来各国的土地纳入同一套行政体系，战国也随之结束。",
+        "figures": [
+          { "id": "first-emperor", "name": "秦王嬴政", "role": "在位时兼并六国，后来称秦始皇" }
+        ],
+        "sources": [
+          { "title": "中国国家博物馆｜秦汉时期", "url": "https://www.chnmuseum.cn/portals/0/web/zt/gudai/detail4.html" },
+          { "title": "美国国家美术馆｜中国考古与早期帝国", "url": "https://www.nga.gov/sites/default/files/migrate_images/content/dam/ngaweb/education/learning-resources/teaching-packets/pdfs/chinese-archaeology-tp.pdf" }
+        ],
+        "rank": 4,
+        "hook": "把七国地图和秦朝地图放在一起看，为什么最后留下的是西边的秦？"
+      }
+    ]
+  },
+  {
+    "id": "qin",
+    "title": "秦",
+    "dates": "公元前221—前207年",
+    "mapCaption": "约公元前210年的秦朝。过去的诸侯国大多改为中央管理的郡县。",
+    "overview": "秦把大部分战国诸侯的土地交给郡县管理，并统一文字、度量衡等标准。秦始皇去世后，朝廷发生权力斗争，各地又因为负担沉重而爆发起义。",
+    "events": [
+      {
+        "date": "公元前209—前207年",
+        "title": "秦末起义与秦朝灭亡",
+        "place": "大泽乡（今安徽宿州一带）、巨鹿、关中",
+        "story": "陈胜、吴广起义后，各地陆续出现反秦力量。项羽在巨鹿打败秦军主力，刘邦随后进军关中，秦王子婴投降。秦朝结束，各路势力开始争夺原来由秦统一的土地。",
+        "figures": [
+          { "id": "xiangyu", "name": "项羽", "role": "在巨鹿击败秦军主力的反秦将领" },
+          { "id": "liubang", "name": "刘邦", "role": "进军关中，接受子婴投降" }
+        ],
+        "sources": [
+          { "title": "《史记·项羽本纪》", "url": "https://www.shidianguji.com/book/CADAL02040536/chapter/1l7l8d3swavxf" },
+          { "title": "国家人文历史｜秦末巨鹿之战", "url": "https://www.gjrwls.com/military/20210622/592020559798206464.html" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "west-han",
+    "title": "西汉",
+    "dates": "公元前202年—公元8年",
+    "mapCaption": "公元2年的西汉。西边的河西走廊连接关中和西域。",
+    "overview": "刘邦赢得楚汉战争后建立汉朝。到了汉武帝时期，汉军与匈奴反复交战，朝廷逐步控制河西走廊，并加强与西域的往来。",
+    "events": [
+      {
+        "date": "公元前202年",
+        "title": "垓下之战与西汉建立",
+        "place": "垓下（一般认为在今安徽固镇一带）",
+        "story": "秦灭亡后，项羽和刘邦争了几年。刘邦的汉军联合其他力量，在垓下围住项羽。项羽战败身亡，刘邦称帝，原来分在各路势力手中的大片土地逐步归到汉朝名下。",
+        "figures": [
+          { "id": "liubang", "name": "刘邦", "role": "率汉军争取天下，获胜后建立汉朝" },
+          { "id": "xiangyu", "name": "项羽", "role": "楚军首领，在垓下战败" }
+        ],
+        "sources": [
+          { "title": "中国国家博物馆｜“汉并天下”瓦当", "url": "https://www.chnmuseum.cn/zp/zpml/kgfjp/202110/t20211027_251887.shtml" },
+          { "title": "《史记·项羽本纪》", "url": "https://www.shidianguji.com/book/CADAL02040536/chapter/1l7l8d3swavxf" }
+        ],
+        "rank": 8,
+        "hook": "“四面楚歌”这个成语，为什么成了项羽最后一战的代名词？"
+      },
+      {
+        "date": "公元前121年",
+        "title": "霍去病进军河西",
+        "place": "河西走廊（今甘肃西部）",
+        "story": "汉武帝派霍去病两次进军河西，重创当地匈奴势力。同年，匈奴浑邪王率部归降。汉朝后来在这里设置郡县，关中通往西域的路线也更容易保持畅通。",
+        "figures": [
+          { "id": "wudi", "name": "汉武帝", "role": "决定向河西出兵的西汉皇帝" },
+          { "id": "huo", "name": "霍去病", "role": "两次率军进攻河西的汉军将领" }
+        ],
+        "sources": [
+          { "title": "《史记·卫将军骠骑列传》", "url": "https://www.shidianguji.com/book/SJwSMQvJLG/chapter/1m8mac9snltma" },
+          { "title": "中国甘肃网｜霍去病的河西远征", "url": "https://gansu.gscn.com.cn/system/2020/05/28/012393526.shtml" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "xin",
+    "title": "新",
+    "dates": "公元9—23年",
+    "mapCaption": "王莽接手了西汉的大片土地，政治中心仍在长安一带。",
+    "overview": "王莽取代西汉，建立新朝。他推出了土地、货币等改革，但执行困难。灾害和民变进一步削弱了朝廷，各地出现反抗力量。",
+    "events": [
+      {
+        "date": "公元23年",
+        "title": "昆阳之战与新朝结束",
+        "place": "昆阳（今河南叶县）与长安",
+        "story": "刘秀参与指挥起义军，在昆阳击败王莽派来的大军。几个月后，反对新朝的军队进入长安，王莽被杀。原来由新朝控制的地区随即成为几股势力争夺的对象。",
+        "figures": [
+          { "id": "wangmang", "name": "王莽", "role": "新朝皇帝，派兵围攻昆阳，后来死于长安" },
+          { "id": "liuxiu", "name": "刘秀", "role": "在昆阳击败新军的起义军将领之一" }
+        ],
+        "sources": [
+          { "title": "中国文化研究院｜昆阳之战", "url": "https://chiculture.org.hk/sc/china-five-thousand-years/3979" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "east-han",
+    "title": "东汉",
+    "dates": "公元25—220年",
+    "mapCaption": "公元189年的东汉。各州的分布仍能看出东汉原来的行政格局。",
+    "overview": "刘秀在战乱后重建汉朝，把都城设在洛阳。到了东汉末年，朝廷失去对许多地区的控制，地方将领在黄河和长江流域争夺地盘。",
+    "events": [
+      {
+        "date": "公元25—36年",
+        "title": "刘秀建东汉、统一各地",
+        "place": "洛阳至今四川一带",
+        "story": "新朝灭亡后，各地有自己的武装和首领。刘秀称帝并定都洛阳，此后陆续击败各地对手。到36年，四川的公孙述兵败，东汉基本完成统一。",
+        "figures": [
+          { "id": "liuxiu", "name": "刘秀", "role": "建立东汉并主持统一的汉光武帝" }
+        ],
+        "sources": [
+          { "title": "《后汉书·光武帝纪》", "url": "https://www.shidianguji.com/book/HY2111/chapter/1krcayme00x7q" },
+          { "title": "中央纪委国家监委网站｜东汉建立与统一", "url": "https://m.ccdi.gov.cn/content/41/a8/57067.html" }
+        ]
+      },
+      {
+        "date": "公元208年",
+        "title": "赤壁之战",
+        "place": "长江中游赤壁（今湖北境内，具体地点有争议）",
+        "story": "曹操控制北方后南下，孙权和刘备联合反抗。周瑜率孙权的部队与刘备一方合作，击退曹军。曹操退回北方，孙、刘两方得以在南方继续发展，为后来的三国局面打下基础。",
+        "figures": [
+          { "id": "caocao", "name": "曹操", "role": "控制北方并领军南下的一方首领" },
+          { "id": "sunquan", "name": "孙权", "role": "决定与刘备联合，派军抵抗曹操" },
+          { "id": "liubei", "name": "刘备", "role": "与孙权结盟抗曹的一方首领" },
+          { "id": "zhouyu", "name": "周瑜", "role": "受孙权派遣，在赤壁指挥孙军" }
+        ],
+        "sources": [
+          { "title": "澳大利亚国立大学研究库｜赤壁与孙权", "url": "https://openresearch-repository.anu.edu.au/server/api/core/bitstreams/d476f712-37d8-4366-ab10-3d98d017a9ff/content" },
+          { "title": "博睿学术出版社｜208年的赤壁", "url": "https://brill.com/previewpdf/book/9789004188303/Bej.9789004185227.i-554_008.xml" }
+        ],
+        "rank": 1,
+        "hook": "《三国演义》把赤壁写得很热闹。回到历史，曹操为什么没能把南北一起统一？"
+      }
+    ]
+  },
+  {
+    "id": "three",
+    "title": "三国",
+    "dates": "公元220—280年",
+    "mapCaption": "公元262年。魏在北方，蜀汉以成都为中心，孙吴控制长江中下游大片地区。",
+    "overview": "东汉结束后，魏、蜀、吴相继建立。这个时期从魏代汉算起，到西晋灭吴结束。西晋建立时，吴还存在，所以两个时期在时间上有交叉。",
+    "events": [
+      {
+        "date": "公元221—222年",
+        "title": "夷陵之战",
+        "place": "夷陵、猇亭（今湖北宜昌一带）",
+        "story": "孙权一方夺取荆州部分地区、关羽被杀后，刘备率军向东进攻。陆逊在夷陵一带打败刘备，孙吴保住了长江中游的地盘。之后蜀汉和孙吴恢复合作，共同应对北方的魏。",
+        "figures": [
+          { "id": "liubei", "name": "刘备", "role": "率蜀汉军队向孙吴进攻" },
+          { "id": "luxun", "name": "陆逊", "role": "率孙吴军队击败刘备" }
+        ],
+        "sources": [
+          { "title": "博睿学术出版社｜东汉末与三国大事年表", "url": "https://brill.com/previewpdf/book/9789004325203/B9789004325203_014.xml" },
+          { "title": "澳大利亚国立大学研究库｜孙吴将领", "url": "https://openresearch-repository.anu.edu.au/server/api/core/bitstreams/d476f712-37d8-4366-ab10-3d98d017a9ff/content" }
+        ]
+      },
+      {
+        "date": "公元228—234年",
+        "title": "诸葛亮北伐",
+        "place": "汉中、陇右与五丈原（今陕甘一带）",
+        "story": "蜀汉把汉中当作向北进军的基地。诸葛亮多次进攻曹魏，收取过武都、阴平两郡，却始终未能拿下关中。234年，他在五丈原去世，蜀魏对峙继续。",
+        "figures": [
+          { "id": "zhugeliang", "name": "诸葛亮", "role": "主持北伐的蜀汉丞相" }
+        ],
+        "sources": [
+          { "title": "中国文化研究院｜诸葛亮与北伐", "url": "https://chiculture.org.hk/sites/mainsite/files/2021-11/0104_zhugeliang_pdf_cn.pdf" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "west-jin",
+    "title": "西晋",
+    "dates": "公元265—316年",
+    "mapCaption": "约公元280年，西晋灭吴后各州的分布。西晋以洛阳为都。",
+    "overview": "司马炎取代曹魏建立晋朝，后来消灭孙吴。统一只持续了几十年。皇族争权和北方战争接连发生，洛阳、长安相继失守。",
+    "events": [
+      {
+        "date": "公元279—280年",
+        "title": "西晋灭吴",
+        "place": "长江流域至建业（今江苏南京）",
+        "story": "司马炎下令从几路进攻孙吴。晋军攻到建业后，吴主孙皓投降。三国时代结束，黄河与长江流域重新归到同一个朝廷之下。",
+        "figures": [
+          { "id": "simayan", "name": "司马炎", "role": "建立西晋并下令进攻孙吴的晋武帝" }
+        ],
+        "sources": [
+          { "title": "博睿学术出版社｜西晋统一与洛阳", "url": "https://brill.com/previewpdf/book/9789004325203/B9789004325203_014.xml" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "east-jin",
+    "title": "东晋与十六国",
+    "dates": "公元317—420年（东晋）",
+    "mapCaption": "公元376年，刚统一北方的前秦和以建康为都的东晋南北并立。",
+    "overview": "西晋灭亡后，晋朝皇族在今天的南京建立东晋。北方政权不断更替。前秦一度控制北方大片地区，并试图把东晋也纳入自己的版图。",
+    "events": [
+      {
+        "date": "公元383年",
+        "title": "淝水之战",
+        "place": "淝水、寿阳（今安徽寿县一带）",
+        "story": "前秦统治者苻坚南下，想把东晋也统一进来。东晋赢得了淝水之战，保住了南方；前秦失利后很快分裂，北方重新出现多个政权。",
+        "figures": [
+          { "id": "xiean", "name": "谢安", "role": "主持东晋朝廷的应战安排" },
+          { "id": "fujian", "name": "苻坚", "role": "决定南下攻打东晋的前秦君主" }
+        ],
+        "sources": [
+          { "title": "故宫博物院｜淝水之战", "url": "https://www.dpm.org.cn/lemmas/240507.html" },
+          { "title": "香港教育局｜淝水之战教学资料", "url": "https://www.edb.gov.hk/attachment/sc/curriculum-development/kla/pshe/references-and-resources/chinese-history/war3_sc.pdf" }
+        ],
+        "rank": 7,
+        "hook": "前秦刚统一北方，为什么一场败仗后，北方地图又变成了好几块？"
+      }
+    ]
+  },
+  {
+    "id": "north-south",
+    "title": "南北朝",
+    "dates": "公元420—589年",
+    "mapCaption": "公元560年，北周和北齐在北方并立，陈朝以南方的建康为都。",
+    "overview": "南方先后有宋、齐、梁、陈，北方也几次分合。420年是南朝开始的时间，北魏此前已经建立。北周统一北方后，隋在这个基础上走向南北统一。",
+    "events": [
+      {
+        "date": "公元576—577年",
+        "title": "北周灭北齐",
+        "place": "晋阳（今山西太原一带）至邺城",
+        "story": "北周和北齐都来自北魏分裂后的政权，长期争夺北方。周武帝攻下北齐的重要城市，北齐在577年灭亡。统一后的北方力量后来被隋朝接手。",
+        "figures": [
+          { "id": "yuwenyong", "name": "宇文邕", "role": "率北周进攻北齐的周武帝" }
+        ],
+        "sources": [
+          { "title": "剑桥中国史｜东魏与北齐", "url": "https://www.cambridge.org/core/books/abs/cambridge-history-of-china/eastern-weinorthern-qi/ACA9DFF6C8EF6DC0B5CB7E89BEF2836E" },
+          { "title": "伦敦大学亚非学院｜北周武帝与北朝", "url": "https://eprints.soas.ac.uk/23582/1/Shi_4296.pdf" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sui",
+    "title": "隋",
+    "dates": "公元581—618年",
+    "mapCaption": "公元610年的隋朝。黄河和长江流域已由隋朝统一管理。",
+    "overview": "杨坚取代北周建立隋，几年后向南灭陈。隋炀帝时，大运河工程加强了南北联系，但大规模工程和出兵也增加了百姓的负担。",
+    "events": [
+      {
+        "date": "公元588—589年",
+        "title": "隋灭陈",
+        "place": "长江流域、建康（今江苏南京）",
+        "story": "隋文帝从北方发兵攻陈。589年，隋军渡过长江，占领陈朝都城建康。南北长期分治结束，隋朝开始在统一的版图上推行制度。",
+        "figures": [
+          { "id": "suiwen", "name": "隋文帝杨坚", "role": "建立隋朝并下令攻陈" }
+        ],
+        "sources": [
+          { "title": "华盛顿大学｜隋朝与南北统一", "url": "https://depts.washington.edu/silkroad/exhibit/sui/essay.html" },
+          { "title": "博睿学术出版社｜由分裂走向统一", "url": "https://brill.com/previewpdf/book/9789004325203/B9789004325203_014.xml" }
+        ]
+      },
+      {
+        "date": "公元612—614年",
+        "title": "隋炀帝三征高句丽",
+        "place": "辽东与朝鲜半岛北部",
+        "story": "隋炀帝多次向高句丽用兵，没有征服对方。出兵所需的人力和粮食给隋朝带来沉重负担，国内起义也越来越多。几年后，隋在内乱中灭亡。",
+        "figures": [
+          { "id": "suiyang", "name": "隋炀帝杨广", "role": "决定三次攻打高句丽的隋朝皇帝" }
+        ],
+        "sources": [
+          { "title": "华盛顿大学｜隋朝的工程、战争与衰亡", "url": "https://depts.washington.edu/silkroad/exhibit/sui/essay.html" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tang",
+    "title": "唐",
+    "dates": "公元618—907年（690—705年为武周）",
+    "mapCaption": "742年的唐朝。长安是政治中心，唐在西域设有管理机构。",
+    "overview": "唐前期的影响向北和向西扩大。武则天在690年改国号为周，705年恢复唐。后来，安史之乱让朝廷对地方的控制越来越弱。",
+    "events": [
+      {
+        "date": "公元629—630年",
+        "title": "唐击败东突厥",
+        "place": "唐朝北部边境至漠南",
+        "story": "唐太宗派李靖等将领出兵，东突厥的颉利可汗被俘。部分草原首领开始承认唐太宗的地位，唐在北方草原的影响因此扩大。",
+        "figures": [
+          { "id": "taizong", "name": "唐太宗李世民", "role": "派兵攻打东突厥的唐朝皇帝" }
+        ],
+        "sources": [
+          { "title": "剑桥大学出版社｜唐太宗与草原各部", "url": "https://assets.cambridge.org/97810092/14643/excerpt/9781009214643_excerpt.pdf" },
+          { "title": "中国文化研究院｜唐太宗", "url": "https://chiculture.org.hk/sites/mainsite/files/2021-07/0108_tangtaizong_yuanwen_cn.pdf" }
+        ]
+      },
+      {
+        "date": "公元755—763年",
+        "title": "安史之乱",
+        "place": "河北、洛阳与长安",
+        "story": "掌握北方军队的安禄山起兵，先后攻下洛阳和长安。唐军后来收复两座都城，叛乱平息。战后，一些地方将领仍掌握军队和财政，朝廷很难再像以前那样管理这些地方。",
+        "figures": [
+          { "id": "guoziyi", "name": "郭子仪", "role": "参与收复长安、洛阳的唐军将领" }
+        ],
+        "sources": [
+          { "title": "故宫博物院｜郭子仪", "url": "https://www.dpm.org.cn/lemmas/239706.html" },
+          { "title": "香港教育局｜安史之乱教学资料", "url": "https://www.edb.gov.hk/attachment/sc/curriculum-development/kla/pshe/references-and-resources/chinese-history/war4_sc.pdf" }
+        ],
+        "rank": 5,
+        "hook": "唐朝收回了两座都城，为什么还是失去了对一些地方的控制？"
+      }
+    ]
+  },
+  {
+    "id": "wu-zhou",
+    "title": "武周",
+    "dates": "公元690—705年",
+    "mapCaption": "约700年的武周，原图沿用 Tang 标示这一段历史。当时的政治中心洛阳也叫神都。",
+    "overview": "武则天在690年称帝，把国号由唐改为周，后人称为武周。这个时期位于唐朝前期，沿用了唐的大部分统治范围。",
+    "events": [
+      {
+        "date": "公元684—690年",
+        "title": "扬州起兵与武周建立",
+        "place": "扬州与洛阳",
+        "story": "武则天掌权后，徐敬业在扬州起兵反对她，最终失败。武则天继续掌权，于690年在洛阳称帝，改国号为周。原先的唐朝州县大多由武周继续管理。",
+        "figures": [
+          { "id": "wuzetian", "name": "武则天", "role": "击败反对势力，后来称帝建立武周" }
+        ],
+        "sources": [
+          { "title": "中国文化研究院｜武则天与扬州起兵", "url": "https://chiculture.org.hk/sites/mainsite/files/2021-10/0109_wuzetian_yuanwen_cn_5.pdf" },
+          { "title": "河南博物院｜武则天金简", "url": "https://www.chnmus.net/sitesources/hnsbwy/page_pc/dzjp/mzyp/article5ec7e9a94e534b55bfada4743a9dd1bd.html" }
+        ]
+      },
+      {
+        "date": "公元705年",
+        "title": "神龙政变",
+        "place": "洛阳",
+        "story": "武则天病重时，张柬之等大臣在宫中发动政变，迫使她交出皇位。唐中宗重新即位，恢复唐的国号。这次变化主要发生在朝廷，大片土地没有因此易手。",
+        "figures": [
+          { "id": "wuzetian", "name": "武则天", "role": "在政变中被迫交出皇位的武周皇帝" }
+        ],
+        "sources": [
+          { "title": "中国文化研究院｜武则天与神龙政变", "url": "https://chiculture.org.hk/sites/mainsite/files/2021-10/0109_wuzetian_yuanwen_hk.edited.pdf" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "five",
+    "title": "五代十国",
+    "dates": "公元907—979年",
+    "mapCaption": "后周时期（951—960年）的北方与周边政权。南方仍有多个政权并存。",
+    "overview": "唐亡以后，北方先后出现五个主要王朝，南方等地还有多个政权。后周夺取南唐在长江以北的土地，为北宋继续向南扩张打下基础。北方的五代到960年结束，979年北宋灭北汉。",
+    "events": [
+      {
+        "date": "公元955—958年",
+        "title": "后周三征南唐",
+        "place": "淮南（淮河与长江之间）",
+        "story": "后周世宗柴荣多次攻打南唐。南唐战败，把长江以北的十四州交给后周。双方的边界退到长江，开封一方进一步掌握了由北向南的通道。",
+        "figures": [
+          { "id": "chairong", "name": "柴荣", "role": "多次亲自出征南唐的后周世宗" }
+        ],
+        "sources": [
+          { "title": "台湾师范大学历史学报｜后周与南唐的战事", "url": "https://www.his.ntnu.edu.tw/publish03/downloadfile.php?issue_id=46&paper_id=310&periodicalsDir=DESC&periodicalsOrder=Sorter_issue_ch" },
+          { "title": "《资治通鉴》白话译文｜后周攻南唐", "url": "https://shishuguan.com/books/zizhi-tongjian-baihuawen-full/volume-16/chapter-294" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "north-song",
+    "title": "北宋",
+    "dates": "公元960—1127年",
+    "mapCaption": "1111年的北宋与周边政权。辽在北方，西夏在西北。",
+    "overview": "赵匡胤建立北宋后，宋逐步结束了五代十国时期的分裂。辽和西夏仍控制北方和西北的大片地区。后来，金攻破开封，北宋结束。",
+    "events": [
+      {
+        "date": "公元974—976年",
+        "title": "北宋灭南唐",
+        "place": "长江下游、金陵（今江苏南京）",
+        "story": "宋太祖派兵攻打南唐，南唐后主李煜最终投降。金陵和附近地区归宋，长江下游的大部分地区由宋朝管理。",
+        "figures": [
+          { "id": "songtaizu", "name": "宋太祖赵匡胤", "role": "建立北宋并下令攻打南唐" }
+        ],
+        "sources": [
+          { "title": "剑桥大学出版社｜宋初统一与对南唐的战争", "url": "https://assets.cambridge.org/97811070/84759/toc/9781107084759_toc.pdf" },
+          { "title": "中国文化研究院｜宋太祖与南唐后主", "url": "https://chiculture.org.hk/sc/node/1587" }
+        ]
+      },
+      {
+        "date": "公元1004—1005年",
+        "title": "宋辽战争与澶渊之盟",
+        "place": "澶州（今河南濮阳一带）",
+        "story": "辽军南下，宋真宗来到澶州。双方后来选择议和，宋每年给辽银和绢，两国维持原来的边界。此后，宋辽之间保持了约一个世纪的和平。",
+        "figures": [
+          { "id": "zhenzong", "name": "宋真宗", "role": "到澶州督战，并同意与辽签订盟约" },
+          { "id": "xiaotaihou", "name": "萧太后", "role": "与辽圣宗一同南下，并主持辽方议和" }
+        ],
+        "sources": [
+          { "title": "四川大学学报｜澶渊之盟", "url": "https://journal.scu.edu.cn/info/1109/13616.htm" },
+          { "title": "学术论文｜北宋如何看待辽", "url": "https://real.mtak.hu/89445/1/062.2018.71.4.2.pdf" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "south-song",
+    "title": "南宋",
+    "dates": "公元1127—1279年",
+    "mapCaption": "1142年，宋金议和后的南北形势。东段边界大致沿淮河。",
+    "overview": "金攻破开封后，宋朝在南方重建朝廷，后来以临安为都。南宋与金长期对峙。到了13世纪，蒙古先灭金，元军后来又攻灭南宋。",
+    "events": [
+      {
+        "date": "公元1126—1127年",
+        "title": "靖康之变",
+        "place": "开封（今河南开封）及宋廷南迁路线",
+        "story": "金军包围并占领开封，带走已经退位的宋徽宗和他的儿子宋钦宗，北宋结束。赵构在1127年称帝，宋朝的统治中心随后移到南方。",
+        "figures": [
+          { "id": "huizong", "name": "宋徽宗", "role": "金军攻打开封时已退位，随后与宋钦宗一同被俘" }
+        ],
+        "sources": [
+          { "title": "香港中文大学｜金军围城时的开封", "url": "https://www.cuhk.edu.hk/ics/journal/articles/v53p057.pdf" },
+          { "title": "中国文化研究院｜宋徽宗", "url": "https://chiculture.org.hk/sc/china-five-thousand-years/4406" }
+        ]
+      },
+      {
+        "date": "公元1140—1142年",
+        "title": "岳飞抗金与绍兴和议",
+        "place": "郾城（今河南漯河一带）、淮河至大散关",
+        "story": "岳飞在郾城等地打败金军，想收回更多失地。宋高宗选择议和，召回岳飞。宋金随后定下边界，东段大致沿淮河，西段到大散关。两国继续南北并立。",
+        "figures": [
+          { "id": "yuefei", "name": "岳飞", "role": "多次率南宋军队抵抗金军的将领" }
+        ],
+        "sources": [
+          { "title": "哥伦比亚大学｜岳飞与宋金议和背景", "url": "https://www.columbia.edu/itc/eacp/japanworks/ps/china/full_river_yuefei.pdf" },
+          { "title": "国家中小学智慧教育平台｜宋金对峙", "url": "https://r3-ndr.ykt.cbern.com.cn/edu_product/esp/assets/aadd94cd-2d05-4716-aa25-dab70c9fc7a4.pkg/pdf.pdf" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "yuan",
+    "title": "元",
+    "dates": "公元1271—1368年",
+    "mapCaption": "1294年的元朝。大都是首都，南宋原来的地区已经由元管理。",
+    "overview": "忽必烈在1271年定国号为元，当时南宋还在。元军随后打开了从襄阳进入长江流域的通道，在1279年结束南宋的统治。",
+    "events": [
+      {
+        "date": "公元1268—1279年",
+        "title": "从襄阳到崖山：元灭南宋",
+        "place": "襄阳（今湖北襄阳）、临安、崖山（今广东江门一带）",
+        "story": "襄阳在1273年失守，元军进入长江流域，后来攻下南宋都城临安。文天祥等人继续抵抗。1279年，南宋最后一支朝廷力量在崖山战败，南宋原来的地区归元。",
+        "figures": [
+          { "id": "kublai", "name": "忽必烈", "role": "建立元朝并推动征服南宋的君主" },
+          { "id": "wentianxiang", "name": "文天祥", "role": "组织南宋抵抗，崖山决战前已被元军俘虏" }
+        ],
+        "sources": [
+          { "title": "珠海博物馆｜宋元角逐与文天祥过零丁洋", "url": "https://www.zhmuseum.org.cn/wen/wenwugushiInfo?id=9" },
+          { "title": "中国文化研究院｜文天祥与南宋抵抗", "url": "https://chiculture.org.hk/sc/china-five-thousand-years/2902" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ming",
+    "title": "明",
+    "dates": "公元1368—1644年",
+    "mapCaption": "约1580年的明朝。首都在北京，长城沿线是北方重要防线。",
+    "overview": "元末各地起事，朱元璋在南京建立明朝，又派兵向北攻取大都。后来明朝迁都北京，北方草原势力一直给明朝带来压力。",
+    "events": [
+      {
+        "date": "公元1367—1368年",
+        "title": "明军北伐与元廷北退",
+        "place": "南京至大都（今北京）",
+        "story": "朱元璋以南京为根据地，派徐达等人北伐。1368年，他建立明朝，明军同年攻占元大都。元朝皇室退到北方草原，明控制了北方大片地区。",
+        "figures": [
+          { "id": "hongwu", "name": "朱元璋", "role": "发起北伐并建立明朝的明太祖" }
+        ],
+        "sources": [
+          { "title": "故宫博物院｜洪武皇帝朱元璋", "url": "https://www.dpm.org.cn/court/lineage/226244.html" },
+          { "title": "故宫博物院｜徐达", "url": "https://www.dpm.org.cn/lemmas/245152.html" }
+        ]
+      },
+      {
+        "date": "公元1449年",
+        "title": "土木堡之变与北京保卫战",
+        "place": "土木堡（今河北怀来）与北京",
+        "story": "明英宗率军与瓦剌交战，在土木堡战败被俘。瓦剌军队随后逼近北京，于谦等人组织防守。明保住了首都，北方防线在危机后得到加强。",
+        "figures": [
+          { "id": "yuqian", "name": "于谦", "role": "在英宗被俘后组织北京防守的明朝大臣" }
+        ],
+        "sources": [
+          { "title": "故宫博物院｜正统皇帝与土木堡之变", "url": "https://www.dpm.org.cn/court/lineage/226258.html" },
+          { "title": "北京市科普网站｜于谦与北京保卫战", "url": "https://www.bjskpj.cn/beijing/27-architecture/18450-2023-06-09-08-15-31" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "qing",
+    "title": "清",
+    "dates": "公元1636—1912年（1644年入关）",
+    "mapCaption": "1820年的清朝，在两次鸦片战争之前。原图也绘有现代边界和领土主张作参考。",
+    "overview": "清朝在1636年定国号，1644年入关并定都北京。康熙和乾隆时期，清巩固南方，并向海上和西北扩展。19世纪，鸦片走私、列强争取更多通商权和国内战争，先后改变了清朝对各地的控制。",
+    "events": [
+      {
+        "date": "公元1673—1683年",
+        "title": "三藩之乱与台湾政局改变",
+        "place": "云南等南方地区、福建沿海与台湾",
+        "story": "康熙决定撤掉南方几个拥有军队的藩王，吴三桂等人起兵反抗。清军到1681年平定三藩。1683年，清军在澎湖打败郑氏军队，郑氏投降，台湾随后由清朝设府管理。",
+        "figures": [
+          { "id": "kangxi", "name": "康熙", "role": "下令撤藩，并派施琅攻打郑氏政权的清朝皇帝" }
+        ],
+        "sources": [
+          { "title": "故宫博物院｜康熙年表", "url": "https://www.dpm.org.cn/court/lineage/226256.html" },
+          { "title": "台北故宫博物院｜清初施琅奏疏与台湾政策", "url": "https://www.npm.gov.tw/NewChineseArtDownload.ashx?bid=2856" }
+        ]
+      },
+      {
+        "date": "公元1755—1759年",
+        "title": "清军进入天山南北",
+        "place": "伊犁与塔里木盆地",
+        "story": "准噶尔内部争权时，乾隆派清军西进。准噶尔政权灭亡，战争和疾病让当地人口大量减少。清军随后控制天山南部的主要绿洲，清朝的控制范围向西扩大。",
+        "figures": [
+          { "id": "qianlong", "name": "乾隆", "role": "下令向准噶尔和天山南部出兵的清朝皇帝" }
+        ],
+        "sources": [
+          { "title": "中国国家博物馆｜准噶尔战争", "url": "https://www.chnmuseum.cn/yj/xscg/xslw/201812/t20181224_33271.shtml" },
+          { "title": "神户大学｜清朝在天山南北的扩张", "url": "https://da.lib.kobe-u.ac.jp/da/kernel/81009892/81009892.pdf" }
+        ]
+      },
+      {
+        "date": "公元1839—1842年",
+        "title": "第一次鸦片战争",
+        "place": "广东虎门、东南沿海与南京",
+        "story": "英国商人把印度生产的鸦片走私到中国。鸦片使许多人上瘾，清政府试图禁止这种贸易。1839年，林则徐在虎门销毁收缴的鸦片。英国为保护商业利益并争取更大的通商权，于1840年派远征军到中国。清朝战败，《南京条约》开放广州等五处港口，把香港岛割让给英国。",
+        "figures": [
+          { "id": "linzexu", "name": "林则徐", "role": "代表清政府在广东查禁鸦片并主持虎门销烟" },
+          { "id": "elliot", "name": "查理·义律", "role": "英国驻华商务监督，要求英商交出鸦片并承诺补偿" }
+        ],
+        "sources": [
+          { "title": "英国国家档案馆｜香港与鸦片战争", "url": "https://cdn.nationalarchives.gov.uk/documents/hong-kong-and-the-opium-wars.pdf" },
+          { "title": "中国国家博物馆｜虎门销烟遗址出土的铺地石", "url": "https://www.chnmuseum.cn/zp/zpml/gmww/202104/t20210402_249493.shtml" },
+          { "title": "美国国务院历史办公室｜鸦片战争与早期通商条约", "url": "https://history.state.gov/milestones/1830-1860/china-1" }
+        ],
+        "rank": 2,
+        "hook": "从虎门销烟到香港岛被割让，一场查禁走私的行动为什么演变成了国际战争？"
+      },
+      {
+        "date": "公元1851—1864年",
+        "title": "太平天国战争",
+        "place": "广西金田、南京与长江流域",
+        "story": "洪秀全在广西起事，建立太平天国，后来占领南京。清朝一度失去对长江流域大片地区的控制。1864年，清军攻下南京，结束了太平天国在那里的统治。",
+        "figures": [
+          { "id": "hongxiuquan", "name": "洪秀全", "role": "建立太平天国并把南京定为首都" }
+        ],
+        "sources": [
+          { "title": "大英博物馆｜太平天国战争展览资料", "url": "https://www.britishmuseum.org/sites/default/files/2023-09/Chinas_hidden_century_large_print_guide.pdf" }
+        ]
+      },
+      {
+        "date": "公元1856—1860年",
+        "title": "第二次鸦片战争",
+        "place": "广州、天津与北京",
+        "story": "英国要求修改条约，扩大通商并让鸦片贸易合法化。1856年，英国以清朝官员登上亚罗号抓人为由开战，法国以一名传教士被杀为由参战。清朝被迫签订《天津条约》和《北京条约》，开放更多港口，允许外国使节常驻北京，并将九龙半岛南端割让给英国。",
+        "figures": [
+          { "id": "yixin", "name": "恭亲王奕䜣", "role": "1860年代表清政府与英、法谈判并签署《北京条约》" }
+        ],
+        "sources": [
+          { "title": "英国国家陆军博物馆｜第二次鸦片战争", "url": "https://www.nam.ac.uk/explore/second-china-war" },
+          { "title": "美国国务院历史办公室｜修约要求与《天津条约》", "url": "https://history.state.gov/milestones/1830-1860/china-2" },
+          { "title": "故宫博物院｜咸丰年表与《北京条约》", "url": "https://www.dpm.org.cn/court/lineage/226247.html" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "republic",
+    "title": "民国（大陆时期）",
+    "dates": "公元1912—1949年（中国大陆）",
+    "mapCaption": "1930年出版的历史地图，反映当时的地理标注与边界画法。",
+    "overview": "中华民国在1912年建立，清帝同年退位。大陆先后经历地方军阀分治、北伐、抗日战争和国共内战。1949年，中华人民共和国成立，中华民国政府迁往台湾。",
+    "events": [
+      {
+        "date": "公元1911—1912年",
+        "title": "辛亥革命与民国建立",
+        "place": "武昌（今湖北武汉）、南京与北京",
+        "story": "武昌起义后，多个省宣布脱离清朝。孙中山在南京就任临时大总统。1912年，清帝退位，原先由清朝统治的大部分地区开始由民国政府接管。",
+        "figures": [
+          { "id": "sunyat", "name": "孙中山", "role": "长期推动反清革命，民国建立时任临时大总统" }
+        ],
+        "sources": [
+          { "title": "辛亥革命博物院｜武昌起义军政府旧址", "url": "https://www.1911museum.cn/view_2910.html" },
+          { "title": "南京中国近代史遗址博物馆｜孙中山就职处", "url": "https://www.njztf.cn/west/detail/697.html" },
+          { "title": "中国国家博物馆｜清帝退位诏书", "url": "https://www.chnmuseum.cn/zp/zpml/gmww/202008/t20200824_247195.shtml" }
+        ]
+      },
+      {
+        "date": "公元1926—1928年",
+        "title": "北伐",
+        "place": "从广州经长江流域向华北推进",
+        "story": "国民革命军从广州出发，打败多支地方军队。国共合作在途中破裂，北伐仍然继续。1928年，南京国民政府获得东北方面的承认，名义上统一了大陆多数地区，各地实际控制仍有差别。",
+        "figures": [
+          { "id": "chiang", "name": "蒋介石", "role": "担任国民革命军总司令，参与领导北伐" }
+        ],
+        "sources": [
+          { "title": "牛津大学出版社｜国民党与北伐", "url": "https://academic.oup.com/reference/62338/reference-article/571461167" },
+          { "title": "美国国务院历史办公室｜第一次国共合作", "url": "https://history.state.gov/milestones/1945-1952/chinese-rev" }
+        ]
+      },
+      {
+        "date": "公元1937—1945年",
+        "title": "抗日战争进入全面阶段",
+        "place": "卢沟桥、华北、沿海与西南",
+        "story": "日本从1931年起逐步占领中国东北。1937年，卢沟桥事变后全面战争爆发，日军陆续占领多个重要城市，国民政府迁往重庆，国共各自组织抗战。1945年日本投降，占领结束。",
+        "figures": [
+          { "id": "chiang", "name": "蒋介石", "role": "领导国民政府，统筹国民政府方面的抗战" },
+          { "id": "mao", "name": "毛泽东", "role": "中国共产党主要领导人之一，参与决定中共的抗战方针" }
+        ],
+        "sources": [
+          { "title": "牛津大学历史系｜中国的抗日战争", "url": "https://www.history.ox.ac.uk/chinas-war-japan" },
+          { "title": "牛津书目｜1937—1945年的中日战争", "url": "https://doi.org/10.1093/obo/9780199743292-0141" }
+        ],
+        "rank": 6,
+        "hook": "沿海多座城市失守后，为什么重庆成了中国继续抗战的政治中心？"
+      },
+      {
+        "date": "公元1946—1949年",
+        "title": "国共全面内战与1949年政局",
+        "place": "东北、华北、长江流域与台湾",
+        "story": "日本投降后，国共之间的争夺再次扩大。到1949年，中国共产党控制了大陆大部分地区，中华人民共和国在北京宣告成立。国民党领导的中华民国政府迁往台湾。",
+        "figures": [
+          { "id": "mao", "name": "毛泽东", "role": "领导中共，并在北京宣告中华人民共和国成立" },
+          { "id": "chiang", "name": "蒋介石", "role": "领导国民党方面，内战后前往台湾" }
+        ],
+        "sources": [
+          { "title": "英国国家档案馆｜中国内战档案", "url": "https://www.nationalarchives.gov.uk/education/resources/the-chinese-civil-war/" },
+          { "title": "美国国务院历史办公室｜1949年的中国政局", "url": "https://history.state.gov/milestones/1945-1952/chinese-rev" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prc",
+    "title": "中华人民共和国",
+    "dates": "公元1949年至今",
+    "mapCaption": "1967年的中国行政区划与周边地区。图上沿用当时原图的地名和边界画法。",
+    "overview": "中华人民共和国于1949年成立。此后，中国参加了朝鲜战争，也先后与印度和越南发生边境战争。几场冲突平息后，各地的停战安排和边界谈判各有不同。",
+    "events": [
+      {
+        "date": "公元1950—1953年",
+        "title": "朝鲜战争与中国参战",
+        "place": "朝鲜半岛、鸭绿江与板门店",
+        "story": "1950年，朝鲜军队越过三八线进攻韩国。以美国为主的联合国军参战并向北推进，接近中朝边境。中国随后派志愿军入朝参战。1953年，朝鲜人民军、中国人民志愿军和联合国军签署停战协定，在半岛划出军事分界线和非军事区。",
+        "figures": [
+          { "id": "pengdehuai", "name": "彭德怀", "role": "中国人民志愿军司令员，代表志愿军签署停战协定" },
+          { "id": "mao", "name": "毛泽东", "role": "参与决定出兵，下令组建中国人民志愿军" }
+        ],
+        "sources": [
+          { "title": "威斯康星大学麦迪逊分校｜朝鲜战争教学资料", "url": "https://eastasia.wisc.edu/wp-content/uploads/sites/544/2020/11/The-Korean-War-CEAS-Curriculum-Guide-with-Appendix-Documents.pdf" },
+          { "title": "美国国家档案馆｜《朝鲜停战协定》原文", "url": "https://www.archives.gov/milestone-documents/armistice-agreement-restoration-south-korean-state" }
+        ]
+      },
+      {
+        "date": "公元1962年10—11月",
+        "title": "中印边境战争",
+        "place": "中印边境东段及西段的阿克赛钦一带",
+        "story": "中印两国长期对边界有不同主张，谈判也没有达成一致。1962年，东、西两段边境都发生交战。中国宣布单方面停火，从东段战时占领的地区撤军，继续控制西段的阿克赛钦。双方没有就正式边界达成协议。",
+        "figures": [
+          { "id": "zhouenlai", "name": "周恩来", "role": "在战前与印度总理会谈，交战后提出停火和谈判方案" }
+        ],
+        "sources": [
+          { "title": "《耶鲁国际事务期刊》｜战后撤军与边境争议", "url": "https://www.yalejournal.org/publications/a-battle-for-barren-land-rethinking-chinese-interests-in-the-sino-indian-border-dispute" },
+          { "title": "《国务院公报》｜1962年中印边界问题文件", "url": "https://www.gov.cn/gongbao/shuju/1962/gwyb196212.pdf" }
+        ]
+      },
+      {
+        "date": "公元1979年2—3月",
+        "title": "中越边境战争",
+        "place": "中国广西、云南与越南北部交界一带",
+        "story": "中越边境关系已经紧张，越南出兵柬埔寨后，双方关系进一步恶化。1979年，中国军队进入越南北部，随后撤回。边境冲突又持续了多年。1999年，两国通过谈判签署陆地边界条约。",
+        "figures": [
+          { "id": "dengxiaoping", "name": "邓小平", "role": "在中国决定向越南出兵时发挥重要作用" }
+        ],
+        "sources": [
+          { "title": "香港中文大学《二十一世纪》｜1979年中越战争与外交", "url": "https://www.cuhk.edu.hk/ics/21c/media/articles/c195-202112026.pdf" },
+          { "title": "北卡罗来纳大学出版社｜中越战争及后续冲突", "url": "https://academic.oup.com/north-carolina-scholarship-online/book/44769" },
+          { "title": "中国外交部｜中越签署陆地边界条约", "url": "https://www.fmprc.gov.cn/eng/gjhdq_665435/2675_665437/2792_663578/2793_663580/202406/t20240607_11414425.html" }
+        ]
+      }
+    ]
+  }
+]

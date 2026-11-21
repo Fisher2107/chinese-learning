@@ -1,3 +1,4 @@
+import type { HistoryAtlas } from './history.ts'
 import { useEffect, useState } from 'react'
 import type { CitiesFile, ContentIndex, FeedFile, PhotosFile, PlacesFile, SeriesFile, TextFile } from './types.ts'
 
@@ -23,6 +24,7 @@ export const loadText = (id: string) => getJson<TextFile>(`content/texts/${id}.j
 export const loadPlaces = () => getJson<PlacesFile>('content/places.json')
 export const loadFeed = () => getJson<FeedFile>('content/feed.json')
 export const loadCities = () => getJson<CitiesFile>('content/cities.json')
+export const loadHistory = () => getJson<HistoryAtlas>('content/history.json')
 export const loadPhotos = () => getJson<PhotosFile>('content/photos.json')
 
 /** Loads something once per key; returns undefined while loading. */

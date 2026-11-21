@@ -378,6 +378,31 @@ if (errors.length) {
   console.error(`\n${errors.length} content error(s):\n  ${errors.join('\n  ')}`)
   process.exit(1)
 }
+// Historical maps are dated snapshots. Keep event descriptions tappable like the rest of the reader.
+const periods = JSON.parse(await readFile('src/data/history-periods.json', 'utf8'))
+const historyMedia = JSON.parse(await readFile('src/data/history-media.json', 'utf8'))
+const historyGlossary = {}
+const ranks = new Set()
+for (const [id, image] of Object.entries(historyMedia)) {
+  if (!image.caption || !image.creator || !image.license || !image.sourceUrl) throw new Error(`Missing historical image credit: ${id}`)
+  const bytes = await readFile(`public/${image.src}`)
+  image.src += '?v=' + createHash('sha256').update(bytes).digest('hex').slice(0, 10)
+}
+for (const period of periods) {
+  if (!historyMedia['map-' + period.id] || !period.events.length) throw new Error(`Missing map or events: ${period.id}`)
+  const paragraph = text => [{ kind: 'p', sentences: makeSentences(text, historyGlossary, 'atlas/' + period.id) }]
+  period.overview = paragraph(period.overview)
+  for (const event of period.events) {
+    if (!event.sources.length || !event.figures.length) throw new Error(`Missing event sources or figures: ${event.title}`)
+    for (const figure of event.figures) if (!historyMedia[figure.id]) throw new Error(`Missing historical image: ${figure.id}`)
+    if (event.rank !== undefined) {
+      if (!event.hook || ranks.has(event.rank)) throw new Error(`Invalid conversation pick: ${event.title}`)
+      ranks.add(event.rank)
+    }
+    event.story = paragraph(event.story)
+  }
+}
+
 // ---------- Photos (fetched by `npm run images`; who took them and their licences are in images.lock.json) ----------
 const photos = {}
 if (existsSync('content/images.lock.json')) {
@@ -405,6 +430,7 @@ if (!CHECK) {
     feed: feed.map(({ id, date, province, series }) => ({ id, date, province, series })),
   }
   await writeFile('public/content/index.json', JSON.stringify(index))
+  await writeFile('public/content/history.json', JSON.stringify({ periods, media: historyMedia, glossary: historyGlossary }))
   await writeFile('public/content/terms.json', JSON.stringify(terms))
   await writeFile('public/content/jieqi.json', JSON.stringify({ hooks: jieqi, glossary: jieqiGlossary }))
   await writeFile('public/content/places.json', JSON.stringify({ places, glossary: placesGlossary }))

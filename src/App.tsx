@@ -25,6 +25,8 @@ const PlacePage = lazy(() => import('./screens/PlacePage.tsx').then((m) => ({ de
 const StampQuiz = lazy(() => import('./screens/PlacePage.tsx').then((m) => ({ default: m.StampQuiz })))
 const Feed = lazy(() => import('./screens/Feed.tsx').then((m) => ({ default: m.Feed })))
 
+const HistoricalAtlas = lazy(() => import('./screens/HistoricalAtlas.tsx').then(m => ({ default: m.HistoricalAtlas })))
+
 const num = (s: string | undefined, fallback: number) => (s && /^\d+$/.test(s) ? Number(s) : fallback)
 
 function Screen({ route }: { route: string[] }): { tab?: string; el: React.ReactNode } {
@@ -43,6 +45,7 @@ function Screen({ route }: { route: string[] }): { tab?: string; el: React.React
     case 'me':
       return { tab: 'me', el: <Me /> }
     case 'map':
+      if (a === 'history') return { tab: 'map', el: <HistoricalAtlas periodId={b} eventId={route[3]} /> }
       if (a === 'stamps') return { el: <StampBook /> }
       if (a === 'test') return { el: <MapTest /> }
       if ((a === 'city' || a === 'place') && b) return { tab: 'map', el: <MapScreen key={`${a}/${b}`} focus={{ kind: a === 'city' ? 'city' : 'province', id: b }} /> }

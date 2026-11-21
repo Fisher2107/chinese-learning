@@ -10,6 +10,7 @@ import {
   MagnifyingGlassPlusIcon,
   MinusIcon,
   PlusIcon,
+  ScrollIcon,
   SealCheckIcon,
   XIcon,
 } from '@phosphor-icons/react'
@@ -169,7 +170,11 @@ function HomeCard({ learnt, stamps }: { learnt: number; stamps: number }) {
   return (
     <div className="tile p-4 shadow-[0_4px_18px_rgba(0,0,0,0.1)]">
       <p className="text-[15px] font-bold text-mute">拖一拖、放大看看，点一个省或者城市。认识了，就标成“学会了”。</p>
-      <div className="mt-3 grid grid-cols-2 gap-2">
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        <button onClick={() => go('map/history')} className="flex flex-col items-center gap-1 rounded-2xl bg-sunken py-2.5 text-[14px] font-extrabold">
+          <ScrollIcon size={24} weight="fill" className="text-zhu-dark" />
+          历史地图
+        </button>
         <button onClick={() => go('map/test')} disabled={!learnt} className="flex flex-col items-center gap-1 rounded-2xl bg-sunken py-2.5 text-[14px] font-extrabold disabled:opacity-50">
           <ExamIcon size={24} weight="fill" className="text-zhu" />
           考考我{learnt ? ` · ${learnt}` : ''}
