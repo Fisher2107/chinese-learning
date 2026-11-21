@@ -4,6 +4,8 @@ import { CITIES, DETAIL, type MapCity } from '../lib/cities.ts'
 
 export type Selection = { kind: 'province' | 'city'; id: string }
 type Box = [number, number, number, number]
+type LabelHit = { selection: Selection; box: Box }
+type CityHit = { id: string; x: number; y: number; r: number }
 
 /** screen = map · k + (x, y) */
 interface View {
@@ -71,7 +73,7 @@ export function ExploreMap({
   const base = useRef<View>(undefined)
   const live = useRef<View>(undefined)
   const anim = useRef(0)
-  const hits = useRef<{ id: string; x: number; y: number; r: number; box?: Box }[]>([])
+  const hits = useRef<{ labels: LabelHit[]; cities: CityHit[] }>({ labels: [], cities: [] })
   const insetsRef = useRef(insets)
   insetsRef.current = insets
 
@@ -342,21 +344,25 @@ export function ExploreMap({
   }, [size.w, size.h])
 
   function tap(sx: number, sy: number, clientX: number, clientY: number) {
-    // a city dot or its name first
+    // Match the displayed positions even if a tap interrupts a pan or zoom.
+    const b = base.current!
+    const v = live.current!
+    const scale = b.k / v.k
+    const x = (sx - v.x) * scale + b.x
+    const y = (sy - v.y) * scale + b.y
+    for (const { selection, box } of hits.current.labels) {
+      if (x >= box[0] && x <= box[2] && y >= box[1] && y <= box[3]) return onSelect(selection)
+    }
+
+    // Then try the nearest city dot.
     let best: string | undefined
     let bestD = 20
-    for (const h of hits.current) {
-      const d = Math.hypot(h.x - sx, h.y - sy) - h.r
-      const inLabel = h.box && sx >= h.box[0] && sx <= h.box[2] && sy >= h.box[1] && sy <= h.box[3]
-      if (inLabel) {
-        best = h.id
-        break
-      }
+    for (const h of hits.current.cities) {
+      const d = (Math.hypot(h.x - x, h.y - y) - h.r) / scale
       if (d < bestD) [best, bestD] = [h.id, d]
     }
     if (best) return onSelect({ kind: 'city', id: best })
     // tiny divisions (Hong Kong, Macau…) catch taps near them
-    const v = base.current!
     for (const p of MAP.provinces) {
       if (!p.small) continue
       if (Math.hypot(p.cx * v.k + v.x - sx, p.cy * v.k + v.y - sy) < 18) return onSelect({ kind: 'province', id: p.id })
@@ -377,22 +383,23 @@ export function ExploreMap({
 
     const placed: Box[] = []
     const fits = (b: Box) => {
-      if (b[0] < 2 || b[2] > size.w - 2 || b[1] < insetsRef.current.top - 30 || b[3] > size.h - 2) return false
+      if (b[0] < 4 || b[2] > size.w - 4 || b[1] < insets.top || b[3] > size.h - insets.bottom) return false
       for (const p of placed) if (b[0] < p[2] && b[2] > p[0] && b[1] < p[3] && b[3] > p[1]) return false
       placed.push(b)
       return true
     }
-    const textBox = (cx: number, cy: number, text: string, size: number, anchor: 'middle' | 'start', pad = 2): Box => {
-      const w = [...text].length * size * 1.02
-      const x0 = anchor === 'middle' ? cx - w / 2 : cx
-      return [x0 - pad, cy - size * 0.85 - pad, x0 + w + pad, cy + size * 0.3 + pad]
+    type Anchor = 'middle' | 'start' | 'end'
+    const textBox = (cx: number, cy: number, text: string, size: number, anchor: Anchor, tracking = 0): Box => {
+      const w = [...text].length * size * (1 + tracking)
+      const x0 = anchor === 'middle' ? cx - w / 2 : anchor === 'end' ? cx - w : cx
+      return [x0 - 3, cy - size * 0.95 - 3, x0 + w + 3, cy + size * 0.3 + 3]
     }
 
     // cities visible at this zoom
     const minZ = (c: MapCity) => {
+      if (selected?.kind === 'city' && selected.id === c.id) return 0
       if (c.rank === 1) return 0
       if (c.rank === 2) return 1.3
-      if (selected?.kind === 'city' && selected.id === c.id) return 0
       if (c.rank === 3) return 1.7
       if (stories.has(c.id)) return 2.1
       return 2.7
@@ -401,47 +408,67 @@ export function ExploreMap({
     const dots = CITIES.filter((c) => z >= minZ(c) && onScreen(sx(c.x), sy(c.y)))
     const selCity = selected?.kind === 'city' ? dots.find((c) => c.id === selected.id) : undefined
 
-    type Label = { key: string; x: number; y: number; text: string; size: number; anchor: 'middle' | 'start'; cls: string; city?: string }
+    type Label = { key: string; x: number; y: number; text: string; size: number; anchor: Anchor; cls: string }
     const labels: Label[] = []
-    const cityLabel = (c: MapCity, force = false) => {
-      const r = c.rank <= 2 ? 4.5 : 3.5
-      const px = sx(c.x) + r + 3
-      const py = sy(c.y) + 4
-      const size = c.rank <= 2 ? 13 : c.rank === 3 ? 12.5 : 12
+    const labelHits: LabelHit[] = []
+    const cityHits = dots.map((c) => ({ id: c.id, x: sx(c.x), y: sy(c.y), r: c.rank === 1 ? 7 : c.rank === 2 ? 4.5 : 3.5 }))
+    const cityLabel = (c: MapCity, active = false) => {
+      const r = c.rank === 1 ? 7 : c.rank === 2 ? 4.5 : 3.5
+      const px = sx(c.x)
+      const py = sy(c.y)
+      const size = active ? 19 : c.rank <= 2 ? 17 : c.rank === 3 ? 16 : 15
       const text = c.name + (learnt.has(`c:${c.id}`) ? ' ✓' : '')
-      const b = textBox(px, py, text, size, 'start')
-      if (force) placed.push(b)
-      else if (!fits(b)) return
-      labels.push({ key: `c-${c.id}`, x: px, y: py, text, size, anchor: 'start', cls: c.rank <= 2 ? 'map-city map-capital' : 'map-city', city: c.id })
-      hits.current.push({ id: c.id, x: sx(c.x), y: sy(c.y), r, box: b })
+      const gap = r + (active ? 7 : 5)
+      const positions: [number, number, Anchor][] = [
+        [px + gap, py + size * 0.32, 'start'],
+        [px - gap, py + size * 0.32, 'end'],
+        [px, py - gap - size * 0.3, 'middle'],
+        [px, py + gap + size * 0.95, 'middle'],
+      ]
+      for (const [x, y, anchor] of positions) {
+        const box = textBox(x, y, text, size, anchor)
+        if (cityHits.some((dot) => dot.id !== c.id &&
+          dot.x + dot.r > box[0] && dot.x - dot.r < box[2] &&
+          dot.y + dot.r > box[1] && dot.y - dot.r < box[3])) continue
+        if (!fits(box)) continue
+        const cls = active ? 'map-city map-selected' : c.rank <= 2 ? 'map-city map-capital' : 'map-city'
+        labels.push({ key: `c-${c.id}`, x, y, text, size, anchor, cls })
+        labelHits.push({ selection: { kind: 'city', id: c.id }, box })
+        break
+      }
     }
-    hits.current = dots.map((c) => ({ id: c.id, x: sx(c.x), y: sy(c.y), r: c.rank <= 2 ? 4.5 : 3.5 }))
 
+    const provinceLabel = (p: (typeof MAP.provinces)[number], active = false) => {
+      const px = sx(p.cx)
+      const py = sy(p.cy)
+      const name = names.get(p.id)
+      if (!name || !onScreen(px, py, 0)) return
+      const text = name + (learnt.has(`p:${p.id}`) ? ' ✓' : '')
+      const size = active ? 19 : z < 1.3 ? 16 : 18
+      const box = textBox(px, py, text, size, 'middle', 0.04)
+      if (!fits(box)) return
+      labels.push({ key: `p-${p.id}`, x: px, y: py, text, size, anchor: 'middle', cls: active ? 'map-province map-selected' : 'map-province' })
+      labelHits.push({ selection: { kind: 'province', id: p.id }, box })
+    }
+
+    // Keep the selection and nearby place names ahead of background geography.
     if (selCity) cityLabel(selCity, true)
+    const selProvince = selected?.kind === 'province' ? PROVINCE_CENTRE.get(selected.id) : undefined
+    if (selProvince) provinceLabel(selProvince, true)
     for (const c of dots.filter((c) => c.rank === 1)) if (c !== selCity) cityLabel(c)
-    // seas and neighbours sit where there are no cities
+    if (z < 2.9)
+      for (const p of MAP.provinces)
+        if (p !== selProvince && (!p.small || z >= 1.6)) provinceLabel(p)
+    const ranked = dots.filter((c) => c.rank > 1 && c !== selCity && z >= labelZ(c)).sort((a, b) => a.rank - b.rank || +stories.has(b.id) - +stories.has(a.id) || b.pop - a.pop)
+    for (const c of ranked) cityLabel(c)
+
     for (const l of DETAIL.labels)
-      if (l.kind === 'sea' && onScreen(sx(l.x), sy(l.y)) && fits(textBox(sx(l.x), sy(l.y), l.zh, 13, 'middle')))
+      if (l.kind === 'sea' && onScreen(sx(l.x), sy(l.y)) && fits(textBox(sx(l.x), sy(l.y), l.zh, 13, 'middle', 0.4)))
         labels.push({ key: `l-${l.zh}`, x: sx(l.x), y: sy(l.y), text: l.zh, size: 13, anchor: 'middle', cls: 'map-sea' })
     if (z < 6)
       for (const n of DETAIL.neighbours)
-        if (onScreen(sx(n.x), sy(n.y)) && fits(textBox(sx(n.x), sy(n.y), n.zh, 12, 'middle')))
+        if (onScreen(sx(n.x), sy(n.y)) && fits(textBox(sx(n.x), sy(n.y), n.zh, 12, 'middle', 0.15)))
           labels.push({ key: `n-${n.zh}`, x: sx(n.x), y: sy(n.y), text: n.zh, size: 12, anchor: 'middle', cls: 'map-country' })
-    // province names while zoomed out, then cities by importance
-    if (z < 2.9)
-      for (const p of MAP.provinces) {
-        if (p.small && z < 1.6) continue
-        const px = sx(p.cx)
-        const py = sy(p.cy)
-        if (!onScreen(px, py, 0)) continue
-        const name = names.get(p.id) ?? ''
-        const text = name + (learnt.has(`p:${p.id}`) ? ' ✓' : '')
-        const size = z < 1.3 ? 12 : 14
-        if (fits(textBox(px, py, text, size, 'middle')))
-          labels.push({ key: `p-${p.id}`, x: px, y: py, text, size, anchor: 'middle', cls: z > 2.2 ? 'map-province map-faded' : 'map-province' })
-      }
-    const ranked = dots.filter((c) => c.rank > 1 && c !== selCity && z >= labelZ(c)).sort((a, b) => a.rank - b.rank || +stories.has(b.id) - +stories.has(a.id) || b.pop - a.pop)
-    for (const c of ranked) cityLabel(c)
     // water and land last: they give way to cities
     for (const r of DETAIL.rivers)
       if ((r.major ? z >= 1.25 : z >= 3) && onScreen(sx(r.x), sy(r.y)) && fits(textBox(sx(r.x), sy(r.y) - 4, r.zh, 11, 'middle')))
@@ -456,12 +483,16 @@ export function ExploreMap({
       if (l.kind === 'shan' && z < 1.15) continue
       const text = l.kind === 'peak' ? `▲${l.zh}` : l.zh
       const size = l.kind === 'land' ? 12 : 11
-      if (onScreen(sx(l.x), sy(l.y)) && fits(textBox(sx(l.x), sy(l.y), text, size, 'middle')))
+      if (onScreen(sx(l.x), sy(l.y)) && fits(textBox(sx(l.x), sy(l.y), text, size, 'middle', l.kind === 'land' ? 0.3 : 0)))
         labels.push({ key: `g-${l.zh}`, x: sx(l.x), y: sy(l.y), text, size, anchor: 'middle', cls: l.kind === 'land' ? 'map-land' : 'map-shan' })
     }
-    return { z, dots, labels }
+    return { z, dots, labels, hits: { labels: labelHits, cities: cityHits } }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view, size.w, size.h, selected?.kind, selected?.id, learnt, stories, names])
+  }, [view, size.w, size.h, insets.top, insets.bottom, selected?.kind, selected?.id, learnt, stories, names])
+
+  useLayoutEffect(() => {
+    if (layout) hits.current = layout.hits
+  }, [layout])
 
   const v = view
   const selProv = selected?.kind === 'province' ? selected.id : undefined
@@ -531,7 +562,7 @@ export function ExploreMap({
                   y={l.y}
                   fontSize={l.size}
                   textAnchor={l.anchor}
-                  className={`${l.cls} ${l.city && l.city === selCity ? 'map-selected' : ''}`}
+                  className={l.cls}
                 >
                   {l.text}
                 </text>
