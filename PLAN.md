@@ -703,6 +703,8 @@ The intro paragraph.
 
 ## 聊天彩蛋
 - One conversation starter per bullet.
+  问：The question its flashcard asks (required).
+  查：Search words for 深入 (optional).
 ```
 
 ```markdown

@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
-import { CardsIcon, CheckCircleIcon, FireIcon, SpeakerHighIcon, XIcon } from '@phosphor-icons/react'
+import { ArrowRightIcon, CardsIcon, ChatCircleDotsIcon, CheckCircleIcon, FireIcon, SpeakerHighIcon, XIcon } from '@phosphor-icons/react'
 import type { Rating } from 'ts-fsrs'
-import type { SavedWord } from '../lib/db.ts'
-import { dueWords, grade, GRADES, previewIntervals } from '../lib/srs.ts'
+import type { EggNote, SavedWord } from '../lib/db.ts'
+import { dueWords, grade, GRADES, previewCard } from '../lib/srs.ts'
+import { dueEggs, eggForCard, gradeEgg } from '../lib/eggs.ts'
+import { tokenizeText } from '../lib/dict.ts'
+import { loadCities, loadPlaces, useLoad } from '../lib/content.ts'
+import type { Para } from '../lib/types.ts'
 import { go } from '../lib/router.ts'
 import { speak } from '../lib/speech.ts'
 import { useStats } from '../lib/stats.ts'
@@ -12,8 +16,13 @@ import { ZhText } from '../components/ZhText.tsx'
 
 const EDGE: Record<string, string> = { zhu: 'zhu', huang: 'huang', lv: 'lv', dai: 'dai' }
 
+/** A word or a 聊天彩蛋, due for review. */
+type Item = { kind: 'word'; id: string; due: number; word: SavedWord } | { kind: 'egg'; id: string; due: number; egg: EggNote }
+
+const itemCard = (it: Item) => (it.kind === 'word' ? it.word.card : it.egg.card!)
+
 export function Review() {
-  const [queue, setQueue] = useState<SavedWord[]>()
+  const [queue, setQueue] = useState<Item[]>()
   const [total, setTotal] = useState(0)
   const [shown, setShown] = useState(false)
   const [intervals, setIntervals] = useState<string[]>([])
@@ -22,28 +31,32 @@ export function Review() {
   const stats = useStats()
 
   useEffect(() => {
-    dueWords(50).then((w) => {
-      setQueue(w)
-      setTotal(w.length)
+    Promise.all([dueWords(50), dueEggs(50)]).then(([words, eggs]) => {
+      const items: Item[] = [
+        ...words.map((w) => ({ kind: 'word' as const, id: `w${w.id}`, due: w.due, word: w })),
+        ...eggs.map((e) => ({ kind: 'egg' as const, id: `e${e.key}`, due: e.due!, egg: e })),
+      ].sort((a, b) => a.due - b.due)
+      setQueue(items)
+      setTotal(items.length)
     })
   }, [])
 
-  const card = queue?.[0]
+  const item = queue?.[0]
   useEffect(() => {
     setShown(false)
-    if (card) previewIntervals(card).then(setIntervals)
-  }, [card])
+    if (item) previewCard(itemCard(item)).then(setIntervals)
+  }, [item])
 
   if (!queue) return <Loading />
 
-  if (!card)
+  if (!item)
     return (
       <div className="mx-auto flex min-h-dvh max-w-xl flex-col px-5">
         <div className="safe-top flex flex-1 flex-col items-center justify-center text-center">
           <motion.div initial={{ scale: 0.4 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 260, damping: 14 }}>
             <CardsIcon size={88} weight="fill" className="text-lv" />
           </motion.div>
-          <h1 className="mt-4 text-[26px] font-black">{total ? '复习完了！' : '现在没有要复习的词'}</h1>
+          <h1 className="mt-4 text-[26px] font-black">{total ? '复习完了！' : '现在没有要复习的卡'}</h1>
           {total > 0 && (
             <div className="mt-6 grid w-full grid-cols-3 gap-3 text-center">
               <Tile label="复习" value={`${reviewed}`} Icon={CardsIcon} color="var(--color-dai)" />
@@ -51,7 +64,7 @@ export function Review() {
               <Tile label="连续" value={`${stats.streak}天`} Icon={FireIcon} color="var(--color-zhu)" />
             </div>
           )}
-          {!total && <p className="mt-2 font-bold text-mute">去读一集故事，点生词加入生词本吧。</p>}
+          {!total && <p className="mt-2 font-bold text-mute">去读一集故事，点生词加入生词本；或者在地方页上把聊天彩蛋加入复习。</p>}
         </div>
         <div className="safe-bottom py-5">
           <Button tone="lv" className="w-full" onClick={() => go('', true)}>
@@ -62,16 +75,20 @@ export function Review() {
     )
 
   async function rate(rating: Rating) {
-    const c = card!
-    await grade(c, rating)
+    let it = item!
+    if (it.kind === 'word') await grade(it.word, rating)
+    else it = { ...it, egg: await gradeEgg(it.egg, rating) }
     setReviewed((n) => n + 1)
     if (rating !== 1) setRight((n) => n + 1)
     // 忘了 → see it again at the end of this session
-    setQueue((q) => (rating === 1 ? [...q!.slice(1), c] : q!.slice(1)))
+    setQueue((q) => (rating === 1 ? [...q!.slice(1), it] : q!.slice(1)))
   }
 
-  const sentence = card.sentence
-  const hit = sentence.findIndex((t) => t.t === card.word)
+  function reveal() {
+    setShown(true)
+    if (item!.kind === 'word') speak(item!.word.word, 0.8)
+  }
+
   const done = total - queue.length
 
   return (
@@ -85,57 +102,17 @@ export function Review() {
       </div>
 
       <div className="flex-1 px-5 pt-6 pb-48">
-        <div className="text-[15px] font-extrabold text-mute">这个词怎么读？什么意思？</div>
-        <motion.div key={`${card.id}-${queue.length}`} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="mt-4 rounded-2xl bg-paper p-5 font-book text-[22px] leading-[1.9] text-paper-text">
-            {shown ? (
-              <ZhText id={`review-${card.id}`} paras={[{ kind: 'p', sentences: [{ tokens: sentence }] }]} source={card.source} />
-            ) : (
-              sentence.map((t, i) =>
-                i === hit ? (
-                  <mark key={i} className="rounded bg-hl px-1 text-inherit">
-                    {t.t}
-                  </mark>
-                ) : (
-                  <span key={i}>{t.t}</span>
-                ),
-              )
-            )}
-          </div>
-          <div className="mt-2 truncate px-1 text-xs font-bold text-mute">{card.source.title}</div>
-
-          {shown && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6">
-              <div className="flex items-end gap-3">
-                <span className="font-book text-[44px] leading-none">{card.word}</span>
-                <span className="pb-1 text-xl font-extrabold text-zhu">{card.p}</span>
-                <button aria-label="朗读" onClick={() => speak(card.word, 0.8)} className="mb-0.5 grid size-9 place-items-center rounded-xl bg-sunken text-dai">
-                  <SpeakerHighIcon size={20} weight="fill" />
-                </button>
-              </div>
-              <p className="mt-2 text-[16px] leading-relaxed">{card.d}</p>
-              {card.note && (
-                <p className="mt-3 rounded-xl bg-huang/20 p-3 text-[15px] font-semibold">
-                  <span className="font-black text-huang-dark">笔记 · </span>
-                  {card.note}
-                </p>
-              )}
-            </motion.div>
-          )}
-        </motion.div>
+        {item.kind === 'word' ? (
+          <WordFace key={`${item.id}-${queue.length}`} card={item.word} shown={shown} />
+        ) : (
+          <EggFace key={`${item.id}-${queue.length}`} row={item.egg} shown={shown} />
+        )}
       </div>
 
       <div className="safe-bottom fixed inset-x-0 bottom-0 border-t-2 border-line bg-bg">
         <div className="mx-auto max-w-xl px-4 py-4">
           {!shown ? (
-            <Button
-              tone="dai"
-              className="w-full"
-              onClick={() => {
-                setShown(true)
-                speak(card.word, 0.8)
-              }}
-            >
+            <Button tone="dai" className="w-full" onClick={reveal}>
               显示答案
             </Button>
           ) : (
@@ -151,6 +128,99 @@ export function Review() {
         </div>
       </div>
     </div>
+  )
+}
+
+function WordFace({ card, shown }: { card: SavedWord; shown: boolean }) {
+  const sentence = card.sentence
+  const hit = sentence.findIndex((t) => t.t === card.word)
+  return (
+    <>
+      <div className="text-[15px] font-extrabold text-mute">这个词怎么读？什么意思？</div>
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+        <div className="mt-4 rounded-2xl bg-paper p-5 font-book text-[22px] leading-[1.9] text-paper-text">
+          {shown ? (
+            <ZhText id={`review-${card.id}`} paras={[{ kind: 'p', sentences: [{ tokens: sentence }] }]} source={card.source} />
+          ) : (
+            sentence.map((t, i) =>
+              i === hit ? (
+                <mark key={i} className="rounded bg-hl px-1 text-inherit">
+                  {t.t}
+                </mark>
+              ) : (
+                <span key={i}>{t.t}</span>
+              ),
+            )
+          )}
+        </div>
+        <div className="mt-2 truncate px-1 text-xs font-bold text-mute">{card.source.title}</div>
+
+        {shown && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6">
+            <div className="flex items-end gap-3">
+              <span className="font-book text-[44px] leading-none">{card.word}</span>
+              <span className="pb-1 text-xl font-extrabold text-zhu">{card.p}</span>
+              <button aria-label="朗读" onClick={() => speak(card.word, 0.8)} className="mb-0.5 grid size-9 place-items-center rounded-xl bg-sunken text-dai">
+                <SpeakerHighIcon size={20} weight="fill" />
+              </button>
+            </div>
+            <p className="mt-2 text-[16px] leading-relaxed">{card.d}</p>
+            {card.note && (
+              <p className="mt-3 rounded-xl bg-huang/20 p-3 text-[15px] font-semibold">
+                <span className="font-black text-huang-dark">笔记 · </span>
+                {card.note}
+              </p>
+            )}
+          </motion.div>
+        )}
+      </motion.div>
+    </>
+  )
+}
+
+/** A 聊天彩蛋 card: its question first, then the egg and the user's notes. */
+function EggFace({ row, shown }: { row: EggNote; shown: boolean }) {
+  const places = useLoad(loadPlaces, 'places').data
+  const cities = useLoad(loadCities, 'cities').data
+  const egg = eggForCard(row, places, cities)
+  const [paras, setParas] = useState<Para[]>()
+  useEffect(() => {
+    if (egg.sentences || !shown) return
+    let live = true
+    tokenizeText(egg.text).then((p) => live && setParas(p), () => {})
+    return () => {
+      live = false
+    }
+  }, [egg.sentences, egg.text, shown])
+  const text = egg.sentences ? [{ kind: 'p' as const, sentences: egg.sentences }] : paras
+  const glossary = row.page.startsWith('place/') ? places?.glossary : cities?.glossary
+  const source = { kind: 'place' as const, route: row.page, title: `${row.title} · 聊天彩蛋` }
+  return (
+    <>
+      <div className="flex items-center gap-1.5 text-[15px] font-extrabold text-lv">
+        <ChatCircleDotsIcon size={18} weight="fill" /> 聊天彩蛋 · {row.title}
+      </div>
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+        <h2 className="mt-3 text-[24px] leading-snug font-black">{egg.q}</h2>
+        {!shown && <p className="mt-3 text-[15px] font-bold text-mute">先在心里说一说，再看答案。</p>}
+        {shown && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-5">
+            <div className="rounded-2xl bg-paper p-5 text-[20px] leading-[1.8] text-paper-text">
+              {text ? <ZhText id={`review-egg-${row.key}`} paras={text} glossary={glossary} source={source} /> : <p className="zh">{egg.text}</p>}
+            </div>
+            {egg.note && (
+              <p className="mt-3 rounded-xl bg-huang/20 p-3 text-[15px] font-semibold whitespace-pre-wrap">
+                <span className="font-black text-huang-dark">笔记 · </span>
+                {egg.note}
+              </p>
+            )}
+            <button onClick={() => go(row.page)} className="mt-3 flex items-center gap-1 px-1 text-sm font-extrabold text-lv">
+              去{row.title}看看 <ArrowRightIcon size={14} weight="bold" />
+            </button>
+          </motion.div>
+        )}
+      </motion.div>
+    </>
   )
 }
 

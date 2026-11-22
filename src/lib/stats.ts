@@ -94,8 +94,9 @@ export function useToday(): DayLog {
 export function useStats() {
   const s = useLiveQuery(readStats, [], EMPTY)
   const words = useLiveQuery(() => db.words.count(), [], 0)
-  const due = useLiveQuery(() => db.words.where('due').belowOrEqual(Date.now()).count(), [], 0)
-  return { ...s, streak: liveStreak(s), streakDoneToday: s.lastDay === today(), words, due }
+  const dueWords = useLiveQuery(() => db.words.where('due').belowOrEqual(Date.now()).count(), [], 0)
+  const dueEggs = useLiveQuery(() => db.eggs.where('due').belowOrEqual(Date.now()).count(), [], 0)
+  return { ...s, streak: liveStreak(s), streakDoneToday: s.lastDay === today(), words, due: dueWords + dueEggs, dueWords, dueEggs }
 }
 
 /** The morning routine's three steps are done: mark the day and pay out once. Returns coins earned. */

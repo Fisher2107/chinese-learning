@@ -35,7 +35,7 @@ function Row({ title, hint, children }: { title: string; hint?: ReactNode; child
   )
 }
 
-const TABLES = ['words', 'reviews', 'series', 'texts', 'imports', 'known', 'ai', 'places', 'feed', 'days', 'cities', 'wiki'] as const
+const TABLES = ['words', 'reviews', 'series', 'texts', 'imports', 'known', 'ai', 'places', 'feed', 'days', 'cities', 'wiki', 'eggs'] as const
 
 export function Me() {
   const stats = useStats()
@@ -96,7 +96,10 @@ export function Me() {
       await db.transaction('rw', [...TABLES.map((t) => db.table(t)), db.settings], async () => {
         for (const t of TABLES) {
           if (!Array.isArray(data[t])) continue
-          const rows = t === 'words' ? data[t].map((w: { card: Record<string, unknown> }) => ({ ...w, card: reviveCard(w.card) })) : data[t]
+          const rows =
+            t === 'words' || t === 'eggs'
+              ? data[t].map((w: { card?: Record<string, unknown> }) => (w.card ? { ...w, card: reviveCard(w.card) } : w))
+              : data[t]
           await db.table(t).bulkPut(rows)
         }
         if (Array.isArray(data.settings)) await db.settings.bulkPut(data.settings)
@@ -134,7 +137,7 @@ export function Me() {
         <PlantIcon size={30} weight="fill" className="shrink-0 text-lv" />
         <div className="min-w-0 flex-1">
           <div className="text-[17px] font-extrabold">生词花园</div>
-          <div className="text-sm font-bold text-mute">{stats.due > 0 ? `${stats.due} 个词该浇水了` : '看看你的生词长多高了'}</div>
+          <div className="text-sm font-bold text-mute">{stats.dueWords > 0 ? `${stats.dueWords} 个词该浇水了` : '看看你的生词长多高了'}</div>
         </div>
         <CaretRightIcon size={20} weight="bold" className="text-mute" />
       </button>

@@ -130,6 +130,34 @@ export interface DayLog {
   morning?: number
 }
 
+/**
+ * The user's side of a 聊天彩蛋: their edits and notes, its flashcard, or a whole egg they wrote.
+ * Content eggs keep their id as the key, so this survives content updates.
+ */
+export interface EggNote {
+  /** a content egg's id (place/zhejiang#1a2b3c4d), or mine:<page>:<time> for one the user wrote */
+  key: string
+  /** the page it's on: place/<id> or city/<id> */
+  page: string
+  /** that page's name (浙江, 杭州), for the flashcard */
+  title: string
+  mine?: boolean
+  /** the user's text and question. For content eggs, only set once edited. */
+  text?: string
+  q?: string
+  /** what the user found out: their notes, links, their own words */
+  note?: string
+  /** search words, if the user changed them */
+  find?: string
+  /** the egg when it was saved, in case the content changes later */
+  was?: { text: string; q: string }
+  /** a flashcard: the ts-fsrs card and when it's next due */
+  card?: Record<string, unknown>
+  due?: number
+  created: number
+  updated: number
+}
+
 export interface Setting {
   key: string
   value: unknown
@@ -154,6 +182,7 @@ export const db = new Dexie('zhongguotong') as Dexie & {
   days: EntityTable<DayLog, 'day'>
   cities: EntityTable<CityProgress, 'id'>
   wiki: EntityTable<WikiProgress, 'id'>
+  eggs: EntityTable<EggNote, 'key'>
 }
 
 db.version(1).stores({
@@ -176,6 +205,9 @@ db.version(3).stores({
 })
 db.version(4).stores({
   wiki: 'id, updated',
+})
+db.version(5).stores({
+  eggs: 'key, page, due',
 })
 
 export async function getSetting<T>(key: string, fallback: T): Promise<T> {

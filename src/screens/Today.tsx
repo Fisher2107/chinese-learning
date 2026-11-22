@@ -73,10 +73,17 @@ export function Today() {
   const met = places?.find((p) => visits.some((v) => v.id === p.id && (v.read ?? 0) >= start))
   const place = met ?? (places && placeOfTheDay(places, new Set(visits.filter((v) => v.read && v.read < start).map((v) => v.id))))
   const steps: Step[] = [
-    stats.words === 0
+    stats.words === 0 && stats.dueEggs === 0
       ? { Icon: DropIcon, color: '#3D8FB8', title: '种下第一个生词', sub: '读的时候点一个词，加入生词本', done: false, to: 'feed' }
       : stats.due > 0
-        ? { Icon: DropIcon, color: '#3D8FB8', title: `浇水：复习 ${stats.due} 个词`, sub: '复习就是给生词浇水', done: false, to: 'review' }
+        ? {
+            Icon: DropIcon,
+            color: '#3D8FB8',
+            title: `浇水：复习 ${[stats.dueWords && `${stats.dueWords} 个词`, stats.dueEggs && `${stats.dueEggs} 个彩蛋`].filter(Boolean).join('、')}`,
+            sub: '复习就是给生词浇水',
+            done: false,
+            to: 'review',
+          }
         : { Icon: DropIcon, color: '#3D8FB8', title: '生词都浇过水了', sub: '去花园看看它们', done: true, to: 'words' },
     { Icon: CardsThreeIcon, color: '#8E5BB5', title: '读 5 张卡片', sub: `读完一张就点“读完了” · ${Math.min(day.cards, 5)}/5`, done: day.cards >= 5, to: 'feed' },
     place

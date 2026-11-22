@@ -1,14 +1,13 @@
 import { Photo } from '../components/Photo.tsx'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'motion/react'
-import { ArrowRightIcon, BooksIcon, ChatCircleDotsIcon, CheckCircleIcon, DiceFiveIcon, InfoIcon, LightbulbIcon, MapPinIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
+import { ArrowRightIcon, BooksIcon, CaretRightIcon, ChatCircleDotsIcon, CheckCircleIcon, DiceFiveIcon, InfoIcon, MapPinIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
 import { useLiveQuery } from '../lib/live.ts'
 import { db, type WordSource } from '../lib/db.ts'
 import { loadCities, loadFeed, loadIndex, loadPhotos, loadPlaces, loadWikiIndex, useLoad } from '../lib/content.ts'
 import { CITIES, citiesOf } from '../lib/cities.ts'
 import { FOOD_KINDS, pagesAbout, randomPage, SIGHT_KINDS, STORY_KINDS, useWikiProgress } from '../lib/wiki.ts'
 import { PeopleRow, PhotoRow } from '../components/WikiCards.tsx'
-import { StaticMap, provinceBox } from '../components/StaticMap.tsx'
 import type { Para } from '../lib/types.ts'
 import { markKey, setLearnt, useMarks } from '../lib/learn.ts'
 import { earnStamp, makeQuiz, MAP_BY_ID, markPlaceRead, markPlaceUnread, regionColor, visitPlace, type QuizQuestion } from '../lib/places.ts'
@@ -19,7 +18,10 @@ import { LearntButton } from '../components/LearntButton.tsx'
 import { CityChips } from './CityPage.tsx'
 import { Seal } from '../components/Seal.tsx'
 import { FeedbackBanner } from '../components/chrome.tsx'
-import { Button, Loading, PageHeader, Pill, ProgressBar, Section } from '../components/ui.tsx'
+import { Button, Loading, PageHeader, Pill, ProgressBar } from '../components/ui.tsx'
+import { Fold, JumpBar, Sub } from '../components/Fold.tsx'
+import { EggSection, placeLinks, useEggCount, type EggGroup } from '../components/Eggs.tsx'
+import { MapKey, ProvinceMap } from '../components/ProvinceMap.tsx'
 import { ZhText } from '../components/ZhText.tsx'
 
 export function PlacePage({ id }: { id: string }) {
@@ -31,11 +33,29 @@ export function PlacePage({ id }: { id: string }) {
   const wikiIndex = useLoad(loadWikiIndex, 'wiki-index').data
   const wikiProgress = useWikiProgress()
   const marks = useMarks()
+  const place = placesFile?.places.find((p) => p.id === id)
+  const eggCount = useEggCount(`place/${id}`, place?.eggs.length ?? 0)
   useEffect(() => {
     visitPlace(id)
   }, [id])
+  const isLearnt = useCallback((c: string) => marks.learnt.has(markKey('city', c)), [marks.learnt])
+  const links = useMemo(() => (placesFile ? placeLinks(placesFile.places) : undefined), [placesFile])
+  const names = useMemo(() => new Map((placesFile?.places ?? []).map((p) => [p.id, p.name])), [placesFile])
+  const written = useMemo(() => new Set((citiesFile?.cities ?? []).filter((c) => c.intro.length).map((c) => c.id)), [citiesFile])
+  const cities = useMemo(() => citiesOf(id).filter((c) => c.kind !== 'muni'), [id])
+  const pages = useMemo(() => pagesAbout(wikiIndex, { province: id }), [wikiIndex, id])
+  const sights = useMemo(() => pages.filter((p) => SIGHT_KINDS.has(p.kind)), [pages])
+  const pins = useMemo(() => sights.filter((p) => p.xy).map((p) => ({ id: p.id, x: p.xy![0], y: p.xy![1], name: p.name })), [sights])
+  const rivers = useMemo(() => [...new Set(pages.filter((p) => p.river).map((p) => p.river))], [pages])
+  const groups = useMemo<EggGroup[]>(() => {
+    if (!place || !placesFile) return []
+    const content = new Map((citiesFile?.cities ?? []).map((c) => [c.id, c]))
+    return [
+      { page: `place/${id}`, title: place.name, eggs: place.eggs, glossary: placesFile.glossary },
+      ...cities.map((c) => ({ page: `city/${c.id}`, title: c.name, eggs: content.get(c.id)?.eggs ?? [], glossary: citiesFile?.glossary ?? {} })),
+    ]
+  }, [place, placesFile, citiesFile, cities, id])
   if (!placesFile) return <Loading />
-  const place = placesFile.places.find((p) => p.id === id)
   if (!place) return <PageHeader title="找不到这个地方" fallback="map/china" />
 
   const color = regionColor(place.region)
@@ -45,177 +65,165 @@ export function PlacePage({ id }: { id: string }) {
   const series = (index?.series ?? []).filter((s) => s.provinces?.includes(id))
   const cards = (feed?.cards ?? []).filter((c) => c.province === id)
   const stamped = !!progress?.stamp
-  const cities = citiesOf(id).filter((c) => c.kind !== 'muni')
-  const pages = pagesAbout(wikiIndex, { province: id })
-  const sights = pages.filter((p) => SIGHT_KINDS.has(p.kind))
+  const learnt = marks.learnt.has(markKey('province', id))
   const people = pages.filter((p) => p.kind === '人物')
   const stories = pages.filter((p) => STORY_KINDS.has(p.kind))
   const food = pages.filter((p) => FOOD_KINDS.has(p.kind))
-  const rivers = [...new Set(pages.filter((p) => p.river).map((p) => p.river))]
   const { lede, sections } = splitSections(place.intro)
   const seenHere = pages.filter((p) => wikiProgress.seen.has(p.id)).length
+  const related = series.length + cards.length
 
   return (
     <div className="pb-12">
-      <PageHeader title={place.full} fallback="map/china" />
+      <PageHeader
+        title={place.full}
+        fallback="map/china"
+        below={
+          <JumpBar
+            items={[
+              { id: 'place-intro', label: '简介' },
+              { id: 'place-eggs', label: '聊天彩蛋', count: eggCount, hot: true },
+              { id: 'place-map', label: '地图', count: cities.length || undefined },
+              ...(sections.length ? [{ id: 'place-more', label: '读更多', count: sections.length }] : []),
+              ...(pages.length ? [{ id: 'place-wiki', label: '百科', count: pages.length }] : []),
+              ...(related || neighbours.length ? [{ id: 'place-related', label: '相关', count: related || undefined }] : []),
+            ]}
+          />
+        }
+      />
       <div className="mx-auto max-w-xl px-4">
         <div className="tile relative overflow-hidden">
-          <div className="flex items-center gap-4 p-5 text-white" style={{ background: color }}>
+          <div className="flex items-center gap-3 px-4 py-3 text-white" style={{ background: color }}>
             <div className="min-w-0 flex-1">
-              <div className="text-sm font-extrabold opacity-90">
-                {place.region} · {place.type}
+              <div className="flex items-baseline gap-2">
+                <span className="text-[30px] leading-tight font-black">{place.name}</span>
+                <span className="text-sm font-extrabold opacity-90">
+                  {place.region} · {place.type}
+                </span>
               </div>
-              <div className="text-[34px] leading-tight font-black">{place.name}</div>
-              <div className="mt-1 text-[15px] font-bold opacity-90">
+              <div className="text-[14px] font-bold opacity-90">
                 <span className="whitespace-nowrap">简称“{place.short}”{place.alias && `或“${place.alias}”`}</span>
                 {place.capital && <span className="whitespace-nowrap"> · 省会{place.capital}</span>}
               </div>
             </div>
-            <LocatorMap id={id} color="#fff" rest="rgba(255,255,255,0.28)" edge="transparent" className="w-28 shrink-0" />
+            <LocatorMap id={id} color="#fff" rest="rgba(255,255,255,0.28)" edge="transparent" className="w-20 shrink-0" />
           </div>
           <Photo k={`place/${id}`} />
-          <div className="flex items-center gap-4 p-4">
-            <Seal char={place.short} earned={stamped} size={56} />
+          <div className="flex items-center gap-3 px-3 py-2.5">
+            <Seal char={place.short} earned={stamped} size={40} />
             {stamped ? (
-              <div className="flex-1 text-[15px] font-bold text-mute">
-                <div className="flex items-center gap-1.5 font-black text-zhu">
-                  <SealCheckIcon size={20} weight="fill" /> 已盖章
-                </div>
+              <div className="flex-1 text-sm font-bold text-mute">
+                <span className="mr-2 inline-flex items-center gap-1 font-black text-zhu">
+                  <SealCheckIcon size={18} weight="fill" /> 已盖章
+                </span>
                 {new Date(progress!.stamp!).toLocaleDateString('zh-CN')}
               </div>
             ) : (
               <Button tone="zhu" size="md" className="flex-1" onClick={() => go(`place/${id}/stamp`)}>
-                <StampIcon size={20} weight="fill" /> 考一考，盖个章
+                <StampIcon size={18} weight="fill" /> 考一考，盖个章
               </Button>
             )}
           </div>
         </div>
 
-        {sections.length > 1 && (
-          <nav className="no-scrollbar -mx-4 mt-4 flex gap-2 overflow-x-auto px-4" aria-label="目录">
-            {sections.map((sec, i) => (
-              <button
-                key={i}
-                onClick={() => document.getElementById(`sec-${i}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                className="h-9 shrink-0 rounded-full border-2 border-line bg-surface px-3.5 text-[14px] font-extrabold"
-              >
-                {sec.title}
-              </button>
-            ))}
-          </nav>
-        )}
-
-        <div className="mt-4 rounded-2xl bg-paper p-4 text-[19px] text-paper-text">
-          <ZhText id={`place-${id}`} paras={lede} glossary={placesFile.glossary} source={source} />
-        </div>
-
-        <PhotoRow title={`去${place.name}，必看`} sub="像地图里的“热门景点”：点开一张，读它的故事。" pages={sights} seen={wikiProgress.seen} />
-
-        {(sights.some((p) => p.xy) || rivers.length > 0) && (
-          <Section title={`地图上的${place.name}`}>
-            <div className="tile overflow-hidden">
-              <StaticMap
-                box={provinceBox(id, 0.08)}
-                focus={id}
-                color={color}
-                rivers={rivers}
-                dots={cities}
-                pins={sights.filter((p) => p.xy).map((p) => ({ id: p.id, x: p.xy![0], y: p.xy![1], label: p.name }))}
-                onPin={(pid) => go(`wiki/${pid}`)}
-              />
-            </div>
-          </Section>
-        )}
-
-        {sections.map((sec, i) => (
-          <section key={i} id={`sec-${i}`} className="mt-6 scroll-mt-20">
-            <h2 className="mb-2 px-1 text-[22px] font-black">{sec.title}</h2>
-            <div className="rounded-2xl bg-paper p-4 text-[19px] text-paper-text">
-              <ZhText id={`place-${id}-s${i}`} paras={sec.paras} glossary={placesFile.glossary} source={source} />
-            </div>
-          </section>
-        ))}
-
-        <PeopleRow title={`${place.name}的人物`} pages={people} seen={wikiProgress.seen} />
-        <PhotoRow title="故事 · 传说 · 历史" pages={stories} seen={wikiProgress.seen} />
-        <PhotoRow title="吃什么、带什么回家" pages={food} seen={wikiProgress.seen} />
-
-        {pages.length > 0 && wikiIndex && (
-          <div className="tile mt-6 flex items-center gap-3 p-4">
-            <BooksIcon size={30} weight="fill" className="shrink-0" style={{ color }} />
-            <div className="min-w-0 flex-1">
-              <div className="text-[16px] font-black">
-                {place.name}百科 · 看过 {seenHere}/{pages.length}
+        <Fold id="place-intro" title="简介">
+          <div className="rounded-2xl bg-paper p-4 text-[19px] text-paper-text">
+            <ZhText id={`place-${id}`} paras={lede} glossary={placesFile.glossary} source={source} />
+          </div>
+          {place.note.length > 0 && (
+            <div className="mt-3 flex gap-3 rounded-2xl border-2 border-dashed border-line p-3.5">
+              <InfoIcon size={20} weight="fill" className="mt-1 shrink-0 text-dai" />
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-black text-dai">聊天小贴士</div>
+                <ZhText id={`note-${id}`} paras={[{ kind: 'p', sentences: place.note }]} glossary={placesFile.glossary} source={source} className="text-[17px]" />
               </div>
-              <ProgressBar value={seenHere / pages.length} color={color} className="mt-1.5" />
             </div>
-            <button
-              onClick={() => {
-                const p = randomPage(wikiIndex, wikiProgress.seen, id)
-                if (p) go(`wiki/${p.id}`)
-              }}
-              className="flex h-11 shrink-0 items-center gap-1 rounded-xl bg-sunken px-3 text-[14px] font-extrabold"
-            >
-              <DiceFiveIcon size={20} weight="fill" className="text-zhu" /> 随便看
-            </button>
-          </div>
-        )}
+          )}
+        </Fold>
 
-        <Section
-          title={
-            <span className="flex items-center gap-2">
-              <ChatCircleDotsIcon size={24} weight="fill" className="text-lv" /> 聊天彩蛋
-            </span>
-          }
-        >
-          <p className="-mt-1 mb-3 px-1 text-sm font-bold text-mute">跟{place.name}朋友聊天的时候，这些话题能聊起来。</p>
-          <div className="space-y-3">
-            {place.eggs.map((egg, i) => (
-              <div key={i} className="tile flex gap-3 p-4">
-                <LightbulbIcon size={22} weight="fill" className="mt-1.5 shrink-0 text-huang-dark" />
-                <ZhText id={`egg-${id}-${i}`} paras={[{ ...egg, kind: 'p' }]} glossary={placesFile.glossary} source={source} className="min-w-0 flex-1 text-[18px]" />
+        <Fold id="place-eggs" title="聊天彩蛋" count={eggCount} icon={<ChatCircleDotsIcon size={22} weight="fill" className="shrink-0 text-lv" />}>
+          {links && <EggSection key={id} groups={groups} links={links} />}
+        </Fold>
+
+        <Fold id="place-map" title={cities.length ? `地图 · ${cities.length}个城市` : '地图'}>
+          <div className="tile overflow-hidden">
+            <ProvinceMap prov={id} names={names} learnt={isLearnt} stories={written} color={color} sights={pins} rivers={rivers} />
+          </div>
+          {(cities.length > 0 || pins.length > 0) && <MapKey sights={pins.length > 0} />}
+          <div className="mt-3 flex gap-2">
+            <LearntButton on={learnt} onToggle={() => setLearnt('province', id, !learnt)} />
+            <Button tone="plain" size="md" className="h-12 min-w-0 flex-1 border-2 border-line !px-2" onClick={() => go(`map/place/${id}`)}>
+              <MapPinIcon size={20} weight="fill" style={{ color }} /> 在大地图上看
+            </Button>
+          </div>
+          {cities.length > 0 && (
+            <details className="group mt-3">
+              <summary className="flex cursor-pointer list-none items-center gap-1.5 px-1 text-sm font-extrabold text-mute">
+                <CaretRightIcon size={14} weight="bold" className="transition-transform group-open:rotate-90" /> 城市列表
+              </summary>
+              <div className="mt-2">
+                <CityChips ids={cities.map((c) => c.id)} learnt={marks.learnt} stories={written} />
               </div>
-            ))}
-          </div>
-        </Section>
+            </details>
+          )}
+        </Fold>
 
-        {place.note.length > 0 && (
-          <div className="mt-4 flex gap-3 rounded-2xl border-2 border-dashed border-line p-4">
-            <InfoIcon size={22} weight="fill" className="mt-1 shrink-0 text-dai" />
-            <div className="min-w-0 flex-1">
-              <div className="text-sm font-black text-dai">聊天小贴士</div>
-              <ZhText id={`note-${id}`} paras={[{ kind: 'p', sentences: place.note }]} glossary={placesFile.glossary} source={source} className="text-[17px]" />
+        {sections.length > 0 && (
+          <Fold id="place-more" title={`读更多 · ${place.name}的故事`} count={sections.length}>
+            <div className="space-y-2">
+              {sections.map((sec, i) => (
+                <Sub key={i} title={sec.title}>
+                  <div className="rounded-2xl bg-paper p-4 text-[19px] text-paper-text">
+                    <ZhText id={`place-${id}-s${i}`} paras={sec.paras} glossary={placesFile.glossary} source={source} />
+                  </div>
+                </Sub>
+              ))}
             </div>
-          </div>
+          </Fold>
         )}
 
-        <div className="mt-6">
+        <div className="mt-5">
           <ReadMark readAt={progress?.read} onRead={() => markPlaceRead(id, place.chars ?? 0)} onUnread={() => markPlaceUnread(id)} />
         </div>
 
-        <div className="mt-3 flex gap-2">
-          <LearntButton on={marks.learnt.has(markKey('province', id))} onToggle={() => setLearnt('province', id, !marks.learnt.has(markKey('province', id)))} />
-          <Button tone="plain" size="md" className="h-12 min-w-0 flex-1 border-2 border-line !px-2" onClick={() => go(`map/place/${id}`)}>
-            <MapPinIcon size={20} weight="fill" style={{ color }} /> 地图
-          </Button>
-        </div>
-
-        {cities.length > 0 && (
-          <Section title={`${place.name}的城市`}>
-            <CityChips ids={cities.map((c) => c.id)} learnt={marks.learnt} stories={new Set((citiesFile?.cities ?? []).filter((c) => c.intro.length).map((c) => c.id))} />
-          </Section>
+        {pages.length > 0 && (
+          <Fold id="place-wiki" title={`${place.name}百科`} count={pages.length} icon={<BooksIcon size={22} weight="fill" className="shrink-0" style={{ color }} />}>
+            {wikiIndex && (
+              <div className="tile flex items-center gap-3 p-3.5">
+                <div className="min-w-0 flex-1">
+                  <div className="text-[15px] font-black">
+                    看过 {seenHere}/{pages.length}
+                  </div>
+                  <ProgressBar value={seenHere / pages.length} color={color} className="mt-1.5" />
+                </div>
+                <button
+                  onClick={() => {
+                    const p = randomPage(wikiIndex, wikiProgress.seen, id)
+                    if (p) go(`wiki/${p.id}`)
+                  }}
+                  className="flex h-11 shrink-0 items-center gap-1 rounded-xl bg-sunken px-3 text-[14px] font-extrabold"
+                >
+                  <DiceFiveIcon size={20} weight="fill" className="text-zhu" /> 随便看
+                </button>
+              </div>
+            )}
+            <PhotoRow title={`去${place.name}，必看`} sub="点开一张，读它的故事。" pages={sights} seen={wikiProgress.seen} />
+            <PeopleRow title={`${place.name}的人物`} pages={people} seen={wikiProgress.seen} />
+            <PhotoRow title="故事 · 传说 · 历史" pages={stories} seen={wikiProgress.seen} />
+            <PhotoRow title="吃什么、带什么回家" pages={food} seen={wikiProgress.seen} />
+          </Fold>
         )}
 
-        {(series.length > 0 || cards.length > 0) && (
-          <Section title={`跟${place.name}有关`}>
-            <div className="space-y-3">
+        {(related > 0 || neighbours.length > 0) && (
+          <Fold id="place-related" title={`跟${place.name}有关`} count={related || undefined} defaultOpen={false}>
+            <div className="space-y-2">
               {series.map((s) => (
                 <button key={s.id} onClick={() => go(`series/${s.id}`)} className="tile flex w-full overflow-hidden text-left">
-                  <div className="w-2.5 shrink-0" style={{ background: s.color }} />
-                  <div className="flex min-w-0 flex-1 items-center gap-3 p-4">
-                    <PlayIcon size={22} weight="fill" style={{ color: s.color }} className="shrink-0" />
+                  <div className="w-2 shrink-0" style={{ background: s.color }} />
+                  <div className="flex min-w-0 flex-1 items-center gap-3 px-3.5 py-3">
+                    <PlayIcon size={20} weight="fill" style={{ color: s.color }} className="shrink-0" />
                     <div className="min-w-0">
-                      <div className="text-[17px] font-black">{s.title}</div>
+                      <div className="text-[16px] font-black">{s.title}</div>
                       <div className="truncate text-sm font-bold text-mute">
                         {s.kind} · {s.episodes.length}集
                       </div>
@@ -224,28 +232,28 @@ export function PlacePage({ id }: { id: string }) {
                 </button>
               ))}
               {cards.map((c) => (
-                <button key={c.id} onClick={() => go(`feed/${c.id}`)} className="tile flex w-full items-center gap-3 p-4 text-left">
+                <button key={c.id} onClick={() => go(`feed/${c.id}`)} className="tile flex w-full items-center gap-3 px-3.5 py-3 text-left">
                   <Pill color={color}>刷一刷</Pill>
-                  <span className="min-w-0 flex-1 truncate text-[16px] font-extrabold">{c.title.map((s) => s.tokens.map((t) => t.t).join('')).join('')}</span>
+                  <span className="min-w-0 flex-1 truncate text-[15px] font-extrabold">{c.title.map((s) => s.tokens.map((t) => t.t).join('')).join('')}</span>
                 </button>
               ))}
             </div>
-          </Section>
-        )}
-
-        {neighbours.length > 0 && (
-          <Section title="邻居">
-            <div className="flex flex-wrap gap-2">
-              {neighbours.map((n) => (
-                <button key={n.id} onClick={() => go(`place/${n.id}`)} className="tile flex h-11 items-center gap-2 px-3 text-[15px] font-extrabold">
-                  <span className="font-book text-lg" style={{ color: regionColor(n.region) }}>
-                    {n.short}
-                  </span>
-                  {n.name}
-                </button>
-              ))}
-            </div>
-          </Section>
+            {neighbours.length > 0 && (
+              <>
+                <div className="mt-4 mb-2 px-1 text-sm font-extrabold text-mute">邻居</div>
+                <div className="flex flex-wrap gap-2">
+                  {neighbours.map((n) => (
+                    <button key={n.id} onClick={() => go(`place/${n.id}`)} className="tile flex h-10 items-center gap-2 px-3 text-[15px] font-extrabold">
+                      <span className="font-book text-lg" style={{ color: regionColor(n.region) }}>
+                        {n.short}
+                      </span>
+                      {n.name}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </Fold>
         )}
       </div>
     </div>
