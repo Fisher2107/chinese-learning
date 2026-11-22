@@ -119,7 +119,7 @@ export interface CityContent {
 }
 
 /**
- * 聊天彩蛋 ("chat Easter egg"): a little thing worth knowing that gets a conversation going.
+ * 聊天彩蛋: a little thing worth knowing that gets a conversation going.
  * Each has a question, so it can become a flashcard.
  */
 export interface Egg {
