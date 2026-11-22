@@ -47,6 +47,13 @@ const RIVERS = [
   { zh: '沅江', ne: ['Yuan'], box: [106, 26, 112.5, 29.5] },
   { zh: '渭河', ne: ['Wei'], box: [104, 34, 110.5, 35.5] },
   { zh: '汾河', ne: ['Fen'] },
+  // 新安江 → 富春江 → 钱塘江: Natural Earth calls the whole river "Fuchun" and stops at 杭州, so the
+  // estuary out past 盐官 (where people watch the tidal bore) is added by hand.
+  {
+    zh: '钱塘江', ne: ['Fuchun'], at: [119.9, 29.93], lz: 1.6,
+    extra: [[120.13, 30.2], [120.26, 30.29], [120.4, 30.33], [120.53, 30.4], [120.7, 30.37], [120.92, 30.36]],
+  },
+  { zh: '瓯江', ne: ['Ou'], box: [118.5, 27.5, 121, 28.6] },
 ]
 
 // Lakes worth a label (Natural Earth's Chinese names → ours)
@@ -56,7 +63,7 @@ const LAKES = {
   丹江口水库: '丹江口水库', 兴凯湖: '兴凯湖', 微山湖: '微山湖', 洪湖: '洪湖',
 }
 
-// Neighbours drawn faintly for context, with where their names go
+// China's neighbours: where their names go (better spots than Natural Earth's for this map)
 const COUNTRIES = {
   MNG: ['蒙古', 103, 46.6], RUS: ['俄罗斯', 113, 53.2], KAZ: ['哈萨克斯坦', 75.5, 47.5], KGZ: ['吉尔吉斯斯坦', 74.5, 41.6],
   TJK: ['塔吉克斯坦', 71.8, 38.9], AFG: ['阿富汗', 68.8, 35.5], PAK: ['巴基斯坦', 71, 31.5], IND: ['印度', 79, 25.5],
@@ -65,6 +72,15 @@ const COUNTRIES = {
   PRK: ['朝鲜', 126.8, 40], KOR: ['韩国', 127.9, 36.4], JPN: ['日本', 134, 34.6], PHL: ['菲律宾', 121.3, 16.5],
   UZB: ['乌兹别克斯坦', 69, 41],
 }
+/** The 14 countries China shares a land border with. */
+const LAND_BORDER = new Set(['PRK', 'RUS', 'MNG', 'KAZ', 'KGZ', 'TJK', 'AFG', 'PAK', 'IND', 'NPL', 'BTN', 'MMR', 'LAO', 'VNM'])
+/** Natural Earth's Chinese names that people don't say */
+const COUNTRY_NAMES = { KOR: '韩国', PRK: '朝鲜', MNG: '蒙古', LAO: '老挝', COD: '刚果（金）', COG: '刚果（布）', CZE: '捷克', SDS: '南苏丹', CAF: '中非', SAH: '西撒哈拉' }
+/**
+ * The rest of the world, drawn around China in the same projection so the map simply carries on.
+ * The Americas are left out: this conic projection, centred on China, can only show them torn in two.
+ */
+const WORLD_CONTINENTS = new Set(['Asia', 'Europe', 'Africa', 'Oceania'])
 
 // Landforms and seas: [name, lon, lat, kind]. Kinds: shan (range), peak, land (plateau, basin,
 // desert, plain), sea.
@@ -166,17 +182,34 @@ export async function build({ features, fc, projection, WIDTH, HEIGHT, get }) {
   const pfc = feature(ptopo, ptopo.objects[Object.keys(ptopo.objects)[0]])
   const provinces = Object.fromEntries(pfc.features.map((f) => [f.properties.id, path(f)]))
 
-  // ---------- neighbouring countries ----------
+  // ---------- the rest of the world ----------
   const countries = await get('ne_50m_admin_0_countries.geojson')
-  const near = countries.features
-    .filter((f) => COUNTRIES[f.properties.ADM0_A3])
+  const CHINA_PARTS = new Set(['CHN', 'TWN', 'HKG', 'MAC'])
+  const world = countries.features
+    .filter((f) => !CHINA_PARTS.has(f.properties.ADM0_A3) && (WORLD_CONTINENTS.has(f.properties.CONTINENT) || COUNTRIES[f.properties.ADM0_A3]))
     .map((f) => ({ type: 'Feature', properties: { a3: f.properties.ADM0_A3 }, geometry: f.geometry }))
-  const cFc = await shape(`-clip bbox=${BBOX.join(',')} -filter-islands min-area=8000km2 -simplify dp interval=12000 keep-shapes`, { type: 'FeatureCollection', features: near })
-  const neighbours = cFc.features.map((f) => {
-    const [zh, lon, lat] = COUNTRIES[f.properties.a3]
-    const [x, y] = project([lon, lat])
-    return { zh, d: geoPath(projection).digits(0)(f), x, y }
-  })
+  const cFc = await shape(`-filter-islands min-area=3000km2 -simplify dp interval=14000 keep-shapes`, { type: 'FeatureCollection', features: world })
+  const props = new Map(countries.features.map((f) => [f.properties.ADM0_A3, f.properties]))
+  const worldBox = [Infinity, Infinity, -Infinity, -Infinity]
+  const neighbours = cFc.features
+    .map((f) => {
+      const a3 = f.properties.a3
+      const p = props.get(a3)
+      const [zh, lon, lat] = COUNTRIES[a3] ?? [COUNTRY_NAMES[a3] ?? p.NAME_ZH, p.LABEL_X, p.LABEL_Y]
+      const [x, y] = project([lon, lat])
+      const d = geoPath(projection).digits(0)(f)
+      if (!d) return undefined
+      const [[x0, y0], [x1, y1]] = geoPath(projection).bounds(f)
+      // far-off islands of European countries (Réunion…) would stretch the world box
+      if (x1 - x0 < 2500) {
+        worldBox[0] = Math.min(worldBox[0], x0)
+        worldBox[1] = Math.min(worldBox[1], y0)
+        worldBox[2] = Math.max(worldBox[2], x1)
+        worldBox[3] = Math.max(worldBox[3], y1)
+      }
+      return { id: a3, zh, en: p.NAME_EN, d, x, y, rank: COUNTRIES[a3] ? 1 : p.LABELRANK, border: LAND_BORDER.has(a3) || undefined }
+    })
+    .filter(Boolean)
 
   // ---------- rivers ----------
   const riverSrc = await get('ne_10m_rivers_lake_centerlines.geojson')
@@ -188,9 +221,11 @@ export async function build({ features, fc, projection, WIDTH, HEIGHT, get }) {
     return hit > c.length / 4
   }
   const riverFeatures = []
-  for (const r of RIVERS)
+  for (const r of RIVERS) {
     for (const f of riverSrc.features.filter((f) => f.geometry && r.ne.includes(f.properties.name)).filter(inBox(r.box)))
       riverFeatures.push({ type: 'Feature', properties: { zh: r.zh }, geometry: f.geometry })
+    if (r.extra) riverFeatures.push({ type: 'Feature', properties: { zh: r.zh }, geometry: { type: 'LineString', coordinates: r.extra } })
+  }
   const rOut = await mapshaper.applyCommands(
     `-i in.json -clip bbox=${BBOX.join(',')} -dissolve zh -simplify dp interval=1500 -o out.json format=geojson`,
     { 'in.json': JSON.stringify({ type: 'FeatureCollection', features: riverFeatures }) },
@@ -206,7 +241,7 @@ export async function build({ features, fc, projection, WIDTH, HEIGHT, get }) {
       at = longest[Math.floor(longest.length / 2)]
     }
     const [x, y] = project(at)
-    return { zh: r.zh, major: !!r.major, d: path(f), x, y }
+    return { zh: r.zh, major: !!r.major, d: path(f), x, y, lz: r.lz ?? (r.major ? 1.25 : 3) }
   })
 
   // ---------- lakes ----------
@@ -286,9 +321,11 @@ export async function build({ features, fc, projection, WIDTH, HEIGHT, get }) {
   const placeNames = Object.fromEntries(
     JSON.parse(await readFile('public/content/places.json', 'utf8')).places.map((p) => [p.id, { name: p.name, full: p.full, py: py(p.name), pin: pin(p.name) }]),
   )
-  const json = JSON.stringify({ width: WIDTH, height: HEIGHT, provinces, neighbours, rivers, lakes, cities, labels, placeNames })
+  // the projection, so the content build can put 百科 places (given in lon/lat) on this map
+  const proj = { scale: projection.scale(), translate: projection.translate() }
+  const json = JSON.stringify({ width: WIDTH, height: HEIGHT, proj, world: worldBox.map((n) => Math.round(n)), provinces, neighbours, rivers, lakes, cities, labels, placeNames })
   await writeFile('src/data/china-detail.json', json)
-  console.log(`detail: ${cities.length} cities, ${rivers.length} rivers, ${lakes.labels.length} lake labels, ${neighbours.length} countries, ${(json.length / 1024).toFixed(0)} KB`)
+  console.log(`detail: ${cities.length} cities, ${rivers.length} rivers, ${lakes.labels.length} lake labels, ${neighbours.length} countries, world ${worldBox.map(Math.round)}, ${(json.length / 1024).toFixed(0)} KB`)
   const byProv = {}
   for (const c of cities) (byProv[c.prov] ??= []).push(`${c.name}(${c.id})`)
   for (const [p, cs] of Object.entries(byProv)) console.log(`  ${p}: ${cs.join(' ')}`)

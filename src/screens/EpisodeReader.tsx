@@ -262,7 +262,7 @@ function Reader({
   )
 }
 
-function ExcerptCard({
+export function ExcerptCard({
   ex,
   glossary,
   source,

@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
   ArrowRightIcon,
+  BooksIcon,
   CornersOutIcon,
   ExamIcon,
   GlobeHemisphereEastIcon,
@@ -12,6 +13,7 @@ import {
   PlusIcon,
   ScrollIcon,
   SealCheckIcon,
+  SpeakerHighIcon,
   XIcon,
 } from '@phosphor-icons/react'
 import { loadCities, loadFeed, loadIndex, loadPlaces, useLoad } from '../lib/content.ts'
@@ -20,7 +22,9 @@ import { markKey, setLearnt, useMarks } from '../lib/learn.ts'
 import { LIGHT, MAP_BY_ID, REGIONS, regionColor, usePlaceStats } from '../lib/places.ts'
 import { go } from '../lib/router.ts'
 import type { CitiesFile, Place, PlacesFile } from '../lib/types.ts'
-import { ExploreMap, type MapApi, type Selection } from '../components/ExploreMap.tsx'
+import { ExploreMap, WORLD_BOX, type MapApi, type Selection } from '../components/ExploreMap.tsx'
+import { DETAIL } from '../lib/cities.ts'
+import { speak } from '../lib/speech.ts'
 import { LearntButton } from '../components/LearntButton.tsx'
 import { Seal } from '../components/Seal.tsx'
 import { Button, Loading, PageHeader, Section } from '../components/ui.tsx'
@@ -72,6 +76,7 @@ export function MapScreen({ focus }: { focus?: Selection }) {
   const lit = placesFile.places.filter((p) => light(p.id) > 0).length
   const place = sel?.kind === 'province' ? placesFile.places.find((p) => p.id === sel.id) : undefined
   const city = sel?.kind === 'city' ? CITY_BY_ID.get(sel.id) : undefined
+  const country = sel?.kind === 'country' ? DETAIL.neighbours.find((n) => n.id === sel.id) : undefined
 
   function pick(s: Selection) {
     setSel(s)
@@ -103,7 +108,7 @@ export function MapScreen({ focus }: { focus?: Selection }) {
             [PlusIcon, '放大', () => api.current?.zoomBy(2)],
             [MinusIcon, '缩小', () => api.current?.zoomBy(0.5)],
             [CornersOutIcon, '看全国', () => api.current?.reset()],
-            [GlobeHemisphereEastIcon, '世界地图', () => go('map')],
+            [GlobeHemisphereEastIcon, '看世界', () => api.current?.flyToBox(WORLD_BOX, 1)],
           ] as const
         ).map(([Icon, label, onClick]) => (
           <button key={label} aria-label={label} onClick={onClick} className="tile grid size-11 place-items-center shadow-[0_2px_8px_rgba(0,0,0,0.08)] active:scale-95">
@@ -138,6 +143,10 @@ export function MapScreen({ focus }: { focus?: Selection }) {
                   onClose={() => setSel(undefined)}
                 />
               </Slide>
+            ) : country ? (
+              <Slide key={`n-${country.id}`}>
+                <CountryCard country={country} onClose={() => setSel(undefined)} />
+              </Slide>
             ) : (
               <Slide key="home">
                 <HomeCard learnt={marks.learnt.size} stamps={placesFile.places.filter((p) => stats.get(p.id)?.stamp).length} />
@@ -153,6 +162,10 @@ export function MapScreen({ focus }: { focus?: Selection }) {
 }
 
 function boxFor(s: Selection): [number, number, number, number] | undefined {
+  if (s.kind === 'country') {
+    const n = DETAIL.neighbours.find((c) => c.id === s.id)
+    return n && [n.x - 120, n.y - 120, n.x + 120, n.y + 120]
+  }
   if (s.kind === 'province') return MAP_BY_ID.get(s.id)?.box as [number, number, number, number] | undefined
   const c = CITY_BY_ID.get(s.id)
   return c && cityBox(c, 40)
@@ -169,8 +182,12 @@ function Slide({ children }: { children: React.ReactNode }) {
 function HomeCard({ learnt, stamps }: { learnt: number; stamps: number }) {
   return (
     <div className="tile p-4 shadow-[0_4px_18px_rgba(0,0,0,0.1)]">
-      <p className="text-[15px] font-bold text-mute">拖一拖、放大看看，点一个省或者城市。认识了，就标成“学会了”。</p>
-      <div className="mt-3 grid grid-cols-3 gap-2">
+      <p className="text-[15px] font-bold text-mute">拖一拖、放大看看，点一个省、城市或者国家。缩小就能看到全世界。</p>
+      <div className="mt-3 grid grid-cols-4 gap-2">
+        <button onClick={() => go('wiki')} className="flex flex-col items-center gap-1 rounded-2xl bg-sunken py-2.5 text-[14px] font-extrabold">
+          <BooksIcon size={24} weight="fill" className="text-dai" />
+          百科
+        </button>
         <button onClick={() => go('map/history')} className="flex flex-col items-center gap-1 rounded-2xl bg-sunken py-2.5 text-[14px] font-extrabold">
           <ScrollIcon size={24} weight="fill" className="text-zhu-dark" />
           历史地图
@@ -310,6 +327,35 @@ function CityCard({ city, file, province, learnt, onClose }: { city: MapCity; fi
           打开 <ArrowRightIcon size={18} weight="bold" />
         </Button>
       </div>
+    </div>
+  )
+}
+
+/** Another country: its name in Chinese, to hear and learn. */
+function CountryCard({ country, onClose }: { country: (typeof DETAIL.neighbours)[number]; onClose: () => void }) {
+  const [py, setPy] = useState('')
+  useEffect(() => {
+    import('pinyin-pro').then((m) => setPy(m.pinyin(country.zh)), () => {})
+  }, [country.zh])
+  return (
+    <div className="tile relative p-4 shadow-[0_4px_18px_rgba(0,0,0,0.1)]">
+      <CloseX onClose={onClose} />
+      <div className="flex items-center gap-3 pr-8">
+        <GlobeHemisphereEastIcon size={40} weight="duotone" className="shrink-0 text-dai" />
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline gap-x-2">
+            <span className="text-[24px] leading-tight font-black">{country.zh}</span>
+            <span className="text-[16px] font-extrabold text-zhu">{py}</span>
+          </div>
+          <div className="truncate text-[14px] font-bold text-mute">{country.en}</div>
+        </div>
+        <button aria-label="朗读" onClick={() => speak(country.zh, 0.8)} className="grid size-11 shrink-0 place-items-center rounded-xl bg-sunken text-dai">
+          <SpeakerHighIcon size={22} weight="fill" />
+        </button>
+      </div>
+      {'border' in country && country.border && (
+        <p className="mt-2 rounded-xl bg-sunken px-3 py-2 text-[15px] font-bold">和中国接壤：中国有14个陆地邻国，{country.zh}是其中之一。</p>
+      )}
     </div>
   )
 }

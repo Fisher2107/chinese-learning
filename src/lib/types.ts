@@ -163,5 +163,58 @@ export interface Photo {
   page: string
 }
 
-/** Photos by key: place/<id>, city/<id>, feed/<id>, series/<id>, series/<id>/<ep>, text/<id> */
+/** 百科 page kinds. 景点 and the like show in a place's "必去" photos; 人物 in its people. */
+export type WikiKind = '景点' | '地点' | '河流' | '山' | '湖' | '人物' | '事件' | '朝代' | '传说' | '美食' | '文化' | '建筑' | '作品' | '物产'
+
+export interface WikiQuiz {
+  q: string
+  options: string[]
+  answer: number
+  /** shown after answering */
+  why: string
+  /** a photo key to show with the question */
+  photo?: string
+}
+
+/** One page in the 百科 list (public/content/wiki-index.json). */
+export interface WikiSummary {
+  id: string
+  name: string
+  en: string
+  py: string
+  kind: WikiKind
+  dates: string
+  provinces: string[]
+  cities: string[]
+  /** where it is on the map (map coordinates), if it's a place */
+  xy?: [number, number]
+  /** a river on the map to draw over */
+  river: string
+  /** one sentence that makes you want to open it */
+  lede: Sentence[]
+  chars: number
+  /** how many pages link here */
+  links: number
+}
+
+export interface WikiIndex {
+  pages: WikiSummary[]
+  quiz: Record<string, WikiQuiz[]>
+  /** linked to, not written yet */
+  wanted: { name: string; from: string[] }[]
+  glossary: Record<string, string>
+}
+
+export interface WikiPage extends Omit<WikiSummary, 'links'> {
+  facts: { k: string; v: Sentence[] }[]
+  body: Block[]
+  /** 下一站: where to go next, each with a question that pulls you there */
+  next: { route: string; title: string; hook: Sentence[] }[]
+  quiz: WikiQuiz[]
+  sources: SourceLink[]
+  backlinks: { route: string; title: string }[]
+  glossary: Record<string, string>
+}
+
+/** Photos by key: place/<id>, city/<id>, feed/<id>, series/<id>, series/<id>/<ep>, text/<id>, wiki/<id> */
 export type PhotosFile = Record<string, Photo>

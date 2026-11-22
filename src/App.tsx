@@ -15,7 +15,6 @@ import { Review } from './screens/Review.tsx'
 import { Loading } from './components/ui.tsx'
 
 // The map, province pages and feed carry the map geometry: load them when first opened
-const WorldMapScreen = lazy(() => import('./screens/WorldMapScreen.tsx').then((m) => ({ default: m.WorldMapScreen })))
 const MapScreen = lazy(() => import('./screens/MapScreen.tsx').then((m) => ({ default: m.MapScreen })))
 const StampBook = lazy(() => import('./screens/MapScreen.tsx').then((m) => ({ default: m.StampBook })))
 const ReadingCollection = lazy(() => import('./screens/ReadingCollections.tsx').then(m => ({ default: m.ReadingCollection })))
@@ -25,6 +24,8 @@ const PlacePage = lazy(() => import('./screens/PlacePage.tsx').then((m) => ({ de
 const StampQuiz = lazy(() => import('./screens/PlacePage.tsx').then((m) => ({ default: m.StampQuiz })))
 const Feed = lazy(() => import('./screens/Feed.tsx').then((m) => ({ default: m.Feed })))
 
+const WikiPage = lazy(() => import('./screens/WikiPage.tsx').then((m) => ({ default: m.WikiPage })))
+const WikiHome = lazy(() => import('./screens/WikiPage.tsx').then((m) => ({ default: m.WikiHome })))
 const HistoricalAtlas = lazy(() => import('./screens/HistoricalAtlas.tsx').then(m => ({ default: m.HistoricalAtlas })))
 
 const num = (s: string | undefined, fallback: number) => (s && /^\d+$/.test(s) ? Number(s) : fallback)
@@ -49,10 +50,11 @@ function Screen({ route }: { route: string[] }): { tab?: string; el: React.React
       if (a === 'stamps') return { el: <StampBook /> }
       if (a === 'test') return { el: <MapTest /> }
       if ((a === 'city' || a === 'place') && b) return { tab: 'map', el: <MapScreen key={`${a}/${b}`} focus={{ kind: a === 'city' ? 'city' : 'province', id: b }} /> }
-      if (a === 'china') return { tab: 'map', el: <MapScreen /> }
-      return { tab: 'map', el: <WorldMapScreen /> }
+      return { tab: 'map', el: <MapScreen /> }
     case 'city':
       return { el: <CityPage key={a} id={a} /> }
+    case 'wiki':
+      return a ? { el: <WikiPage key={a} id={a} /> } : { tab: 'map', el: <WikiHome /> }
     case 'place':
       if (b === 'stamp') return { el: <StampQuiz key={a} id={a} /> }
       return { el: <PlacePage key={a} id={a} /> }

@@ -35,7 +35,7 @@ function Row({ title, hint, children }: { title: string; hint?: ReactNode; child
   )
 }
 
-const TABLES = ['words', 'reviews', 'series', 'texts', 'imports', 'known', 'ai', 'places', 'feed', 'days', 'cities'] as const
+const TABLES = ['words', 'reviews', 'series', 'texts', 'imports', 'known', 'ai', 'places', 'feed', 'days', 'cities', 'wiki'] as const
 
 export function Me() {
   const stats = useStats()

@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type Ref } from 
 import { MAP } from '../lib/places.ts'
 import { CITIES, DETAIL, type MapCity } from '../lib/cities.ts'
 
-export type Selection = { kind: 'province' | 'city'; id: string }
+export type Selection = { kind: 'province' | 'city' | 'country'; id: string }
 type Box = [number, number, number, number]
 type LabelHit = { selection: Selection; box: Box }
 type CityHit = { id: string; x: number; y: number; r: number }
@@ -25,6 +25,9 @@ export interface MapApi {
 
 const W = DETAIL.width
 const H = DETAIL.height
+/** the whole map, China and the world around it */
+const [WX0, WY0, WX1, WY1] = DETAIL.world
+export const WORLD_BOX: Box = [WX0, WY0, WX1, WY1]
 const MAX_ZOOM = 16
 const PROVINCE_CENTRE = new Map(MAP.provinces.map((p) => [p.id, p]))
 
@@ -84,11 +87,13 @@ export function ExploreMap({
     const { w, h } = size
     if (!w) return v
     const k0 = fitK(w, h)
-    const k = Math.min(Math.max(v.k, k0 * 0.75), k0 * MAX_ZOOM)
+    // zoom out as far as the whole world, in as far as a city
+    const kWorld = Math.min(w / (WX1 - WX0), (h - insetsRef.current.top - insetsRef.current.bottom) / (WY1 - WY0))
+    const k = Math.min(Math.max(v.k, Math.min(kWorld, k0 * 0.75)), k0 * MAX_ZOOM)
     const m = 140
     // keep the centre of the screen over (or near) the map
-    const x = Math.min(Math.max(v.x, w / 2 - (W + m) * k), w / 2 + m * k)
-    const y = Math.min(Math.max(v.y, h / 2 - (H + m) * k), h / 2 + m * k)
+    const x = Math.min(Math.max(v.x, w / 2 - (WX1 + m) * k), w / 2 - (WX0 - m) * k)
+    const y = Math.min(Math.max(v.y, h / 2 - (WY1 + m) * k), h / 2 - (WY0 - m) * k)
     return { k, x, y }
   }
 
@@ -367,9 +372,10 @@ export function ExploreMap({
       if (!p.small) continue
       if (Math.hypot(p.cx * v.k + v.x - sx, p.cy * v.k + v.y - sy) < 18) return onSelect({ kind: 'province', id: p.id })
     }
-    const el = document.elementFromPoint(clientX, clientY)?.closest('[data-prov]')
+    const el = document.elementFromPoint(clientX, clientY)?.closest('[data-prov],[data-country]')
     const id = el?.getAttribute('data-prov')
-    onSelect(id ? { kind: 'province', id } : undefined)
+    const country = el?.getAttribute('data-country')
+    onSelect(id ? { kind: 'province', id } : country ? { kind: 'country', id: country } : undefined)
   }
 
   // ---------- what to draw at this zoom ----------
@@ -456,22 +462,35 @@ export function ExploreMap({
     const selProvince = selected?.kind === 'province' ? PROVINCE_CENTRE.get(selected.id) : undefined
     if (selProvince) provinceLabel(selProvince, true)
     for (const c of dots.filter((c) => c.rank === 1)) if (c !== selCity) cityLabel(c)
-    if (z < 2.9)
+    if (z < 2.9 && z >= 0.6)
       for (const p of MAP.provinces)
         if (p !== selProvince && (!p.small || z >= 1.6)) provinceLabel(p)
+    if (z < 0.6 && fits(textBox(sx(W * 0.55), sy(H * 0.55), '中国', 20, 'middle', 0.2)))
+      labels.push({ key: 'china', x: sx(W * 0.55), y: sy(H * 0.55), text: '中国', size: 20, anchor: 'middle', cls: 'map-province' })
     const ranked = dots.filter((c) => c.rank > 1 && c !== selCity && z >= labelZ(c)).sort((a, b) => a.rank - b.rank || +stories.has(b.id) - +stories.has(a.id) || b.pop - a.pop)
     for (const c of ranked) cityLabel(c)
 
     for (const l of DETAIL.labels)
-      if (l.kind === 'sea' && onScreen(sx(l.x), sy(l.y)) && fits(textBox(sx(l.x), sy(l.y), l.zh, 13, 'middle', 0.4)))
+      if (l.kind === 'sea' && z >= 0.6 && onScreen(sx(l.x), sy(l.y)) && fits(textBox(sx(l.x), sy(l.y), l.zh, 13, 'middle', 0.4)))
         labels.push({ key: `l-${l.zh}`, x: sx(l.x), y: sy(l.y), text: l.zh, size: 13, anchor: 'middle', cls: 'map-sea' })
+    // countries: China's neighbours always, the rest of the world as there's room (big ones first)
+    const selCountry = selected?.kind === 'country' ? DETAIL.neighbours.find((n) => n.id === selected.id) : undefined
+    const countryZ = (rank: number) => (rank <= 1 ? 0 : rank === 2 ? 0.25 : rank === 3 ? 0.7 : rank === 4 ? 1.4 : 2.4)
+    const countries = [...DETAIL.neighbours].sort((a, b) => +(b === selCountry) - +(a === selCountry) || a.rank - b.rank)
     if (z < 6)
-      for (const n of DETAIL.neighbours)
-        if (onScreen(sx(n.x), sy(n.y)) && fits(textBox(sx(n.x), sy(n.y), n.zh, 12, 'middle', 0.15)))
-          labels.push({ key: `n-${n.zh}`, x: sx(n.x), y: sy(n.y), text: n.zh, size: 12, anchor: 'middle', cls: 'map-country' })
+      for (const n of countries) {
+        const active = n === selCountry
+        if (!active && z < countryZ(n.rank)) continue
+        const size = active ? 17 : 12
+        const box = textBox(sx(n.x), sy(n.y), n.zh, size, 'middle', 0.15)
+        if (onScreen(sx(n.x), sy(n.y)) && fits(box)) {
+          labels.push({ key: `n-${n.id}`, x: sx(n.x), y: sy(n.y), text: n.zh, size, anchor: 'middle', cls: active ? 'map-country map-selected' : 'map-country' })
+          labelHits.push({ selection: { kind: 'country', id: n.id }, box })
+        }
+      }
     // water and land last: they give way to cities
     for (const r of DETAIL.rivers)
-      if ((r.major ? z >= 1.25 : z >= 3) && onScreen(sx(r.x), sy(r.y)) && fits(textBox(sx(r.x), sy(r.y) - 4, r.zh, 11, 'middle')))
+      if (z >= r.lz && onScreen(sx(r.x), sy(r.y)) && fits(textBox(sx(r.x), sy(r.y) - 4, r.zh, 11, 'middle')))
         labels.push({ key: `r-${r.zh}`, x: sx(r.x), y: sy(r.y) - 4, text: r.zh, size: 11, anchor: 'middle', cls: 'map-water' })
     if (z >= 1.8)
       for (const l of DETAIL.lakes.labels)
@@ -481,6 +500,7 @@ export function ExploreMap({
       if (l.kind === 'sea') continue
       if (l.kind === 'peak' && z < 2.4) continue
       if (l.kind === 'shan' && z < 1.15) continue
+      if (l.kind === 'land' && z < 0.7) continue
       const text = l.kind === 'peak' ? `▲${l.zh}` : l.zh
       const size = l.kind === 'land' ? 12 : 11
       if (onScreen(sx(l.x), sy(l.y)) && fits(textBox(sx(l.x), sy(l.y), text, size, 'middle', l.kind === 'land' ? 0.3 : 0)))
@@ -497,6 +517,7 @@ export function ExploreMap({
   const v = view
   const selProv = selected?.kind === 'province' ? selected.id : undefined
   const selCity = selected?.kind === 'city' ? selected.id : undefined
+  const selCountry = selected?.kind === 'country' ? selected.id : undefined
   const riverW = (major: boolean) => (layout ? (major ? Math.min(3.2, 1.3 + layout.z * 0.12) : Math.min(2, 0.6 + layout.z * 0.1)) : 1)
 
   return (
@@ -505,15 +526,33 @@ export function ExploreMap({
         <svg ref={svg} width={size.w} height={size.h} className="absolute top-0 left-0 origin-top-left will-change-transform" role="img" aria-label="可以拖动和放大的中国地图">
           <g transform={`translate(${v.x} ${v.y}) scale(${v.k})`} strokeLinejoin="round">
             {DETAIL.neighbours.map((n) => (
-              <path key={n.zh} d={n.d} className="map-abroad" strokeWidth={0.8} vectorEffect="non-scaling-stroke" />
+              <path
+                key={n.id}
+                data-country={n.id}
+                d={n.d}
+                className="map-abroad"
+                style={n.id === selCountry ? { fill: 'color-mix(in oklab, var(--color-huang) 45%, var(--map-abroad))' } : undefined}
+                strokeWidth={0.8}
+                vectorEffect="non-scaling-stroke"
+              />
             ))}
             {Object.entries(DETAIL.provinces).map(([id, d]) => (
-              <path key={id} data-prov={id} d={d} fill={fill(id)} stroke="var(--map-border)" strokeWidth={1} vectorEffect="non-scaling-stroke" />
+              <path key={id} data-prov={id} d={d} fill={fill(id)} stroke="var(--map-province-line)" strokeWidth={1.3} vectorEffect="non-scaling-stroke" />
             ))}
             <path d={DETAIL.lakes.d} className="map-lake" />
             {DETAIL.rivers.map((r) => (
               <path key={r.zh} d={r.d} fill="none" className="map-river" strokeWidth={riverW(r.major)} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
             ))}
+            {selCountry && (
+              <path
+                d={DETAIL.neighbours.find((n) => n.id === selCountry)?.d}
+                fill="none"
+                stroke="var(--text)"
+                strokeWidth={2}
+                vectorEffect="non-scaling-stroke"
+                pointerEvents="none"
+              />
+            )}
             {selProv && (
               <path
                 d={(DETAIL.provinces as Record<string, string>)[selProv]}

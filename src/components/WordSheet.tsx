@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Drawer } from 'vaul'
 import { useLiveQuery } from '../lib/live.ts'
 import {
   ArrowLeftIcon,
+  BookOpenTextIcon,
   ChatCircleDotsIcon,
   CheckIcon,
   LightbulbIcon,
@@ -38,13 +39,43 @@ export function WordSheetProvider({ children }: { children: ReactNode }) {
   const pop = () => setStack((s) => s.slice(0, -1))
   const close = () => setOpen(false)
 
+  // the peek bubble: shown while a word is pressed, gone shortly after
+  const [peeked, setPeeked] = useState<{ target: WordTarget; rect: DOMRect }>()
+  const peekTimer = useRef(0)
+  const peek = useCallback((target: WordTarget, rect: DOMRect) => {
+    clearTimeout(peekTimer.current)
+    setPeeked({ target, rect })
+  }, [])
+  const unpeek = useCallback((afterMs = 0) => {
+    clearTimeout(peekTimer.current)
+    if (afterMs <= 0) setPeeked(undefined)
+    else peekTimer.current = window.setTimeout(() => setPeeked(undefined), afterMs)
+  }, [])
+  useEffect(() => {
+    // scrolling moves the word away from its bubble
+    const hide = () => unpeek()
+    window.addEventListener('scroll', hide, { passive: true, capture: true })
+    return () => window.removeEventListener('scroll', hide, { capture: true })
+  }, [unpeek])
+
   const top = stack.at(-1)
-  const active = open && top ? top.target.key : undefined
-  const api = useMemo(() => ({ open: show, active }), [show, active])
+  const active = open && top ? top.target.key : peeked?.target.key
+  const api = useMemo(() => ({ open: show, active, peek, unpeek }), [show, active, peek, unpeek])
 
   return (
     <WordSheetContext.Provider value={api}>
       {children}
+      {peeked && !open && (
+        <PeekBubble
+          key={peeked.target.key}
+          target={peeked.target}
+          rect={peeked.rect}
+          onOpen={() => {
+            unpeek()
+            show(peeked.target)
+          }}
+        />
+      )}
       <Drawer.Root open={open} onOpenChange={setOpen}>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 z-40 bg-black/35" />
@@ -66,6 +97,51 @@ export function WordSheetProvider({ children }: { children: ReactNode }) {
         </Drawer.Portal>
       </Drawer.Root>
     </WordSheetContext.Provider>
+  )
+}
+
+/**
+ * The little card above a pressed word: pinyin and meaning, nothing to dismiss. It goes away by
+ * itself; tapping it opens the full word card (save, ask AI).
+ */
+function PeekBubble({ target, rect, onOpen }: { target: WordTarget; rect: DOMRect; onOpen: () => void }) {
+  const { token } = target
+  const [gloss, setGloss] = useState(target.gloss)
+  const ref = useRef<HTMLButtonElement>(null)
+  const [pos, setPos] = useState<{ left: number; top: number }>()
+  useEffect(() => {
+    if (!target.gloss && token.p) lookupGloss(token.t, token.p).then(setGloss, () => setGloss(''))
+  }, [target, token])
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const w = el.offsetWidth
+    const h = el.offsetHeight
+    const left = Math.min(Math.max(rect.left + rect.width / 2 - w / 2, 8), window.innerWidth - w - 8)
+    const above = rect.top - h - 10
+    setPos({ left, top: above > 8 ? above : rect.bottom + 10 })
+  }, [rect, gloss])
+  const short = gloss?.split(/;\s*/).slice(0, 3).join('; ')
+  return (
+    <button
+      ref={ref}
+      onClick={onOpen}
+      aria-label={`${token.t} ${token.p ?? ''}，打开词卡`}
+      className="peek fixed z-[60] max-w-[min(20rem,calc(100vw-16px))] rounded-2xl bg-dai-dark px-3.5 py-2.5 text-left text-white shadow-[0_6px_24px_rgba(0,0,0,0.25)]"
+      style={pos ? { left: pos.left, top: pos.top } : { left: -9999, top: 0 }}
+    >
+      <div className="flex items-baseline gap-2">
+        <span className="font-book text-[22px] leading-none">{token.t}</span>
+        <span className="text-[17px] font-extrabold text-huang">{token.p}</span>
+        {token.l ? <span className="text-[11px] font-black opacity-70">HSK{token.l === 7 ? '7+' : token.l}</span> : null}
+      </div>
+      <div className="mt-1 text-[14px] leading-snug font-bold opacity-95">{short ?? '…'}</div>
+      {token.k && (
+        <div className="mt-1.5 flex items-center gap-1 text-[12px] font-black text-huang">
+          <BookOpenTextIcon size={14} weight="fill" /> 轻点这个词，打开百科页
+        </div>
+      )}
+    </button>
   )
 }
 

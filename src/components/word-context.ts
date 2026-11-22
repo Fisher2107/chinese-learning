@@ -14,11 +14,15 @@ export interface WordTarget {
 
 export interface WordSheetApi {
   open(target: WordTarget): void
-  /** key of the word currently shown in the sheet */
+  /** key of the word currently shown in the sheet or the peek bubble */
   active?: string
+  /** DuChinese-style: show pinyin and meaning above the word while it's pressed */
+  peek(target: WordTarget, rect: DOMRect): void
+  /** hide the peek bubble, now or after a moment */
+  unpeek(afterMs?: number): void
 }
 
-export const WordSheetContext = createContext<WordSheetApi>({ open: () => {} })
+export const WordSheetContext = createContext<WordSheetApi>({ open: () => {}, peek: () => {}, unpeek: () => {} })
 export const useWordSheet = () => useContext(WordSheetContext)
 
 export const sentenceText = (tokens: Token[]) => tokens.map((t) => t.t).join('')

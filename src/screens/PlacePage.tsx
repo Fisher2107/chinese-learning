@@ -1,11 +1,15 @@
 import { Photo } from '../components/Photo.tsx'
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'motion/react'
-import { ChatCircleDotsIcon, CheckCircleIcon, InfoIcon, LightbulbIcon, MapPinIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
+import { ArrowRightIcon, BooksIcon, ChatCircleDotsIcon, CheckCircleIcon, DiceFiveIcon, InfoIcon, LightbulbIcon, MapPinIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
 import { useLiveQuery } from '../lib/live.ts'
 import { db, type WordSource } from '../lib/db.ts'
-import { loadCities, loadFeed, loadIndex, loadPlaces, useLoad } from '../lib/content.ts'
-import { citiesOf } from '../lib/cities.ts'
+import { loadCities, loadFeed, loadIndex, loadPhotos, loadPlaces, loadWikiIndex, useLoad } from '../lib/content.ts'
+import { CITIES, citiesOf } from '../lib/cities.ts'
+import { FOOD_KINDS, pagesAbout, randomPage, SIGHT_KINDS, STORY_KINDS, useWikiProgress } from '../lib/wiki.ts'
+import { PeopleRow, PhotoRow } from '../components/WikiCards.tsx'
+import { StaticMap, provinceBox } from '../components/StaticMap.tsx'
+import type { Para } from '../lib/types.ts'
 import { markKey, setLearnt, useMarks } from '../lib/learn.ts'
 import { earnStamp, makeQuiz, MAP_BY_ID, markPlaceRead, markPlaceUnread, regionColor, visitPlace, type QuizQuestion } from '../lib/places.ts'
 import { back, go } from '../lib/router.ts'
@@ -24,6 +28,8 @@ export function PlacePage({ id }: { id: string }) {
   const index = useLoad(loadIndex, 'index').data
   const progress = useLiveQuery(() => db.places.get(id), [id])
   const citiesFile = useLoad(loadCities, 'cities').data
+  const wikiIndex = useLoad(loadWikiIndex, 'wiki-index').data
+  const wikiProgress = useWikiProgress()
   const marks = useMarks()
   useEffect(() => {
     visitPlace(id)
@@ -40,6 +46,14 @@ export function PlacePage({ id }: { id: string }) {
   const cards = (feed?.cards ?? []).filter((c) => c.province === id)
   const stamped = !!progress?.stamp
   const cities = citiesOf(id).filter((c) => c.kind !== 'muni')
+  const pages = pagesAbout(wikiIndex, { province: id })
+  const sights = pages.filter((p) => SIGHT_KINDS.has(p.kind))
+  const people = pages.filter((p) => p.kind === '人物')
+  const stories = pages.filter((p) => STORY_KINDS.has(p.kind))
+  const food = pages.filter((p) => FOOD_KINDS.has(p.kind))
+  const rivers = [...new Set(pages.filter((p) => p.river).map((p) => p.river))]
+  const { lede, sections } = splitSections(place.intro)
+  const seenHere = pages.filter((p) => wikiProgress.seen.has(p.id)).length
 
   return (
     <div className="pb-12">
@@ -77,9 +91,75 @@ export function PlacePage({ id }: { id: string }) {
           </div>
         </div>
 
-        <div className="mt-5 rounded-2xl bg-paper p-4 text-[19px] text-paper-text">
-          <ZhText id={`place-${id}`} paras={place.intro} glossary={placesFile.glossary} source={source} />
+        {sections.length > 1 && (
+          <nav className="no-scrollbar -mx-4 mt-4 flex gap-2 overflow-x-auto px-4" aria-label="目录">
+            {sections.map((sec, i) => (
+              <button
+                key={i}
+                onClick={() => document.getElementById(`sec-${i}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                className="h-9 shrink-0 rounded-full border-2 border-line bg-surface px-3.5 text-[14px] font-extrabold"
+              >
+                {sec.title}
+              </button>
+            ))}
+          </nav>
+        )}
+
+        <div className="mt-4 rounded-2xl bg-paper p-4 text-[19px] text-paper-text">
+          <ZhText id={`place-${id}`} paras={lede} glossary={placesFile.glossary} source={source} />
         </div>
+
+        <PhotoRow title={`去${place.name}，必看`} sub="像地图里的“热门景点”：点开一张，读它的故事。" pages={sights} seen={wikiProgress.seen} />
+
+        {(sights.some((p) => p.xy) || rivers.length > 0) && (
+          <Section title={`地图上的${place.name}`}>
+            <div className="tile overflow-hidden">
+              <StaticMap
+                box={provinceBox(id, 0.08)}
+                focus={id}
+                color={color}
+                rivers={rivers}
+                dots={cities}
+                pins={sights.filter((p) => p.xy).map((p) => ({ id: p.id, x: p.xy![0], y: p.xy![1], label: p.name }))}
+                onPin={(pid) => go(`wiki/${pid}`)}
+              />
+            </div>
+          </Section>
+        )}
+
+        {sections.map((sec, i) => (
+          <section key={i} id={`sec-${i}`} className="mt-6 scroll-mt-20">
+            <h2 className="mb-2 px-1 text-[22px] font-black">{sec.title}</h2>
+            <div className="rounded-2xl bg-paper p-4 text-[19px] text-paper-text">
+              <ZhText id={`place-${id}-s${i}`} paras={sec.paras} glossary={placesFile.glossary} source={source} />
+            </div>
+          </section>
+        ))}
+
+        <PeopleRow title={`${place.name}的人物`} pages={people} seen={wikiProgress.seen} />
+        <PhotoRow title="故事 · 传说 · 历史" pages={stories} seen={wikiProgress.seen} />
+        <PhotoRow title="吃什么、带什么回家" pages={food} seen={wikiProgress.seen} />
+
+        {pages.length > 0 && wikiIndex && (
+          <div className="tile mt-6 flex items-center gap-3 p-4">
+            <BooksIcon size={30} weight="fill" className="shrink-0" style={{ color }} />
+            <div className="min-w-0 flex-1">
+              <div className="text-[16px] font-black">
+                {place.name}百科 · 看过 {seenHere}/{pages.length}
+              </div>
+              <ProgressBar value={seenHere / pages.length} color={color} className="mt-1.5" />
+            </div>
+            <button
+              onClick={() => {
+                const p = randomPage(wikiIndex, wikiProgress.seen, id)
+                if (p) go(`wiki/${p.id}`)
+              }}
+              className="flex h-11 shrink-0 items-center gap-1 rounded-xl bg-sunken px-3 text-[14px] font-extrabold"
+            >
+              <DiceFiveIcon size={20} weight="fill" className="text-zhu" /> 随便看
+            </button>
+          </div>
+        )}
 
         <Section
           title={
@@ -172,16 +252,24 @@ export function PlacePage({ id }: { id: string }) {
   )
 }
 
-/** 集章: three quick questions; get them all right (wrong ones come back) to earn the seal. */
+/** 集章: about six questions on the place itself; get them all right (wrong ones come back) to earn the seal. */
 export function StampQuiz({ id }: { id: string }) {
   const placesFile = useLoad(loadPlaces, 'places').data
+  const wiki = useLoad(loadWikiIndex, 'wiki-index').data
+  const photos = useLoad(loadPhotos, 'photos').data
+  const { seen } = useWikiProgress()
   const place = placesFile?.places.find((p) => p.id === id)
-  const questions = useMemo<QuizQuestion[]>(() => (place && placesFile ? makeQuiz(place, placesFile.places) : []), [place, placesFile])
+  const ready = !!(place && placesFile && photos)
+  // made once, when everything has loaded: answering mustn't reshuffle the questions
+  const [questions, setQuestions] = useState<QuizQuestion[]>()
+  useEffect(() => {
+    if (ready && !questions) setQuestions(makeQuiz(place!, placesFile!.places, { wiki, photos: new Set(Object.keys(photos!)), cities: CITIES, seen }))
+  }, [ready, questions, place, placesFile, wiki, photos, seen])
   const [queue, setQueue] = useState<number[]>()
   const [choice, setChoice] = useState<number>()
   const [result, setResult] = useState<'right' | 'wrong'>()
   const [coins, setCoins] = useState<number>()
-  if (!place || !questions.length) return <Loading />
+  if (!place || !questions?.length) return <Loading />
   const q0 = queue ?? questions.map((_, i) => i)
   const color = regionColor(place.region)
 
@@ -189,6 +277,7 @@ export function StampQuiz({ id }: { id: string }) {
 
   const qi = q0[0]
   const q = questions[qi]
+  const wide = q.options.some((o) => [...o].length > 6)
   function check() {
     if (choice === undefined) return
     setResult(choice === q.answer ? 'right' : 'wrong')
@@ -205,13 +294,14 @@ export function StampQuiz({ id }: { id: string }) {
   return (
     <div className="mx-auto flex min-h-dvh max-w-xl flex-col">
       <PageHeader close fallback={`place/${id}`} title={<ProgressBar value={(questions.length - q0.length) / questions.length} color={color} />} />
-      <div className="flex-1 px-5 pt-4 pb-48">
+      <div className="flex-1 px-5 pt-4 pb-56">
         <div className="flex items-center gap-2 text-sm font-black" style={{ color }}>
           <StampIcon size={18} weight="fill" /> 集章 · {place.name}
         </div>
         <motion.div key={`${qi}-${q0.length}`} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}>
-          <h2 className="mt-2 text-[24px] font-black">{q.q}</h2>
-          <div className="mt-6 grid grid-cols-2 gap-3">
+          {q.photo && <Photo k={q.photo} ratio="16 / 10" credit={false} className="mt-3 rounded-2xl" />}
+          <h2 className="mt-3 text-[24px] font-black">{q.q}</h2>
+          <div className={`mt-5 grid gap-3 ${wide ? 'grid-cols-1' : 'grid-cols-2'}`}>
             {q.options.map((o, oi) => {
               const on = choice === oi
               const showRight = result && oi === q.answer
@@ -221,7 +311,7 @@ export function StampQuiz({ id }: { id: string }) {
                   key={o}
                   disabled={!!result}
                   onClick={() => setChoice(oi)}
-                  className={`tile flex h-20 items-center justify-center px-3 font-black transition-colors ${o.length === 1 ? 'font-book text-[36px]' : 'text-[20px]'}`}
+                  className={`tile flex items-center px-4 font-black transition-colors ${wide ? 'min-h-14 py-3 text-left text-[18px]' : `h-20 justify-center ${o.length === 1 ? 'font-book text-[36px]' : 'text-[20px]'}`}`}
                   style={{
                     borderColor: showRight ? 'var(--color-lv)' : showWrong ? 'var(--color-zhu)' : on ? color : undefined,
                     background: showRight ? 'var(--color-lv-soft)' : showWrong ? 'var(--color-zhu-soft)' : on ? `color-mix(in oklab, ${color} 10%, var(--surface))` : undefined,
@@ -243,9 +333,35 @@ export function StampQuiz({ id }: { id: string }) {
           </div>
         </div>
       )}
-      <FeedbackBanner state={result} answer={q.options[q.answer]} onContinue={next} extra={<div className="mt-1 text-[16px] font-bold text-mute">{q.why}</div>} />
+      <FeedbackBanner
+        state={result}
+        answer={q.options[q.answer]}
+        onContinue={next}
+        extra={
+          <>
+            <div className="mt-1 text-[16px] font-bold text-mute">{q.why}</div>
+            {q.more && (
+              <button onClick={() => go(q.more!.route)} className="mt-2 flex items-center gap-1 text-[15px] font-black text-[var(--link)]">
+                读一读：{q.more.title} <ArrowRightIcon size={15} weight="bold" />
+              </button>
+            )}
+          </>
+        }
+      />
     </div>
   )
+}
+
+/** A province intro split at its ## headings: the opening, then titled sections. */
+function splitSections(intro: Para[]): { lede: Para[]; sections: { title: string; paras: Para[] }[] } {
+  const lede: Para[] = []
+  const sections: { title: string; paras: Para[] }[] = []
+  for (const p of intro) {
+    if (p.kind === 'h') sections.push({ title: p.sentences.map((s) => s.tokens.map((t) => t.t).join('')).join(''), paras: [] })
+    else if (sections.length) sections.at(-1)!.paras.push(p)
+    else lede.push(p)
+  }
+  return { lede, sections }
 }
 
 function StampDone({ id, name, short, coins }: { id: string; name: string; short: string; coins: number }) {
