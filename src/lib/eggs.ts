@@ -2,7 +2,19 @@ import type { Rating } from 'ts-fsrs'
 import { db, type EggNote } from './db.ts'
 import { newCard, reviewCard } from './srs.ts'
 import { addCoins, bumpDay, recordActivity } from './stats.ts'
-import type { CitiesFile, Egg, PlacesFile, Sentence } from './types.ts'
+import type { CitiesFile, DialectFile, Egg, PlacesFile, Sentence, SourceLink } from './types.ts'
+
+/**
+ * Where eggs live: place/<id> and city/<id> are 聊天彩蛋 on those pages; hometown/<id> is a province's
+ * 家乡话 in the 家乡话与地方梗 collection.
+ */
+export const isHometown = (page: string) => page.startsWith('hometown/')
+
+/** The app route that shows an egg's page. */
+export const eggRoute = (page: string) => (isHometown(page) ? `collection/${page}` : page)
+
+/** What eggs on that page are called. */
+export const eggLabel = (page: string) => (isHometown(page) ? '家乡话' : '聊天彩蛋')
 
 /** A 聊天彩蛋 as the user sees it: the content's egg with their changes, or one they wrote. */
 export interface EggView {
@@ -21,6 +33,8 @@ export interface EggView {
   /** has a flashcard */
   card: boolean
   due?: number
+  /** where the content's egg comes from */
+  sources?: SourceLink[]
   /** the content's version, for 还原 */
   base?: Egg
 }
@@ -45,6 +59,7 @@ export function mergeEggs(page: string, title: string, eggs: Egg[], rows: EggNot
       edited: (r?.text !== undefined && r.text !== e.text) || (r?.q !== undefined && r.q !== e.q),
       card: !!r?.card,
       due: r?.due,
+      sources: e.sources,
       base: e,
     }
   })
@@ -178,9 +193,14 @@ export async function gradeEgg(row: EggNote, rating: Rating): Promise<EggNote> {
 }
 
 /** The egg behind a flashcard: today's content (with the user's changes) or what was saved. */
-export function eggForCard(row: EggNote, places?: PlacesFile, cities?: CitiesFile): EggView {
+export function eggForCard(row: EggNote, places?: PlacesFile, cities?: CitiesFile, dialect?: DialectFile): EggView {
   const [kind, id] = row.page.split('/')
-  const eggs = (kind === 'place' ? places?.places.find((p) => p.id === id)?.eggs : cities?.cities.find((c) => c.id === id)?.eggs) ?? []
+  const eggs =
+    (kind === 'place'
+      ? places?.places.find((p) => p.id === id)?.eggs
+      : kind === 'hometown'
+        ? dialect?.provinces[id]
+        : cities?.cities.find((c) => c.id === id)?.eggs) ?? []
   return mergeEggs(row.page, row.title, eggs, [row]).find((e) => e.key === row.key) ?? {
     key: row.key,
     page: row.page,

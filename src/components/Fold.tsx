@@ -43,6 +43,7 @@ export function Fold({
   count,
   action,
   defaultOpen = true,
+  small = false,
   children,
 }: {
   id: string
@@ -52,27 +53,30 @@ export function Fold({
   /** shown on the right of the header, even when folded */
   action?: ReactNode
   defaultOpen?: boolean
+  /** a row in a list of folds (inside another fold) rather than a page section */
+  small?: boolean
   children: ReactNode
 }) {
   const [isOpen, set] = useOpen(id, defaultOpen)
   return (
-    <section id={`fold-${id}`} className="mt-5">
+    <section id={`fold-${id}`} className={small ? (isOpen ? 'mb-3' : '') : 'mt-5'}>
       <div className="flex min-h-11 items-center gap-2">
         <button onClick={() => set(!isOpen)} aria-expanded={isOpen} className="flex min-w-0 flex-1 items-center gap-2 py-1.5 text-left">
           <CaretDownIcon size={16} weight="bold" className={`shrink-0 text-mute transition-transform ${isOpen ? '' : '-rotate-90'}`} />
           {icon}
-          <h2 className="truncate text-[19px] font-extrabold">{title}</h2>
+          <h2 className={`truncate font-extrabold ${small ? 'text-[17px]' : 'text-[19px]'}`}>{title}</h2>
           {count !== undefined && <span className="shrink-0 rounded-full bg-sunken px-2 py-0.5 text-xs font-extrabold text-mute">{count}</span>}
         </button>
         {action}
       </div>
-      {isOpen && <div className="mt-2">{children}</div>}
+      {isOpen && <div className={small ? 'mt-1' : 'mt-2'}>{children}</div>}
     </section>
   )
 }
 
-/** Opens a fold and scrolls it to just under the sticky header. */
-export function jumpTo(id: string) {
+/** Opens a fold (and the folds it sits in) and scrolls it to just under the sticky header. */
+export function jumpTo(id: string, parents: string[] = []) {
+  for (const p of parents) setOpen(p, true)
   setOpen(id, true)
   requestAnimationFrame(() => {
     const el = document.getElementById(`fold-${id}`)

@@ -38,7 +38,7 @@ function Screen({ route }: { route: string[] }): { tab?: string; el: React.React
     case 'shelf':
       return { tab: 'shelf', el: <Shelf /> }
     case 'collection':
-      return { tab: 'shelf', el: <ReadingCollection id={a} /> }
+      return { tab: 'shelf', el: <ReadingCollection id={a} focus={b} /> }
     case 'words':
       return { tab: 'me', el: <WordBank /> }
     case 'feed':
