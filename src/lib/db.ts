@@ -126,6 +126,11 @@ export interface Setting {
   value: unknown
 }
 
+/*
+ * Queries must work in iPhone Safari. WebKit 26 refuses "unique" cursors with
+ * "UnknownError: Unable to open cursor", so never use uniqueKeys() or eachUniqueKey():
+ * read with toArray() (or get/where…toArray) and dedupe in JS. The tables are small.
+ */
 export const db = new Dexie('zhongguotong') as Dexie & {
   words: EntityTable<SavedWord, 'id'>
   reviews: EntityTable<ReviewLog, 'id'>
