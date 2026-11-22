@@ -637,7 +637,7 @@ Modern topics come with a **聊天提示 (conversation tip)**: what's a point of
 |---|---|---|
 | App | Vite + React + TypeScript | Fast, simple, widely supported |
 | UI | Tailwind CSS with the design tokens, Motion, Radix, Vaul, Phosphor icons, Lottie | Proven building blocks (see the design system) |
-| Your data (saves, notes, imports, memory record, API key) | IndexedDB via Dexie, on your device | Personal data and copyrighted imports never touch the public repo. Export/import as a backup file |
+| Your data (saves, notes, imports, memory record, API key) | IndexedDB via Dexie, on your device | Personal data and copyrighted imports never touch the public repo. Export/import as a backup file. Don't use `uniqueKeys()` / `eachUniqueKey()`: iPhone Safari (WebKit 26) can't open those cursors and the app fails to start. Read with `toArray()` and dedupe in JS |
 | Spaced repetition | `ts-fsrs` | FSRS algorithm |
 | Pinyin | `pinyin-pro` | Handles words with more than one reading (行 háng/xíng, 长 cháng/zhǎng) using context. Runs in the browser, so imports and tutor messages get pinyin too |
 | Word splitting | `Intl.Segmenter`, plus manual fixes for committed texts | Built into browsers, so it also works on imports and tutor messages |

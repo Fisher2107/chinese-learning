@@ -1,4 +1,4 @@
-import { memo, type MouseEvent } from 'react'
+import { memo, useMemo, type MouseEvent } from 'react'
 import { useLiveQuery } from '../lib/live.ts'
 import type { Para } from '../lib/types.ts'
 import { db, type WordSource } from '../lib/db.ts'
@@ -7,8 +7,11 @@ import { useWordSheet } from './word-context.ts'
 const HAN = /[㐀-鿿]/
 
 export function useSavedWords(): Set<string> {
-  const words = useLiveQuery(() => db.words.orderBy('word').uniqueKeys(), [], [])
-  return new Set(words as string[])
+  // Read whole rows, not orderBy('word').uniqueKeys(): that opens a 'nextunique' cursor, which
+  // iPhone Safari (WebKit 26) refuses with "UnknownError: Unable to open cursor", and every screen
+  // with Chinese text runs this.
+  const words = useLiveQuery(() => db.words.toArray(), [], [])
+  return useMemo(() => new Set(words.map((w) => w.word)), [words])
 }
 
 interface Props {
