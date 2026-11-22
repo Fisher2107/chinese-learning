@@ -101,7 +101,7 @@ export interface Place {
   note: Sentence[]
   intro: Para[]
   /** 聊天彩蛋: things worth knowing to start a conversation */
-  eggs: Para[]
+  eggs: Egg[]
   /** characters in the intro and 聊天彩蛋, counted when the page is marked read */
   chars: number
   series: string[]
@@ -114,8 +114,24 @@ export interface CityContent {
   nickname: string
   facts: Sentence[]
   intro: Para[]
-  eggs: Para[]
+  eggs: Egg[]
   chars: number
+}
+
+/**
+ * 聊天彩蛋 ("chat Easter egg"): a little thing worth knowing that gets a conversation going.
+ * Each has a question, so it can become a flashcard.
+ */
+export interface Egg {
+  /** "<page>#<hash of the text>", e.g. place/zhejiang#1a2b3c4d: the user's notes and flashcard hang on it */
+  id: string
+  /** plain text, for editing and for AI */
+  text: string
+  sentences: Sentence[]
+  /** the flashcard question */
+  q: string
+  /** words to look it up with */
+  find: string
 }
 
 export interface CitiesFile {

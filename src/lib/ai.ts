@@ -120,6 +120,37 @@ export function askAboutWord(word: string, pinyin: string, sentence: string, his
   return ask(wordInstructions(word, pinyin, sentence), history, first ? `word:${word}|${sentence}|${history[0].content}` : undefined)
 }
 
+function eggInstructions(place: string, egg: string) {
+  return `${TUTOR}
+学生在了解「${place}」，读到了这条“聊天彩蛋”（跟中国人聊天时可以拿出来的小知识）：
+「${egg}」
+学生想更深入地了解它。这一次回答可以长一点（不超过 250 字）。如果这条彩蛋有说得不准确的地方，直接指出来。`
+}
+
+const eggKey = (place: string, egg: string) => `egg:${place}|${egg}`
+
+/** An 展开 asked before, if there is one (no network). */
+export async function cachedEggExpansion(place: string, egg: string) {
+  return (await db.ai.get(eggKey(place, egg)))?.answer
+}
+
+/** 展开: the background to a 聊天彩蛋, a story or detail, and things to ask a Chinese friend. Cached. */
+export function expandEgg(place: string, egg: string) {
+  return ask(
+    eggInstructions(place, egg),
+    `请帮我展开讲讲：
+1. 这是怎么回事？为什么？（有时间、人物、数字更好）
+2. 一个相关的、有意思的细节或者小故事
+3. 跟中国朋友聊这个的时候，我可以问对方的两个问题`,
+    eggKey(place, egg),
+  )
+}
+
+/** A follow-up about a 聊天彩蛋. The first question of a conversation is cached. */
+export function askAboutEgg(place: string, egg: string, history: ChatMsg[]) {
+  return ask(eggInstructions(place, egg), history, history.length === 1 ? `egg-q:${place}|${egg}|${history[0].content}` : undefined)
+}
+
 /** Quick connection test for the settings page. */
 export async function testKey(): Promise<string> {
   return ask('Reply with exactly: 连接成功', 'ping')

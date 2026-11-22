@@ -38,20 +38,39 @@ export async function unsaveWord(word: string) {
   await db.reviews.where('wordId').anyOf(rows.map((r) => r.id!)).delete()
 }
 
+/** A fresh flashcard, due now. */
+export async function newCard(): Promise<{ card: Record<string, unknown>; due: number }> {
+  const s = await getScheduler()
+  const card = s.newCard({ now: new Date() }) as unknown as CardLike
+  return { card: card as unknown as Record<string, unknown>, due: card.dueAt.getTime() }
+}
+
+/** The card after answering it with `rating`. */
+export async function reviewCard(card: Record<string, unknown>, rating: Rating): Promise<{ card: Record<string, unknown>; due: number }> {
+  const s = await getScheduler()
+  const { card: next } = s.review({ card: reviveCard(card), grade: rating as never, now: new Date() }) as unknown as { card: CardLike }
+  return { card: next as unknown as Record<string, unknown>, due: next.dueAt.getTime() }
+}
+
+/** Human-readable next interval for each grade, for any card. */
+export async function previewCard(card: Record<string, unknown>): Promise<string[]> {
+  const s = await getScheduler()
+  const now = new Date()
+  const out: string[] = []
+  for (const item of s.preview({ card: reviveCard(card), now }) as Iterable<{ card: CardLike }>) {
+    out.push(formatInterval(item.card.dueAt.getTime() - now.getTime()))
+  }
+  return out
+}
+
 /** Cards due now, oldest first. */
 export function dueWords(limit = 50) {
   return db.words.where('due').belowOrEqual(Date.now()).limit(limit).toArray()
 }
 
 /** Human-readable next interval for each grade, e.g. "1分钟", "4天". */
-export async function previewIntervals(word: SavedWord): Promise<string[]> {
-  const s = await getScheduler()
-  const now = new Date()
-  const out: string[] = []
-  for (const item of s.preview({ card: reviveCard(word.card), now }) as Iterable<{ card: CardLike }>) {
-    out.push(formatInterval(item.card.dueAt.getTime() - now.getTime()))
-  }
-  return out
+export function previewIntervals(word: SavedWord): Promise<string[]> {
+  return previewCard(word.card)
 }
 
 export async function grade(word: SavedWord, rating: Rating) {

@@ -223,7 +223,7 @@ export function MapTest() {
               {result.right ? '对了！' : '是'}
               <NameWord name={q.name} py={q.py} gloss={gloss} source={source} className="text-[24px]" />
               {/* the photo ties the name to a picture: what you see when you think of the place */}
-              <Photo k={q.kind === 'city' ? `city/${q.id}` : `place/${q.id}`} ratio="4 / 3" credit={false} className="ml-auto w-20 shrink-0 rounded-xl" />
+              <Photo k={q.kind === 'city' ? `city/${q.id}` : `place/${q.id}`} ratio="4 / 3" fit="cover" credit={false} className="ml-auto w-20 shrink-0 rounded-xl" />
             </div>
             {!result.right && result.given && <div className="mt-1 text-[15px] font-bold text-mute">你写的是“{result.given}”</div>}
             <div className="mt-3 flex gap-3">

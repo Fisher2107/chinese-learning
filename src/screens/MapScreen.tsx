@@ -258,7 +258,7 @@ function ProvinceCard({
         </div>
       </div>
       <div className="mt-2 flex items-start gap-3">
-        <Photo k={`place/${place.id}`} ratio="4 / 3" credit={false} className="w-20 shrink-0 rounded-xl" />
+        <Photo k={`place/${place.id}`} ratio="4 / 3" fit="cover" credit={false} className="w-20 shrink-0 rounded-xl" />
         {first && (
           <ZhText
             ui
@@ -309,7 +309,7 @@ function CityCard({ city, file, province, learnt, onClose }: { city: MapCity; fi
         )}
       </div>
       <div className="mt-2 flex items-start gap-3">
-        <Photo k={`city/${city.id}`} ratio="4 / 3" credit={false} className="w-20 shrink-0 rounded-xl" />
+        <Photo k={`city/${city.id}`} ratio="4 / 3" fit="cover" credit={false} className="w-20 shrink-0 rounded-xl" />
         {first && file && !muni && (
           <ZhText
             ui

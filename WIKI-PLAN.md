@@ -10,7 +10,7 @@ The daily task `zhongguotong-wiki-daily` (10:00 every day) works through this fi
 
 浙江 is the template (`content/places/zhejiang.md` and the pages in `content/wiki/`). A province is done when it has all of these:
 
-- [ ] **Province page rewritten** as a long read, about 1,800–2,500 字: an opening paragraph, then 5–7 `##` sections (where the name comes from, geography, history, people, food, today), then `## 聊天彩蛋`. Every person, place, river, event and dish that has (or deserves) a page is a `[[link]]`.
+- [ ] **Province page rewritten** as a long read, about 1,800–2,500 字: an opening paragraph, then 5–7 `##` sections (where the name comes from, geography, history, people, food, today), then `## 聊天彩蛋`. Every person, place, river, event and dish that has (or deserves) a page is a `[[link]]`. Each 聊天彩蛋 bullet (on province and city pages) has an indented `问：` line under it, the question its flashcard asks, and a `查：` line with search words when its first “quoted” words aren't the thing to look up (see README).
 - [ ] **12–20 百科 pages** in `content/wiki/<id>.md`:
   - 5–8 places to see (景点, 湖, 山, 河流, 建筑), each with `at: [lon, lat]` so it's pinned on the map, and `city:` so it shows on its city page;
   - 4–6 people (人物), including people who aren't from there but made their name there (苏轼 in 杭州);

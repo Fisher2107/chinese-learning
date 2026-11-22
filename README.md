@@ -33,10 +33,24 @@ content/
   series/<id>/01.md …       episodes: title, beat, gate (recall questions); story in the body
   series/<id>/after.md      读后: ## headings and - bullets (关键词, 聊天工具包, 聊天彩蛋)
   places/<id>.md            one per province (34): id, name, full, type, short, alias?, capital?, region, note?;
-                            body = intro paragraph, then `## 聊天彩蛋` with - bullets
+                            body = intro paragraph, then `## 聊天彩蛋` with - bullets (see below)
+  cities/<id>.md            a city page: id, name, nickname?; intro, then `## 聊天彩蛋` the same way
   feed/<slug>.md            刷一刷 cards: id (= file name), date, title (the hook question), province?, series?,
                             tags, sources [{ title, url }], inspiration; body 150–300 字 ending on a question
 ```
+
+Each 聊天彩蛋 bullet on a province or city page needs a question under it, which becomes its
+flashcard, and can have search words for 深入 (otherwise its first “quoted” words, or the place name):
+
+```markdown
+## 聊天彩蛋
+- 每年农历八月十八前后，钱塘江大潮最壮观，很多人专门去看潮。
+  问：什么时候去看钱塘江大潮最好？
+  查：钱塘江大潮
+```
+
+The app keeps the user's own edits, notes and flashcards for an egg under an id made from its page
+and its text, so fixing an egg's wording gives it a new id; the old notes stay, shown as the user's own.
 
 A series lists the provinces it's about with `provinces: [henan]` in its index.md; those link the
 series to the map and light the province up as it's read.

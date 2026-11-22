@@ -4,7 +4,7 @@
 //   content/series/<id>/after.md     读后: key words, 聊天工具包, 聊天彩蛋…
 //   content/texts/<id>.md            public-domain full texts
 //   content/terms.yml                names and words the dictionary lacks
-//   content/places/<id>.md           one page per province: intro, then ## 聊天彩蛋 bullets
+//   content/places/<id>.md           one page per province: intro, then ## 聊天彩蛋 bullets (each with 问： and maybe 查：)
 //   content/feed/<slug>.md           刷一刷 cards: title is the hook question, body 150–300 字
 //   content/wiki/<id>.md             百科: one page per place, person, river, event, legend, dish…
 // Output: public/content/{index.json, series/<id>.json, texts/<id>.json, places.json, feed.json,
@@ -262,6 +262,42 @@ function parseBlocks(body, glossary, where) {
   return blocks
 }
 
+/**
+ * 聊天彩蛋: one `- ` bullet per egg, then an indented `问：` line (the flashcard question) and,
+ * if the egg's first “quoted” words aren't the thing to look up, a `查：` line (search words).
+ * Each egg gets an id from its page and its text, so the user's notes and flashcards stay attached.
+ */
+function parseEggs(src, page, name, glossary, where) {
+  const raw = []
+  for (const line of src.split('\n')) {
+    const l = line.trim()
+    if (!l) continue
+    if (l.startsWith('- ')) {
+      raw.push({ text: l.slice(2).trim(), q: '', find: '' })
+      continue
+    }
+    const m = l.match(/^(问|查)[:：]\s*(.+)$/)
+    if (m && raw.length) raw.at(-1)[m[1] === '问' ? 'q' : 'find'] = m[2].trim()
+    else errors.push(`${where}: 聊天彩蛋 takes "- 彩蛋" bullets, each followed by "  问：…" and maybe "  查：…" (got "${l}")`)
+  }
+  const ids = new Set()
+  return raw.map((e, i) => {
+    if (!e.q) errors.push(`${where}: 聊天彩蛋 ${i + 1} needs a question line "  问：…" for its flashcard`)
+    const id = `${page}#${createHash('md5').update(e.text).digest('hex').slice(0, 8)}`
+    if (ids.has(id)) errors.push(`${where}: 聊天彩蛋 ${i + 1} is there twice`)
+    ids.add(id)
+    return {
+      id,
+      // shown when editing and sent to AI: without {字|reading} marks or [[links]]
+      text: plainText(e.text),
+      sentences: makeSentences(e.text, glossary, where),
+      q: e.q,
+      find: e.find || plainText(e.text).match(/[“《]([^”》]{2,14})[”》]/)?.[1] || name,
+    }
+  })
+}
+const eggChars = (eggs) => eggs.reduce((n, e) => n + charCount(e.text), 0)
+
 const PALETTE = ['#ED5126', '#2BAE85', '#425066', '#E3A008', '#8E5BB5']
 
 async function buildSeries(id, index) {
@@ -346,7 +382,8 @@ for (const file of (await readdir('content/places')).filter((f) => f.endsWith('.
   for (const k of ['id', 'name', 'full', 'type', 'short', 'region']) if (!meta[k]) errors.push(`${where}: missing ${k}`)
   if (`${meta.id}.md` !== file) errors.push(`${where}: id should match the file name`)
   if (meta.short && [...meta.short].length !== 1) errors.push(`${where}: short should be one character (put a second one in alias)`)
-  const [intro, eggs = ''] = body.split(/^## 聊天彩蛋\s*$/m)
+  const [intro, eggSrc = ''] = body.split(/^## 聊天彩蛋\s*$/m)
+  const eggs = parseEggs(eggSrc, `place/${meta.id}`, meta.name, placesGlossary, where)
   placeIds.add(meta.id)
   onPage(`place/${meta.id}`, meta.name)
   places.push({
@@ -360,8 +397,8 @@ for (const file of (await readdir('content/places')).filter((f) => f.endsWith('.
     region: meta.region,
     note: meta.note ? makeSentences(meta.note, placesGlossary, where) : [],
     intro: parseBlocks(intro, placesGlossary, where),
-    eggs: parseBlocks(eggs, placesGlossary, where),
-    chars: charCount(intro) + charCount(eggs),
+    eggs,
+    chars: charCount(intro) + eggChars(eggs),
     series: seriesOut.filter((s) => s.summary.provinces.includes(meta.id)).map((s) => s.summary.id),
   })
 }
@@ -441,8 +478,8 @@ for (const c of detail.cities) {
     nickname: w?.meta.nickname ? String(w.meta.nickname) : '',
     facts: makeSentences(cityFacts(c), citiesGlossary, where),
     intro: w ? parseBlocks(w.intro, citiesGlossary, where) : [],
-    eggs: w ? parseBlocks(w.eggs, citiesGlossary, where) : [],
-    chars: w ? charCount(w.intro) + charCount(w.eggs) : 0,
+    eggs: w ? parseEggs(w.eggs, `city/${c.id}`, c.name, citiesGlossary, where) : [],
+    chars: w ? charCount(w.intro) + charCount(w.eggs.replace(/^\s*(问|查)[:：].*$/gm, '')) : 0,
   })
 }
 

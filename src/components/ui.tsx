@@ -54,12 +54,15 @@ export function PageHeader({
   close,
   fallback = '',
   onBack,
+  below,
 }: {
   title?: ReactNode
   right?: ReactNode
   close?: boolean
   fallback?: string
   onBack?: () => void
+  /** a row under the title bar that stays with it, e.g. section jumps */
+  below?: ReactNode
 }) {
   const Icon = close ? XIcon : ArrowLeftIcon
   return (
@@ -75,6 +78,7 @@ export function PageHeader({
         <div className="min-w-0 flex-1 truncate text-[17px] font-extrabold">{title}</div>
         {right}
       </div>
+      {below}
     </header>
   )
 }

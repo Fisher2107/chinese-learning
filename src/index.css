@@ -280,6 +280,15 @@
   .map-province {
     stroke-width: 4px;
   }
+  .map-sight {
+    fill: var(--color-zhu-ink);
+  }
+  .map-river-name {
+    font-weight: 900;
+  }
+  .map-other {
+    opacity: 0.7;
+  }
   .map-selected {
     fill: var(--color-zhu);
     font-weight: 900;
