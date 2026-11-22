@@ -914,6 +914,29 @@
   "w": 640,
   "h": 426
  },
+ "wiki/fanli": {
+  "spec": "范蠡",
+  "qid": "Q1374991",
+  "label": "范蠡",
+  "desc": "中国先秦历史人物，春秋时期越国大夫",
+  "file": "Fanli.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Fanli.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 633,
+  "h": 807
+ },
+ "wiki/fuchai": {
+  "spec": "File:20230208 Bronze sword used by King Fuchai of Wu.jpg",
+  "label": "",
+  "desc": "",
+  "file": "20230208 Bronze sword used by King Fuchai of Wu.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:20230208_Bronze_sword_used_by_King_Fuchai_of_Wu.jpg",
+  "artist": "Windmemories",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 427
+ },
  "wiki/fuchunshanjutu": {
   "spec": "富春山居图",
   "qid": "Q706846",
@@ -937,6 +960,17 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 426
+ },
+ "wiki/helv": {
+  "spec": "File:Swords Pond at Tiger Hill, Suzhou-20250402 (1).jpg",
+  "label": "",
+  "desc": "",
+  "file": "Swords Pond at Tiger Hill, Suzhou-20250402 (1).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Swords_Pond_at_Tiger_Hill,_Suzhou-20250402_(1).jpg",
+  "artist": "Shwangtianyuan",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
  },
  "wiki/leifengta": {
   "spec": "雷峰塔",
