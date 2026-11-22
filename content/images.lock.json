@@ -202,6 +202,30 @@
   "w": 640,
   "h": 374
  },
+ "city/huzhou": {
+  "spec": "南浔镇",
+  "qid": "Q6849907",
+  "label": "南浔镇",
+  "desc": "",
+  "file": "Nanxun - Ancient water town - 0100.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Nanxun_-_Ancient_water_town_-_0100.jpg",
+  "artist": "Stefan Fussan",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 408
+ },
+ "city/jiaxing": {
+  "spec": "Q912306",
+  "qid": "Q912306",
+  "label": "嘉兴南湖",
+  "desc": "",
+  "file": "嘉兴南湖, 2021-10-30 03.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%98%89%E5%85%B4%E5%8D%97%E6%B9%96,_2021-10-30_03.jpg",
+  "artist": "Siyuwj",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 427
+ },
  "city/jilinshi": {
   "spec": "File:吉林雾凇 Frosty Pines in Jilin - panoramio.jpg",
   "label": "",
@@ -221,6 +245,18 @@
   "file": "Baotu Spring, Jinan in Oct 2013.jpg",
   "page": "https://commons.wikimedia.org/wiki/File:Baotu_Spring,_Jinan_in_Oct_2013.jpg",
   "artist": "Windmemories",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "city/jinhua": {
+  "spec": "诸葛八卦村",
+  "qid": "Q11243440",
+  "label": "诸葛八卦村",
+  "desc": "",
+  "file": "Lanxi Zhugecun 2011.04.24 08-55-43.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Lanxi_Zhugecun_2011.04.24_08-55-43.jpg",
+  "artist": "Zhangzhugang",
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 426
@@ -260,6 +296,17 @@
   "w": 640,
   "h": 481
  },
+ "city/lishui": {
+  "spec": "File:云和梯田.jpg",
+  "label": "",
+  "desc": "",
+  "file": "云和梯田.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E4%BA%91%E5%92%8C%E6%A2%AF%E7%94%B0.jpg",
+  "artist": "唐代吉",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 368
+ },
  "city/mohe": {
   "spec": "北极村",
   "qid": "Q10903106",
@@ -296,6 +343,18 @@
   "w": 640,
   "h": 853
  },
+ "city/ningbo": {
+  "spec": "天一阁",
+  "qid": "Q2066117",
+  "label": "天一阁",
+  "desc": "明代兵部右侍郎范钦建造的藏书楼",
+  "file": "Ningbo Tianyige 2013.07.28 09-23-22.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ningbo_Tianyige_2013.07.28_09-23-22.jpg",
+  "artist": "Zhangzhugang",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 426
+ },
  "city/qinhuangdao": {
   "spec": "山海关",
   "qid": "Q1048381",
@@ -319,6 +378,29 @@
   "license": "CC BY 4.0",
   "w": 640,
   "h": 400
+ },
+ "city/quzhou": {
+  "spec": "江郎山",
+  "qid": "Q6112670",
+  "label": "江郎山",
+  "desc": "",
+  "file": "Jiangshan Jianglangshan 2012.07.01 13-08-31.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Jiangshan_Jianglangshan_2012.07.01_13-08-31.jpg",
+  "artist": "Zhangzhugang",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 426
+ },
+ "city/shaoxing": {
+  "spec": "File:绍兴乌篷船.JPG",
+  "label": "",
+  "desc": "",
+  "file": "绍兴乌篷船.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:%E7%BB%8D%E5%85%B4%E4%B9%8C%E7%AF%B7%E8%88%B9.JPG",
+  "artist": "Gisling",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
  },
  "city/shenyang": {
   "spec": "沈阳故宫",
@@ -380,6 +462,30 @@
   "w": 640,
   "h": 480
  },
+ "city/taizhou": {
+  "spec": "国清寺",
+  "qid": "Q2509232",
+  "label": "国清寺",
+  "desc": "浙江省天台县的佛教寺院",
+  "file": "Guoqingsi002r.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Guoqingsi002r.jpg",
+  "artist": "me, Joshtinho",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 960
+ },
+ "city/wenzhou": {
+  "spec": "雁荡山",
+  "qid": "Q21283576",
+  "label": "雁荡山",
+  "desc": "浙江省温州市乐清市境内的山峰",
+  "file": "China2011 Zhejiang YandangShan.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:China2011_Zhejiang_YandangShan.jpg",
+  "artist": "Glasreifen",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 956
+ },
  "city/wuhan": {
   "spec": "武汉长江大桥",
   "qid": "Q8039097",
@@ -415,6 +521,18 @@
   "license": "CC BY 3.0",
   "w": 640,
   "h": 846
+ },
+ "city/wuzhen": {
+  "spec": "乌镇",
+  "qid": "Q1371343",
+  "label": "乌镇",
+  "desc": "中国浙江省桐乡市的镇",
+  "file": "Bridge in Wuzhen 03.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Bridge_in_Wuzhen_03.JPG",
+  "artist": "Immanuel Giel",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
  },
  "city/xian": {
   "spec": "大雁塔",
@@ -452,6 +570,18 @@
   "w": 640,
   "h": 480
  },
+ "city/yiwu": {
+  "spec": "义乌国际商贸城",
+  "qid": "Q10877722",
+  "label": "义乌国际商贸城",
+  "desc": "",
+  "file": "201706 Overview of Yiwu International Trading Town.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:201706_Overview_of_Yiwu_International_Trading_Town.jpg",
+  "artist": "MNXANL",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 425
+ },
  "city/yuncheng": {
   "spec": "解州关帝庙",
   "qid": "Q1552731",
@@ -486,6 +616,18 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 850
+ },
+ "city/zhoushan": {
+  "spec": "普陀山",
+  "qid": "Q716232",
+  "label": "普陀山",
+  "desc": "浙江舟山群島的島嶼",
+  "file": "远眺南海观音像.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E8%BF%9C%E7%9C%BA%E5%8D%97%E6%B5%B7%E8%A7%82%E9%9F%B3%E5%83%8F.jpg",
+  "artist": "Shizhao",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 283
  },
  "feed/taishan": {
   "spec": "File:Mount Tai.jpg",
@@ -914,6 +1056,30 @@
   "w": 640,
   "h": 426
  },
+ "wiki/fanli": {
+  "spec": "范蠡",
+  "qid": "Q1374991",
+  "label": "范蠡",
+  "desc": "中国先秦历史人物，春秋时期越国大夫",
+  "file": "Fanli.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Fanli.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 500,
+  "h": 637
+ },
+ "wiki/fuchai": {
+  "spec": "吴王夫差矛",
+  "qid": "Q3818256",
+  "label": "吴王夫差矛",
+  "desc": "文物",
+  "file": "Wuwangfuchaimao.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Wuwangfuchaimao.JPG",
+  "artist": "fmwang",
+  "license": "Public domain",
+  "w": 640,
+  "h": 853
+ },
  "wiki/fuchunshanjutu": {
   "spec": "富春山居图",
   "qid": "Q706846",
@@ -937,6 +1103,18 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 426
+ },
+ "wiki/huanggongwang": {
+  "spec": "黄公望",
+  "qid": "Q702525",
+  "label": "黄公望",
+  "desc": "",
+  "file": "黃公望像.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E9%BB%83%E5%85%AC%E6%9C%9B%E5%83%8F.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 447
  },
  "wiki/leifengta": {
   "spec": "雷峰塔",
@@ -985,7 +1163,28 @@
   "h": 854
  },
  "wiki/maoyisheng": {
-  "spec": "茅以升"
+  "spec": "Q6753608",
+  "qid": "Q6753608",
+  "label": "茅以昇",
+  "desc": "中国桥梁专家",
+  "file": "Mao Yisheng.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Mao_Yisheng.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 250,
+  "h": 407
+ },
+ "wiki/nansong": {
+  "spec": "宋高宗",
+  "qid": "Q7489",
+  "label": "宋高宗",
+  "desc": "宋朝第十任皇帝，南宋开国皇帝",
+  "file": "Gaozong Of Song.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gaozong_Of_Song.jpg",
+  "artist": "anonymous",
+  "license": "Public domain",
+  "w": 640,
+  "h": 1115
  },
  "wiki/qiandaohu": {
   "spec": "File:Qiandao Lake on 7 Feb 2017.jpg",

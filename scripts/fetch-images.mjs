@@ -156,6 +156,18 @@ async function byName(specs) {
   return out
 }
 
+/**
+ * Where to download a file from, best first. Commons answers a 960px request for a file narrower
+ * than that with the original itself, and originals are throttled far harder than thumbnails
+ * (they 429 run after run), so ask for a standard thumbnail size first and the original last.
+ */
+function downloadUrls(info) {
+  if (/\/\d+px-/.test(info.thumb)) return [info.thumb, info.thumb.replace(/\/\d+px-/, '/500px-')]
+  const m = (info.url ?? '').split('?')[0].match(/^(https:\/\/upload\.wikimedia\.org\/wikipedia\/commons)\/(.+)\/([^/]+)$/)
+  const thumbs = m ? [500, 330, 250].filter((w) => info.width > w).map((w) => `${m[1]}/thumb/${m[2]}/${m[3]}/${w}px-${m[3]}`) : []
+  return [...new Set([...thumbs, info.thumb])]
+}
+
 /** Commons details (licence, author, a 960px thumbnail) for some files. */
 async function fileInfo(files) {
   const out = new Map()
@@ -177,6 +189,7 @@ async function fileInfo(files) {
       const strip = (s = '') => s.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim()
       out.set(asked, {
         thumb: ii.thumburl ?? ii.url,
+        url: ii.url,
         mime: ii.mime,
         width: ii.width,
         page: ii.descriptionurl,
@@ -238,7 +251,7 @@ for (const [key, spec] of todo) {
   // A big original can be refused (429) while its thumbnail is rendered: try a smaller standard size,
   // then leave it for the next run rather than waiting on it
   let r
-  for (const url of [info.thumb, info.thumb.replace(/\/960px-/, '/500px-')]) {
+  for (const url of downloadUrls(info)) {
     try {
       r = await polite(url, {}, 1)
       break
@@ -249,7 +262,11 @@ for (const [key, spec] of todo) {
   if (!r) continue
   const tmp = `${out}.orig`
   await writeFile(tmp, Buffer.from(await r.arrayBuffer()))
-  const width = String(Math.min(WIDTH, info.width || WIDTH))
+  // never stretch: a 500px fallback of a 633px original stays 500px
+  const got0 = process.platform === 'darwin'
+    ? Number(execFileSync('sips', ['-g', 'pixelWidth', tmp]).toString().match(/pixelWidth: (\d+)/)?.[1])
+    : Number(execFileSync('magick', ['identify', '-format', '%w', tmp]).toString())
+  const width = String(Math.min(WIDTH, info.width || WIDTH, got0 || WIDTH))
   if (process.platform === 'darwin') {
     execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', QUALITY, '--resampleWidth', width, tmp, '--out', out], { stdio: 'ignore' })
   } else {

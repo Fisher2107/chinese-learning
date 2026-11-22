@@ -79,10 +79,20 @@ The map's rivers come from Natural Earth (`data/raw/ne/ne_10m_rivers_lake_center
 
 - Each page names its photo in `image:`. Run `node scripts/fetch-images.mjs --only wiki/<id>,wiki/<id>…` for the new pages, and `--only city/<id>,…` for the province's cities that have none yet.
 - **Check every pick by eye.** Look at `label`, `desc` and `file` in `content/images.lock.json`. A name can match the wrong thing: 千岛湖 first matched the Thousand Islands on the US–Canada border. Fix with an explicit `File:` found by searching Commons.
-- Commons refuses bursts (429). The script leaves refused files for the next run, so just run it again tomorrow.
+- Commons refuses bursts (429). The script leaves refused files for the next run, so just run it again tomorrow. A small thumbnail nobody has asked for before can be refused once while Commons renders it: run the same `--only` again a minute later.
+- If a name keeps matching nothing, give the Wikidata Q-id of the thing itself (`city/jiaxing: Q912306` for 嘉兴南湖) or an explicit `File:`.
 - Only CC0, public-domain, CC BY and CC BY-SA photos are kept (the script enforces it).
 
-## 6. Facts and copying
+## 6. Sources, facts and copying
+
+Read more than Wikipedia. Use:
+
+- **Wikipedia** (zh first) for the facts and dates.
+- **The original texts** where there are any: 《史记》, 《左传》 and the rest on zh.wikisource.org. The best stories are often there (范蠡's eldest son and the thousand gold).
+- **知乎专栏** (zhuanlan.zhihu.com), for the stories, debates and angles Wikipedia leaves out: why 夫差 let 勾践 go, what a night out in 临安 was like. Find articles with WebSearch (`allowed_domains: ["zhuanlan.zhihu.com"]`) and read them in the learner's own Chrome through Claude in Chrome (`mcp__claude-in-chrome__*`, a new tab, `get_page_text`), where they are signed in. Zhihu refuses scripted fetches (403), and the app's built-in browser pane isn't signed in (it shows 安全验证). If Chrome isn't connected or shows a login page, don't sign in or get around it: note it in the log and use the other sources. Zhihu posts are written by users and often exaggerate, so take angles and leads from them and check every fact against a second source.
+- **Museums, UNESCO, official and tourism sites** for places and objects.
+
+List what you used under `sources:`, zhihu articles included.
 
 Every claim needs a source you read; numbers and dates need two where possible. Legends are told as legends (传说, 据说). Never invent a quote. Never copy: no run of 10+ Chinese characters may match a source. Public-domain classical lines can be quoted briefly.
 
@@ -92,7 +102,7 @@ Every claim needs a source you read; numbers and dates need two where possible. 
 
 One province a day, in this order. 浙江 is done as the template.
 
-- [x] 浙江 zhejiang (template, 2026-11-21)
+- [x] 浙江 zhejiang (template 2026-11-21, finished 2026-11-22)
 - [ ] 江苏 jiangsu
 - [ ] 四川 sichuan
 - [ ] 陕西 shaanxi
@@ -141,3 +151,4 @@ The daily task doesn't change app code. These are waiting for a yes:
 ## Log
 
 - **2026-11-21** · Built the 百科: `[[links]]`, backlinks, wanted pages, the wiki page and 百科 home, photo rows on province and city pages, a pinned map with rivers, the new stamp quiz, press-to-peek word meanings, the world map inside the main map. 浙江 written as the template: province page rewritten, 21 pages (钱塘江, 钱塘潮, 钱镠, 吴越国, 钱塘江大桥, 茅以升, 千岛湖, 富春山居图, 伍子胥, 西湖, 苏轼, 雷峰塔, 龙井茶, 东坡肉, 岳飞, 勾践, 西施, 王羲之, 鲁迅, 绍兴黄酒, 良渚古城), 钱塘江 and 瓯江 added to the map, 杭州 and 绍兴 city pages linked in. 38 wanted pages queued. Still to do: 茅以升's photo (Commons 429, retry).
+- **2026-11-22** · Finished 浙江 against the checklist (it had been ticked too early). Wanted pages: 夫差, 范蠡, 黄公望, 南宋. New city pages: 金华, 台州, 湖州, 丽水, 衢州. 宁波, 温州, 嘉兴, 舟山, 乌镇, 义乌, 杭州, 绍兴 now link into the 百科 (e.g. 温州 → 黄公望, 舟山 → 夫差's 甬东, 宁波 → 南宋). Every 浙江 city has a photo now (12 fetched, 绍兴 and 丽水 swapped by hand for 乌篷船 and 云和梯田), plus 茅以升. Fixed `fetch-images.mjs`: files narrower than 960px used to fall back to the original, which Commons throttles, so they 429'd every run; it now asks for a 500/330/250px thumbnail first. Added 知乎专栏 to §6 at the learner's request and read 9 articles in the learner's Chrome. From them, after checking each fact elsewhere: 《越公其事》 (清华简) on why 夫差 spared 越, checked against Yuri Pines (Early China 2022); 子贡 on 夫差 (史记); 文种's "七术" and 庄生 in 范蠡's son story (史记); 元 restoring 科举 while 黄公望 was in prison; why 南宋 chose 杭州 over 南京, the 1111 太湖 freeze (竺可桢), 《梦粱录》 night markets, the 柳永/完颜亮 legend. Dropped as unverified or wrong: a "chrome-plated" 夫差 sword, 黄公望 being pushed into the river, 范蠡 as the author of 夏则资皮 (《国语》 gives it to 文种). Also fixed 的士兵 being read as 的士 (taxi) on four pages. Wanted list: 40 (阖闾, 京杭大运河, 陆游, 瓯江, 普陀山 lead).

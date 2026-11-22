@@ -5,7 +5,7 @@ en: Mao Yisheng, bridge engineer
 kind: 人物
 province: [jiangsu, zhejiang]
 city: [zhenjiang, hangzhou]
-image: 'File:Mao Yisheng.jpg'
+image: Q6753608
 dates: 1896—1989
 lede: '中国最有名的造桥专家。他用两年半造好了[[钱塘江大桥]]，又在89天后参与把它炸断，八年后再亲手修好。'
 facts:
