@@ -6,10 +6,15 @@
 //   content/terms.yml                names and words the dictionary lacks
 //   content/places/<id>.md           one page per province: intro, then ## 聊天彩蛋 bullets
 //   content/feed/<slug>.md           刷一刷 cards: title is the hook question, body 150–300 字
-// Output: public/content/{index.json, series/<id>.json, texts/<id>.json, places.json, feed.json}
+//   content/wiki/<id>.md             百科: one page per place, person, river, event, legend, dish…
+// Output: public/content/{index.json, series/<id>.json, texts/<id>.json, places.json, feed.json,
+//         wiki-index.json, wiki/<id>.json}
 //
 // Markup inside stories:
 //   {假|jià}                  force a reading
+//   [[钱塘江]] [[苏轼|苏东坡]]   a link, by name or id, to a 百科 page, a province or a city. Names
+//                             with no page yet are "wanted": they print at the end of the build
+//                             (most-linked first) so the next pages to write are the ones asked for
 //   ::原文[text-id#P]         excerpt of paragraph P of a text (1-based)
 //   ::原文[text-id#P:a-b]     sentences a..b of paragraph P
 //   ## heading / - bullet     headings and list items (used in after.md)
@@ -19,7 +24,9 @@ import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { parse as parseYaml } from 'yaml'
-import { splitSentences, tokenizeSentence, glossFor, isHan, readings, numericToMarks } from '../src/lib/zh-core.ts'
+import { pinyin as pinyinPro } from 'pinyin-pro'
+import { geoConicEqualArea } from 'd3-geo'
+import { splitSentences, tokenizeSentence, glossFor, isHan, readings, numericToMarks, plainText } from '../src/lib/zh-core.ts'
 import { JIEQI } from '../src/lib/jieqi.ts'
 
 const CHECK = process.argv.includes('--check')
@@ -69,8 +76,80 @@ function splitFrontmatter(src, file) {
   return { meta: parseYaml(m[1]) ?? {}, body: m[2] }
 }
 
+// ---------- links between pages ----------
+// Every page that can be linked to, by id and by name: 百科 pages first, then provinces, then cities.
+const WIKI_DIR = 'content/wiki'
+const wikiRaw = []
+for (const file of existsSync(WIKI_DIR) ? (await readdir(WIKI_DIR)).filter((f) => f.endsWith('.md')).sort() : []) {
+  const src = await readFile(`${WIKI_DIR}/${file}`, 'utf8')
+  wikiRaw.push({ file, ...splitFrontmatter(src, `wiki/${file}`) })
+}
+const routeOf = new Map()
+const titleOf = new Map()
+const claim = (key, route) => key && !routeOf.has(String(key)) && routeOf.set(String(key), route)
+for (const { meta } of wikiRaw) {
+  const route = `wiki/${meta.id}`
+  titleOf.set(route, meta.name)
+  claim(meta.id, route)
+  claim(meta.name, route)
+  for (const a of meta.aka ?? []) claim(a, route)
+  // names stay one word, read the way the page says
+  if (meta.name && !terms[meta.name])
+    terms[meta.name] = { p: (meta.py ?? pinyinPro(meta.name, { toneSandhi: false })).replace(/\s+/g, ''), d: meta.en ?? '' }
+}
+for (const file of (await readdir('content/places')).filter((f) => f.endsWith('.md'))) {
+  const { meta } = splitFrontmatter(await readFile(`content/places/${file}`, 'utf8'), file)
+  titleOf.set(`place/${meta.id}`, meta.name)
+  for (const k of [meta.id, meta.name, meta.full]) claim(k, `place/${meta.id}`)
+}
+for (const c of mapDetail.cities) {
+  if (c.kind === 'muni') continue
+  titleOf.set(`city/${c.id}`, c.name)
+  for (const k of [c.id, c.name, c.full]) claim(k, `city/${c.id}`)
+}
+
+/** route → pages linking to it */
+const backlinks = new Map()
+/** names linked to that have no page yet → the pages asking for them */
+const wanted = new Map()
+/** the page whose text is being built, so links know where they come from */
+let page = { route: '', title: '' }
+const onPage = (route, title) => (page = { route, title })
+
+/** [[钱塘江]] / [[苏轼|苏东坡]] / [[qiantangjiang]] → [[wiki/qiantangjiang|钱塘江]], or plain text if there's no page yet. */
+function resolveLinks(text, where) {
+  return text.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, rawTarget, label) => {
+    const target = rawTarget.trim()
+    // a route given directly: [[series/baishezhuan|白蛇传]], [[text/lun-leifengta|论雷峰塔的倒掉]]
+    const direct = /^(series|text|feed)\/[\w-]+$/.test(target) ? target : undefined
+    if (direct) {
+      const [kind, rid] = direct.split('/')
+      const dir = { series: 'content/series', text: 'content/texts', feed: 'content/feed' }[kind]
+      if (!existsSync(kind === 'series' ? `${dir}/${rid}` : `${dir}/${rid}.md`)) errors.push(`${where}: link to missing ${direct}`)
+      if (!label) errors.push(`${where}: [[${direct}]] needs a label: [[${direct}|名字]]`)
+    }
+    const route = direct ?? routeOf.get(target)
+    if (!route) {
+      if (!isHan(target)) errors.push(`${where}: link to unknown id "${target}"`)
+      else if (page.route) {
+        const from = wanted.get(target) ?? new Map()
+        from.set(page.route, page.title)
+        wanted.set(target, from)
+      }
+      return label ?? target
+    }
+    if (page.route && route !== page.route) {
+      const from = backlinks.get(route) ?? new Map()
+      from.set(page.route, page.title)
+      backlinks.set(route, from)
+    }
+    return `[[${route}|${label ?? (isHan(target) ? target : titleOf.get(route))}]]`
+  })
+}
+
 /** Tokenizes text into sentences, recording glossary entries and ambiguous readings. */
 function makeSentences(text, glossary, where, trackAmbiguity = true) {
+  text = resolveLinks(String(text), where)
   return splitSentences(text).map((s) => {
     const { tokens, ambiguous: amb } = tokenizeSentence(s, lookup)
     for (const tok of tokens) {
@@ -188,6 +267,7 @@ const PALETTE = ['#ED5126', '#2BAE85', '#425066', '#E3A008', '#8E5BB5']
 async function buildSeries(id, index) {
   const dir = `content/series/${id}`
   const { meta, body } = splitFrontmatter(await readFile(`${dir}/index.md`, 'utf8'), `${id}/index.md`)
+  onPage(`series/${id}`, meta.title)
   const glossary = {}
   const files = (await readdir(dir)).filter((f) => /^\d+\.md$/.test(f)).sort()
   const full = []
@@ -268,6 +348,7 @@ for (const file of (await readdir('content/places')).filter((f) => f.endsWith('.
   if (meta.short && [...meta.short].length !== 1) errors.push(`${where}: short should be one character (put a second one in alias)`)
   const [intro, eggs = ''] = body.split(/^## 聊天彩蛋\s*$/m)
   placeIds.add(meta.id)
+  onPage(`place/${meta.id}`, meta.name)
   places.push({
     id: meta.id,
     name: meta.name,
@@ -296,6 +377,7 @@ for (const file of existsSync(feedDir) ? (await readdir(feedDir)).filter((f) => 
   const where = `feed/${file}`
   const { meta, body } = splitFrontmatter(await readFile(`${feedDir}/${file}`, 'utf8'), where)
   const id = meta.id ?? file.slice(0, -3)
+  onPage(`feed/${id}`, String(meta.title ?? id))
   if (!meta.title) errors.push(`${where}: missing title (the hook question)`)
   if (meta.province && !placeIds.has(meta.province)) errors.push(`${where}: unknown province "${meta.province}"`)
   if (meta.city && (!cityProvinces.has(meta.city) || cityProvinces.get(meta.city) !== meta.province)) errors.push(`${where}: city "${meta.city}" must belong to the card's province`)
@@ -353,6 +435,7 @@ for (const c of detail.cities) {
   if (c.kind === 'muni') continue // their page is the province page
   const w = written.get(c.id)
   const where = w?.where ?? `cities/${c.id}`
+  onPage(`city/${c.id}`, c.name)
   cities.push({
     id: c.id,
     nickname: w?.meta.nickname ? String(w.meta.nickname) : '',
@@ -363,7 +446,80 @@ for (const c of detail.cities) {
   })
 }
 
+// ---------- 百科 ----------
+// Pages about one thing each: a place, a person, a river, an event, a legend, a dish. Linked from
+// stories, provinces and each other, so one page leads to the next.
+const WIKI_KINDS = ['景点', '地点', '河流', '山', '湖', '人物', '事件', '朝代', '传说', '美食', '文化', '建筑', '作品', '物产']
+const proj = mapDetail.proj && geoConicEqualArea().parallels([25, 47]).rotate([-105, 0]).scale(mapDetail.proj.scale).translate(mapDetail.proj.translate)
+const asList = (v) => (v == null ? [] : Array.isArray(v) ? v.map(String) : [String(v)])
+const wiki = []
+const wikiIndexGlossary = {}
+for (const { file, meta, body } of wikiRaw) {
+  const where = `wiki/${file}`
+  const id = String(meta.id ?? '')
+  onPage(`wiki/${id}`, meta.name)
+  if (`${id}.md` !== file) errors.push(`${where}: id should match the file name`)
+  if (placeIds.has(id) || mapCities.has(id)) errors.push(`${where}: id "${id}" is already a province or city id; pick another`)
+  for (const k of ['name', 'kind', 'lede']) if (!meta[k]) errors.push(`${where}: missing ${k}`)
+  if (meta.kind && !WIKI_KINDS.includes(meta.kind)) errors.push(`${where}: kind "${meta.kind}" should be one of ${WIKI_KINDS.join(' ')}`)
+  const provinces = asList(meta.province)
+  for (const p of provinces) if (!placeIds.has(p)) errors.push(`${where}: unknown province "${p}"`)
+  const cityIds = asList(meta.city)
+  for (const c of cityIds) if (!mapCities.has(c)) errors.push(`${where}: unknown city "${c}"`)
+  let xy
+  if (meta.at) {
+    if (!Array.isArray(meta.at) || meta.at.length !== 2 || !proj) errors.push(`${where}: at should be [lon, lat]`)
+    else xy = proj(meta.at).map((n) => Math.round(n * 10) / 10)
+  }
+  if (meta.river && !mapDetail.rivers.some((r) => r.zh === meta.river)) errors.push(`${where}: no river "${meta.river}" on the map`)
+  if (!Array.isArray(meta.sources) || !meta.sources.length) errors.push(`${where}: needs at least one source`)
+  const glossary = {}
+  const quiz = (meta.quiz ?? []).map((q, i) => {
+    if (!q.q || !Array.isArray(q.options) || q.options.length < 2 || !(q.answer >= 0 && q.answer < q.options.length) || !q.why)
+      errors.push(`${where}: quiz ${i + 1} needs q, options, a valid answer index and why`)
+    return { q: plainText(String(q.q)), options: q.options.map((o) => plainText(String(o))), answer: q.answer, why: plainText(String(q.why ?? '')), photo: q.photo ? String(q.photo) : undefined }
+  })
+  const next = (meta.next ?? []).map((n, i) => {
+    const route = routeOf.get(String(n.to))
+    if (!n.hook) errors.push(`${where}: next ${i + 1} needs a hook question`)
+    if (!route) {
+      if (isHan(String(n.to))) {
+        const from = wanted.get(String(n.to)) ?? new Map()
+        from.set(page.route, page.title)
+        wanted.set(String(n.to), from)
+      } else errors.push(`${where}: next → unknown "${n.to}"`)
+      return undefined
+    }
+    return { route, title: titleOf.get(route), hook: makeSentences(String(n.hook), glossary, where) }
+  }).filter(Boolean)
+  const blocks = parseBlocks(body, glossary, where)
+  const chars = charCount(body)
+  if (chars < 150) errors.push(`${where}: body is only ${chars} 字; a 百科 page needs real substance`)
+  wiki.push({
+    id,
+    name: meta.name,
+    en: meta.en ?? '',
+    py: terms[meta.name]?.p ?? '',
+    kind: meta.kind,
+    dates: meta.dates ? String(meta.dates) : '',
+    provinces,
+    cities: cityIds,
+    xy,
+    river: meta.river ?? '',
+    lede: makeSentences(meta.lede ?? '', glossary, where),
+    ledeIndex: makeSentences(meta.lede ?? '', wikiIndexGlossary, where),
+    facts: (meta.facts ?? []).map(([k, v]) => ({ k: String(k), v: makeSentences(String(v), glossary, where) })),
+    body: blocks,
+    next,
+    quiz,
+    sources: meta.sources ?? [],
+    chars,
+    glossary,
+  })
+}
+
 // 节气 hooks for the home banner, tokenized so every word can be tapped
+onPage('', '')
 const jieqiGlossary = {}
 const jieqi = Object.fromEntries(JIEQI.map((j) => [j.name, makeSentences(j.hook, jieqiGlossary, `jieqi/${j.name}`)]))
 
@@ -390,6 +546,7 @@ for (const [id, image] of Object.entries(historyMedia)) {
 }
 for (const period of periods) {
   if (!historyMedia['map-' + period.id] || !period.events.length) throw new Error(`Missing map or events: ${period.id}`)
+  onPage(`map/history/${period.id}`, `历史地图 · ${period.title}`)
   const paragraph = text => [{ kind: 'p', sentences: makeSentences(text, historyGlossary, 'atlas/' + period.id) }]
   period.overview = paragraph(period.overview)
   for (const event of period.events) {
@@ -418,7 +575,29 @@ if (existsSync('content/images.lock.json')) {
   }
 }
 
+// pages asking for a 百科 page that doesn't exist yet, most-asked first
+const wantedList = [...wanted].map(([name, from]) => ({ name, from: [...from.values()] })).sort((a, b) => b.from.length - a.from.length || a.name.localeCompare(b.name, 'zh'))
+if (wantedList.length) {
+  console.log(`\n百科 pages people link to that don't exist yet (${wantedList.length}), most wanted first:`)
+  for (const w of wantedList.slice(0, 25)) console.log(`  ${w.name} ← ${w.from.slice(0, 4).join('、')}${w.from.length > 4 ? ` …+${w.from.length - 4}` : ''}`)
+}
+
 if (!CHECK) {
+  await mkdir('public/content/wiki', { recursive: true })
+  const linksTo = (route) => [...(backlinks.get(route) ?? new Map())].map(([r, title]) => ({ route: r, title }))
+  for (const w of wiki) {
+    const { ledeIndex, ...rest } = w
+    await writeFile(`public/content/wiki/${w.id}.json`, JSON.stringify({ ...rest, backlinks: linksTo(`wiki/${w.id}`) }))
+  }
+  await writeFile(
+    'public/content/wiki-index.json',
+    JSON.stringify({
+      pages: wiki.map((w) => ({ id: w.id, name: w.name, en: w.en, py: w.py, kind: w.kind, dates: w.dates, provinces: w.provinces, cities: w.cities, xy: w.xy, river: w.river, lede: w.ledeIndex, chars: w.chars, links: (backlinks.get(`wiki/${w.id}`)?.size ?? 0) })),
+      quiz: Object.fromEntries(wiki.filter((w) => w.quiz.length).map((w) => [w.id, w.quiz])),
+      wanted: wantedList,
+      glossary: wikiIndexGlossary,
+    }),
+  )
   await mkdir('public/content/series', { recursive: true })
   await mkdir('public/content/texts', { recursive: true })
   for (const { file } of seriesOut) await writeFile(`public/content/series/${file.id}.json`, JSON.stringify(file))
@@ -438,4 +617,4 @@ if (!CHECK) {
   await writeFile('public/content/cities.json', JSON.stringify({ cities, glossary: citiesGlossary }))
   await writeFile('public/content/photos.json', JSON.stringify(photos))
 }
-console.log(`\n${seriesOut.length} series, ${textOut.length} texts, ${places.length} places, ${written.size}/${cities.length} city pages, ${feed.length} feed cards ${CHECK ? 'checked' : 'built'}.`)
+console.log(`\n${seriesOut.length} series, ${textOut.length} texts, ${places.length} places, ${written.size}/${cities.length} city pages, ${feed.length} feed cards, ${wiki.length} 百科 pages (${wanted.size} wanted) ${CHECK ? 'checked' : 'built'}.`)

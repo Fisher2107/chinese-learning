@@ -7,7 +7,7 @@
 //   npm run images -- --only place/fujian,city/guangzhou fetch selected keys only
 //
 // Only CC0, public-domain, CC BY and CC BY-SA photos are kept.
-import { readFile, writeFile, mkdir, unlink } from 'node:fs/promises'
+import { readFile, readdir, writeFile, mkdir, unlink } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { dirname } from 'node:path'
@@ -43,6 +43,13 @@ for (const b of raw.results.bindings) {
 /** key → spec: what each photo should show */
 const jobs = new Map()
 for (const [key, spec] of Object.entries(manifest)) jobs.set(key, String(spec).trim())
+// 百科 pages name their own photo in their frontmatter (image: 钱塘江大桥 / Q… / File:…)
+if (existsSync('content/wiki'))
+  for (const file of (await readdir('content/wiki')).filter((f) => f.endsWith('.md'))) {
+    const m = (await readFile(`content/wiki/${file}`, 'utf8')).match(/^---\n([\s\S]*?)\n---/)
+    const meta = m ? parseYaml(m[1]) : {}
+    if (meta?.id && meta.image && !jobs.has(`wiki/${meta.id}`)) jobs.set(`wiki/${meta.id}`, String(meta.image).trim())
+  }
 for (const c of detail.cities) {
   const key = `city/${c.id}`
   if (jobs.has(key)) continue

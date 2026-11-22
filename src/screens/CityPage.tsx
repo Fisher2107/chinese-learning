@@ -2,7 +2,9 @@ import { Photo } from '../components/Photo.tsx'
 import { useEffect } from 'react'
 import { ChatCircleDotsIcon, LightbulbIcon, MapPinIcon } from '@phosphor-icons/react'
 import { db, type WordSource } from '../lib/db.ts'
-import { loadCities, loadFeed, loadPlaces, useLoad } from '../lib/content.ts'
+import { loadCities, loadFeed, loadPlaces, loadWikiIndex, useLoad } from '../lib/content.ts'
+import { FOOD_KINDS, pagesAbout, SIGHT_KINDS, STORY_KINDS, useWikiProgress } from '../lib/wiki.ts'
+import { PeopleRow, PhotoRow } from '../components/WikiCards.tsx'
 import { CITY_BY_ID, cityKind, citiesOf } from '../lib/cities.ts'
 import { markCityRead, markCityUnread, markKey, setLearnt, useMarks, visitCity } from '../lib/learn.ts'
 import { useLiveQuery } from '../lib/live.ts'
@@ -22,6 +24,8 @@ export function CityPage({ id }: { id: string }) {
   const feed = useLoad(loadFeed, 'feed').data
   const stories = feed?.cards.filter(c => c.city === id) ?? []
   const marks = useMarks()
+  const wikiIndex = useLoad(loadWikiIndex, 'wiki-index').data
+  const { seen } = useWikiProgress()
   const row = useLiveQuery(() => db.cities.get(id), [id])
   useEffect(() => {
     visitCity(id)
@@ -36,6 +40,7 @@ export function CityPage({ id }: { id: string }) {
   const siblings = citiesOf(city.prov).filter((c) => c.kind !== 'muni')
   const learnt = marks.learnt.has(markKey('city', id))
   const written = !!content?.intro.length
+  const pages = pagesAbout(wikiIndex, { city: id })
 
   return (
     <div className="pb-12">
@@ -66,6 +71,8 @@ export function CityPage({ id }: { id: string }) {
           </div>
         </div>
 
+        <PhotoRow title={`去${city.name}，必看`} pages={pages.filter((p) => SIGHT_KINDS.has(p.kind))} seen={seen} />
+
         <div className="mt-5 rounded-2xl bg-paper p-4 text-[19px] text-paper-text">
           <ZhText id={`city-${id}`} paras={written ? content!.intro : [{ kind: 'p', sentences: content?.facts ?? [] }]} glossary={file.glossary} source={source} />
         </div>
@@ -95,6 +102,9 @@ export function CityPage({ id }: { id: string }) {
             <ReadMark readAt={row?.read} onRead={() => markCityRead(id, content!.chars)} onUnread={() => markCityUnread(id)} />
           </div>
         )}
+
+        <PeopleRow title={`${city.name}的人物`} pages={pages.filter((p) => p.kind === '人物')} seen={seen} />
+        <PhotoRow title="故事 · 传说 · 美食" pages={pages.filter((p) => STORY_KINDS.has(p.kind) || FOOD_KINDS.has(p.kind))} seen={seen} />
 
         {stories.length > 0 && <Section title="这里的故事">
           <ul className="tile divide-y divide-line">{stories.map(c => <li key={c.id}>

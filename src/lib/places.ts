@@ -2,7 +2,7 @@ import { useLiveQuery } from './live.ts'
 import MAP from '../data/china-map.json'
 import { db } from './db.ts'
 import { addChars, addCoins, recordActivity } from './stats.ts'
-import type { FeedCard, Place, Region, SeriesSummary } from './types.ts'
+import type { FeedCard, Place, Region, Sentence, SeriesSummary, WikiIndex } from './types.ts'
 
 export { MAP }
 export type MapProvince = (typeof MAP.provinces)[number]
@@ -130,6 +130,10 @@ export interface QuizQuestion {
   answer: number
   /** shown after answering, right or wrong */
   why: string
+  /** a photo key shown with the question */
+  photo?: string
+  /** where to read more: shown after answering */
+  more?: { route: string; title: string }
 }
 
 function shuffle<T>(a: T[]): T[] {
@@ -150,8 +154,8 @@ export function shortQuestion(p: Place, all: Place[]): QuizQuestion {
   return { q: `${p.name}的简称是哪个字？`, ...choice(p.short, all.map((x) => x.short)), why: `${p.name}简称“${p.short}”${p.alias ? `，也可以叫“${p.alias}”` : ''}。` }
 }
 
-/** Three quick questions about a province: 简称, 省会 (or region), and a neighbour. */
-export function makeQuiz(p: Place, all: Place[]): QuizQuestion[] {
+/** The old three: 简称, 省会 (or region), and a neighbour. One of them warms up every quiz. */
+function basics(p: Place, all: Place[]): QuizQuestion[] {
   const byId = new Map(all.map((x) => [x.id, x]))
   const qs: QuizQuestion[] = [shortQuestion(p, all)]
   if (p.capital) {
@@ -165,14 +169,93 @@ export function makeQuiz(p: Place, all: Place[]): QuizQuestion[] {
     const yes = byId.get(shuffle(neighbours)[0])!
     const no = all.filter((x) => x.id !== p.id && !neighbours.includes(x.id)).map((x) => x.name)
     const names = neighbours.map((id) => byId.get(id)!.name).join('、')
-    qs.push({ q: `哪个地方和${p.name}挨着？`, ...choice(yes.name, no), why: `和${p.name}挨着的有：${names}。` })
-  } else {
-    const islands = ['hainan', 'taiwan']
-    qs.push({
-      q: `${p.name}是哪一种行政区？`,
-      ...choice(p.type, ['省', '自治区', '直辖市', '特别行政区']),
-      why: `${p.full}是${p.type}${islands.includes(p.id) ? '，也是一个岛' : ''}。`,
-    })
+    qs.push({ q: `哪个地方和${p.name}挨着？`, ...choice(yes.name, no), why: `和${p.name}挨着的有：${names}。`, more: { route: `place/${yes.id}`, title: yes.name } })
   }
   return qs
 }
+
+export interface QuizSources {
+  /** the 百科 list */
+  wiki?: WikiIndex
+  /** photo keys that exist */
+  photos: Set<string>
+  /** cities on the map: id, name, province */
+  cities: { id: string; name: string; prov: string; kind: string }[]
+  /** 百科 pages the user has opened: their questions come first */
+  seen: Set<string>
+}
+
+const SIGHTS = new Set(['景点', '地点', '河流', '山', '湖', '建筑'])
+
+/**
+ * 集章: about six questions on what makes the place itself: photos of its famous sights ("这是哪里？"),
+ * its people, the questions written with its 百科 pages (pages you've read come first), which city
+ * things are in, and one of the basics. Each answer says why and where to read more.
+ */
+export function makeQuiz(p: Place, all: Place[], src: QuizSources): QuizQuestion[] {
+  const pages = (src.wiki?.pages ?? []).filter((w) => w.provinces.includes(p.id))
+  const others = (src.wiki?.pages ?? []).filter((w) => !w.provinces.includes(p.id))
+  const more = (id: string, name: string) => ({ route: `wiki/${id}`, title: name })
+  const out: QuizQuestion[] = []
+
+  // 1. a famous sight, by its photo
+  const sights = shuffle(pages.filter((w) => SIGHTS.has(w.kind) && src.photos.has(`wiki/${w.id}`)))
+  if (sights.length) {
+    const s = sights[0]
+    const pool = [...pages.filter((w) => SIGHTS.has(w.kind)), ...shuffle(others.filter((w) => SIGHTS.has(w.kind)))].map((w) => w.name)
+    out.push({ q: '照片里是哪儿？', photo: `wiki/${s.id}`, ...choice(s.name, pool), why: plainLede(s.lede), more: more(s.id, s.name) })
+  } else {
+    // no 百科 photos yet: a city of this province, by its photo
+    const mine = shuffle(src.cities.filter((c) => c.prov === p.id && c.kind !== 'muni' && src.photos.has(`city/${c.id}`)))
+    if (mine.length) {
+      const c = mine[0]
+      const pool = [...src.cities.filter((x) => x.prov === p.id), ...shuffle(src.cities)].map((x) => x.name)
+      out.push({ q: `照片里是${p.name}的哪个城市？`, photo: `city/${c.id}`, ...choice(c.name, pool), why: `这是${c.name}。`, more: { route: `city/${c.id}`, title: c.name } })
+    }
+  }
+
+  // 2. someone from here
+  const people = shuffle(pages.filter((w) => w.kind === '人物'))
+  if (people.length) {
+    const who = people[0]
+    if (src.photos.has(`wiki/${who.id}`)) {
+      const pool = [...people.slice(1), ...shuffle(others.filter((w) => w.kind === '人物'))].map((w) => w.name)
+      if (pool.length >= 3) out.push({ q: '这位是谁？', photo: `wiki/${who.id}`, ...choice(who.name, pool), why: plainLede(who.lede), more: more(who.id, who.name) })
+    } else {
+      const pool = shuffle(others.filter((w) => w.kind === '人物')).map((w) => w.name)
+      if (pool.length >= 3) out.push({ q: `下面哪一位跟${p.name}关系最深？`, ...choice(who.name, pool), why: plainLede(who.lede), more: more(who.id, who.name) })
+    }
+  }
+
+  // 3. questions written with the pages: read ones first
+  const written = pages.flatMap((w) => (src.wiki?.quiz[w.id] ?? []).map((q) => ({ q, w })))
+  const ordered = [...shuffle(written.filter((x) => src.seen.has(x.w.id))), ...shuffle(written.filter((x) => !src.seen.has(x.w.id)))]
+  for (const { q, w } of ordered.slice(0, 3)) {
+    const options = shuffle(q.options.map((o, i) => ({ o, right: i === q.answer })))
+    out.push({ q: q.q, options: options.map((x) => x.o), answer: options.findIndex((x) => x.right), why: q.why, photo: q.photo, more: more(w.id, w.name) })
+  }
+
+  // 4. which city a sight is in
+  const placed = shuffle(pages.filter((w) => SIGHTS.has(w.kind) && w.cities.length === 1))
+  const inCity = placed.find((w) => !out.some((q) => q.more?.route === `wiki/${w.id}`)) ?? placed[0]
+  if (inCity) {
+    const city = src.cities.find((c) => c.id === inCity.cities[0])
+    if (city) {
+      const pool = shuffle(src.cities.filter((c) => c.prov === p.id && c.kind !== 'muni')).map((c) => c.name)
+      if (pool.length >= 3) out.push({ q: `${inCity.name}在哪个城市？`, ...choice(city.name, pool), why: `${inCity.name}在${city.name}。`, more: more(inCity.id, inCity.name) })
+    }
+  }
+
+  // 5. basics: one if there's plenty else, all of them if there's little
+  const b = shuffle(basics(p, all))
+  const fill = out.length >= 4 ? b.slice(0, 1) : b
+  // a city of this province among others, if still short
+  if (out.length + fill.length < 5) {
+    const mine = shuffle(src.cities.filter((c) => c.prov === p.id && c.kind !== 'muni'))[0]
+    const pool = shuffle(src.cities.filter((c) => c.prov !== p.id && c.kind !== 'muni')).map((c) => c.name)
+    if (mine) fill.push({ q: `哪个城市在${p.name}？`, ...choice(mine.name, pool), why: `${mine.name}在${p.name}。`, more: { route: `city/${mine.id}`, title: mine.name } })
+  }
+  return [fill[0], ...out, ...fill.slice(1)].filter(Boolean).slice(0, 7)
+}
+
+const plainLede = (lede: Sentence[]) => lede.map((s) => s.tokens.map((t) => t.t).join('')).join('')

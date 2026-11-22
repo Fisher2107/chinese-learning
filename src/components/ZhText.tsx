@@ -1,10 +1,15 @@
-import { memo, useMemo, type MouseEvent } from 'react'
+import { memo, useMemo, useRef, type PointerEvent } from 'react'
 import { useLiveQuery } from '../lib/live.ts'
 import type { Para } from '../lib/types.ts'
 import { db, type WordSource } from '../lib/db.ts'
-import { useWordSheet } from './word-context.ts'
+import { go } from '../lib/router.ts'
+import { useWordSheet, type WordTarget } from './word-context.ts'
 
 const HAN = /[㐀-鿿]/
+/** a press shorter than this, without moving, is a tap */
+const TAP_MS = 320
+/** how long a tapped word's meaning stays up */
+const LINGER_MS = 2200
 
 export function useSavedWords(): Set<string> {
   // Read whole rows, not orderBy('word').uniqueKeys(): that opens a 'nextunique' cursor, which
@@ -12,6 +17,13 @@ export function useSavedWords(): Set<string> {
   // with Chinese text runs this.
   const words = useLiveQuery(() => db.words.toArray(), [], [])
   return useMemo(() => new Set(words.map((w) => w.word)), [words])
+}
+
+/** 百科 pages already opened, as routes (wiki/qiantangjiang), so links to them look visited. */
+export function useSeenPages(): Set<string> {
+  // whole rows for the same iPhone reason as above; the table is a few hundred rows at most
+  const rows = useLiveQuery(() => db.wiki.toArray(), [], [])
+  return useMemo(() => new Set(rows.map((r) => `wiki/${r.id}`)), [rows])
 }
 
 interface Props {
@@ -27,29 +39,107 @@ interface Props {
   className?: string
 }
 
-/** Chinese text where every word can be tapped to open its word card. Pinyin only ever shows in that card. */
+/**
+ * Chinese text where every word can be pressed, as in Du Chinese: hold a word to see its pinyin and
+ * meaning, let go and it disappears. A quick tap shows it for a moment; tapping the bubble (or
+ * double-tapping the word) opens the full word card. Linked words (百科) open their page on a tap.
+ */
 export const ZhText = memo(function ZhText({ paras, glossary, source, id, speaking, ui, className = '' }: Props) {
   const saved = useSavedWords()
+  const seen = useSeenPages()
   const sheet = useWordSheet()
+  const root = useRef<HTMLDivElement>(null)
+  const press = useRef<{ k: string; t0: number; x: number; y: number; moved: boolean } | null>(null)
+  const lastTap = useRef({ k: '', t: 0 })
+  // what a tap decided to do, done on the click that follows it, so the phone's click can't land
+  // on whatever the next page puts under the finger
+  const onTap = useRef<(() => void) | null>(null)
 
-  function onClick(e: MouseEvent) {
-    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-k]')
-    if (!el) return
-    const [pi, si, ti] = el.dataset.k!.split('.').map(Number)
+  function target(k: string): WordTarget {
+    const [pi, si, ti] = k.split('.').map(Number)
     const sentence = paras[pi].sentences[si].tokens
     const token = sentence[ti]
-    sheet.open({ token, gloss: glossary?.[`${token.t}|${token.p}`], sentence, source, key: `${id}:${el.dataset.k}` })
+    return { token, gloss: glossary?.[`${token.t}|${token.p}`], sentence, source, key: `${id}:${k}` }
+  }
+  const wordEl = (el: Element | null) => {
+    const w = el?.closest<HTMLElement>('[data-k]')
+    return w && root.current?.contains(w) ? w : undefined
+  }
+
+  function down(e: PointerEvent) {
+    if (e.pointerType === 'mouse' && e.button !== 0) return
+    const el = wordEl(e.target as Element)
+    if (!el) return
+    const k = el.dataset.k!
+    onTap.current = null
+    press.current = { k, t0: performance.now(), x: e.clientX, y: e.clientY, moved: false }
+    sheet.peek(target(k), el.getBoundingClientRect())
+  }
+
+  function move(e: PointerEvent) {
+    const p = press.current
+    if (!p) return
+    if (Math.hypot(e.clientX - p.x, e.clientY - p.y) > 8) p.moved = true
+    // slide along the line to read the next word
+    const el = wordEl(document.elementFromPoint(e.clientX, e.clientY))
+    if (el && el.dataset.k !== p.k) {
+      p.k = el.dataset.k!
+      sheet.peek(target(p.k), el.getBoundingClientRect())
+    }
+  }
+
+  function up() {
+    const p = press.current
+    press.current = null
+    if (!p) return
+    if (p.moved || performance.now() - p.t0 > TAP_MS) return sheet.unpeek(200)
+    const t = target(p.k)
+    const route = t.token.k
+    if (route) {
+      sheet.unpeek()
+      onTap.current = () => go(route)
+      return
+    }
+    const now = performance.now()
+    if (lastTap.current.k === p.k && now - lastTap.current.t < 450) {
+      lastTap.current = { k: '', t: 0 }
+      sheet.unpeek()
+      onTap.current = () => sheet.open(t)
+      return
+    }
+    lastTap.current = { k: p.k, t: now }
+    sheet.unpeek(LINGER_MS)
+  }
+
+  function cancel() {
+    if (!press.current) return
+    press.current = null
+    sheet.unpeek()
   }
 
   return (
-    <div className={`zh ${ui ? 'zh-ui' : ''} ${className}`} onClick={onClick}>
+    <div
+      ref={root}
+      className={`zh ${ui ? 'zh-ui' : ''} ${className}`}
+      onPointerDown={down}
+      onPointerMove={move}
+      onPointerUp={up}
+      onPointerCancel={cancel}
+      onClick={() => {
+        const run = onTap.current
+        onTap.current = null
+        run?.()
+      }}
+      onPointerLeave={(e) => e.pointerType === 'mouse' && cancel()}
+      onContextMenu={(e) => press.current && e.preventDefault()}
+    >
       {paras.map((para, pi) => {
         const content = para.sentences.map((s, si) => (
           <span key={si} className={`s ${speaking === `${pi}.${si}` ? 'speaking' : ''}`}>
             {s.tokens.map((t, ti) => {
-              if (!t.p || !HAN.test(t.t)) return t.t
+              if (!t.p || !HAN.test(t.t)) return t.k ? <span key={ti} className={`wl ${seen.has(t.k) ? 'seen' : ''}`}>{t.t}</span> : t.t
               const k = `${pi}.${si}.${ti}`
-              const cls = `w ${sheet.active === `${id}:${k}` ? 'on' : ''} ${saved.has(t.t) ? 'saved' : ''}`
+              const cls = `w ${sheet.active === `${id}:${k}` ? 'on' : ''} ${saved.has(t.t) ? 'saved' : ''} ${t.k ? `wl ${seen.has(t.k) ? 'seen' : ''}` : ''}`
               return (
                 <span key={ti} data-k={k} className={cls}>
                   {t.t}

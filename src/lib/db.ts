@@ -99,6 +99,15 @@ export interface CityProgress {
 }
 
 /** A 刷一刷 card the user has seen: how long they stayed, and whether they liked it. */
+/** A 百科 page the user has opened: links to it turn from "new" to "seen". */
+export interface WikiProgress {
+  id: string
+  visited: number
+  /** said 读完了 */
+  read?: number
+  updated: number
+}
+
 export interface FeedSeen {
   id: string
   seen: number
@@ -144,6 +153,7 @@ export const db = new Dexie('zhongguotong') as Dexie & {
   feed: EntityTable<FeedSeen, 'id'>
   days: EntityTable<DayLog, 'day'>
   cities: EntityTable<CityProgress, 'id'>
+  wiki: EntityTable<WikiProgress, 'id'>
 }
 
 db.version(1).stores({
@@ -163,6 +173,9 @@ db.version(2).stores({
 })
 db.version(3).stores({
   cities: 'id, updated',
+})
+db.version(4).stores({
+  wiki: 'id, updated',
 })
 
 export async function getSetting<T>(key: string, fallback: T): Promise<T> {

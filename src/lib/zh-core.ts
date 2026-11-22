@@ -19,6 +19,8 @@ export interface Token {
   p?: string
   /** HSK level 1–7; absent if the word isn't in the HSK lists */
   l?: number
+  /** a link: the route it opens (wiki/qiantangjiang, place/zhejiang, city/hangzhou) */
+  k?: string
 }
 
 export interface Sentence {
@@ -239,12 +241,15 @@ export interface TokenizeResult {
  *   {假|jià}  forces a reading for one word
  */
 export function tokenizeSentence(sentence: string, lookup: Lookup): TokenizeResult {
-  // 1. words, with forced readings kept aside
-  const words: { t: string; forced?: string }[] = []
-  for (const part of sentence.split(/(\{[^}|]+\|[^}]+\})/)) {
+  // 1. words, with forced readings and links kept aside
+  const words: { t: string; forced?: string; k?: string }[] = []
+  for (const part of sentence.split(/(\{[^}|]+\|[^}]+\}|\[\[[^\]|]+\|[^\]]+\]\])/)) {
     if (!part) continue
     const forced = part.match(/^\{([^}|]+)\|([^}]+)\}$/)
+    const link = part.match(/^\[\[([^\]|]+)\|([^\]]+)\]\]$/)
     if (forced) words.push({ t: forced[1], forced: forced[2].replace(/\s+/g, '') })
+    // a link's text is segmented on its own, so its words never run into the text around it
+    else if (link) for (const t of segmentWords(link[2], lookup)) words.push({ t, k: link[1] })
     else for (const t of segmentWords(part, lookup)) for (const piece of SPLIT[t] ?? [t]) words.push({ t: piece })
   }
   // 2. pinyin-pro reads the whole sentence once, so it can use context
@@ -258,24 +263,28 @@ export function tokenizeSentence(sentence: string, lookup: Lookup): TokenizeResu
   words.forEach((w, i) => {
     const from = at
     at += w.t.length
+    const link = w.k ? { k: w.k } : {}
     if (w.forced) {
-      tokens.push({ t: w.t, p: w.forced, l: levelOf(w.t, lookup) })
+      tokens.push({ t: w.t, p: w.forced, l: levelOf(w.t, lookup), ...link })
       return
     }
     if (!isHan(w.t)) {
-      tokens.push({ t: w.t })
+      tokens.push({ t: w.t, ...link })
       return
     }
     const context = aligned ? chars.slice(from, at).map((c) => c.pinyin).join('') : undefined
     const { p, ambiguous: amb } = pinyinFor(w.t, lookup, { context, prev: words[i - 1]?.t, next: words[i + 1]?.t })
     if (amb) ambiguous.push(w.t)
     const l = levelOf(w.t, lookup)
-    tokens.push(l ? { t: w.t, p, l } : { t: w.t, p })
+    tokens.push(l ? { t: w.t, p, l, ...link } : { t: w.t, p, ...link })
   })
   return { tokens, ambiguous }
 }
 
 /** Removes override markup, leaving plain text. */
 export function plainText(s: string): string {
-  return s.replace(/\{([^}|]+)\|[^}]+\}/g, '$1').replace(/\[\[([^\]]+)\]\]/g, '$1')
+  return s
+    .replace(/\{([^}|]+)\|[^}]+\}/g, '$1')
+    .replace(/\[\[[^\]|]+\|([^\]]+)\]\]/g, '$1')
+    .replace(/\[\[([^\]]+)\]\]/g, '$1')
 }
