@@ -1,15 +1,16 @@
 import { Photo } from '../components/Photo.tsx'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { motion } from 'motion/react'
 import { ArrowRightIcon, CheckCircleIcon, ExamIcon, ListBulletsIcon, XCircleIcon } from '@phosphor-icons/react'
 import { db, type WordSource } from '../lib/db.ts'
 import { CITY_BY_ID, DETAIL, cityKind, citiesOf } from '../lib/cities.ts'
 import { recordTest, type PlaceKind } from '../lib/learn.ts'
 import { boxOf, MAP_BY_ID } from '../lib/places.ts'
-import { go } from '../lib/router.ts'
+import { go, usePageState } from '../lib/router.ts'
 import { NameWord } from '../components/LearntButton.tsx'
 import { CHINA_BOX, StaticMap, provinceBox } from '../components/StaticMap.tsx'
 import { Button, Loading, PageHeader, ProgressBar } from '../components/ui.tsx'
+import { TapText } from '../components/ZhText.tsx'
 
 interface Q {
   kind: PlaceKind
@@ -70,28 +71,34 @@ const SMALL = new Set(['beijing', 'tianjin', 'shanghai', 'xianggang', 'aomen'])
 
 /** 认地图: every place marked 学会了, shown on a map with no names. Type the name (or pick it). */
 export function MapTest() {
-  const [round, setRound] = useState(0)
-  const [only, setOnly] = useState<string[]>()
-  const [qs, setQs] = useState<Q[]>()
-  const [i, setI] = useState(0)
-  const [answer, setAnswer] = useState('')
-  const [options, setOptions] = useState<string[]>()
-  const [result, setResult] = useState<{ right: boolean; given: string }>()
-  const [log, setLog] = useState<{ q: Q; right: boolean }[]>([])
+  // kept with the page, so following a link (a missed place, a word's card) and coming back
+  // carries on where you were
+  const [qs, setQs] = usePageState<Q[] | undefined>('qs', undefined)
+  const [i, setI] = usePageState('i', 0)
+  const [answer, setAnswer] = usePageState('answer', '')
+  const [options, setOptions] = usePageState<string[] | undefined>('options', undefined)
+  const [result, setResult] = usePageState<{ right: boolean; given: string } | undefined>('result', undefined)
+  const [log, setLog] = usePageState<{ q: Q; right: boolean }[]>('log', [])
   const input = useRef<HTMLInputElement>(null)
 
+  /** A new round: every learnt place, or only `only` (the ones missed last time). */
+  async function start(only?: string[]) {
+    const [places, cities] = await Promise.all([db.places.toArray(), db.cities.toArray()])
+    const all = [
+      ...places.filter((p) => p.learnt).map((p) => toQ('province', p.id)),
+      ...cities.filter((c) => c.learnt).map((c) => toQ('city', c.id)),
+    ].filter((q): q is Q => !!q)
+    setQs(shuffle(only ? all.filter((q) => only.includes(`${q.kind}:${q.id}`)) : all))
+    setI(0)
+    setLog([])
+    setAnswer('')
+    setOptions(undefined)
+    setResult(undefined)
+  }
+  // once, when opened: a test kept from before carries on instead
   useEffect(() => {
-    ;(async () => {
-      const [places, cities] = await Promise.all([db.places.toArray(), db.cities.toArray()])
-      const all = [
-        ...places.filter((p) => p.learnt).map((p) => toQ('province', p.id)),
-        ...cities.filter((c) => c.learnt).map((c) => toQ('city', c.id)),
-      ].filter((q): q is Q => !!q)
-      setQs(shuffle(only ? all.filter((q) => only.includes(`${q.kind}:${q.id}`)) : all))
-      setI(0)
-      setLog([])
-    })()
-  }, [round, only])
+    if (!qs) start()
+  }, [])
 
   const q = qs?.[i]
   const view = useMemo(() => {
@@ -120,7 +127,7 @@ export function MapTest() {
       </div>
     )
 
-  if (!q) return <Done log={log} onAgain={(ids) => (setOnly(ids), setRound((r) => r + 1))} />
+  if (!q) return <Done log={log} onAgain={start} />
 
   const source: WordSource = { kind: 'place', route: q.kind === 'city' ? `city/${q.id}` : `place/${q.id}`, title: '认地图' }
   const gloss = q.kind === 'city' ? `${cityKind(CITY_BY_ID.get(q.id)!)} · ${PLACE_NAMES[q.prov]?.name ?? ''}` : PLACE_NAMES[q.id]?.full ?? ''
@@ -154,7 +161,9 @@ export function MapTest() {
         </div>
         <motion.div key={`${q.kind}-${q.id}-${i}`} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}>
           <div className="tile mt-2 overflow-hidden">{view && <StaticMap {...view} />}</div>
-          <h2 className="mt-4 text-[22px] font-black">{q.kind === 'city' ? '红点是哪个城市？' : '涂红的是哪儿？'}</h2>
+          <h2 className="mt-4 text-[22px] font-black">
+            <TapText inline id="maptest-q" text={q.kind === 'city' ? '红点是哪个城市？' : '涂红的是哪儿？'} source={source} />
+          </h2>
 
           {options ? (
             <div className="mt-3 grid grid-cols-2 gap-3">
@@ -162,14 +171,15 @@ export function MapTest() {
                 const right = result && o === q.name
                 const wrong = result && !result.right && o === result.given
                 return (
+                  // a press picks, so the names only show their pinyin once you've answered
                   <button
                     key={o}
-                    disabled={!!result}
+                    aria-disabled={!!result}
                     onClick={() => check(o)}
                     className="tile flex h-16 items-center justify-center gap-2 text-[20px] font-black"
                     style={{ borderColor: right ? 'var(--color-lv)' : wrong ? 'var(--color-zhu)' : undefined, background: right ? 'var(--color-lv-soft)' : wrong ? 'var(--color-zhu-soft)' : undefined }}
                   >
-                    {o}
+                    {result ? <TapText inline id={`maptest-o-${o}`} text={o} source={source} /> : o}
                   </button>
                 )
               })}
@@ -225,7 +235,7 @@ export function MapTest() {
               {/* the photo ties the name to a picture: what you see when you think of the place */}
               <Photo k={q.kind === 'city' ? `city/${q.id}` : `place/${q.id}`} ratio="4 / 3" fit="cover" credit={false} className="ml-auto w-20 shrink-0 rounded-xl" />
             </div>
-            {!result.right && result.given && <div className="mt-1 text-[15px] font-bold text-mute">你写的是“{result.given}”</div>}
+            {!result.right && result.given && <TapText id="maptest-given" text={`你写的是“${result.given}”`} source={source} className="mt-1 text-[15px] font-bold text-mute" />}
             <div className="mt-3 flex gap-3">
               <Button tone={result.right ? 'lv' : 'zhu'} className="flex-1" onClick={next}>
                 继续 <ArrowRightIcon size={20} weight="bold" />
