@@ -132,6 +132,15 @@ export interface Egg {
   q: string
   /** words to look it up with */
   find: string
+  /** where it comes from */
+  sources?: SourceLink[]
+}
+
+/** 家乡话: a province's sayings, in the 家乡话与地方梗 collection. Same shape as 聊天彩蛋. */
+export interface DialectFile {
+  /** province id → its entries; provinces with none are missing */
+  provinces: Record<string, Egg[]>
+  glossary: Record<string, string>
 }
 
 export interface CitiesFile {

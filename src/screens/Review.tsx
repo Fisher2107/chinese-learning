@@ -4,9 +4,9 @@ import { ArrowRightIcon, CardsIcon, ChatCircleDotsIcon, CheckCircleIcon, FireIco
 import type { Rating } from 'ts-fsrs'
 import type { EggNote, SavedWord } from '../lib/db.ts'
 import { dueWords, grade, GRADES, previewCard } from '../lib/srs.ts'
-import { dueEggs, eggForCard, gradeEgg } from '../lib/eggs.ts'
+import { dueEggs, eggForCard, eggLabel, eggRoute, gradeEgg, isHometown } from '../lib/eggs.ts'
 import { tokenizeText } from '../lib/dict.ts'
-import { loadCities, loadPlaces, useLoad } from '../lib/content.ts'
+import { loadCities, loadDialect, loadPlaces, useLoad } from '../lib/content.ts'
 import type { Para } from '../lib/types.ts'
 import { go } from '../lib/router.ts'
 import { speak } from '../lib/speech.ts'
@@ -182,7 +182,8 @@ function WordFace({ card, shown }: { card: SavedWord; shown: boolean }) {
 function EggFace({ row, shown }: { row: EggNote; shown: boolean }) {
   const places = useLoad(loadPlaces, 'places').data
   const cities = useLoad(loadCities, 'cities').data
-  const egg = eggForCard(row, places, cities)
+  const dialect = useLoad(loadDialect, 'dialect').data
+  const egg = eggForCard(row, places, cities, dialect)
   const [paras, setParas] = useState<Para[]>()
   useEffect(() => {
     if (egg.sentences || !shown) return
@@ -193,12 +194,12 @@ function EggFace({ row, shown }: { row: EggNote; shown: boolean }) {
     }
   }, [egg.sentences, egg.text, shown])
   const text = egg.sentences ? [{ kind: 'p' as const, sentences: egg.sentences }] : paras
-  const glossary = row.page.startsWith('place/') ? places?.glossary : cities?.glossary
-  const source = { kind: 'place' as const, route: row.page, title: `${row.title} · 聊天彩蛋` }
+  const glossary = row.page.startsWith('place/') ? places?.glossary : isHometown(row.page) ? dialect?.glossary : cities?.glossary
+  const source = { kind: 'place' as const, route: eggRoute(row.page), title: `${row.title} · ${eggLabel(row.page)}` }
   return (
     <>
       <div className="flex items-center gap-1.5 text-[15px] font-extrabold text-lv">
-        <ChatCircleDotsIcon size={18} weight="fill" /> 聊天彩蛋 · {row.title}
+        <ChatCircleDotsIcon size={18} weight="fill" /> {eggLabel(row.page)} · {row.title}
       </div>
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
         <h2 className="mt-3 text-[24px] leading-snug font-black">{egg.q}</h2>
@@ -214,7 +215,7 @@ function EggFace({ row, shown }: { row: EggNote; shown: boolean }) {
                 {egg.note}
               </p>
             )}
-            <button onClick={() => go(row.page)} className="mt-3 flex items-center gap-1 px-1 text-sm font-extrabold text-lv">
+            <button onClick={() => go(eggRoute(row.page))} className="mt-3 flex items-center gap-1 px-1 text-sm font-extrabold text-lv">
               去{row.title}看看 <ArrowRightIcon size={14} weight="bold" />
             </button>
           </motion.div>

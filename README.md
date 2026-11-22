@@ -35,6 +35,8 @@ content/
   places/<id>.md            one per province (34): id, name, full, type, short, alias?, capital?, region, note?;
                             body = intro paragraph, then `## 聊天彩蛋` with - bullets (see below)
   cities/<id>.md            a city page: id, name, nickname?; intro, then `## 聊天彩蛋` the same way
+  dialect.md                家乡话 for the 家乡话与地方梗 collection: `## <province id>`, then entries
+                            written like 聊天彩蛋 (every province has a section in the app, written or not)
   feed/<slug>.md            刷一刷 cards: id (= file name), date, title (the hook question), province?, series?,
                             tags, sources [{ title, url }], inspiration; body 150–300 字 ending on a question
 ```
@@ -47,6 +49,17 @@ flashcard, and can have search words for 深入 (otherwise its first “quoted�
 - 每年农历八月十八前后，钱塘江大潮最壮观，很多人专门去看潮。
   问：什么时候去看钱塘江大潮最好？
   查：钱塘江大潮
+```
+
+An egg can also say where it comes from, with any number of `源：[标题](https://…)` lines; they're
+listed under 深入. dialect.md entries use the same format and should have one:
+
+```markdown
+## henan
+- 河南话里，“中”就是“行、可以”……所以网上很火的“俺不中嘞”，意思就是“我不行了”。
+  问：网上很火的“俺不中嘞”是什么意思？河南人觉得它地道吗？
+  查：俺不中嘞
+  源：[新周刊：河南话魔性爆红，河南人自己都没想通（2025）](https://m.huxiu.com/article/4794212.html)
 ```
 
 The app keeps the user's own edits, notes and flashcards for an egg under an id made from its page

@@ -265,6 +265,7 @@ function parseBlocks(body, glossary, where) {
 /**
  * 聊天彩蛋: one `- ` bullet per egg, then an indented `问：` line (the flashcard question) and,
  * if the egg's first “quoted” words aren't the thing to look up, a `查：` line (search words).
+ * `源：[标题](https://…)` lines give where it comes from (any number).
  * Each egg gets an id from its page and its text, so the user's notes and flashcards stay attached.
  */
 function parseEggs(src, page, name, glossary, where) {
@@ -273,12 +274,16 @@ function parseEggs(src, page, name, glossary, where) {
     const l = line.trim()
     if (!l) continue
     if (l.startsWith('- ')) {
-      raw.push({ text: l.slice(2).trim(), q: '', find: '' })
+      raw.push({ text: l.slice(2).trim(), q: '', find: '', sources: [] })
       continue
     }
-    const m = l.match(/^(问|查)[:：]\s*(.+)$/)
-    if (m && raw.length) raw.at(-1)[m[1] === '问' ? 'q' : 'find'] = m[2].trim()
-    else errors.push(`${where}: 聊天彩蛋 takes "- 彩蛋" bullets, each followed by "  问：…" and maybe "  查：…" (got "${l}")`)
+    const m = l.match(/^(问|查|源)[:：]\s*(.+)$/)
+    if (m && raw.length && m[1] === '源') {
+      const link = m[2].trim().match(/^\[(.+)\]\((https?:\/\/[^\s)]+)\)$/)
+      if (link) raw.at(-1).sources.push({ title: link[1], url: link[2] })
+      else errors.push(`${where}: a source line is "  源：[标题](https://…)" (got "${l}")`)
+    } else if (m && raw.length) raw.at(-1)[m[1] === '问' ? 'q' : 'find'] = m[2].trim()
+    else errors.push(`${where}: 聊天彩蛋 takes "- 彩蛋" bullets, each followed by "  问：…" and maybe "  查：…" and "  源：[标题](链接)" (got "${l}")`)
   }
   const ids = new Set()
   return raw.map((e, i) => {
@@ -293,6 +298,7 @@ function parseEggs(src, page, name, glossary, where) {
       sentences: makeSentences(e.text, glossary, where),
       q: e.q,
       find: e.find || plainText(e.text).match(/[“《]([^”》]{2,14})[”》]/)?.[1] || name,
+      ...(e.sources.length ? { sources: e.sources } : {}),
     }
   })
 }
@@ -404,6 +410,26 @@ for (const file of (await readdir('content/places')).filter((f) => f.endsWith('.
 }
 for (const s of seriesOut)
   for (const pid of s.summary.provinces) if (!placeIds.has(pid)) errors.push(`series ${s.summary.id}: unknown province "${pid}"`)
+
+// ---------- 家乡话 (in the 家乡话与地方梗 collection): `## <province id>`, then 聊天彩蛋-style entries ----------
+const dialect = {}
+const dialectGlossary = {}
+if (existsSync('content/dialect.md')) {
+  // text before the first heading is a note for whoever edits the file
+  const parts = (await readFile('content/dialect.md', 'utf8')).split(/^## +(.+?)\s*$/m)
+  for (let i = 1; i < parts.length; i += 2) {
+    const id = parts[i]
+    const where = `dialect.md ## ${id}`
+    const place = places.find((p) => p.id === id)
+    if (!place) {
+      errors.push(`${where}: "${id}" is not a province id (use the file name in content/places)`)
+      continue
+    }
+    if (dialect[id]) errors.push(`${where}: this province has two sections`)
+    onPage(`collection/hometown/${id}`, `${place.name} · 家乡话`)
+    dialect[id] = parseEggs(parts[i + 1], `hometown/${id}`, place.name, dialectGlossary, where)
+  }
+}
 
 // ---------- 刷一刷 feed ----------
 const feed = []
@@ -650,6 +676,7 @@ if (!CHECK) {
   await writeFile('public/content/terms.json', JSON.stringify(terms))
   await writeFile('public/content/jieqi.json', JSON.stringify({ hooks: jieqi, glossary: jieqiGlossary }))
   await writeFile('public/content/places.json', JSON.stringify({ places, glossary: placesGlossary }))
+  await writeFile('public/content/dialect.json', JSON.stringify({ provinces: dialect, glossary: dialectGlossary }))
   await writeFile('public/content/feed.json', JSON.stringify({ cards: feed, glossary: feedGlossary }))
   await writeFile('public/content/cities.json', JSON.stringify({ cities, glossary: citiesGlossary }))
   await writeFile('public/content/photos.json', JSON.stringify(photos))

@@ -1,6 +1,6 @@
 import type { HistoryAtlas } from './history.ts'
 import { useEffect, useState } from 'react'
-import type { CitiesFile, ContentIndex, FeedFile, PhotosFile, PlacesFile, SeriesFile, TextFile, WikiIndex, WikiPage } from './types.ts'
+import type { CitiesFile, ContentIndex, DialectFile, FeedFile, PhotosFile, PlacesFile, SeriesFile, TextFile, WikiIndex, WikiPage } from './types.ts'
 
 const BASE = import.meta.env.BASE_URL
 const cache = new Map<string, Promise<unknown>>()
@@ -24,6 +24,7 @@ export const loadText = (id: string) => getJson<TextFile>(`content/texts/${id}.j
 export const loadPlaces = () => getJson<PlacesFile>('content/places.json')
 export const loadFeed = () => getJson<FeedFile>('content/feed.json')
 export const loadCities = () => getJson<CitiesFile>('content/cities.json')
+export const loadDialect = () => getJson<DialectFile>('content/dialect.json')
 export const loadHistory = () => getJson<HistoryAtlas>('content/history.json')
 export const loadPhotos = () => getJson<PhotosFile>('content/photos.json')
 export const loadWikiIndex = () => getJson<WikiIndex>('content/wiki-index.json')

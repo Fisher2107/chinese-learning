@@ -21,6 +21,9 @@ import {
   addMyEgg,
   deleteEgg,
   editEgg,
+  eggLabel,
+  eggRoute,
+  isHometown,
   mergeEggs,
   removeEggCard,
   resetEgg,
@@ -37,7 +40,7 @@ import { ZhText } from './ZhText.tsx'
 
 /** One page's 聊天彩蛋: the page itself first, then related pages (its province, its cities…). */
 export interface EggGroup {
-  /** place/<id> or city/<id> */
+  /** place/<id>, city/<id>, or hometown/<id> (a province's 家乡话) */
   page: string
   title: string
   eggs: Egg[]
@@ -75,9 +78,7 @@ export function EggSection({ groups, links }: { groups: EggGroup[]; links: Place
   const views = useMemo(() => groups.map((g) => ({ g, eggs: mergeEggs(g.page, g.title, g.eggs, rows) })), [groups, rows])
   const shown = views.filter((v, i) => i === 0 || v.eggs.length > 0)
   const [sel, setSel] = useState(here.page)
-  const [adding, setAdding] = useState(false)
   const cur = shown.find((v) => v.g.page === sel) ?? shown[0]
-  const notCards = cur.eggs.filter((e) => !e.card)
   const other = cur.g.page !== here.page
 
   return (
@@ -92,10 +93,7 @@ export function EggSection({ groups, links }: { groups: EggGroup[]; links: Place
             return (
               <button
                 key={g.page}
-                onClick={() => {
-                  setSel(g.page)
-                  setAdding(false)
-                }}
+                onClick={() => setSel(g.page)}
                 className={`flex h-9 shrink-0 items-center gap-1 rounded-xl border-2 px-3 text-sm font-extrabold ${on ? 'border-text bg-text text-bg' : 'border-line bg-surface'}`}
               >
                 {g.title}
@@ -106,36 +104,55 @@ export function EggSection({ groups, links }: { groups: EggGroup[]; links: Place
         </div>
       )}
       {other && (
-        <button onClick={() => go(cur.g.page)} className="mb-3 flex w-full items-center gap-2 rounded-2xl bg-sunken px-4 py-2.5 text-left text-[15px] font-extrabold">
+        <button onClick={() => go(eggRoute(cur.g.page))} className="mb-3 flex w-full items-center gap-2 rounded-2xl bg-sunken px-4 py-2.5 text-left text-[15px] font-extrabold">
           <span className="min-w-0 flex-1">{cur.g.title}的聊天彩蛋</span>
           <span className="flex items-center gap-1 text-sm text-lv">
             去{cur.g.title} <ArrowRightIcon size={14} weight="bold" />
           </span>
         </button>
       )}
-      {cur.eggs.length === 0 && !adding && (
-        <p className="tile p-4 text-[15px] font-bold text-mute">{cur.g.title}还没有聊天彩蛋。你知道什么好玩的事吗？写一个吧。</p>
+      <EggList key={cur.g.page} group={cur.g} eggs={cur.eggs} links={links} here={here.page} />
+    </div>
+  )
+}
+
+/**
+ * One page's eggs (a page's 聊天彩蛋, or a province's 家乡话) with buttons to write your own and to
+ * put them all into review. `eggs` are the group's eggs merged with the user's (mergeEggs).
+ */
+export function EggList({ group, eggs, links, here }: { group: EggGroup; eggs: EggView[]; links?: PlaceLinks; here?: string }) {
+  const [adding, setAdding] = useState(false)
+  const notCards = eggs.filter((e) => !e.card)
+  const hometown = isHometown(group.page)
+  return (
+    <>
+      {eggs.length === 0 && !adding && (
+        <p className="tile p-4 text-[15px] font-bold text-mute">
+          {hometown
+            ? `还没有${group.title}的家乡话。听${group.title}朋友说过哪句？写下来吧。`
+            : `${group.title}还没有聊天彩蛋。你知道什么好玩的事吗？写一个吧。`}
+        </p>
       )}
       <div className="space-y-3">
-        {cur.eggs.map((e) => (
-          <EggCard key={e.key} egg={e} glossary={cur.g.glossary} links={links} here={here.page} />
+        {eggs.map((e) => (
+          <EggCard key={e.key} egg={e} glossary={group.glossary} links={links} here={here} />
         ))}
       </div>
       {adding ? (
-        <AddEgg page={cur.g.page} title={cur.g.title} onDone={() => setAdding(false)} />
+        <AddEgg page={group.page} title={group.title} onDone={() => setAdding(false)} />
       ) : (
         <div className="mt-3 flex gap-2">
           <Button tone="plain" size="md" className="min-w-0 flex-1 !px-2" onClick={() => setAdding(true)}>
-            <PlusIcon size={18} weight="bold" /> 写一个我的彩蛋
+            <PlusIcon size={18} weight="bold" /> {hometown ? '写一句我听到的' : '写一个我的彩蛋'}
           </Button>
-          {notCards.length > 0 && (
+          {notCards.length > 1 && (
             <Button tone="plain" size="md" className="min-w-0 flex-1 !px-2" onClick={() => addEggCards(notCards)}>
               <CardsIcon size={18} weight="fill" className="text-lv" /> 全部加入复习
             </Button>
           )}
         </div>
       )}
-    </div>
+    </>
   )
 }
 
@@ -163,7 +180,7 @@ type Mode = 'dig' | 'edit' | undefined
 export function EggCard({ egg, glossary, links, here }: { egg: EggView; glossary?: Record<string, string>; links?: PlaceLinks; here?: string }) {
   const [mode, setMode] = useState<Mode>()
   const paras = useEggParas(egg)
-  const source: WordSource = { kind: 'place', route: egg.page, title: `${egg.title} · 聊天彩蛋` }
+  const source: WordSource = { kind: 'place', route: eggRoute(egg.page), title: `${egg.title} · ${eggLabel(egg.page)}` }
   const related = useMemo(() => {
     if (!links || !paras) return []
     const seen = new Map<string, string>()
@@ -172,7 +189,7 @@ export function EggCard({ egg, glossary, links, here }: { egg: EggView; glossary
         for (const t of s.tokens) {
           // a [[link]] in the content (百科 pages too), or a place named in the text
           const route = t.k ?? links.get(t.t)
-          if (route && route !== egg.page && route !== here && !seen.has(route)) seen.set(route, t.t)
+          if (route && route !== eggRoute(egg.page) && route !== here && !seen.has(route)) seen.set(route, t.t)
         }
     return [...seen].map(([route, name]) => ({ route, name }))
   }, [paras, links, egg.page, here])
@@ -241,11 +258,13 @@ function Dig({ egg, source }: { egg: EggView; source: WordSource }) {
   const [note, setNote] = useState(egg.note ?? '')
   const [saved, setSaved] = useState(false)
   const aiSource: WordSource = { ...source, kind: 'ai', title: `AI 展开 · ${egg.title}` }
+  // what the AI is told the student is reading about
+  const topic = isHometown(egg.page) ? `${egg.title}的方言和地方说法` : egg.title
 
   // An 展开 asked before shows straight away (it's kept on the device)
   useEffect(() => {
     let live = true
-    cachedEggExpansion(egg.title, egg.text).then(async (answer) => {
+    cachedEggExpansion(topic, egg.text).then(async (answer) => {
       if (!answer || !live) return
       const paras = await tokenizeText(answer).catch(() => undefined)
       if (live) setMsgs((m) => (m.length ? m : [{ role: 'assistant', content: answer, paras }]))
@@ -253,7 +272,7 @@ function Dig({ egg, source }: { egg: EggView; source: WordSource }) {
     return () => {
       live = false
     }
-  }, [egg.title, egg.text])
+  }, [topic, egg.text])
 
   async function run(job: () => Promise<string>, history: Msg[]) {
     setBusy(true)
@@ -277,7 +296,7 @@ function Dig({ egg, source }: { egg: EggView; source: WordSource }) {
     const history: Msg[] = [...msgs, { role: 'user', content: q }]
     setMsgs(history)
     // the 展开 itself is the first assistant turn; the model sees it as context
-    run(() => askAboutEgg(egg.title, egg.text, history.map(({ role, content }) => ({ role, content }))), history)
+    run(() => askAboutEgg(topic, egg.text, history.map(({ role, content }) => ({ role, content }))), history)
   }
 
   function keep(text: string) {
@@ -301,7 +320,7 @@ function Dig({ egg, source }: { egg: EggView; source: WordSource }) {
           <SparkleIcon size={16} weight="fill" /> AI 展开
         </div>
         {msgs.length === 0 && !busy && (
-          <Button tone="dai" size="md" className="w-full" onClick={() => run(() => expandEgg(egg.title, egg.text), [])}>
+          <Button tone="dai" size="md" className="w-full" onClick={() => run(() => expandEgg(topic, egg.text), [])}>
             <SparkleIcon size={18} weight="fill" /> 帮我展开讲讲
           </Button>
         )}
@@ -357,6 +376,19 @@ function Dig({ egg, source }: { egg: EggView; source: WordSource }) {
         <div className="mb-2 flex items-center gap-1.5 text-sm font-black text-dai">
           <MagnifyingGlassIcon size={16} weight="bold" /> 自己查
         </div>
+        {!!egg.sources?.length && (
+          <ul className="mb-3 space-y-1.5">
+            {egg.sources.map((l) => (
+              <li key={l.url}>
+                <a href={l.url} target="_blank" rel="noreferrer" className="flex items-start gap-1.5 rounded-xl bg-surface px-3 py-2 text-[14px] leading-snug font-bold">
+                  <span className="shrink-0 text-xs leading-5 font-black text-mute">来源</span>
+                  <span className="min-w-0 flex-1">{l.title}</span>
+                  <ArrowSquareOutIcon size={14} weight="bold" className="mt-0.5 shrink-0 text-mute" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
         <input
           value={find}
           onChange={(e) => setFind(e.target.value)}
@@ -455,18 +487,26 @@ function AddEgg({ page, title, onDone }: { page: string; title: string; onDone: 
   const [q, setQ] = useState('')
   const [note, setNote] = useState('')
   const [card, setCard] = useState(true)
+  const hometown = isHometown(page)
+  // the first “quoted” words are usually the saying itself
+  const said = text.match(/[“"「]([^”"」]{1,14})[”"」]/)?.[1]
+  const defaultQ = hometown ? (said ? `${title}话“${said}”是什么意思？` : `${title}人说的这句话是什么意思？`) : `关于${title}，这个彩蛋说的是什么？`
   return (
     <div className="tile mt-3 space-y-2 p-4">
-      <div className="text-[16px] font-extrabold">写一个{title}的彩蛋</div>
+      <div className="text-[16px] font-extrabold">{hometown ? `写一句${title}话` : `写一个${title}的彩蛋`}</div>
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         rows={3}
         autoFocus
-        placeholder="你听说的、读到的、朋友告诉你的……用中文写。"
+        placeholder={
+          hometown
+            ? '这句话怎么说，什么意思，什么时候说，在哪儿听到的……比如：“得劲”就是“舒服、好”。'
+            : '你听说的、读到的、朋友告诉你的……用中文写。'
+        }
         className={`${field} py-2 leading-relaxed`}
       />
-      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="复习时问自己的问题，比如：为什么……？" className={`${field} h-11`} />
+      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={hometown ? `复习时的问题，不写就是：${defaultQ}` : '复习时问自己的问题，比如：为什么……？'} className={`${field} h-11`} />
       <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={2} placeholder="笔记或者链接（可以不写）" className={`${field} py-2`} />
       <label className="flex items-center gap-2 py-1 text-[15px] font-bold">
         <input type="checkbox" checked={card} onChange={(e) => setCard(e.target.checked)} className="size-5 accent-[var(--color-lv)]" />
@@ -479,7 +519,7 @@ function AddEgg({ page, title, onDone }: { page: string; title: string; onDone: 
           className="flex-1"
           disabled={!text.trim()}
           onClick={async () => {
-            await addMyEgg(page, title, text, q || `关于${title}，这个彩蛋说的是什么？`, note, card)
+            await addMyEgg(page, title, text, q.trim() || defaultQ, note, card)
             onDone()
           }}
         >
