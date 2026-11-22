@@ -67,6 +67,12 @@ sources:
 ……
 ```
 
+### Check a reading path before marking a batch complete
+
+Start from an existing city or province page and follow two recommendations in the built wiki. Each published page should have at least two working recommendations, and the destination should answer the question in its hook. Keep prospective topics in body links, where the builder counts them as wanted. A local legend should be identified as such in the lede and quiz as well as the body.
+
+A province can take several batches. Record finished pages and remaining gaps in the log, and tick the province only when its checklist is complete.
+
 ## 3. Wanted pages
 
 `npm run content` ends with "百科 pages people link to that don't exist yet", most-linked first. That list is the second queue: a name three pages link to is three readers asking for it. Each run writes at least three of them, preferring names linked from two or more pages, and anything linked from the province being worked on.
@@ -141,3 +147,5 @@ The daily task doesn't change app code. These are waiting for a yes:
 ## Log
 
 - **2026-11-21** · Built the 百科: `[[links]]`, backlinks, wanted pages, the wiki page and 百科 home, photo rows on province and city pages, a pinned map with rivers, the new stamp quiz, press-to-peek word meanings, the world map inside the main map. 浙江 written as the template: province page rewritten, 21 pages (钱塘江, 钱塘潮, 钱镠, 吴越国, 钱塘江大桥, 茅以升, 千岛湖, 富春山居图, 伍子胥, 西湖, 苏轼, 雷峰塔, 龙井茶, 东坡肉, 岳飞, 勾践, 西施, 王羲之, 鲁迅, 绍兴黄酒, 良渚古城), 钱塘江 and 瓯江 added to the map, 杭州 and 绍兴 city pages linked in. 38 wanted pages queued. Still to do: 茅以升's photo (Commons 429, retry).
+
+- **2026-11-22** · 江苏 started with the Wu–Yue reading path from 苏州. Added three previously wanted pages: 阖闾, 夫差 and 范蠡. 范蠡 is listed with 越 and his later life in 山东. 江苏 remains open for its long read, sights, food and city coverage.
