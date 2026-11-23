@@ -22,6 +22,14 @@ Open http://localhost:5173/chinese-learning/. The first run downloads CC-CEDICT 
 
 `npm run build` makes the production site in `dist/`. Pushing to `main` deploys it to GitHub Pages.
 
+## Sync progress
+
+Open **我的 → 云同步 → 用邮箱登录** on each device and use the same email. Signing in opens a separate cloud profile. Your original device profile is available again after signing out. While the app is open, Dexie Cloud sends queued study changes after reconnecting. The sync panel shows the last successful sync.
+
+Saved words (including example sentences and notes), review history, reading and map progress, and study counters sync. Pasted articles, cached AI answers and the OpenAI key stay on the device. **我的 → 备份** still exports and restores JSON backups.
+
+The production database URL is public. For a separate deployment set `VITE_DEXIE_CLOUD_URL` at build time and allow the site's origin in that database.
+
 ## Writing content
 
 ```
@@ -32,7 +40,8 @@ content/
   series/<id>/index.md      title, subtitle, place, kind, color, sources; description in the body
   series/<id>/01.md …       episodes: title, beat, gate (recall questions); story in the body
   series/<id>/after.md      读后: ## headings and - bullets (关键词, 聊天工具包, 聊天彩蛋)
-  places/<id>.md            one per province (34): id, name, full, type, short, alias?, capital?, region, note?;
+  places/<id>.md            one per province (34): id, name, full, type, short, alias?, capital?, region, note?,
+                            dialect, quiz (the 集章 questions, see below);
                             body = intro paragraph, then `## 聊天彩蛋` with - bullets (see below)
   cities/<id>.md            a city page: id, name, nickname?; intro, then `## 聊天彩蛋` the same way
   dialect.md                家乡话 for the 家乡话与地方梗 collection: `## <province id>`, then entries
@@ -68,6 +77,27 @@ listed under 深入. dialect.md entries use the same format and should have one:
 
 The app keeps the user's own edits, notes and flashcards for an egg under an id made from its page
 and its text, so fixing an egg's wording gives it a new id; the old notes stay, shown as the user's own.
+
+A province's 集章 test asks its 省会 first (made from `capital`; a 直辖市 or 特别行政区 is asked what
+kind of place it is), then four questions from its `quiz` list and its 简称, then its `dialect`
+question. Write them about things everyone from there knows (food, sights, sayings, what's on the
+news), never about a photo. Each has 4 options, the right one at `answer` (the app shuffles them), a
+`why`, and maybe `more`: the name of a 百科 page or city to read next (the dialect question links to
+the province's 家乡话 by default). A province needs at least 4 `quiz` questions and a `dialect` one:
+
+```yaml
+dialect:
+  q: 浙江大部分地方说的是哪一种方言？
+  options: [吴语, 粤语, 闽南话, 湘语]
+  answer: 0
+  why: 浙江话大多是吴语，跟上海话、苏州话是一家。
+quiz:
+  - q: 杭州最有名的湖叫什么？
+    options: [西湖, 东湖, 太湖, 洱海]
+    answer: 0
+    why: 西湖有“苏堤春晓”“断桥残雪”等十景。
+    more: 西湖
+```
 
 A series lists the provinces it's about with `provinces: [henan]` in its index.md; those link the
 series to the map and light the province up as it's read.

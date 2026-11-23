@@ -36,7 +36,7 @@ import { CITIES } from '../lib/cities.ts'
 import { go } from '../lib/router.ts'
 import type { Egg, Para, Place } from '../lib/types.ts'
 import { Button } from './ui.tsx'
-import { ZhText } from './ZhText.tsx'
+import { TapText, ZhText } from './ZhText.tsx'
 
 /** One page's 聊天彩蛋: the page itself first, then related pages (its province, its cities…). */
 export interface EggGroup {
@@ -200,7 +200,9 @@ export function EggCard({ egg, glossary, links, here }: { egg: EggView; glossary
       <div className="px-4 pt-3.5 pb-3">
         <div className="flex items-start gap-2">
           <span className="mt-0.5 shrink-0 rounded-md bg-dai px-1.5 text-xs leading-5 font-black text-white">问</span>
-          <span className="min-w-0 flex-1 text-[15px] leading-snug font-extrabold">{egg.q || '还没有问题：点“改”写一个'}</span>
+          <span className="min-w-0 flex-1 text-[15px] leading-snug font-extrabold">
+            {egg.q ? <TapText inline id={`egg-q-${egg.key}`} text={egg.q} glossary={glossary} source={source} className="!leading-snug" /> : '还没有问题：点“改”写一个'}
+          </span>
           {egg.mine && <span className="shrink-0 rounded-md bg-huang/30 px-1.5 text-xs leading-5 font-extrabold text-huang-dark">我的</span>}
           {egg.edited && <span className="shrink-0 rounded-md bg-sunken px-1.5 text-xs leading-5 font-extrabold text-mute">改过</span>}
         </div>

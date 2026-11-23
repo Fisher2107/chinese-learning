@@ -16,7 +16,7 @@ let lastView: 'garden' | 'list' = 'garden'
 export function WordBank() {
   const words = useLiveQuery(() => db.words.orderBy('created').reverse().toArray(), [], [])
   const [q, setQ] = useState('')
-  const [open, setOpen] = useState<number>()
+  const [open, setOpen] = useState<SavedWord['id']>()
   const [view, setViewState] = useState(lastView)
   const setView = (v: typeof view) => setViewState((lastView = v))
   const now = Date.now()

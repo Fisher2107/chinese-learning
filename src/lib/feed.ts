@@ -1,4 +1,5 @@
-import { db, type FeedSeen, type SavedWord } from './db.ts'
+import { add } from 'dexie'
+import { progressKey, db, type FeedSeen, type SavedWord } from './db.ts'
 import { shortQuestion, type QuizQuestion } from './places.ts'
 import { addChars, addCoins, bumpDay, recordActivity } from './stats.ts'
 import type { FeedCard, Place } from './types.ts'
@@ -104,15 +105,15 @@ export function buildQueue({
  */
 export async function markSeen(id: string, dwell: number) {
   if (dwell < 600) return
-  const prev = await db.feed.get(id)
-  await db.feed.put({ ...prev, id, seen: prev?.seen ?? Date.now(), dwell: (prev?.dwell ?? 0) + dwell })
+  const prev = await db.feed.get(progressKey(id))
+  await db.feed.upsert(progressKey(id), { id, seen: prev?.seen ?? Date.now(), dwell: add(dwell) })
 }
 
 /** 读完了: counts the card for today and its characters as read (once). */
 export async function markRead(id: string, chars: number) {
-  const prev = await db.feed.get(id)
+  const prev = await db.feed.get(progressKey(id))
   if (prev?.read) return
-  await db.feed.put({ ...prev, id, seen: prev?.seen ?? Date.now(), dwell: prev?.dwell ?? 0, read: Date.now() })
+  await db.feed.upsert(progressKey(id), { id, seen: prev?.seen ?? Date.now(), read: Date.now() })
   await addChars(chars)
   await bumpDay('cards')
   await recordActivity()
@@ -120,13 +121,13 @@ export async function markRead(id: string, chars: number) {
 
 /** Changed their mind: the card comes back in the feed. */
 export async function markUnread(id: string) {
-  const prev = await db.feed.get(id)
-  if (prev) await db.feed.put({ ...prev, read: undefined })
+  const prev = await db.feed.get(progressKey(id))
+  if (prev) await db.feed.upsert(progressKey(id), { read: undefined })
 }
 
 export async function toggleLike(id: string) {
-  const prev = await db.feed.get(id)
-  await db.feed.put({ ...prev, id, seen: prev?.seen ?? Date.now(), dwell: prev?.dwell ?? 0, liked: !prev?.liked })
+  const prev = await db.feed.get(progressKey(id))
+  await db.feed.upsert(progressKey(id), { id, seen: prev?.seen ?? Date.now(), liked: !prev?.liked })
 }
 
 export async function quizAnswered(right: boolean) {

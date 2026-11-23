@@ -1,7 +1,7 @@
 import { Photo } from '../components/Photo.tsx'
 import { useCallback, useEffect, useMemo } from 'react'
 import { BooksIcon, ChatCircleDotsIcon, MapPinIcon } from '@phosphor-icons/react'
-import { db, type WordSource } from '../lib/db.ts'
+import { db, progressKey, type WordSource } from '../lib/db.ts'
 import { loadCities, loadFeed, loadPlaces, loadWikiIndex, useLoad } from '../lib/content.ts'
 import { FOOD_KINDS, pagesAbout, SIGHT_KINDS, STORY_KINDS, useWikiProgress } from '../lib/wiki.ts'
 import { PeopleRow, PhotoRow } from '../components/WikiCards.tsx'
@@ -28,7 +28,7 @@ export function CityPage({ id }: { id: string }) {
   const marks = useMarks()
   const wikiIndex = useLoad(loadWikiIndex, 'wiki-index').data
   const { seen } = useWikiProgress()
-  const row = useLiveQuery(() => db.cities.get(id), [id])
+  const row = useLiveQuery(() => db.cities.get(progressKey(id)), [id])
   const content = file?.cities.find((c) => c.id === id)
   const eggCount = useEggCount(`city/${id}`, content?.eggs.length ?? 0)
   useEffect(() => {

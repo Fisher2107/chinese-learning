@@ -1,4 +1,4 @@
-import { db } from './db.ts'
+import { deviceDb } from './db.ts'
 import { readSettings } from './settings.ts'
 
 export class NoKeyError extends Error {
@@ -44,7 +44,7 @@ let skipReasoning = false
 /** Asks the model. With a cacheKey, the answer is kept on the device and reused next time. */
 export async function ask(instructions: string, input: string | ChatMsg[], cacheKey?: string): Promise<string> {
   if (cacheKey) {
-    const hit = await db.ai.get(cacheKey)
+    const hit = await deviceDb.ai.get(cacheKey)
     if (hit) return hit.answer
   }
   const { openai, model, key, APIConnectionError } = await client()
@@ -69,7 +69,7 @@ export async function ask(instructions: string, input: string | ChatMsg[], cache
     }
   }
   const answer = res.output_text.trim()
-  if (cacheKey) await db.ai.put({ key: cacheKey, answer, created: Date.now() })
+  if (cacheKey) await deviceDb.ai.put({ key: cacheKey, answer, created: Date.now() })
   return answer
 }
 
@@ -131,7 +131,7 @@ const eggKey = (place: string, egg: string) => `egg:${place}|${egg}`
 
 /** An 展开 asked before, if there is one (no network). */
 export async function cachedEggExpansion(place: string, egg: string) {
-  return (await db.ai.get(eggKey(place, egg)))?.answer
+  return (await deviceDb.ai.get(eggKey(place, egg)))?.answer
 }
 
 /** 展开: the background to a 聊天彩蛋, a story or detail, and things to ask a Chinese friend. Cached. */

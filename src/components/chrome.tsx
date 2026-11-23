@@ -19,7 +19,7 @@ const TABS = [
 /** True when there are cards the user hasn't seen that arrived after their last visit to 刷一刷. */
 function useNewCards() {
   const index = useLoad(loadIndex, 'index').data
-  const state = useLiveQuery(async () => ({ visited: await getSetting('feedVisited', ''), seen: new Set(await db.feed.toCollection().primaryKeys()) }), [])
+  const state = useLiveQuery(async () => ({ visited: await getSetting('feedVisited', ''), seen: new Set((await db.feed.toArray()).map((row) => row.id)) }), [])
   if (!index || !state) return false
   return (index.feed ?? []).some((c) => c.date > state.visited && !state.seen.has(c.id))
 }

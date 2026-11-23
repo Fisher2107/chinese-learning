@@ -4,7 +4,8 @@
 //   content/series/<id>/after.md     读后: key words, 聊天工具包, 聊天彩蛋…
 //   content/texts/<id>.md            public-domain full texts
 //   content/terms.yml                names and words the dictionary lacks
-//   content/places/<id>.md           one page per province: intro, then ## 聊天彩蛋 bullets (each with 问： and maybe 查：)
+//   content/places/<id>.md           one page per province: intro, then ## 聊天彩蛋 bullets (each with 问： and maybe 查：);
+//                                    frontmatter dialect + quiz: the 集章 questions (see README)
 //   content/feed/<slug>.md           刷一刷 cards: title is the hook question, body 150–300 字
 //   content/wiki/<id>.md             百科: one page per place, person, river, event, legend, dish…
 // Output: public/content/{index.json, series/<id>.json, texts/<id>.json, places.json, feed.json,
@@ -379,6 +380,22 @@ for (const [i, id] of seriesIds.entries()) seriesOut.push(await buildSeries(id, 
 const textOut = Object.keys(texts).map(buildText)
 
 // ---------- places (provinces) ----------
+/** A 集章 question: { q, options, answer, why, more? }, where `more` names a page to read (西湖, 苏州…). */
+function placeQuiz(q, where) {
+  if (!q?.q || !Array.isArray(q.options) || q.options.length !== 4 || !(q.answer >= 0 && q.answer < 4) || !q.why)
+    errors.push(`${where}: needs q, 4 options, a valid answer index and why`)
+  const options = (q?.options ?? []).map((o) => plainText(String(o)))
+  if (new Set(options).size !== options.length) errors.push(`${where}: options repeat`)
+  if (q?.photo) errors.push(`${where}: 集章 has no photo questions`)
+  let more
+  if (q?.more) {
+    const route = routeOf.get(String(q.more))
+    if (route) more = { route, title: titleOf.get(route) ?? String(q.more) }
+    else errors.push(`${where}: more → no page called "${q.more}"`)
+  }
+  return { q: plainText(String(q?.q ?? '')), options, answer: q?.answer ?? 0, why: plainText(String(q?.why ?? '')), ...(more && { more }) }
+}
+
 const placeIds = new Set()
 const places = []
 const placesGlossary = {}
@@ -390,6 +407,10 @@ for (const file of (await readdir('content/places')).filter((f) => f.endsWith('.
   if (meta.short && [...meta.short].length !== 1) errors.push(`${where}: short should be one character (put a second one in alias)`)
   const [intro, eggSrc = ''] = body.split(/^## 聊天彩蛋\s*$/m)
   const eggs = parseEggs(eggSrc, `place/${meta.id}`, meta.name, placesGlossary, where)
+  // 集章: questions everyone from here would know, and one on the local dialect
+  const quiz = (meta.quiz ?? []).map((q, i) => placeQuiz(q, `${where}: quiz ${i + 1}`))
+  if (quiz.length < 4) errors.push(`${where}: needs at least 4 quiz questions everyone from ${meta.name} would know (has ${quiz.length})`)
+  if (!meta.dialect) errors.push(`${where}: needs a dialect question (什么话、什么方言)`)
   placeIds.add(meta.id)
   onPage(`place/${meta.id}`, meta.name)
   places.push({
@@ -404,6 +425,8 @@ for (const file of (await readdir('content/places')).filter((f) => f.endsWith('.
     note: meta.note ? makeSentences(meta.note, placesGlossary, where) : [],
     intro: parseBlocks(intro, placesGlossary, where),
     eggs,
+    quiz,
+    dialect: meta.dialect ? placeQuiz(meta.dialect, `${where}: dialect`) : undefined,
     chars: charCount(intro) + eggChars(eggs),
     series: seriesOut.filter((s) => s.summary.provinces.includes(meta.id)).map((s) => s.summary.id),
   })

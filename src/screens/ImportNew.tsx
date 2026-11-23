@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ClipboardTextIcon } from '@phosphor-icons/react'
-import { db } from '../lib/db.ts'
+import { deviceDb } from '../lib/db.ts'
 import { countHan, tokenizeText } from '../lib/dict.ts'
 import { go } from '../lib/router.ts'
 import { Button, PageHeader } from '../components/ui.tsx'
@@ -26,7 +26,7 @@ export function ImportNew() {
     try {
       const paras = await tokenizeText(raw)
       const firstLine = raw.trim().split('\n')[0].slice(0, 24)
-      const id = await db.imports.add({ title: title.trim() || firstLine, raw, paras, chars, created: Date.now() })
+      const id = await deviceDb.imports.add({ title: title.trim() || firstLine, raw, paras, chars, created: Date.now() })
       go(`import/${id}`, true)
     } catch (e) {
       setError(`导入失败：${e instanceof Error ? e.message : e}`)

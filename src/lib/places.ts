@@ -1,8 +1,8 @@
 import { useLiveQuery } from './live.ts'
 import MAP from '../data/china-map.json'
-import { db } from './db.ts'
+import { progressKey, db } from './db.ts'
 import { addChars, addCoins, recordActivity } from './stats.ts'
-import type { FeedCard, Place, Region, Sentence, SeriesSummary, WikiIndex } from './types.ts'
+import type { FeedCard, Place, PlaceQuiz, Region, SeriesSummary } from './types.ts'
 
 export { MAP }
 export type MapProvince = (typeof MAP.provinces)[number]
@@ -91,15 +91,15 @@ export function usePlaceStats(feedCards: FeedCard[] = [], seriesList: SeriesSumm
 
 /** Opening a page only notes the visit; it doesn't count as reading or as activity for the day. */
 export async function visitPlace(id: string) {
-  const prev = await db.places.get(id)
-  if (!prev) await db.places.put({ id, visited: Date.now(), updated: Date.now() })
+  const prev = await db.places.get(progressKey(id))
+  if (!prev) await db.places.upsert(progressKey(id), { id, visited: Date.now(), updated: Date.now() })
 }
 
 /** 我读完了 on a place page. Returns coins earned (5, only the first time). */
 export async function markPlaceRead(id: string, chars: number): Promise<number> {
-  const prev = await db.places.get(id)
+  const prev = await db.places.get(progressKey(id))
   if (prev?.read) return 0
-  await db.places.put({ ...prev, id, visited: prev?.visited ?? Date.now(), read: Date.now(), updated: Date.now() })
+  await db.places.upsert(progressKey(id), { id, visited: prev?.visited ?? Date.now(), read: Date.now(), updated: Date.now() })
   await addChars(chars)
   await addCoins(5)
   await recordActivity()
@@ -107,8 +107,8 @@ export async function markPlaceRead(id: string, chars: number): Promise<number> 
 }
 
 export async function markPlaceUnread(id: string) {
-  const prev = await db.places.get(id)
-  if (prev) await db.places.put({ ...prev, read: undefined, updated: Date.now() })
+  const prev = await db.places.get(progressKey(id))
+  if (prev) await db.places.upsert(progressKey(id), { read: undefined, updated: Date.now() })
 }
 
 /** Provinces the user has read about or stamped: what quizzes and the feed lean on. */
@@ -116,9 +116,9 @@ export const explored = (rows: { id: string; read?: number; stamp?: number }[]) 
 
 /** Passing the 集章 quiz. Returns coins earned (only the first time). */
 export async function earnStamp(id: string): Promise<number> {
-  const prev = await db.places.get(id)
+  const prev = await db.places.get(progressKey(id))
   if (prev?.stamp) return 0
-  await db.places.put({ ...prev, id, visited: prev?.visited ?? Date.now(), stamp: Date.now(), updated: Date.now() })
+  await db.places.upsert(progressKey(id), { id, visited: prev?.visited ?? Date.now(), stamp: Date.now(), updated: Date.now() })
   await addCoins(15)
   await recordActivity()
   return 15
@@ -130,8 +130,6 @@ export interface QuizQuestion {
   answer: number
   /** shown after answering, right or wrong */
   why: string
-  /** a photo key shown with the question */
-  photo?: string
   /** where to read more: shown after answering */
   more?: { route: string; title: string }
 }
@@ -145,117 +143,62 @@ function shuffle<T>(a: T[]): T[] {
   return b
 }
 
+/** The right answer and three others: the first of `pool` that differ, so put the best ones first. */
 function choice(correct: string, pool: string[]): { options: string[]; answer: number } {
-  const options = shuffle([correct, ...shuffle([...new Set(pool.filter((x) => x && x !== correct))]).slice(0, 3)])
+  const options = shuffle([correct, ...[...new Set(pool.filter((x) => x && x !== correct))].slice(0, 3)])
   return { options, answer: options.indexOf(correct) }
 }
 
+/** Mainland number plates start with the 简称 (京A, 浙A…); Hong Kong's, Macao's and Taiwan's don't. */
+const PLATES = (p: Place) => p.type !== '特别行政区' && p.id !== 'taiwan'
+
 export function shortQuestion(p: Place, all: Place[]): QuizQuestion {
-  return { q: `${p.name}的简称是哪个字？`, ...choice(p.short, all.map((x) => x.short)), why: `${p.name}简称“${p.short}”${p.alias ? `，也可以叫“${p.alias}”` : ''}。` }
+  return { q: `${p.name}的简称是哪个字？`, ...choice(p.short, shuffle(all.map((x) => x.short))), why: `${p.name}简称“${p.short}”${p.alias ? `，也可以叫“${p.alias}”` : ''}。${PLATES(p) ? '车牌上的第一个字就是简称。' : ''}` }
 }
 
-/** The old three: 简称, 省会 (or region), and a neighbour. One of them warms up every quiz. */
-function basics(p: Place, all: Place[]): QuizQuestion[] {
-  const byId = new Map(all.map((x) => [x.id, x]))
-  const qs: QuizQuestion[] = [shortQuestion(p, all)]
-  if (p.capital) {
-    const near = all.filter((x) => x.region === p.region && x.capital).map((x) => x.capital)
-    qs.push({ q: `${p.name}的省会是哪个城市？`, ...choice(p.capital, [...near, ...all.map((x) => x.capital)]), why: `${p.full}的省会是${p.capital}。` })
-  } else {
-    qs.push({ q: `${p.name}在中国的哪个地区？`, ...choice(p.region, REGIONS.map((r) => r.name)), why: `${p.name}属于${p.region}。` })
+const KINDS = ['省', '自治区', '直辖市', '特别行政区'] as const
+
+/** 省会, with the capitals of its region as the other options; what kind of place it is if it has none. */
+function capitalQuestion(p: Place, all: Place[], cities: QuizCity[]): QuizQuestion {
+  if (!p.capital) {
+    const why =
+      p.type === '直辖市'
+        ? `${p.name}是直辖市，直接归中央管，所以没有省会。中国有四个直辖市：北京、上海、天津和重庆。`
+        : `${p.name}是特别行政区，实行“一国两制”，所以没有省会。中国有两个特别行政区：香港和澳门。`
+    const options = shuffle([...KINDS])
+    return { q: `${p.name}没有省会，因为它是哪一种行政区？`, options, answer: options.indexOf(p.type), why }
   }
-  const neighbours = (MAP_BY_ID.get(p.id)?.neighbours ?? []).filter((id) => byId.has(id))
-  if (neighbours.length) {
-    const yes = byId.get(shuffle(neighbours)[0])!
-    const no = all.filter((x) => x.id !== p.id && !neighbours.includes(x.id)).map((x) => x.name)
-    const names = neighbours.map((id) => byId.get(id)!.name).join('、')
-    qs.push({ q: `哪个地方和${p.name}挨着？`, ...choice(yes.name, no), why: `和${p.name}挨着的有：${names}。`, more: { route: `place/${yes.id}`, title: yes.name } })
+  const near = all.filter((x) => x.id !== p.id && x.region === p.region && x.capital).map((x) => x.capital)
+  const rest = all.filter((x) => x.id !== p.id && x.capital).map((x) => x.capital)
+  const city = cities.find((c) => c.prov === p.id && c.name === p.capital)
+  return {
+    q: `${p.name}的省会是哪个城市？`,
+    ...choice(p.capital, [...shuffle(near), ...shuffle(rest)]),
+    why: `${p.full}的省会是${p.capital}。`,
+    ...(city && { more: { route: `city/${city.id}`, title: p.capital } }),
   }
-  return qs
 }
 
-export interface QuizSources {
-  /** the 百科 list */
-  wiki?: WikiIndex
-  /** photo keys that exist */
-  photos: Set<string>
-  /** cities on the map: id, name, province */
-  cities: { id: string; name: string; prov: string; kind: string }[]
-  /** 百科 pages the user has opened: their questions come first */
-  seen: Set<string>
+/** A question from the content, its options in a new order each time. */
+function fromContent(q: PlaceQuiz): QuizQuestion {
+  const options = shuffle(q.options.map((o, i) => ({ o, right: i === q.answer })))
+  return { q: q.q, options: options.map((x) => x.o), answer: options.findIndex((x) => x.right), why: q.why, more: q.more }
 }
 
-const SIGHTS = new Set(['景点', '地点', '河流', '山', '湖', '建筑'])
+export interface QuizCity {
+  id: string
+  name: string
+  prov: string
+}
 
 /**
- * 集章: about six questions on what makes the place itself: photos of its famous sights ("这是哪里？"),
- * its people, the questions written with its 百科 pages (pages you've read come first), which city
- * things are in, and one of the basics. Each answer says why and where to read more.
+ * 集章: what everyone from the place knows. Its 省会 first (or, with none, what kind of place it is),
+ * then four of the questions written for it (its 简称 is one of them), then what people speak there.
+ * No photos: this is knowing the place, not recognising a picture. Each answer says why.
  */
-export function makeQuiz(p: Place, all: Place[], src: QuizSources): QuizQuestion[] {
-  const pages = (src.wiki?.pages ?? []).filter((w) => w.provinces.includes(p.id))
-  const others = (src.wiki?.pages ?? []).filter((w) => !w.provinces.includes(p.id))
-  const more = (id: string, name: string) => ({ route: `wiki/${id}`, title: name })
-  const out: QuizQuestion[] = []
-
-  // 1. a famous sight, by its photo
-  const sights = shuffle(pages.filter((w) => SIGHTS.has(w.kind) && src.photos.has(`wiki/${w.id}`)))
-  if (sights.length) {
-    const s = sights[0]
-    const pool = [...pages.filter((w) => SIGHTS.has(w.kind)), ...shuffle(others.filter((w) => SIGHTS.has(w.kind)))].map((w) => w.name)
-    out.push({ q: '照片里是哪儿？', photo: `wiki/${s.id}`, ...choice(s.name, pool), why: plainLede(s.lede), more: more(s.id, s.name) })
-  } else {
-    // no 百科 photos yet: a city of this province, by its photo
-    const mine = shuffle(src.cities.filter((c) => c.prov === p.id && c.kind !== 'muni' && src.photos.has(`city/${c.id}`)))
-    if (mine.length) {
-      const c = mine[0]
-      const pool = [...src.cities.filter((x) => x.prov === p.id), ...shuffle(src.cities)].map((x) => x.name)
-      out.push({ q: `照片里是${p.name}的哪个城市？`, photo: `city/${c.id}`, ...choice(c.name, pool), why: `这是${c.name}。`, more: { route: `city/${c.id}`, title: c.name } })
-    }
-  }
-
-  // 2. someone from here
-  const people = shuffle(pages.filter((w) => w.kind === '人物'))
-  if (people.length) {
-    const who = people[0]
-    if (src.photos.has(`wiki/${who.id}`)) {
-      const pool = [...people.slice(1), ...shuffle(others.filter((w) => w.kind === '人物'))].map((w) => w.name)
-      if (pool.length >= 3) out.push({ q: '这位是谁？', photo: `wiki/${who.id}`, ...choice(who.name, pool), why: plainLede(who.lede), more: more(who.id, who.name) })
-    } else {
-      const pool = shuffle(others.filter((w) => w.kind === '人物')).map((w) => w.name)
-      if (pool.length >= 3) out.push({ q: `下面哪一位跟${p.name}关系最深？`, ...choice(who.name, pool), why: plainLede(who.lede), more: more(who.id, who.name) })
-    }
-  }
-
-  // 3. questions written with the pages: read ones first
-  const written = pages.flatMap((w) => (src.wiki?.quiz[w.id] ?? []).map((q) => ({ q, w })))
-  const ordered = [...shuffle(written.filter((x) => src.seen.has(x.w.id))), ...shuffle(written.filter((x) => !src.seen.has(x.w.id)))]
-  for (const { q, w } of ordered.slice(0, 3)) {
-    const options = shuffle(q.options.map((o, i) => ({ o, right: i === q.answer })))
-    out.push({ q: q.q, options: options.map((x) => x.o), answer: options.findIndex((x) => x.right), why: q.why, photo: q.photo, more: more(w.id, w.name) })
-  }
-
-  // 4. which city a sight is in
-  const placed = shuffle(pages.filter((w) => SIGHTS.has(w.kind) && w.cities.length === 1))
-  const inCity = placed.find((w) => !out.some((q) => q.more?.route === `wiki/${w.id}`)) ?? placed[0]
-  if (inCity) {
-    const city = src.cities.find((c) => c.id === inCity.cities[0])
-    if (city) {
-      const pool = shuffle(src.cities.filter((c) => c.prov === p.id && c.kind !== 'muni')).map((c) => c.name)
-      if (pool.length >= 3) out.push({ q: `${inCity.name}在哪个城市？`, ...choice(city.name, pool), why: `${inCity.name}在${city.name}。`, more: more(inCity.id, inCity.name) })
-    }
-  }
-
-  // 5. basics: one if there's plenty else, all of them if there's little
-  const b = shuffle(basics(p, all))
-  const fill = out.length >= 4 ? b.slice(0, 1) : b
-  // a city of this province among others, if still short
-  if (out.length + fill.length < 5) {
-    const mine = shuffle(src.cities.filter((c) => c.prov === p.id && c.kind !== 'muni'))[0]
-    const pool = shuffle(src.cities.filter((c) => c.prov !== p.id && c.kind !== 'muni')).map((c) => c.name)
-    if (mine) fill.push({ q: `哪个城市在${p.name}？`, ...choice(mine.name, pool), why: `${mine.name}在${p.name}。`, more: { route: `city/${mine.id}`, title: mine.name } })
-  }
-  return [fill[0], ...out, ...fill.slice(1)].filter(Boolean).slice(0, 7)
+export function makeQuiz(p: Place, all: Place[], cities: QuizCity[]): QuizQuestion[] {
+  const first = capitalQuestion(p, all, cities)
+  const known = shuffle([shortQuestion(p, all), ...p.quiz.map(fromContent)]).slice(0, 4)
+  const dialect = p.dialect && { ...fromContent(p.dialect), more: p.dialect.more ?? { route: `collection/hometown/${p.id}`, title: `${p.name}的家乡话` } }
+  return [first, ...known, ...(dialect ? [dialect] : [])]
 }
-
-const plainLede = (lede: Sentence[]) => lede.map((s) => s.tokens.map((t) => t.t).join('')).join('')

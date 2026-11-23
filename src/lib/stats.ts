@@ -1,5 +1,6 @@
 import { useLiveQuery } from './live.ts'
-import { db, getSetting, setSetting, type DayLog } from './db.ts'
+import { add, type Table } from 'dexie'
+import { progressKey, db, getSetting, type DayLog } from './db.ts'
 
 /**
  * Streak with one grace day: missing a single day doesn't break it
@@ -14,6 +15,9 @@ export interface Stats {
   coins: number
   chars: number
 }
+
+// Only the stats row uses these nested numeric fields.
+const statsTable = db.settings as Table<{ key: string; value: Partial<Stats> }, string>
 
 const EMPTY: Stats = { streak: 0, lastDay: '', graceUsed: '', coins: 0, chars: 0 }
 
@@ -52,24 +56,16 @@ export async function recordActivity() {
       s.graceUsed = now
     } else s.streak = 1
     s.lastDay = now
-    await setSetting('stats', s)
+    await statsTable.upsert(progressKey('stats'), { key: 'stats', 'value.streak': s.streak, 'value.lastDay': now, 'value.graceUsed': s.graceUsed })
   })
 }
 
 export async function addCoins(n: number) {
-  await db.transaction('rw', db.settings, async () => {
-    const s = await readStats()
-    s.coins += n
-    await setSetting('stats', s)
-  })
+  await statsTable.upsert(progressKey('stats'), { key: 'stats', 'value.coins': add(n) })
 }
 
 export async function addChars(n: number) {
-  await db.transaction('rw', db.settings, async () => {
-    const s = await readStats()
-    s.chars += n
-    await setSetting('stats', s)
-  })
+  await statsTable.upsert(progressKey('stats'), { key: 'stats', 'value.chars': add(n) })
   await bumpDay('chars', n)
 }
 
@@ -79,16 +75,13 @@ export const emptyDay = (day = today()): DayLog => ({ day, reviews: 0, saved: 0,
 
 /** Adds to one of today's counters (for the morning routine and the day summary). */
 export async function bumpDay(field: Counter, n = 1) {
-  await db.transaction('rw', db.days, async () => {
-    const d = (await db.days.get(today())) ?? emptyDay()
-    d[field] += n
-    await db.days.put(d)
-  })
+  const day = today()
+  await db.days.upsert(progressKey(day), { day, [field]: add(n) })
 }
 
 export function useToday(): DayLog {
   const day = today()
-  return useLiveQuery(async () => (await db.days.get(day)) ?? emptyDay(day), [day], emptyDay(day))
+  return useLiveQuery(async () => ({ ...emptyDay(day), ...await db.days.get(progressKey(day)) }), [day], emptyDay(day))
 }
 
 export function useStats() {
@@ -102,10 +95,10 @@ export function useStats() {
 /** The morning routine's three steps are done: mark the day and pay out once. Returns coins earned. */
 export async function finishMorning(): Promise<number> {
   const fresh = await db.transaction('rw', db.days, async () => {
-    const d = (await db.days.get(today())) ?? emptyDay()
+    const d = (await db.days.get(progressKey(today()))) ?? emptyDay()
     if (d.morning) return false
     d.morning = Date.now()
-    await db.days.put(d)
+    await db.days.upsert(progressKey(d.day), { day: d.day, morning: d.morning })
     return true
   })
   if (!fresh) return 0

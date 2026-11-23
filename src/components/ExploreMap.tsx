@@ -463,7 +463,7 @@ export function ExploreMap({
     }
 
     // Region names first: they're what the 分区 map is for. Taps go through them to the province.
-    if (areas && z < 3)
+    if (areas && z < 5)
       for (const a of areas) {
         const size = z < 1.3 ? 21 : 26
         const box = textBox(sx(a.x), sy(a.y), a.text, size, 'middle', 0.12)

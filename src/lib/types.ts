@@ -102,9 +102,22 @@ export interface Place {
   intro: Para[]
   /** 聊天彩蛋: things worth knowing to start a conversation */
   eggs: Egg[]
+  /** 集章: questions everyone from here would know (the right answer is options[answer]) */
+  quiz: PlaceQuiz[]
+  /** 集章's last question: what people speak here */
+  dialect?: PlaceQuiz
   /** characters in the intro and 聊天彩蛋, counted when the page is marked read */
   chars: number
   series: string[]
+}
+
+export interface PlaceQuiz {
+  q: string
+  options: string[]
+  answer: number
+  why: string
+  /** a page to read more on */
+  more?: { route: string; title: string }
 }
 
 /** A city on the map: facts for every one, an intro and 聊天彩蛋 for the ones with a page. */

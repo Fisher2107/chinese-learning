@@ -4,7 +4,7 @@ import { useLiveQuery } from '../lib/live.ts'
 import { motion } from 'motion/react'
 import { ArrowDownIcon, ArrowUpIcon, ArrowRightIcon, ArrowsClockwiseIcon, CardsIcon, CaretRightIcon, CheckCircleIcon, CheckIcon, HeartIcon, MapTrifoldIcon, PlayIcon, XCircleIcon } from '@phosphor-icons/react'
 import { Rating } from 'ts-fsrs'
-import { db, setSetting, type SavedWord, type WordSource } from '../lib/db.ts'
+import { progressKey, db, setSetting, type SavedWord, type WordSource } from '../lib/db.ts'
 import { loadFeed, loadIndex, loadPlaces, useLoad } from '../lib/content.ts'
 import { buildQueue, markRead, markSeen, quizAnswered, toggleLike, type FeedItem } from '../lib/feed.ts'
 import { explored, regionColor, type QuizQuestion } from '../lib/places.ts'
@@ -14,7 +14,7 @@ import { today, useToday } from '../lib/stats.ts'
 import type { FeedCard, FeedFile, Place, SeriesSummary } from '../lib/types.ts'
 import { Seal } from '../components/Seal.tsx'
 import { Button, Loading } from '../components/ui.tsx'
-import { ZhText } from '../components/ZhText.tsx'
+import { TapText, ZhText } from '../components/ZhText.tsx'
 
 const NO_PLACE = '#425066'
 const titleText = (c: FeedCard) => c.title.map((s) => s.tokens.map((t) => t.t).join('')).join('')
@@ -107,7 +107,7 @@ export function Feed({ start }: { start?: string }) {
         <section key={`${round}-${i}`} data-i={i} className="relative h-full snap-start snap-always overflow-hidden">
           {item.kind === 'card' && <StoryCard card={item.card} feed={feed} place={places.get(item.card.province)} series={series.get(item.card.series)} first={i === 0} onNext={next} />}
           {item.kind === 'review' && <ReviewCard word={item.word} onDone={next} />}
-          {item.kind === 'quiz' && <QuizCard place={item.place} q={item.q} onDone={next} />}
+          {item.kind === 'quiz' && <QuizCard place={item.place} q={item.q} glossary={placesFile.glossary} onDone={next} />}
           {item.kind === 'end' && <EndCard onAgain={() => setRound((r) => r + 1)} />}
         </section>
       ))}
@@ -174,7 +174,7 @@ function StoryCard({
   first: boolean
   onNext: () => void
 }) {
-  const row = useLiveQuery(() => db.feed.get(card.id), [card.id])
+  const row = useLiveQuery(() => db.feed.get(progressKey(card.id)), [card.id])
   const liked = !!row?.liked
   const read = !!row?.read
   const color = place ? regionColor(place.region) : NO_PLACE
@@ -326,8 +326,9 @@ function ReviewCard({ word, onDone }: { word: SavedWord; onDone: () => void }) {
   )
 }
 
-function QuizCard({ place, q, onDone }: { place: Place; q: QuizQuestion; onDone: () => void }) {
+function QuizCard({ place, q, glossary, onDone }: { place: Place; q: QuizQuestion; glossary: Record<string, string>; onDone: () => void }) {
   const [pick, setPick] = useState<number>()
+  const source: WordSource = { kind: 'place', route: `place/${place.id}`, title: `考考你 · ${place.name}` }
   function answer(i: number) {
     if (pick !== undefined) return
     setPick(i)
@@ -341,7 +342,9 @@ function QuizCard({ place, q, onDone }: { place: Place; q: QuizQuestion; onDone:
         <div className="flex justify-center">
           <Seal char={pick !== undefined ? place.short : '？'} earned size={96} />
         </div>
-        <h2 className="mt-6 text-center text-[24px] font-black">{q.q}</h2>
+        <h2 className="mt-6 text-center text-[24px] font-black">
+          <TapText inline id={`feed-quiz-q-${place.id}`} text={q.q} glossary={glossary} source={source} className="!leading-snug" />
+        </h2>
         <div className="mt-6 grid grid-cols-2 gap-3">
           {q.options.map((o, i) => {
             const right = pick !== undefined && i === q.answer
@@ -361,9 +364,9 @@ function QuizCard({ place, q, onDone }: { place: Place; q: QuizQuestion; onDone:
           })}
         </div>
         {pick !== undefined && (
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-5 text-center text-[17px] font-bold">
-            {q.why}
-          </motion.p>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-5 text-[17px] font-bold">
+            <TapText id={`feed-quiz-why-${place.id}`} text={q.why} glossary={glossary} source={source} className="text-center" />
+          </motion.div>
         )}
       </div>
     </Frame>

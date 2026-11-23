@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { ArrowRightIcon, BooksIcon, CaretRightIcon, CheckCircleIcon, DiceFiveIcon, LinkIcon, MagnifyingGlassIcon, MapTrifoldIcon, PathIcon, QuestionIcon, XCircleIcon } from '@phosphor-icons/react'
 import { loadPlaces, loadWiki, loadWikiIndex, useLoad } from '../lib/content.ts'
 import { useLiveQuery } from '../lib/live.ts'
-import { db, type WordSource } from '../lib/db.ts'
+import { progressKey, db, type WordSource } from '../lib/db.ts'
 import { go } from '../lib/router.ts'
 import { regionColor } from '../lib/places.ts'
 import { CITY_BY_ID } from '../lib/cities.ts'
@@ -13,14 +13,14 @@ import { ReadMark } from '../components/ReadMark.tsx'
 import { StaticMap, provinceBox, riverBox, type Pin } from '../components/StaticMap.tsx'
 import { NextCard } from '../components/WikiCards.tsx'
 import { Loading, PageHeader, Pill, Section } from '../components/ui.tsx'
-import { ZhText } from '../components/ZhText.tsx'
+import { TapText, ZhText } from '../components/ZhText.tsx'
 import { ExcerptCard } from './EpisodeReader.tsx'
 
 /** One 百科 page: a place, a person, a river… with links onward at every turn. */
 export function WikiPage({ id }: { id: string }) {
   const { data: page, error } = useLoad(() => loadWiki(id), `wiki/${id}`)
   const places = useLoad(loadPlaces, 'places').data
-  const progress = useLiveQuery(() => db.wiki.get(id), [id])
+  const progress = useLiveQuery(() => db.wiki.get(progressKey(id)), [id])
   const [trail, setTrail] = useState<Crumb[]>([])
   useEffect(() => {
     visitWiki(id)
@@ -95,7 +95,7 @@ export function WikiPage({ id }: { id: string }) {
           <Blocks blocks={page.body} id={id} glossary={page.glossary} source={source} />
         </div>
 
-        {page.quiz.length > 0 && <QuickQuiz q={page.quiz[0]} />}
+        {page.quiz.length > 0 && <QuickQuiz q={page.quiz[0]} glossary={page.glossary} source={source} />}
 
         {page.next.length > 0 && (
           <Section
@@ -229,7 +229,7 @@ function Blocks({ blocks, id, glossary, source }: { blocks: Block[]; id: string;
 }
 
 /** 考考你: one question at the end of the page, answered on the spot. */
-function QuickQuiz({ q }: { q: WikiQuiz }) {
+function QuickQuiz({ q, glossary, source }: { q: WikiQuiz; glossary: Record<string, string>; source: WordSource }) {
   const [pick, setPick] = useState<number>()
   return (
     <div className="tile mt-5 p-4">
@@ -237,26 +237,27 @@ function QuickQuiz({ q }: { q: WikiQuiz }) {
         <QuestionIcon size={18} weight="fill" /> 考考你
       </div>
       {q.photo && <Photo k={q.photo} ratio="16 / 9" credit={false} className="mt-2 rounded-xl" />}
-      <p className="mt-2 text-[19px] font-black">{q.q}</p>
+      <TapText id={`wiki-quiz-q-${source.route}`} text={q.q} glossary={glossary} source={source} className="mt-2 text-[19px] font-black" />
       <div className="mt-3 grid gap-2">
         {q.options.map((o, i) => {
           const right = pick !== undefined && i === q.answer
           const wrong = pick === i && i !== q.answer
           return (
+            // a press answers, so the options only show their pinyin once you've answered
             <button
               key={i}
-              disabled={pick !== undefined}
-              onClick={() => setPick(i)}
+              aria-disabled={pick !== undefined}
+              onClick={() => pick === undefined && setPick(i)}
               className={`flex min-h-12 items-center gap-2 rounded-xl border-2 px-3 py-2 text-left text-[16px] font-extrabold ${right ? 'border-lv bg-lv-soft' : wrong ? 'border-zhu bg-zhu-soft' : 'border-line'}`}
             >
-              <span className="flex-1">{o}</span>
+              <span className="flex-1">{pick !== undefined ? <TapText inline id={`wiki-quiz-o-${source.route}-${i}`} text={o} glossary={glossary} source={source} /> : o}</span>
               {right && <CheckCircleIcon size={22} weight="fill" className="text-lv" />}
               {wrong && <XCircleIcon size={22} weight="fill" className="text-zhu" />}
             </button>
           )
         })}
       </div>
-      {pick !== undefined && <p className="mt-3 text-[15px] font-bold text-mute">{q.why}</p>}
+      {pick !== undefined && <TapText id={`wiki-quiz-why-${source.route}`} text={q.why} glossary={glossary} source={source} className="mt-3 text-[15px] font-bold text-mute" />}
     </div>
   )
 }

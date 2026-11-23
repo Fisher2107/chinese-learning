@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { db } from './db.ts'
+import { progressKey, db } from './db.ts'
 import { useLiveQuery } from './live.ts'
 import { addChars, addCoins, recordActivity } from './stats.ts'
 
@@ -35,20 +35,20 @@ export function useMarks() {
 /** 学会了 on or off. Learnt places are what the 认地图 test asks about. */
 export async function setLearnt(kind: PlaceKind, id: string, on: boolean) {
   const t = table(kind)
-  const prev = await t.get(id)
-  await t.put({ ...prev, id, visited: prev?.visited ?? Date.now(), learnt: on ? Date.now() : undefined, updated: Date.now() })
+  const prev = await t.get(progressKey(id))
+  await t.upsert(progressKey(id), { id, visited: prev?.visited ?? Date.now(), learnt: on ? Date.now() : undefined, updated: Date.now() })
   if (on) await recordActivity()
 }
 
 export async function visitCity(id: string) {
-  if (!(await db.cities.get(id))) await db.cities.put({ id, visited: Date.now(), updated: Date.now() })
+  if (!(await db.cities.get(progressKey(id)))) await db.cities.upsert(progressKey(id), { id, visited: Date.now(), updated: Date.now() })
 }
 
 /** 我读完了 on a city page. Returns coins earned (3, only the first time). */
 export async function markCityRead(id: string, chars: number): Promise<number> {
-  const prev = await db.cities.get(id)
+  const prev = await db.cities.get(progressKey(id))
   if (prev?.read) return 0
-  await db.cities.put({ ...prev, id, read: Date.now(), updated: Date.now() })
+  await db.cities.upsert(progressKey(id), { id, read: Date.now(), updated: Date.now() })
   await addChars(chars)
   await addCoins(3)
   await recordActivity()
@@ -56,15 +56,15 @@ export async function markCityRead(id: string, chars: number): Promise<number> {
 }
 
 export async function markCityUnread(id: string) {
-  const prev = await db.cities.get(id)
-  if (prev) await db.cities.put({ ...prev, read: undefined, updated: Date.now() })
+  const prev = await db.cities.get(progressKey(id))
+  if (prev) await db.cities.upsert(progressKey(id), { read: undefined, updated: Date.now() })
 }
 
 /** Records a 认地图 answer; a right one is worth a coin. */
 export async function recordTest(kind: PlaceKind, id: string, right: boolean) {
   const t = table(kind)
-  const prev = await t.get(id)
-  await t.put({ ...prev, id, visited: prev?.visited ?? Date.now(), tested: { at: Date.now(), right }, updated: Date.now() })
+  const prev = await t.get(progressKey(id))
+  await t.upsert(progressKey(id), { id, visited: prev?.visited ?? Date.now(), tested: { at: Date.now(), right }, updated: Date.now() })
   if (right) await addCoins(1)
   await recordActivity()
 }
