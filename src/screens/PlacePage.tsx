@@ -263,22 +263,18 @@ export function PlacePage({ id }: { id: string }) {
 /** 集章: about six questions on the place itself; get them all right (wrong ones come back) to earn the seal. */
 export function StampQuiz({ id }: { id: string }) {
   const placesFile = useLoad(loadPlaces, 'places').data
-  const wiki = useLoad(loadWikiIndex, 'wiki-index').data
-  const photos = useLoad(loadPhotos, 'photos').data
-  const { seen } = useWikiProgress()
   const place = placesFile?.places.find((p) => p.id === id)
-  const ready = !!(place && placesFile && photos)
-  // made once, when everything has loaded: answering mustn't reshuffle the questions. All of it is
+  // made once, when the places have loaded: answering mustn't reshuffle the questions. All of it is
   // kept with the page, so following 读一读 (or any link) and coming back carries on where you were.
   const [questions, setQuestions] = usePageState<QuizQuestion[] | undefined>('questions', undefined)
   useEffect(() => {
-    if (ready && !questions) setQuestions(makeQuiz(place!, placesFile!.places, { wiki, photos: new Set(Object.keys(photos!)), cities: CITIES, seen }))
-  }, [ready, questions, setQuestions, place, placesFile, wiki, photos, seen])
+    if (place && placesFile && !questions) setQuestions(makeQuiz(place, placesFile.places, CITIES))
+  }, [place, placesFile, questions, setQuestions])
   const [queue, setQueue] = usePageState<number[] | undefined>('queue', undefined)
   const [choice, setChoice] = usePageState<number | undefined>('choice', undefined)
   const [result, setResult] = usePageState<'right' | 'wrong' | undefined>('result', undefined)
   const [coins, setCoins] = usePageState<number | undefined>('coins', undefined)
-  const glossary = useMemo(() => ({ ...wiki?.glossary, ...placesFile?.glossary }), [wiki, placesFile])
+  const glossary = placesFile?.glossary
   if (!place || !questions?.length) return <Loading />
   const q0 = queue ?? questions.map((_, i) => i)
   const color = regionColor(place.region)
@@ -310,7 +306,6 @@ export function StampQuiz({ id }: { id: string }) {
           <StampIcon size={18} weight="fill" /> 集章 · {place.name}
         </div>
         <motion.div key={`${qi}-${q0.length}`} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}>
-          {q.photo && <Photo k={q.photo} ratio="16 / 10" credit={false} className="mt-3 rounded-2xl" />}
           <h2 className="mt-3 text-[24px] font-black">
             <TapText inline id={`stamp-q-${qi}`} text={q.q} glossary={glossary} source={source} className="!leading-snug" />
           </h2>
