@@ -463,6 +463,58 @@ for (const file of existsSync(feedDir) ? (await readdir(feedDir)).filter((f) => 
   })
 }
 
+// ---------- 分区: the seven regions and the names people use for groups of provinces (content/regions.md) ----------
+const REGION_NAMES = ['华北', '东北', '华东', '华中', '华南', '西南', '西北']
+const regions = []
+const regionsGlossary = {}
+if (existsSync('content/regions.md')) {
+  // text before the first heading is a note for whoever edits the file
+  const parts = (await readFile('content/regions.md', 'utf8')).split(/^## +(.+?)\s*$/m)
+  const feedIds = new Set(feed.map((c) => c.id))
+  for (let i = 1; i < parts.length; i += 2) {
+    const [id, name] = parts[i].split(/\s+/)
+    const where = `regions.md ## ${parts[i]}`
+    if (!id || !name || !/^[a-z]+$/.test(id)) {
+      errors.push(`${where}: start with "## <id> <名字>", e.g. "## dongbei 东北"`)
+      continue
+    }
+    if (regions.some((r) => r.id === id)) errors.push(`${where}: two sections have the id "${id}"`)
+    const field = {}
+    const intro = []
+    for (const line of parts[i + 1].split('\n').map((l) => l.trim()).filter(Boolean)) {
+      const m = line.match(/^(省|网上省|网上|卡)：\s*(.*)$/)
+      if (m) field[m[1]] = m[2]
+      else intro.push(line)
+    }
+    const ids = (s) => (s ?? '').split(/\s+/).filter(Boolean)
+    const provinces = ids(field['省'])
+    for (const p of provinces) if (!placeIds.has(p)) errors.push(`${where}: unknown province "${p}"`)
+    if (provinces.length < 2) errors.push(`${where}: 省： should list at least two provinces`)
+    const kind = REGION_NAMES.includes(name) ? '分区' : '常说'
+    if (kind === '分区') {
+      const should = places.filter((p) => p.region === name).map((p) => p.id).sort().join(' ')
+      if ([...provinces].sort().join(' ') !== should) errors.push(`${where}: 省： should be the provinces whose region is ${name}: ${should}`)
+    }
+    const onlineFor = field['网上省'] ? ids(field['网上省']) : provinces
+    for (const p of onlineFor) if (!provinces.includes(p)) errors.push(`${where}: 网上省 "${p}" is not in 省：`)
+    const cards = ids(field['卡'])
+    for (const c of cards) if (!feedIds.has(c)) errors.push(`${where}: no 刷一刷 card "${c}"`)
+    if (!intro.length) errors.push(`${where}: needs an intro line`)
+    onPage(`map/regions/${id}`, `${name} · 分区`)
+    regions.push({
+      id,
+      name,
+      kind,
+      provinces,
+      intro: makeSentences(intro.join(''), regionsGlossary, where),
+      online: field['网上'] ? makeSentences(field['网上'], regionsGlossary, where) : [],
+      onlineFor: field['网上'] ? onlineFor : [],
+      cards,
+    })
+  }
+  for (const n of REGION_NAMES) if (!regions.some((r) => r.name === n)) errors.push(`regions.md: no section for ${n}`)
+}
+
 // ---------- cities on the map ----------
 // Every city on the map gets a line of facts from the map data (src/data/china-detail.json);
 // the ones with a page in content/cities/<id>.md also get an intro and 聊天彩蛋.
@@ -677,6 +729,7 @@ if (!CHECK) {
   await writeFile('public/content/jieqi.json', JSON.stringify({ hooks: jieqi, glossary: jieqiGlossary }))
   await writeFile('public/content/places.json', JSON.stringify({ places, glossary: placesGlossary }))
   await writeFile('public/content/dialect.json', JSON.stringify({ provinces: dialect, glossary: dialectGlossary }))
+  await writeFile('public/content/regions.json', JSON.stringify({ regions, glossary: regionsGlossary }))
   await writeFile('public/content/feed.json', JSON.stringify({ cards: feed, glossary: feedGlossary }))
   await writeFile('public/content/cities.json', JSON.stringify({ cities, glossary: citiesGlossary }))
   await writeFile('public/content/photos.json', JSON.stringify(photos))

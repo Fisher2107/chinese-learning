@@ -143,6 +143,29 @@ export interface DialectFile {
   glossary: Record<string, string>
 }
 
+/**
+ * A block of provinces on the 分区 map (content/regions.md): one of the seven regions taught in
+ * geography class, or a name people use for a few provinces together, like 江浙沪.
+ */
+export interface RegionInfo {
+  id: string
+  name: string
+  kind: '分区' | '常说'
+  provinces: string[]
+  intro: Sentence[]
+  /** 网上的说法: what people joke about online, e.g. in short videos */
+  online: Sentence[]
+  /** provinces whose page shows `online` */
+  onlineFor: string[]
+  /** 刷一刷 cards about `online` */
+  cards: string[]
+}
+
+export interface RegionsFile {
+  regions: RegionInfo[]
+  glossary: Record<string, string>
+}
+
 export interface CitiesFile {
   cities: CityContent[]
   glossary: Record<string, string>

@@ -37,6 +37,10 @@ content/
   cities/<id>.md            a city page: id, name, nickname?; intro, then `## 聊天彩蛋` the same way
   dialect.md                家乡话 for the 家乡话与地方梗 collection: `## <province id>`, then entries
                             written like 聊天彩蛋 (every province has a section in the app, written or not)
+  regions.md                分区: the seven regions (华北…西北) and names people use for groups of provinces
+                            (江浙沪, 川渝…): `## <id> <名字>`, `省：` ids, an intro, and optionally `网上：` (what's
+                            said online), `网上省：` (which province pages show it), `卡：` 刷一刷 card ids.
+                            Shown on the map's 分区 view and in 所在地区 under each province's map
   feed/<slug>.md            刷一刷 cards: id (= file name), date, title (the hook question), province?, series?,
                             tags, sources [{ title, url }], inspiration; body 150–300 字 ending on a question
 ```

@@ -4,7 +4,7 @@ import { motion } from 'motion/react'
 import { ArrowRightIcon, BooksIcon, CaretRightIcon, ChatCircleDotsIcon, CheckCircleIcon, DiceFiveIcon, InfoIcon, MapPinIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
 import { useLiveQuery } from '../lib/live.ts'
 import { db, type WordSource } from '../lib/db.ts'
-import { loadCities, loadFeed, loadIndex, loadPhotos, loadPlaces, loadWikiIndex, useLoad } from '../lib/content.ts'
+import { loadCities, loadFeed, loadIndex, loadPhotos, loadPlaces, loadRegions, loadWikiIndex, useLoad } from '../lib/content.ts'
 import { CITIES, citiesOf } from '../lib/cities.ts'
 import { FOOD_KINDS, pagesAbout, randomPage, SIGHT_KINDS, STORY_KINDS, useWikiProgress } from '../lib/wiki.ts'
 import { PeopleRow, PhotoRow } from '../components/WikiCards.tsx'
@@ -22,6 +22,7 @@ import { Button, Loading, PageHeader, Pill, ProgressBar } from '../components/ui
 import { Fold, JumpBar, Sub } from '../components/Fold.tsx'
 import { EggSection, placeLinks, useEggCount, type EggGroup } from '../components/Eggs.tsx'
 import { MapKey, ProvinceMap } from '../components/ProvinceMap.tsx'
+import { PlaceRegion } from '../components/Regions.tsx'
 import { ZhText } from '../components/ZhText.tsx'
 
 export function PlacePage({ id }: { id: string }) {
@@ -30,6 +31,7 @@ export function PlacePage({ id }: { id: string }) {
   const index = useLoad(loadIndex, 'index').data
   const progress = useLiveQuery(() => db.places.get(id), [id])
   const citiesFile = useLoad(loadCities, 'cities').data
+  const regionsFile = useLoad(loadRegions, 'regions').data
   const wikiIndex = useLoad(loadWikiIndex, 'wiki-index').data
   const wikiProgress = useWikiProgress()
   const marks = useMarks()
@@ -156,6 +158,7 @@ export function PlacePage({ id }: { id: string }) {
               <MapPinIcon size={20} weight="fill" style={{ color }} /> 在大地图上看
             </Button>
           </div>
+          {regionsFile && <PlaceRegion place={place} file={regionsFile} places={placesFile.places} feed={feed?.cards} />}
           {cities.length > 0 && (
             <details className="group mt-3">
               <summary className="flex cursor-pointer list-none items-center gap-1.5 px-1 text-sm font-extrabold text-mute">

@@ -3,6 +3,8 @@ import { MAP } from '../lib/places.ts'
 import { CITIES, DETAIL, type MapCity } from '../lib/cities.ts'
 
 export type Selection = { kind: 'province' | 'city' | 'country'; id: string }
+/** a big name over a block of provinces (分区), in map coordinates */
+export type Area = { key: string; text: string; x: number; y: number; color: string }
 type Box = [number, number, number, number]
 type LabelHit = { selection: Selection; box: Box }
 type CityHit = { id: string; x: number; y: number; r: number }
@@ -51,6 +53,7 @@ export function ExploreMap({
   stories,
   insets = { top: 0, bottom: 0 },
   initialBox,
+  areas,
   api,
 }: {
   /** open looking at this box instead of where the user left off */
@@ -67,6 +70,8 @@ export function ExploreMap({
   stories: Set<string>
   /** parts of the screen covered by floating UI, for fitting */
   insets?: { top: number; bottom: number }
+  /** region names drawn big over their provinces, ahead of every other label (分区) */
+  areas?: Area[]
   api?: Ref<MapApi>
 }) {
   const wrap = useRef<HTMLDivElement>(null)
@@ -414,7 +419,7 @@ export function ExploreMap({
     const dots = CITIES.filter((c) => z >= minZ(c) && onScreen(sx(c.x), sy(c.y)))
     const selCity = selected?.kind === 'city' ? dots.find((c) => c.id === selected.id) : undefined
 
-    type Label = { key: string; x: number; y: number; text: string; size: number; anchor: Anchor; cls: string }
+    type Label = { key: string; x: number; y: number; text: string; size: number; anchor: Anchor; cls: string; color?: string }
     const labels: Label[] = []
     const labelHits: LabelHit[] = []
     const cityHits = dots.map((c) => ({ id: c.id, x: sx(c.x), y: sy(c.y), r: c.rank === 1 ? 7 : c.rank === 2 ? 4.5 : 3.5 }))
@@ -456,6 +461,14 @@ export function ExploreMap({
       labels.push({ key: `p-${p.id}`, x: px, y: py, text, size, anchor: 'middle', cls: active ? 'map-province map-selected' : 'map-province' })
       labelHits.push({ selection: { kind: 'province', id: p.id }, box })
     }
+
+    // Region names first: they're what the 分区 map is for. Taps go through them to the province.
+    if (areas && z < 3)
+      for (const a of areas) {
+        const size = z < 1.3 ? 21 : 26
+        const box = textBox(sx(a.x), sy(a.y), a.text, size, 'middle', 0.12)
+        if (onScreen(sx(a.x), sy(a.y), 0) && fits(box)) labels.push({ key: `a-${a.key}`, x: sx(a.x), y: sy(a.y), text: a.text, size, anchor: 'middle', cls: 'map-region', color: a.color })
+      }
 
     // Keep the selection and nearby place names ahead of background geography.
     if (selCity) cityLabel(selCity, true)
@@ -508,7 +521,7 @@ export function ExploreMap({
     }
     return { z, dots, labels, hits: { labels: labelHits, cities: cityHits } }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view, size.w, size.h, insets.top, insets.bottom, selected?.kind, selected?.id, learnt, stories, names])
+  }, [view, size.w, size.h, insets.top, insets.bottom, selected?.kind, selected?.id, learnt, stories, names, areas])
 
   useLayoutEffect(() => {
     if (layout) hits.current = layout.hits
@@ -602,6 +615,7 @@ export function ExploreMap({
                   fontSize={l.size}
                   textAnchor={l.anchor}
                   className={l.cls}
+                  style={l.color ? { fill: l.color } : undefined}
                 >
                   {l.text}
                 </text>

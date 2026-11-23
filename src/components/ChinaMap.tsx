@@ -143,25 +143,32 @@ export function ChinaMap({
   )
 }
 
-/** A small locator map: the whole country in grey with one province in colour. */
+/**
+ * A small locator map: the whole country in grey with one province in colour. With `group`, the
+ * other provinces of its region show in a lighter `groupColor`.
+ */
 export function LocatorMap({
   id,
   color,
   rest = 'var(--sunken)',
   edge = 'var(--bg)',
+  group = [],
+  groupColor = color,
   className = '',
 }: {
   id: string
   color: string
   rest?: string
   edge?: string
+  group?: string[]
+  groupColor?: string
   className?: string
 }) {
   const me = MAP_BY_ID.get(id)
   return (
     <svg viewBox={`0 0 ${MAP.width} ${MAP.height}`} className={`block ${className}`} aria-hidden>
       {MAP.provinces.map((p) => (
-        <path key={p.id} d={p.d} fill={p.id === id ? color : rest} stroke={edge} strokeWidth={2} strokeLinejoin="round" />
+        <path key={p.id} d={p.d} fill={p.id === id ? color : group.includes(p.id) ? groupColor : rest} stroke={edge} strokeWidth={2} strokeLinejoin="round" />
       ))}
       {me?.small && <circle cx={me.cx} cy={me.cy} r={22} fill="none" stroke={color} strokeWidth={8} />}
     </svg>

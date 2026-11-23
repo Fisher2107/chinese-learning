@@ -325,6 +325,16 @@
     fill: #8a6d4c;
     font-weight: 700;
   }
+  /* 分区: a region's name over its provinces, in the region's colour */
+  .map-region {
+    font-family: var(--font-ui);
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    paint-order: stroke;
+    stroke: var(--map-halo);
+    stroke-width: 5px;
+    stroke-linejoin: round;
+  }
 }
 
 /* Photo credit: small, on the photo's bottom edge, readable on any picture */
