@@ -9,8 +9,6 @@ import { useWordSheet, type WordTarget } from './word-context.ts'
 const HAN = /[㐀-鿿]/
 /** a press shorter than this, without moving, is a tap */
 const TAP_MS = 320
-/** how long a tapped word's meaning stays up */
-const LINGER_MS = 2200
 
 export function useSavedWords(): Set<string> {
   // Read whole rows, not orderBy('word').uniqueKeys(): that opens a 'nextunique' cursor, which
@@ -46,9 +44,9 @@ interface Props {
 }
 
 /**
- * Chinese text where every word can be pressed, as in Du Chinese: hold a word to see its pinyin and
- * meaning, let go and it disappears. A quick tap shows it for a moment; tapping the bubble (or
- * double-tapping the word) opens the full word card. Linked words (百科) open their page on a tap.
+ * Chinese text where every word can be pressed, as in Du Chinese: press a word to see its pinyin and
+ * meaning, let go and it disappears (a quick tap too: nothing stays up). Double-tapping the word
+ * opens the full word card. Linked words (百科) open their page on a tap.
  */
 export const ZhText = memo(function ZhText({ paras, glossary, source, id, speaking, ui, inline, className = '' }: Props) {
   const saved = useSavedWords()
@@ -98,23 +96,22 @@ export const ZhText = memo(function ZhText({ paras, glossary, source, id, speaki
     const p = press.current
     press.current = null
     if (!p) return
-    if (p.moved || performance.now() - p.t0 > TAP_MS) return sheet.unpeek(200)
+    // gone as soon as the finger lifts, held or tapped
+    sheet.unpeek()
+    if (p.moved || performance.now() - p.t0 > TAP_MS) return
     const t = target(p.k)
     const route = t.token.k
     if (route) {
-      sheet.unpeek()
       onTap.current = () => go(route)
       return
     }
     const now = performance.now()
     if (lastTap.current.k === p.k && now - lastTap.current.t < 450) {
       lastTap.current = { k: '', t: 0 }
-      sheet.unpeek()
       onTap.current = () => sheet.open(t)
       return
     }
     lastTap.current = { k: p.k, t: now }
-    sheet.unpeek(LINGER_MS)
   }
 
   function cancel() {

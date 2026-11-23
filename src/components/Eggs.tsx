@@ -84,7 +84,7 @@ export function EggSection({ groups, links }: { groups: EggGroup[]; links: Place
   return (
     <div>
       <p className="mb-3 px-1 text-[13px] leading-snug font-bold text-mute">
-        彩蛋（Easter egg）是藏起来的小惊喜。聊天时说出一个，对方会觉得：你连这个都知道！每个都有一个问题，可以加入复习。
+        彩蛋就是藏起来的小惊喜。聊天时说出一个，对方会觉得：你连这个都知道！每个都有一个问题，可以加入复习。
       </p>
       {shown.length > 1 && (
         <div className="no-scrollbar -mx-4 mb-3 flex gap-1.5 overflow-x-auto px-4">

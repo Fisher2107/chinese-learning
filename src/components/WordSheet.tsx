@@ -39,7 +39,7 @@ export function WordSheetProvider({ children }: { children: ReactNode }) {
   const pop = () => setStack((s) => s.slice(0, -1))
   const close = () => setOpen(false)
 
-  // the peek bubble: shown while a word is pressed, gone shortly after
+  // the peek bubble: shown while a word is pressed, gone when it's let go
   const [peeked, setPeeked] = useState<{ target: WordTarget; rect: DOMRect }>()
   const peekTimer = useRef(0)
   const peek = useCallback((target: WordTarget, rect: DOMRect) => {
@@ -101,8 +101,8 @@ export function WordSheetProvider({ children }: { children: ReactNode }) {
 }
 
 /**
- * The little card above a pressed word: pinyin and meaning, nothing to dismiss. It goes away by
- * itself; tapping it opens the full word card (save, ask AI).
+ * The little card above a pressed word: pinyin and meaning, nothing to dismiss. It goes away when
+ * the finger lifts (double-tap the word for the full word card: save, ask AI).
  */
 function PeekBubble({ target, rect, onOpen }: { target: WordTarget; rect: DOMRect; onOpen: () => void }) {
   const { token } = target

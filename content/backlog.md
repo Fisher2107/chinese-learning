@@ -2,6 +2,18 @@
 
 Researched or half-researched topics waiting to be written. Newest first. Reels are links only (inspiration, never copied).
 
+## 2026-11-23
+
+### 衢州 · 家乡必做（进行中）
+- 已写：第1集 钩子、第2集 揭晓（孔端友南渡、楷木像、两座孔氏家庙）。
+- 下一集 第3集：孔洙让爵（1282），见上面 2026-11-22 的提纲和来源。
+- 待核实，可做彩蛋或第4集：楷木像1959年借给曲阜复制，据说一直没还，2000年浙江方面正式要求归还。目前只有一个来源（https://www.rujiazg.com/article/20510），要找第二个来源，再查现在的情况。
+- 来源注意：孔玠是孔端友的儿子还是侄子（过继），各来源说法不同，写的时候别提。
+
+### 新的 刷一刷 选题
+- 山西午睡 → 已写（content/feed/shanxi-wushui.md）。没用的线索：《中国健康睡眠调查报告》说山西午睡率63.9%（只找到一个来源）；阎锡山爱午睡、推广“子午觉”（只有一个来源）。
+- “2000年前的中国砝码/权”（中国冷知识搜索里看到，链接没记下），待研究：秦权、度量衡统一。
+
 ## 2026-11-22
 
 ### 衢州 · 家乡必做 (series in progress: content/series/quzhou)
@@ -24,3 +36,4 @@ Researched or half-researched topics waiting to be written. Newest first. Reels 
 
 ## 已用 Used
 - 2026-11-22 深圳拖鞋与APEC → content/feed/shenzhen-tuoxie.md
+- 2026-11-23 山西午睡 → content/feed/shanxi-wushui.md
