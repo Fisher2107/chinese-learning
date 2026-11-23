@@ -49,6 +49,7 @@ function Screen({ route }: { route: string[] }): { tab?: string; el: React.React
       if (a === 'history') return { tab: 'map', el: <HistoricalAtlas periodId={b} eventId={route[3]} /> }
       if (a === 'stamps') return { el: <StampBook /> }
       if (a === 'test') return { el: <MapTest /> }
+      if (a === 'regions') return { tab: 'map', el: <MapScreen key={`regions/${b ?? ''}`} blocks={b ?? ''} /> }
       if ((a === 'city' || a === 'place') && b) return { tab: 'map', el: <MapScreen key={`${a}/${b}`} focus={{ kind: a === 'city' ? 'city' : 'province', id: b }} /> }
       return { tab: 'map', el: <MapScreen /> }
     case 'city':

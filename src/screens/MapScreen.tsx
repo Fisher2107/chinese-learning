@@ -14,15 +14,18 @@ import {
   ScrollIcon,
   SealCheckIcon,
   SpeakerHighIcon,
+  SquaresFourIcon,
   XIcon,
 } from '@phosphor-icons/react'
-import { loadCities, loadFeed, loadIndex, loadPlaces, useLoad } from '../lib/content.ts'
+import { loadCities, loadFeed, loadIndex, loadPlaces, loadRegions, useLoad } from '../lib/content.ts'
 import { CITY_BY_ID, CITIES, cityBox, cityKind, type MapCity } from '../lib/cities.ts'
 import { markKey, setLearnt, useMarks } from '../lib/learn.ts'
 import { LIGHT, MAP_BY_ID, REGIONS, regionColor, usePlaceStats } from '../lib/places.ts'
 import { go } from '../lib/router.ts'
 import type { CitiesFile, Place, PlacesFile } from '../lib/types.ts'
-import { ExploreMap, WORLD_BOX, type MapApi, type Selection } from '../components/ExploreMap.tsx'
+import { ExploreMap, WORLD_BOX, type Area, type MapApi, type Selection } from '../components/ExploreMap.tsx'
+import { BlocksCard } from '../components/Regions.tsx'
+import { blockBox, blockCentre, blockColor, blocksOf } from '../lib/regions.ts'
 import { DETAIL } from '../lib/cities.ts'
 import { speak } from '../lib/speech.ts'
 import { LearntButton } from '../components/LearntButton.tsx'
@@ -32,12 +35,20 @@ import { ZhText } from '../components/ZhText.tsx'
 
 const STEPS = ['读完介绍', '考一考盖章', '再读两篇', '存三个词']
 
-/** The last selection survives switching tabs. */
+/** The last selection survives switching tabs, and so does the 分区 view. */
 let remembered: Selection | undefined
+let rememberedBlocks: { on: boolean; id?: string } = { on: false }
 
-/** 点亮中国: a map to wander around, like a maps app, with every province and city tappable. */
-export function MapScreen({ focus }: { focus?: Selection }) {
+/**
+ * 点亮中国: a map to wander around, like a maps app, with every province and city tappable.
+ * 分区 colours it by the seven regions instead; `blocks` (from map/regions/<id>) opens that view.
+ */
+export function MapScreen({ focus, blocks: blocksRoute }: { focus?: Selection; blocks?: string }) {
   const placesFile = useLoad(loadPlaces, 'places').data
+  const regionsFile = useLoad(loadRegions, 'regions').data
+  const [blocks, setBlocksState] = useState(() =>
+    blocksRoute !== undefined ? (rememberedBlocks = { on: true, id: blocksRoute || undefined }) : focus ? (rememberedBlocks = { on: false }) : rememberedBlocks,
+  )
   const citiesFile = useLoad(loadCities, 'cities').data
   const feed = useLoad(loadFeed, 'feed').data
   const index = useLoad(loadIndex, 'index').data
@@ -51,6 +62,7 @@ export function MapScreen({ focus }: { focus?: Selection }) {
   const card = useRef<HTMLDivElement>(null)
 
   const setSel = (s?: Selection) => setSelState((remembered = s))
+  const setBlocks = (b: { on: boolean; id?: string }) => setBlocksState((rememberedBlocks = b))
 
   useEffect(() => {
     const prev = document.body.style.overflow
@@ -69,25 +81,66 @@ export function MapScreen({ focus }: { focus?: Selection }) {
 
   const stories = useMemo(() => new Set((citiesFile?.cities ?? []).filter((c) => c.intro.length).map((c) => c.id)), [citiesFile])
   const names = useMemo(() => new Map((placesFile?.places ?? []).map((p) => [p.id, p.name])), [placesFile])
-  if (!placesFile) return <Loading />
+  const picked = blocks.on ? regionsFile?.regions.find((r) => r.id === blocks.id) : undefined
+  /** 分区: each province's region colour, and the region names over them */
+  const regionOf = useMemo(() => new Map((placesFile?.places ?? []).map((p) => [p.id, regionColor(p.region)])), [placesFile])
+  const areas = useMemo<Area[] | undefined>(() => {
+    if (!blocks.on || !regionsFile || !placesFile) return undefined
+    const shown = regionsFile.regions.filter((r) => r.kind === '分区' || r.id === blocks.id).sort((a, b) => +(b.id === blocks.id) - +(a.id === blocks.id))
+    return shown.map((r) => {
+      const [x, y] = blockCentre(r)
+      return { key: r.id, text: r.name, x, y, color: blockColor(r, placesFile.places) }
+    })
+  }, [blocks.on, blocks.id, regionsFile, placesFile])
+  if (!placesFile || (blocksRoute && !regionsFile)) return <Loading />
 
   const light = (id: string) => stats.get(id)?.light ?? 0
-  const fill = (id: string) => (light(id) ? LIGHT[light(id)] : 'var(--map-china)')
+  const fill = blocks.on
+    ? (id: string) => `color-mix(in oklab, ${regionOf.get(id) ?? '#888'} ${picked ? (picked.provinces.includes(id) ? 62 : 10) : 40}%, var(--map-china))`
+    : (id: string) => (light(id) ? LIGHT[light(id)] : 'var(--map-china)')
   const lit = placesFile.places.filter((p) => light(p.id) > 0).length
   const place = sel?.kind === 'province' ? placesFile.places.find((p) => p.id === sel.id) : undefined
   const city = sel?.kind === 'city' ? CITY_BY_ID.get(sel.id) : undefined
   const country = sel?.kind === 'country' ? DETAIL.neighbours.find((n) => n.id === sel.id) : undefined
 
   function pick(s: Selection) {
+    if (blocks.on) setBlocks({ on: false })
     setSel(s)
     setSearching(false)
     const b = boxFor(s)
     if (b) api.current?.flyToBox(b, 12)
   }
 
+  /** 分区: pick a block (or none) and fly to it */
+  function pickBlock(id?: string) {
+    setBlocks({ on: true, id })
+    const r = regionsFile?.regions.find((x) => x.id === id)
+    if (r) api.current?.flyToBox(blockBox(r), 8)
+  }
+
+  /** 分区: a tap on the map picks the region of the province (or city) under it */
+  function tapBlocks(s?: Selection) {
+    const prov = s?.kind === 'province' ? s.id : s?.kind === 'city' ? CITY_BY_ID.get(s.id)?.prov : undefined
+    if (!prov || !regionsFile) return
+    if (picked?.provinces.includes(prov)) return
+    pickBlock(blocksOf(prov, regionsFile.regions).region?.id)
+  }
+  const routeBlock = blocksRoute ? regionsFile?.regions.find((r) => r.id === blocksRoute) : undefined
+
   return (
     <div className="fixed inset-x-0 top-0 overflow-hidden" style={{ bottom: 'calc(4rem + 2px + env(safe-area-inset-bottom))' }}>
-      <ExploreMap names={names} fill={fill} selected={sel} onSelect={setSel} learnt={marks.learnt} stories={stories} insets={{ top: 72, bottom: cardH + 16 }} initialBox={initialBox} api={api} />
+      <ExploreMap
+        names={names}
+        fill={fill}
+        selected={blocks.on ? undefined : sel}
+        onSelect={blocks.on ? tapBlocks : setSel}
+        learnt={marks.learnt}
+        stories={stories}
+        insets={{ top: 112, bottom: cardH + 16 }}
+        initialBox={initialBox ?? (routeBlock && blockBox(routeBlock))}
+        areas={areas}
+        api={api}
+      />
 
       {/* search bar */}
       <div className="safe-top pointer-events-none absolute inset-x-0 top-0 px-3 pt-3">
@@ -99,6 +152,15 @@ export function MapScreen({ focus }: { focus?: Selection }) {
           <span className="flex-1 text-[16px] font-bold text-mute">找一个省或者城市</span>
           <span className="text-sm font-black text-huang-dark">点亮 {lit}/34</span>
         </button>
+        <div className="mx-auto mt-2 flex max-w-xl">
+          <button
+            onClick={() => (blocks.on ? setBlocks({ on: false }) : setBlocks({ on: true, id: undefined }))}
+            aria-pressed={blocks.on}
+            className={`pointer-events-auto flex h-9 items-center gap-1.5 rounded-full border-2 px-3.5 text-[15px] font-extrabold shadow-[0_2px_8px_rgba(0,0,0,0.08)] ${blocks.on ? 'border-dai bg-dai text-white' : 'border-line bg-surface'}`}
+          >
+            <SquaresFourIcon size={17} weight="fill" /> 分区
+          </button>
+        </div>
       </div>
 
       {/* zoom */}
@@ -121,7 +183,11 @@ export function MapScreen({ focus }: { focus?: Selection }) {
       <div ref={card} className="absolute inset-x-0 bottom-0 px-3 pb-3">
         <div className="mx-auto max-w-xl">
           <AnimatePresence mode="wait" initial={false}>
-            {place ? (
+            {blocks.on && regionsFile ? (
+              <Slide key="blocks">
+                <BlocksCard file={regionsFile} places={placesFile.places} feed={feed?.cards} picked={picked} onPick={pickBlock} onClose={() => setBlocks({ on: false })} />
+              </Slide>
+            ) : place ? (
               <Slide key={`p-${place.id}`}>
                 <ProvinceCard
                   place={place}
