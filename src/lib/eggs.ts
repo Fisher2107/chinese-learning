@@ -1,5 +1,5 @@
 import type { Rating } from 'ts-fsrs'
-import { db, type EggNote } from './db.ts'
+import { db, keyed, progressKey, type EggNote } from './db.ts'
 import { newCard, reviewCard } from './srs.ts'
 import { addCoins, bumpDay, recordActivity } from './stats.ts'
 import type { CitiesFile, DialectFile, Egg, PlacesFile, Sentence, SourceLink } from './types.ts'
@@ -89,10 +89,10 @@ const now = () => Date.now()
 
 async function upsert(egg: Pick<EggView, 'key' | 'page' | 'title' | 'text' | 'q'>, patch: Partial<EggNote>) {
   await db.transaction('rw', db.eggs, async () => {
-    const row = await db.eggs.get(egg.key)
-    if (row) await db.eggs.put({ ...row, ...patch, updated: now() })
+    const row = await db.eggs.get(progressKey(egg.key))
+    if (row) await db.eggs.update(progressKey(egg.key), { ...patch, updated: now() })
     else
-      await db.eggs.put({
+      await db.eggs.put(keyed({
         key: egg.key,
         page: egg.page,
         title: egg.title,
@@ -100,7 +100,7 @@ async function upsert(egg: Pick<EggView, 'key' | 'page' | 'title' | 'text' | 'q'
         created: now(),
         updated: now(),
         ...patch,
-      })
+      }))
   })
 }
 
@@ -142,20 +142,20 @@ export async function addEggCards(eggs: EggView[]) {
 }
 
 export async function removeEggCard(egg: EggView) {
-  const row = await db.eggs.get(egg.key)
+  const row = await db.eggs.get(progressKey(egg.key))
   if (!row) return
   // Nothing else of the user's on it: forget the row
-  if (!row.mine && row.text === undefined && row.q === undefined && !row.note && !row.find) await db.eggs.delete(egg.key)
-  else await db.eggs.put({ ...row, card: undefined, due: undefined, updated: now() })
+  if (!row.mine && row.text === undefined && row.q === undefined && !row.note && !row.find) await db.eggs.delete(progressKey(egg.key))
+  else await db.eggs.update(progressKey(egg.key), { card: undefined, due: undefined, updated: now() })
 }
 
 /** A 聊天彩蛋 the user wrote. */
 export async function addMyEgg(page: string, title: string, text: string, q: string, note: string, flashcard: boolean) {
   text = text.trim()
   q = q.trim()
-  const key = `mine:${page}:${now().toString(36)}`
+  const key = `mine:${page}:${crypto.randomUUID()}`
   const card = flashcard ? await newCard() : undefined
-  await db.eggs.put({
+  await db.eggs.put(keyed({
     key,
     page,
     title,
@@ -167,12 +167,12 @@ export async function addMyEgg(page: string, title: string, text: string, q: str
     ...card,
     created: now(),
     updated: now(),
-  })
+  }))
   return key
 }
 
 export function deleteEgg(key: string) {
-  return db.eggs.delete(key)
+  return db.eggs.delete(progressKey(key))
 }
 
 /** Egg flashcards due now, oldest first. */
@@ -182,10 +182,10 @@ export function dueEggs(limit = 50) {
 
 /** Answers an egg's flashcard; returns the row as it is now (so a 忘了 card comes back up to date). */
 export async function gradeEgg(row: EggNote, rating: Rating): Promise<EggNote> {
-  const fresh = (await db.eggs.get(row.key)) ?? row
+  const fresh = (await db.eggs.get(progressKey(row.key))) ?? row
   const { card, due } = await reviewCard(fresh.card!, rating)
   const next = { ...fresh, card, due, updated: now() }
-  await db.eggs.put(next)
+  await db.eggs.update(progressKey(row.key), { card, due, updated: next.updated })
   if (rating !== 1) await addCoins(2)
   await bumpDay('reviews')
   await recordActivity()

@@ -1,5 +1,5 @@
 import { useLiveQuery } from './live.ts'
-import { db, setSetting } from './db.ts'
+import { deviceDb, setSetting } from './db.ts'
 
 export type FontSize = 's' | 'm' | 'l'
 
@@ -16,7 +16,7 @@ export const DEFAULTS: Settings = {
 }
 
 export async function readSettings(): Promise<Settings> {
-  const rows = await db.settings.bulkGet(Object.keys(DEFAULTS))
+  const rows = await deviceDb.settings.bulkGet(Object.keys(DEFAULTS))
   const out = { ...DEFAULTS } as Record<string, unknown>
   rows.forEach((r) => r && (out[r.key] = r.value))
   return out as unknown as Settings

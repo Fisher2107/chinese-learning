@@ -1,4 +1,4 @@
-import { db } from './db.ts'
+import { progressKey, db } from './db.ts'
 import { useLiveQuery } from './live.ts'
 import { addChars, addCoins, recordActivity } from './stats.ts'
 import type { Sentence, WikiIndex, WikiKind, WikiSummary } from './types.ts'
@@ -20,14 +20,14 @@ export function pagesAbout(index: WikiIndex | undefined, where: { province?: str
 }
 
 export async function visitWiki(id: string) {
-  if (!(await db.wiki.get(id))) await db.wiki.put({ id, visited: Date.now(), updated: Date.now() })
+  if (!(await db.wiki.get(progressKey(id)))) await db.wiki.upsert(progressKey(id), { id, visited: Date.now(), updated: Date.now() })
 }
 
 /** 读完了 on a 百科 page. Returns coins earned (2, only the first time). */
 export async function markWikiRead(id: string, chars: number): Promise<number> {
-  const prev = await db.wiki.get(id)
+  const prev = await db.wiki.get(progressKey(id))
   if (prev?.read) return 0
-  await db.wiki.put({ id, visited: prev?.visited ?? Date.now(), read: Date.now(), updated: Date.now() })
+  await db.wiki.upsert(progressKey(id), { id, visited: prev?.visited ?? Date.now(), read: Date.now(), updated: Date.now() })
   await addChars(chars)
   await addCoins(2)
   await recordActivity()
@@ -35,8 +35,8 @@ export async function markWikiRead(id: string, chars: number): Promise<number> {
 }
 
 export async function markWikiUnread(id: string) {
-  const prev = await db.wiki.get(id)
-  if (prev) await db.wiki.put({ ...prev, read: undefined, updated: Date.now() })
+  const prev = await db.wiki.get(progressKey(id))
+  if (prev) await db.wiki.upsert(progressKey(id), { read: undefined, updated: Date.now() })
 }
 
 /** Every 百科 page opened, and which were read to the end. */

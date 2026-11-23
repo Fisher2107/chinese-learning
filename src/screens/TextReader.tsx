@@ -2,7 +2,7 @@ import { Photo } from '../components/Photo.tsx'
 import { useEffect, useMemo, useState } from 'react'
 import { useLiveQuery } from '../lib/live.ts'
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, TrashIcon } from '@phosphor-icons/react'
-import { db } from '../lib/db.ts'
+import { deviceDb } from '../lib/db.ts'
 import { loadText, useLoad } from '../lib/content.ts'
 import { go } from '../lib/router.ts'
 import { FONT_PX, useSettings } from '../lib/settings.ts'
@@ -166,7 +166,7 @@ function splitParts(paras: Para[]): Para[][] {
 }
 
 export function ImportReader({ id, sitting }: { id: number; sitting: number }) {
-  const doc = useLiveQuery(() => db.imports.get(id), [id])
+  const doc = useLiveQuery(() => deviceDb.imports.get(id), [id])
   const parts = useMemo(() => (doc ? splitParts(doc.paras) : []), [doc])
   if (doc === undefined) return <Loading />
   if (!doc) return <div className="p-8 text-center font-bold text-mute">这篇导入已经删除了。</div>
@@ -179,8 +179,8 @@ export function ImportReader({ id, sitting }: { id: number; sitting: number }) {
       parts={parts}
       sitting={sitting}
       onDelete={async () => {
-        await db.imports.delete(id)
-        await db.texts.delete(`import:${id}`)
+        await deviceDb.imports.delete(id)
+        await deviceDb.texts.delete(`import:${id}`)
         go('shelf', true)
       }}
     />

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { ArrowRightIcon, BooksIcon, CaretRightIcon, CheckCircleIcon, DiceFiveIcon, LinkIcon, MagnifyingGlassIcon, MapTrifoldIcon, PathIcon, QuestionIcon, XCircleIcon } from '@phosphor-icons/react'
 import { loadPlaces, loadWiki, loadWikiIndex, useLoad } from '../lib/content.ts'
 import { useLiveQuery } from '../lib/live.ts'
-import { db, type WordSource } from '../lib/db.ts'
+import { progressKey, db, type WordSource } from '../lib/db.ts'
 import { go } from '../lib/router.ts'
 import { regionColor } from '../lib/places.ts'
 import { CITY_BY_ID } from '../lib/cities.ts'
@@ -20,7 +20,7 @@ import { ExcerptCard } from './EpisodeReader.tsx'
 export function WikiPage({ id }: { id: string }) {
   const { data: page, error } = useLoad(() => loadWiki(id), `wiki/${id}`)
   const places = useLoad(loadPlaces, 'places').data
-  const progress = useLiveQuery(() => db.wiki.get(id), [id])
+  const progress = useLiveQuery(() => db.wiki.get(progressKey(id)), [id])
   const [trail, setTrail] = useState<Crumb[]>([])
   useEffect(() => {
     visitWiki(id)

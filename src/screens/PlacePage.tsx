@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'motion/react'
 import { ArrowRightIcon, BooksIcon, CaretRightIcon, ChatCircleDotsIcon, CheckCircleIcon, DiceFiveIcon, InfoIcon, MapPinIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
 import { useLiveQuery } from '../lib/live.ts'
-import { db, type WordSource } from '../lib/db.ts'
+import { progressKey, db, type WordSource } from '../lib/db.ts'
 import { loadCities, loadFeed, loadIndex, loadPhotos, loadPlaces, loadWikiIndex, useLoad } from '../lib/content.ts'
 import { CITIES, citiesOf } from '../lib/cities.ts'
 import { FOOD_KINDS, pagesAbout, randomPage, SIGHT_KINDS, STORY_KINDS, useWikiProgress } from '../lib/wiki.ts'
@@ -28,7 +28,7 @@ export function PlacePage({ id }: { id: string }) {
   const placesFile = useLoad(loadPlaces, 'places').data
   const feed = useLoad(loadFeed, 'feed').data
   const index = useLoad(loadIndex, 'index').data
-  const progress = useLiveQuery(() => db.places.get(id), [id])
+  const progress = useLiveQuery(() => db.places.get(progressKey(id)), [id])
   const citiesFile = useLoad(loadCities, 'cities').data
   const wikiIndex = useLoad(loadWikiIndex, 'wiki-index').data
   const wikiProgress = useWikiProgress()

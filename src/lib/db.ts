@@ -1,4 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie'
+import dexieCloud from 'dexie-cloud-addon'
 import type { Para, Token } from './types.ts'
 
 /** Where a saved word was found, so the card can link back to it. */
@@ -11,7 +12,7 @@ export interface WordSource {
 
 /** A flashcard made from a saved word. `card` is the ts-fsrs card (dates stay Date objects in IndexedDB). */
 export interface SavedWord {
-  id?: number
+  id?: string | number
   word: string
   p: string
   d: string
@@ -24,8 +25,8 @@ export interface SavedWord {
 }
 
 export interface ReviewLog {
-  id?: number
-  wordId: number
+  id?: string | number
+  wordId: string | number
   rating: number
   at: number
 }
@@ -37,6 +38,8 @@ export interface SeriesProgress {
   unlocked: number
   /** episodes finished */
   done: number[]
+  completedEpisodes?: Record<string, boolean>
+  openedEpisodes?: Record<string, boolean>
   /** the 读后 page has been seen */
   finished?: boolean
   /** how many episodes the series had when the user last opened it, for the 更新 badge */
@@ -168,7 +171,7 @@ export interface Setting {
  * "UnknownError: Unable to open cursor", so never use uniqueKeys() or eachUniqueKey():
  * read with toArray() (or get/where…toArray) and dedupe in JS. The tables are small.
  */
-export const db = new Dexie('zhongguotong') as Dexie & {
+type StudyDatabase = Dexie & {
   words: EntityTable<SavedWord, 'id'>
   reviews: EntityTable<ReviewLog, 'id'>
   series: EntityTable<SeriesProgress, 'id'>
@@ -185,7 +188,9 @@ export const db = new Dexie('zhongguotong') as Dexie & {
   eggs: EntityTable<EggNote, 'key'>
 }
 
-db.version(1).stores({
+export const deviceDb = new Dexie('zhongguotong') as StudyDatabase
+
+deviceDb.version(1).stores({
   words: '++id, word, due, created',
   reviews: '++id, wordId, at',
   series: 'id, updated',
@@ -195,30 +200,100 @@ db.version(1).stores({
   known: 'word',
   settings: 'key',
 })
-db.version(2).stores({
+deviceDb.version(2).stores({
   places: 'id, updated',
   feed: 'id, seen',
   days: 'day',
 })
-db.version(3).stores({
+deviceDb.version(3).stores({
   cities: 'id, updated',
 })
-db.version(4).stores({
+deviceDb.version(4).stores({
   wiki: 'id, updated',
 })
-db.version(5).stores({
+deviceDb.version(5).stores({
   eggs: 'key, page, due',
 })
 
+// The cloud profile has a separate IndexedDB cache. Signing in or out never clears
+// the original device database (including pasted texts and API credentials).
+export const cloudUrl = import.meta.env.VITE_DEXIE_CLOUD_URL ?? 'https://z067pyapo.dexie.cloud'
+export const cloudDb = cloudUrl ? new Dexie('zhongguotong-cloud', { addons: [dexieCloud] }) as StudyDatabase : undefined
+if (cloudDb && cloudUrl) {
+  cloudDb.version(1).stores({
+    words: 'id, word, due, created',
+    reviews: 'id, wordId, at',
+    series: 'cloudKey, updated',
+    texts: 'cloudKey, updated',
+    known: 'cloudKey',
+    settings: 'cloudKey',
+    places: 'cloudKey, updated',
+    feed: 'cloudKey, seen',
+    days: 'cloudKey',
+    cities: 'cloudKey, updated',
+    wiki: 'cloudKey, updated',
+    eggs: 'cloudKey, page, due',
+  })
+  cloudDb.cloud.configure({ databaseUrl: cloudUrl, tryUseServiceWorker: false })
+}
+
+const profileKey = 'zgt-cloud-profile'
+function selectedProfile() {
+  try { return localStorage.getItem(profileKey) } catch { return null }
+}
+export const db = cloudDb && selectedProfile() === cloudUrl ? cloudDb : deviceDb
+window.addEventListener('storage', event => {
+  if (event.key === profileKey && event.newValue !== event.oldValue) location.reload()
+})
+export const inCloud = db !== deviceDb
+
+// Independent episode marks merge when two devices study the series offline.
+db.series.hook('reading', row => row && ({
+  ...row,
+  done: [...new Set([...(row.done ?? []), ...Object.keys(row.completedEpisodes ?? {}).map(Number)])].sort((a, b) => a - b),
+  unlocked: Math.max(row.unlocked ?? 1, ...Object.keys(row.openedEpisodes ?? {}).map(Number)),
+}))
+
+export async function connectCloud() {
+  if (!cloudDb || !cloudUrl) throw new Error('云同步尚未配置')
+  await cloudDb.open()
+  await cloudDb.cloud.login()
+  await cloudDb.cloud.sync({ purpose: 'pull', wait: true })
+  localStorage.setItem(profileKey, cloudUrl)
+  location.reload()
+}
+
+export async function disconnectCloud() {
+  if (!cloudDb) return
+  await cloudDb.cloud.sync({ purpose: 'push', wait: true })
+  await cloudDb.cloud.logout()
+  localStorage.removeItem(profileKey)
+  location.reload()
+}
+
+// Dexie Cloud private singleton IDs begin with # and are scoped to the account.
+// Keep the original content ID on each row for routes, joins and JSON backups.
+export const progressKey = (key: string) => inCloud ? '#' + key : key
+export function keyed<T extends { id?: string; day?: string; key?: string; word?: string }>(row: T) {
+  const key = row.id ?? row.day ?? row.key ?? row.word
+  if (key === undefined) throw new Error('Missing progress key')
+  return inCloud ? { ...row, cloudKey: progressKey(key) } : row
+}
+
+export function isStudySetting(key: string) {
+  return key === 'stats' || key === 'feedVisited'
+}
+
 export async function getSetting<T>(key: string, fallback: T): Promise<T> {
-  const row = await db.settings.get(key)
+  const row = isStudySetting(key) ? await db.settings.get(progressKey(key)) : await deviceDb.settings.get(key)
   return row === undefined ? fallback : (row.value as T)
 }
 
 export function setSetting(key: string, value: unknown) {
-  return db.settings.put({ key, value })
+  if (isStudySetting(key)) return db.settings.put(keyed({ key, value }))
+  return deviceDb.settings.put({ key, value })
 }
 
 export async function seriesProgress(id: string): Promise<SeriesProgress> {
-  return (await db.series.get(id)) ?? { id, unlocked: 1, done: [], updated: 0 }
+  return (await db.series.get(progressKey(id))) ?? { id, unlocked: 1, done: [], updated: 0 }
 }

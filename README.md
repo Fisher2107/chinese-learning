@@ -22,6 +22,14 @@ Open http://localhost:5173/chinese-learning/. The first run downloads CC-CEDICT 
 
 `npm run build` makes the production site in `dist/`. Pushing to `main` deploys it to GitHub Pages.
 
+## Sync progress
+
+Open **我的 → 云同步 → 用邮箱登录** on each device and use the same email. Signing in opens a separate cloud profile. Your original device profile is available again after signing out. While the app is open, Dexie Cloud sends queued study changes after reconnecting. The sync panel shows the last successful sync.
+
+Saved words (including example sentences and notes), review history, reading and map progress, and study counters sync. Pasted articles, cached AI answers and the OpenAI key stay on the device. **我的 → 备份** still exports and restores JSON backups.
+
+The production database URL is public. For a separate deployment set `VITE_DEXIE_CLOUD_URL` at build time and allow the site's origin in that database.
+
 ## Writing content
 
 ```

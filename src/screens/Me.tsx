@@ -1,10 +1,10 @@
 import { useRef, useState, type ReactNode } from 'react'
 import { BookOpenTextIcon, CaretRightIcon, CheckCircleIcon, CloudArrowDownIcon, DeviceMobileIcon, WarningCircleIcon, CardsIcon, CoinsIcon, DownloadSimpleIcon, FireIcon, KeyIcon, PlantIcon, UploadSimpleIcon } from '@phosphor-icons/react'
-import { db } from '../lib/db.ts'
+import { CloudSync } from '../components/CloudSync.tsx'
+import { exportStudyBackup, restoreStudyBackup } from '../lib/backup.ts'
 import { describeError, testKey } from '../lib/ai.ts'
 import { saveSetting, useSettings, type FontSize } from '../lib/settings.ts'
 import { useStats } from '../lib/stats.ts'
-import { reviveCard } from '../lib/srs.ts'
 import { Button, Section } from '../components/ui.tsx'
 import { go } from '../lib/router.ts'
 import { builtLabel, checkForUpdate, isInstalled, useOffline } from '../lib/update.ts'
@@ -34,8 +34,6 @@ function Row({ title, hint, children }: { title: string; hint?: ReactNode; child
     </div>
   )
 }
-
-const TABLES = ['words', 'reviews', 'series', 'texts', 'imports', 'known', 'ai', 'places', 'feed', 'days', 'cities', 'wiki', 'eggs'] as const
 
 export function Me() {
   const stats = useStats()
@@ -77,9 +75,7 @@ export function Me() {
   }
 
   async function exportBackup() {
-    const data: Record<string, unknown> = { app: 'zhongguotong', version: 1, exported: new Date().toISOString() }
-    for (const t of TABLES) data[t] = await db.table(t).toArray()
-    data.settings = (await db.settings.toArray()).filter((s) => s.key !== 'apiKey')
+    const data = await exportStudyBackup()
     const blob = new Blob([JSON.stringify(data)], { type: 'application/json' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
@@ -91,20 +87,8 @@ export function Me() {
 
   async function importBackup(f: File) {
     try {
-      const data = JSON.parse(await f.text())
-      if (data.app !== 'zhongguotong') throw new Error('这不是中国通的备份文件')
-      await db.transaction('rw', [...TABLES.map((t) => db.table(t)), db.settings], async () => {
-        for (const t of TABLES) {
-          if (!Array.isArray(data[t])) continue
-          const rows =
-            t === 'words' || t === 'eggs'
-              ? data[t].map((w: { card?: Record<string, unknown> }) => (w.card ? { ...w, card: reviveCard(w.card) } : w))
-              : data[t]
-          await db.table(t).bulkPut(rows)
-        }
-        if (Array.isArray(data.settings)) await db.settings.bulkPut(data.settings)
-      })
-      setBackupMsg(`恢复好了：${data.words?.length ?? 0} 个生词。`)
+      const count = await restoreStudyBackup(await f.text())
+      setBackupMsg(`恢复好了：${count} 个生词。`)
     } catch (e) {
       setBackupMsg(`恢复失败：${e instanceof Error ? e.message : e}`)
     }
@@ -204,9 +188,11 @@ export function Me() {
         </div>
       </Section>
 
+      <CloudSync />
+
       <Section title="备份">
         <div className="tile p-4">
-          <p className="text-sm font-semibold text-mute">生词、进度、笔记和导入都只存在这台设备上。换手机或者清理浏览器之前，先导出一份备份。（备份里不包括 OpenAI 密钥。）</p>
+          <p className="text-sm font-semibold text-mute">导出生词、进度、笔记和导入文章，随时可以恢复。OpenAI 密钥只保存在本机。</p>
           <div className="mt-3 flex gap-2">
             <Button tone="plain" size="md" onClick={exportBackup}>
               <DownloadSimpleIcon size={18} weight="bold" /> 导出

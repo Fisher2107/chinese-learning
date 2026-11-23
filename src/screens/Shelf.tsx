@@ -1,6 +1,6 @@
 import { useLiveQuery } from '../lib/live.ts'
 import { BookOpenTextIcon, CaretRightIcon, ClipboardTextIcon, PlusIcon } from '@phosphor-icons/react'
-import { db } from '../lib/db.ts'
+import { deviceDb, db } from '../lib/db.ts'
 import { loadIndex, useLoad } from '../lib/content.ts'
 import { go } from '../lib/router.ts'
 import { Loading, Pill, ProgressBar, Section } from '../components/ui.tsx'
@@ -11,7 +11,7 @@ export function Shelf() {
   const { data: index } = useLoad(loadIndex, 'index')
   const progress = useLiveQuery(() => db.series.toArray(), [], [])
   const texts = useLiveQuery(() => db.texts.toArray(), [], [])
-  const imports = useLiveQuery(() => db.imports.orderBy('created').reverse().toArray(), [], [])
+  const imports = useLiveQuery(() => deviceDb.imports.orderBy('created').reverse().toArray(), [], [])
   if (!index) return <Loading />
 
   return (

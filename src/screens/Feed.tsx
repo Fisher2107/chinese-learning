@@ -4,7 +4,7 @@ import { useLiveQuery } from '../lib/live.ts'
 import { motion } from 'motion/react'
 import { ArrowDownIcon, ArrowUpIcon, ArrowRightIcon, ArrowsClockwiseIcon, CardsIcon, CaretRightIcon, CheckCircleIcon, CheckIcon, HeartIcon, MapTrifoldIcon, PlayIcon, XCircleIcon } from '@phosphor-icons/react'
 import { Rating } from 'ts-fsrs'
-import { db, setSetting, type SavedWord, type WordSource } from '../lib/db.ts'
+import { progressKey, db, setSetting, type SavedWord, type WordSource } from '../lib/db.ts'
 import { loadFeed, loadIndex, loadPlaces, useLoad } from '../lib/content.ts'
 import { buildQueue, markRead, markSeen, quizAnswered, toggleLike, type FeedItem } from '../lib/feed.ts'
 import { explored, regionColor, type QuizQuestion } from '../lib/places.ts'
@@ -174,7 +174,7 @@ function StoryCard({
   first: boolean
   onNext: () => void
 }) {
-  const row = useLiveQuery(() => db.feed.get(card.id), [card.id])
+  const row = useLiveQuery(() => db.feed.get(progressKey(card.id)), [card.id])
   const liked = !!row?.liked
   const read = !!row?.read
   const color = place ? regionColor(place.region) : NO_PLACE
