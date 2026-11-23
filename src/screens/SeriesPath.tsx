@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useLiveQuery } from '../lib/live.ts'
 import { motion } from 'motion/react'
 import { ArrowLeftIcon, BookOpenTextIcon, CheckIcon, LockIcon, StampIcon, StarIcon } from '@phosphor-icons/react'
-import { progressKey, db, seriesProgress } from '../lib/db.ts'
+import { patchRow, progressKey, db, seriesProgress } from '../lib/db.ts'
 import { loadSeries, useLoad } from '../lib/content.ts'
 import { back, go } from '../lib/router.ts'
 import { Loading } from '../components/ui.tsx'
@@ -20,7 +20,7 @@ export function SeriesPath({ id }: { id: string }) {
   useEffect(() => {
     if (!count) return
     db.series.get(progressKey(id)).then((p) => {
-      if (p && p.known !== count) db.series.update(progressKey(id), { known: count })
+      if (p && p.known !== count) patchRow(db.series, progressKey(id), { known: count })
     })
   }, [id, count])
   if (error) return <div className="p-8 text-center font-bold text-mute">找不到这个系列。</div>

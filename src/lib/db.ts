@@ -1,4 +1,4 @@
-import Dexie, { type EntityTable } from 'dexie'
+import Dexie, { type EntityTable, type Table, type UpdateSpec } from 'dexie'
 import dexieCloud from 'dexie-cloud-addon'
 import type { Para, Token } from './types.ts'
 
@@ -131,6 +131,8 @@ export interface DayLog {
   chars: number
   /** the morning routine was finished at this time */
   morning?: number
+  /** something counted for the streak this day (first time). One mark per day, so devices merge. */
+  active?: number
 }
 
 /**
@@ -278,6 +280,19 @@ export function keyed<T extends { id?: string; day?: string; key?: string; word?
   const key = row.id ?? row.day ?? row.key ?? row.word
   if (key === undefined) throw new Error('Missing progress key')
   return inCloud ? { ...row, cloudKey: progressKey(key) } : row
+}
+
+/**
+ * Changes some fields of a row that exists, and writes nothing if it's gone (so another device's
+ * delete isn't undone). Use this rather than update(): Dexie Cloud sends update() on a private "#" id
+ * as the whole row, which can undo what another device changed, while upsert() sends only these fields.
+ */
+export function patchRow<T, K, I>(table: Table<T, K, I>, key: K, changes: UpdateSpec<I>) {
+  return table.db.transaction('rw', table, async () => {
+    if ((await table.get(key)) === undefined) return false
+    await table.upsert(key, changes)
+    return true
+  })
 }
 
 export function isStudySetting(key: string) {
