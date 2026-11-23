@@ -103,7 +103,7 @@ Every claim needs a source you read; numbers and dates need two where possible. 
 One province a day, in this order. 浙江 is done as the template.
 
 - [x] 浙江 zhejiang (template 2026-11-21, finished 2026-11-22)
-- [ ] 江苏 jiangsu
+- [x] 江苏 jiangsu (2026-11-23)
 - [ ] 四川 sichuan
 - [ ] 陕西 shaanxi
 - [ ] 北京 beijing
@@ -147,8 +147,10 @@ The daily task doesn't change app code. These are waiting for a yes:
 - A 百科 card in the 刷一刷 feed: "你知道吗？" with a page's hook.
 - A "rabbit-hole streak": count how many pages in a row you followed today.
 - Show 百科 pages on the big map as pins when zoomed in.
+- Draw canals in their own style (dashed or a different blue): 京杭大运河 is now in `RIVERS` as a hand-drawn line and looks like a river.
 
 ## Log
 
 - **2026-11-21** · Built the 百科: `[[links]]`, backlinks, wanted pages, the wiki page and 百科 home, photo rows on province and city pages, a pinned map with rivers, the new stamp quiz, press-to-peek word meanings, the world map inside the main map. 浙江 written as the template: province page rewritten, 21 pages (钱塘江, 钱塘潮, 钱镠, 吴越国, 钱塘江大桥, 茅以升, 千岛湖, 富春山居图, 伍子胥, 西湖, 苏轼, 雷峰塔, 龙井茶, 东坡肉, 岳飞, 勾践, 西施, 王羲之, 鲁迅, 绍兴黄酒, 良渚古城), 钱塘江 and 瓯江 added to the map, 杭州 and 绍兴 city pages linked in. 38 wanted pages queued. Still to do: 茅以升's photo (Commons 429, retry).
 - **2026-11-22** · Finished 浙江 against the checklist (it had been ticked too early). Wanted pages: 夫差, 范蠡, 黄公望, 南宋. New city pages: 金华, 台州, 湖州, 丽水, 衢州. 宁波, 温州, 嘉兴, 舟山, 乌镇, 义乌, 杭州, 绍兴 now link into the 百科 (e.g. 温州 → 黄公望, 舟山 → 夫差's 甬东, 宁波 → 南宋). Every 浙江 city has a photo now (12 fetched, 绍兴 and 丽水 swapped by hand for 乌篷船 and 云和梯田), plus 茅以升. Fixed `fetch-images.mjs`: files narrower than 960px used to fall back to the original, which Commons throttles, so they 429'd every run; it now asks for a 500/330/250px thumbnail first. Added 知乎专栏 to §6 at the learner's request and read 9 articles in the learner's Chrome. From them, after checking each fact elsewhere: 《越公其事》 (清华简) on why 夫差 spared 越, checked against Yuri Pines (Early China 2022); 子贡 on 夫差 (史记); 文种's "七术" and 庄生 in 范蠡's son story (史记); 元 restoring 科举 while 黄公望 was in prison; why 南宋 chose 杭州 over 南京, the 1111 太湖 freeze (竺可桢), 《梦粱录》 night markets, the 柳永/完颜亮 legend. Dropped as unverified or wrong: a "chrome-plated" 夫差 sword, 黄公望 being pushed into the river, 范蠡 as the author of 夏则资皮 (《国语》 gives it to 文种). Also fixed 的士兵 being read as 的士 (taxi) on four pages. Wanted list: 40 (阖闾, 京杭大运河, 陆游, 瓯江, 普陀山 lead).
+- **2026-11-23** · 江苏. Province page rewritten (name from 江宁+苏州, 苏南/苏北, water, 阖闾 to 六朝 to 朱元璋 and 孙中山, people, food, 苏超), two new 聊天彩蛋. 19 pages: places 拙政园, 虎丘, 寒山寺, 太湖, 瘦西湖, 秦淮河, 中山陵, 京杭大运河; people 阖闾, 韩信, 项羽, 朱元璋, 曹雪芹, 白居易; stories 六朝, 红楼梦; food 淮扬菜, 盐水鸭, 大闸蟹. Wanted pages written: 阖闾, 京杭大运河, 韩信, 白居易 (阖闾 and 京杭大运河 were linked from 3 pages). River: 长江 and 淮河 were already drawn; 京杭大运河 added to `RIVERS` as a hand-drawn `extra` line from 北京 to 杭州 (Natural Earth has no canals; 秦淮河 is too small for it). New city pages: 淮安, 宿迁, 连云港, 常州; 南京, 苏州, 无锡, 扬州, 徐州, 镇江, 昆山 now link in. Every 江苏 city has a photo (9 fetched, incl. 南通, 盐城, 泰州). Photos set by hand: 寒山寺 (first pick was a Buddha statue), 大运河 (first pick was a map), 六朝 (a Ming map → 鸡鸣寺, on the 同泰寺 site), 太湖 (first pick's licence was refused), 淮扬菜 (狮子头). Still to do: 秦淮河 should be `File:Qinhuai River along Fuzimiao 2008.jpg` (set, but Commons 429'd four times; it shows the city-wall photo until the retry). 知乎: read 6 articles in the learner's Chrome (大运河/隋炀帝, 虎丘 and 剑池, 江宁织造府, 南京城砖铭文, 韩信's 王孙 question) and checked facts against Wikipedia and 史记. Dropped or hedged: 张继 failing the exam (he probably passed; dropped), the 1950s 剑池 drainage (only in 知乎, told as 据说), the 白塔-overnight legend (told as unrecorded), 盐水鸭 numbers, 寒山寺 New Year bell, 吕彦直's cause of death. Found that 白堤 is not 白居易's (the 白居易 page says so; 西湖 already hedges). Wanted list: 45 (乾隆, 明孝陵, 吴承恩, 孙中山, 长江 lead).

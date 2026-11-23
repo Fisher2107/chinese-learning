@@ -35,6 +35,18 @@
   "w": 640,
   "h": 322
  },
+ "city/changzhou": {
+  "spec": "Q57970?",
+  "qid": "Q57970",
+  "label": "常州市",
+  "desc": "中國江蘇省的地級市",
+  "file": "20090919 Changzhou Imgp5266.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:20090919_Changzhou_Imgp5266.jpg",
+  "artist": "Jakub Hałun",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 425
+ },
  "city/chengde": {
   "spec": "避暑山庄",
   "qid": "Q1046818",
@@ -178,6 +190,18 @@
   "w": 640,
   "h": 473
  },
+ "city/huaian": {
+  "spec": "Q57818?",
+  "qid": "Q57818",
+  "label": "淮安市",
+  "desc": "中国江苏省的地级市",
+  "file": "清江浦码头风光.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E6%B8%85%E6%B1%9F%E6%B5%A6%E7%A0%81%E5%A4%B4%E9%A3%8E%E5%85%89.jpg",
+  "artist": "Cz2018764171",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
  "city/huhehaote": {
   "spec": "大召寺",
   "qid": "Q1179294",
@@ -273,6 +297,18 @@
   "w": 640,
   "h": 426
  },
+ "city/kunshan": {
+  "spec": "周庄",
+  "qid": "Q61948",
+  "label": "周庄",
+  "desc": "江苏省苏州市昆山市辖镇",
+  "file": "Zhouzhuang 2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zhouzhuang_2.jpg",
+  "artist": "ngader",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 425
+ },
  "city/lanzhou": {
   "spec": "中山桥 (兰州)",
   "qid": "Q197892",
@@ -295,6 +331,18 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 481
+ },
+ "city/lianyungang": {
+  "spec": "Q57756?",
+  "qid": "Q57756",
+  "label": "连云港市",
+  "desc": "中国江苏省的地级市",
+  "file": "Lianyun District Birdview.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Lianyun_District_Birdview.JPG",
+  "artist": "风之清扬",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 360
  },
  "city/lishui": {
   "spec": "File:云和梯田.jpg",
@@ -342,6 +390,18 @@
   "license": "CC BY-SA 2.0",
   "w": 640,
   "h": 853
+ },
+ "city/nantong": {
+  "spec": "Q57947?",
+  "qid": "Q57947",
+  "label": "南通市",
+  "desc": "中国江苏省的地级市",
+  "file": "南通.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%8D%97%E9%80%9A.jpg",
+  "artist": "Qingqing Chen",
+  "license": "Public domain",
+  "w": 640,
+  "h": 480
  },
  "city/ningbo": {
   "spec": "天一阁",
@@ -426,6 +486,18 @@
   "w": 640,
   "h": 480
  },
+ "city/suqian": {
+  "spec": "Q57787?",
+  "qid": "Q57787",
+  "label": "宿迁市",
+  "desc": "中国江苏省的地级市",
+  "file": "Shuyang City View 01.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Shuyang_City_View_01.JPG",
+  "artist": "Sinopitt",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 375
+ },
  "city/suzhou": {
   "spec": "虎丘",
   "qid": "Q8013177",
@@ -473,6 +545,18 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 960
+ },
+ "city/taizhou-jiangsu": {
+  "spec": "Q57931?",
+  "qid": "Q57931",
+  "label": "泰州市",
+  "desc": "中国江苏省的一个城市",
+  "file": "Jingcheng Subdistrict August 2025 Jingjiang.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Jingcheng_Subdistrict_August_2025_Jingjiang.jpg",
+  "artist": "風雚流羽",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 474
  },
  "city/wenzhou": {
   "spec": "雁荡山",
@@ -557,6 +641,30 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 436
+ },
+ "city/xuzhou": {
+  "spec": "Q57719?",
+  "qid": "Q57719",
+  "label": "徐州市",
+  "desc": "中国江苏省的地级市",
+  "file": "Yunlong Mountain 8.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Yunlong_Mountain_8.jpg",
+  "artist": "H2v5o68z",
+  "license": "CC0",
+  "w": 640,
+  "h": 480
+ },
+ "city/yancheng": {
+  "spec": "Q57866?",
+  "qid": "Q57866",
+  "label": "盐城市",
+  "desc": "中国江苏省的地级市",
+  "file": "Tinghu, Yancheng, Jiangsu, China - panoramio (44).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tinghu,_Yancheng,_Jiangsu,_China_-_panoramio_(44).jpg",
+  "artist": "柳少阳",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 359
  },
  "city/yangzhou": {
   "spec": "瘦西湖",
@@ -1044,6 +1152,42 @@
   "w": 640,
   "h": 426
  },
+ "wiki/baijuyi": {
+  "spec": "白居易",
+  "qid": "Q313324",
+  "label": "白居易",
+  "desc": "唐代文學家",
+  "file": "唐名臣像-21-白樂天.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%94%90%E5%90%8D%E8%87%A3%E5%83%8F-21-%E7%99%BD%E6%A8%82%E5%A4%A9.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 902
+ },
+ "wiki/caoxueqin": {
+  "spec": "曹雪芹",
+  "qid": "Q182874",
+  "label": "曹雪芹",
+  "desc": "中國清朝作家",
+  "file": "Statue of Cao Xueqin.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Statue_of_Cao_Xueqin.JPG",
+  "artist": "User:Yongxinge",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 853
+ },
+ "wiki/dazhaxie": {
+  "spec": "中华绒螯蟹",
+  "qid": "Q823941",
+  "label": "中华绒螯蟹",
+  "desc": "方蟹科绒螯蟹属甲壳动物",
+  "file": "EriocheirSinensis1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:EriocheirSinensis1.jpg",
+  "artist": "Christian Fischer",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 416
+ },
  "wiki/dongporou": {
   "spec": "东坡肉",
   "qid": "Q1146046",
@@ -1104,6 +1248,64 @@
   "w": 640,
   "h": 426
  },
+ "wiki/hanshansi": {
+  "spec": "File:Hanshan Temple, Suzhou.JPG",
+  "label": "",
+  "desc": "",
+  "file": "Hanshan Temple, Suzhou.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Hanshan_Temple,_Suzhou.JPG",
+  "artist": "螺钉",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 853
+ },
+ "wiki/hanxin": {
+  "spec": "韩信",
+  "qid": "Q574498",
+  "label": "韩信",
+  "desc": "中国古代名将",
+  "file": "Hán Xìn.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:H%C3%A1n_X%C3%ACn.jpg",
+  "artist": "Wikimedia Commons",
+  "license": "Public domain",
+  "w": 500,
+  "h": 705
+ },
+ "wiki/helu": {
+  "spec": "虎丘塔",
+  "qid": "Q1581102",
+  "label": "虎丘塔",
+  "desc": "中華人民共和國的建築物",
+  "file": "2024-Apr Suzhou - Tiger Hill Pagoda 虎丘塔 (Huqiu Ta) - img 04.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2024-Apr_Suzhou_-_Tiger_Hill_Pagoda_%E8%99%8E%E4%B8%98%E5%A1%94_(Huqiu_Ta)_-_img_04.jpg",
+  "artist": "Chainwit.",
+  "license": "CC BY 4.0",
+  "w": 640,
+  "h": 853
+ },
+ "wiki/hongloumeng": {
+  "spec": "红楼梦",
+  "qid": "Q8265",
+  "label": "红楼梦",
+  "desc": "清代长篇小说",
+  "file": "Hongloumeng2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Hongloumeng2.jpg",
+  "artist": "Wikimedia Commons",
+  "license": "Public domain",
+  "w": 272,
+  "h": 319
+ },
+ "wiki/huaiyangcai": {
+  "spec": "File:Lions head meatballs in brown sauce.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Lions head meatballs in brown sauce.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Lions_head_meatballs_in_brown_sauce.jpg",
+  "artist": "Jpatokal",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
  "wiki/huanggongwang": {
   "spec": "黄公望",
   "qid": "Q702525",
@@ -1115,6 +1317,29 @@
   "license": "Public domain",
   "w": 640,
   "h": 447
+ },
+ "wiki/huqiu": {
+  "spec": "虎丘塔",
+  "qid": "Q1581102",
+  "label": "虎丘塔",
+  "desc": "中華人民共和國的建築物",
+  "file": "2024-Apr Suzhou - Tiger Hill Pagoda 虎丘塔 (Huqiu Ta) - img 04.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2024-Apr_Suzhou_-_Tiger_Hill_Pagoda_%E8%99%8E%E4%B8%98%E5%A1%94_(Huqiu_Ta)_-_img_04.jpg",
+  "artist": "Chainwit.",
+  "license": "CC BY 4.0",
+  "w": 640,
+  "h": 853
+ },
+ "wiki/jinghang-dayunhe": {
+  "spec": "File:Yangzhou-Modern-Grand-Canal-barges-3361.JPG",
+  "label": "",
+  "desc": "",
+  "file": "Yangzhou-Modern-Grand-Canal-barges-3361.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Yangzhou-Modern-Grand-Canal-barges-3361.JPG",
+  "artist": "Vmenkov",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
  },
  "wiki/leifengta": {
   "spec": "雷峰塔",
@@ -1136,6 +1361,17 @@
   "page": "https://commons.wikimedia.org/wiki/File:West_City_Wall_of_Liangzhu_Ancient_City.JPG",
   "artist": "LukeLOU",
   "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "wiki/liuchao": {
+  "spec": "File:Jiming Temple Nanjing - 南京 鸡鸣寺 (2024) - img 05.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Jiming Temple Nanjing - 南京 鸡鸣寺 (2024) - img 05.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Jiming_Temple_Nanjing_-_%E5%8D%97%E4%BA%AC_%E9%B8%A1%E9%B8%A3%E5%AF%BA_(2024)_-_img_05.jpg",
+  "artist": "Chainwit.",
+  "license": "CC BY 4.0",
   "w": 640,
   "h": 480
  },
@@ -1244,6 +1480,18 @@
   "w": 640,
   "h": 426
  },
+ "wiki/qinhuaihe": {
+  "spec": "秦淮河",
+  "qid": "Q835550",
+  "label": "秦淮河",
+  "desc": "中华人民共和国河流",
+  "file": "2024Apr - Nanjing City Wall -- south section - img 04.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2024Apr_-_Nanjing_City_Wall_--_south_section_-_img_04.jpg",
+  "artist": "Chainwit.",
+  "license": "CC BY 4.0",
+  "w": 640,
+  "h": 480
+ },
  "wiki/shaoxing-huangjiu": {
   "spec": "绍兴酒",
   "qid": "Q175245",
@@ -1256,6 +1504,18 @@
   "w": 640,
   "h": 956
  },
+ "wiki/shouxihu": {
+  "spec": "瘦西湖",
+  "qid": "Q3215751",
+  "label": "瘦西湖",
+  "desc": "中华人民共和国湖泊",
+  "file": "Thin West Lake south entrance.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Thin_West_Lake_south_entrance.JPG",
+  "artist": "Gisling",
+  "license": "CC BY 3.0",
+  "w": 640,
+  "h": 480
+ },
  "wiki/sushi": {
   "spec": "苏轼",
   "qid": "Q36020",
@@ -1267,6 +1527,17 @@
   "license": "Public domain",
   "w": 640,
   "h": 1507
+ },
+ "wiki/taihu": {
+  "spec": "File:Tai Lake boat 2.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Tai Lake boat 2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tai_Lake_boat_2.jpg",
+  "artist": "Gwydion M. Williams",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 224
  },
  "wiki/wangxizhi": {
   "spec": "王羲之",
@@ -1304,6 +1575,18 @@
   "w": 640,
   "h": 862
  },
+ "wiki/xiangyu": {
+  "spec": "项羽",
+  "qid": "Q182266",
+  "label": "项羽",
+  "desc": "中国历史人物",
+  "file": "Xiang Yu.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Xiang_Yu.jpg",
+  "artist": "ShangGuan Zhou（上官周）",
+  "license": "Public domain",
+  "w": 330,
+  "h": 478
+ },
  "wiki/xihu": {
   "spec": "西湖",
   "qid": "Q502371",
@@ -1328,6 +1611,18 @@
   "w": 400,
   "h": 490
  },
+ "wiki/yanshuiya": {
+  "spec": "盐水鸭",
+  "qid": "Q3704951",
+  "label": "盐水鸭",
+  "desc": "南京名特产",
+  "file": "Nanjing salted duck.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Nanjing_salted_duck.JPG",
+  "artist": "NNU10.24100114",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 853
+ },
  "wiki/yuefei": {
   "spec": "岳飞",
   "qid": "Q334398",
@@ -1339,5 +1634,41 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 1338
+ },
+ "wiki/zhongshanling": {
+  "spec": "中山陵",
+  "qid": "Q1338405",
+  "label": "中山陵",
+  "desc": "孙中山的陵墓",
+  "file": "Hall of Sun Yat-sen Mausoleum.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Hall_of_Sun_Yat-sen_Mausoleum.jpg",
+  "artist": "Jiong Sheng from London, United Kingdom",
+  "license": "CC BY-SA 2.0",
+  "w": 640,
+  "h": 853
+ },
+ "wiki/zhuozhengyuan": {
+  "spec": "拙政园",
+  "qid": "Q1076650",
+  "label": "拙政园",
+  "desc": "园林",
+  "file": "Suzhou Zhuozheng Yuan 2015.04.23 08-13-49.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Suzhou_Zhuozheng_Yuan_2015.04.23_08-13-49.jpg",
+  "artist": "Zhangzhugang",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/zhuyuanzhang": {
+  "spec": "明太祖",
+  "qid": "Q9957",
+  "label": "明太祖",
+  "desc": "中国明朝开国皇帝",
+  "file": "Portrait assis de l'empereur Ming Taizu.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Portrait_assis_de_l%27empereur_Ming_Taizu.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 1042
  }
 }
