@@ -17,7 +17,7 @@ import {
 } from '@phosphor-icons/react'
 import { db, seriesProgress, type WordSource } from '../lib/db.ts'
 import { loadSeries, useLoad } from '../lib/content.ts'
-import { back, go } from '../lib/router.ts'
+import { back, go, usePageState } from '../lib/router.ts'
 import { FONT_PX, saveSetting, useSettings, type FontSize } from '../lib/settings.ts'
 import { speak, stopSpeaking, canSpeak } from '../lib/speech.ts'
 import { finishEpisode, unlockEpisode } from '../lib/progress.ts'
@@ -34,8 +34,9 @@ type Phase = 'read' | 'gate' | 'done'
 export function EpisodeReader({ id, n }: { id: string; n: number }) {
   const { data: series } = useLoad(() => loadSeries(id), `series:${id}`)
   const progress = useLiveQuery(() => seriesProgress(id), [id])
-  const [phase, setPhase] = useState<Phase>('read')
-  const [coins, setCoins] = useState(0)
+  // kept with the page: a link followed from the recall questions comes back to them
+  const [phase, setPhase] = usePageState<Phase>('phase', 'read')
+  const [coins, setCoins] = usePageState('coins', 0)
 
   useEffect(() => () => stopSpeaking(), [])
   if (!series || !progress) return <Loading />
@@ -319,10 +320,11 @@ function RecallGate({
   onClose: () => void
   onPass: (firstTry: number) => void
 }) {
-  const [queue, setQueue] = useState(() => questions.map((_, i) => i))
-  const [missed, setMissed] = useState<Set<number>>(new Set())
-  const [choice, setChoice] = useState<number>()
-  const [result, setResult] = useState<'right' | 'wrong'>()
+  // kept with the page, like the phase: closing to reread and coming back keeps your place too
+  const [queue, setQueue] = usePageState('gate-queue', () => questions.map((_, i) => i))
+  const [missed, setMissed] = usePageState<number[]>('gate-missed', [])
+  const [choice, setChoice] = usePageState<number | undefined>('gate-choice', undefined)
+  const [result, setResult] = usePageState<'right' | 'wrong' | undefined>('gate-result', undefined)
   const qi = queue[0]
   const q = questions[qi]
   const solved = questions.length - queue.length
@@ -331,7 +333,7 @@ function RecallGate({
     if (choice === undefined) return
     const right = choice === q.answer
     setResult(right ? 'right' : 'wrong')
-    if (!right) setMissed((m) => new Set(m).add(qi))
+    if (!right) setMissed((m) => (m.includes(qi) ? m : [...m, qi]))
   }
 
   function next() {
@@ -339,7 +341,7 @@ function RecallGate({
     const newQueue = result === 'right' ? rest : [...rest, qi]
     setResult(undefined)
     setChoice(undefined)
-    if (newQueue.length === 0) onPass(questions.length - missed.size)
+    if (newQueue.length === 0) onPass(questions.length - missed.length)
     else setQueue(newQueue)
   }
 
@@ -364,10 +366,11 @@ function RecallGate({
               const showRight = result && oi === q.answer
               const showWrong = result === 'wrong' && on
               return (
+                // not `disabled` once answered: the options stay pressable for their pinyin
                 <button
                   key={oi}
-                  disabled={!!result}
-                  onClick={() => setChoice(oi)}
+                  aria-disabled={!!result}
+                  onClick={() => !result && setChoice(oi)}
                   className="tile flex w-full items-center gap-3 px-4 py-4 text-left text-[18px] font-bold transition-colors"
                   style={{
                     borderColor: showRight ? 'var(--color-lv)' : showWrong ? 'var(--color-zhu)' : on ? color : undefined,
@@ -380,7 +383,7 @@ function RecallGate({
                   >
                     {oi + 1}
                   </span>
-                  {sentenceText(o.tokens)}
+                  <ZhText ui inline id={`gate-o${qi}-${oi}`} paras={[{ kind: 'p', sentences: [o] }]} glossary={glossary} source={source} />
                 </button>
               )
             })}
@@ -396,7 +399,11 @@ function RecallGate({
           </div>
         </div>
       )}
-      <FeedbackBanner state={result} answer={sentenceText(q.options[q.answer].tokens)} onContinue={next} />
+      <FeedbackBanner
+        state={result}
+        answer={<ZhText ui inline id={`gate-a${qi}`} paras={[{ kind: 'p', sentences: [q.options[q.answer]] }]} glossary={glossary} source={source} />}
+        onContinue={next}
+      />
     </div>
   )
 }

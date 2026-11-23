@@ -11,7 +11,7 @@ import { PeopleRow, PhotoRow } from '../components/WikiCards.tsx'
 import type { Para } from '../lib/types.ts'
 import { markKey, setLearnt, useMarks } from '../lib/learn.ts'
 import { earnStamp, makeQuiz, MAP_BY_ID, markPlaceRead, markPlaceUnread, regionColor, visitPlace, type QuizQuestion } from '../lib/places.ts'
-import { back, go } from '../lib/router.ts'
+import { back, go, usePageState } from '../lib/router.ts'
 import { LocatorMap } from '../components/ChinaMap.tsx'
 import { ReadMark } from '../components/ReadMark.tsx'
 import { LearntButton } from '../components/LearntButton.tsx'
@@ -22,7 +22,7 @@ import { Button, Loading, PageHeader, Pill, ProgressBar } from '../components/ui
 import { Fold, JumpBar, Sub } from '../components/Fold.tsx'
 import { EggSection, placeLinks, useEggCount, type EggGroup } from '../components/Eggs.tsx'
 import { MapKey, ProvinceMap } from '../components/ProvinceMap.tsx'
-import { ZhText } from '../components/ZhText.tsx'
+import { TapText, ZhText } from '../components/ZhText.tsx'
 
 export function PlacePage({ id }: { id: string }) {
   const placesFile = useLoad(loadPlaces, 'places').data
@@ -263,20 +263,18 @@ export function PlacePage({ id }: { id: string }) {
 /** 集章: about six questions on the place itself; get them all right (wrong ones come back) to earn the seal. */
 export function StampQuiz({ id }: { id: string }) {
   const placesFile = useLoad(loadPlaces, 'places').data
-  const wiki = useLoad(loadWikiIndex, 'wiki-index').data
-  const photos = useLoad(loadPhotos, 'photos').data
-  const { seen } = useWikiProgress()
   const place = placesFile?.places.find((p) => p.id === id)
-  const ready = !!(place && placesFile && photos)
-  // made once, when everything has loaded: answering mustn't reshuffle the questions
-  const [questions, setQuestions] = useState<QuizQuestion[]>()
+  // made once, when the places have loaded: answering mustn't reshuffle the questions. All of it is
+  // kept with the page, so following 读一读 (or any link) and coming back carries on where you were.
+  const [questions, setQuestions] = usePageState<QuizQuestion[] | undefined>('questions', undefined)
   useEffect(() => {
-    if (ready && !questions) setQuestions(makeQuiz(place!, placesFile!.places, { wiki, photos: new Set(Object.keys(photos!)), cities: CITIES, seen }))
-  }, [ready, questions, place, placesFile, wiki, photos, seen])
-  const [queue, setQueue] = useState<number[]>()
-  const [choice, setChoice] = useState<number>()
-  const [result, setResult] = useState<'right' | 'wrong'>()
-  const [coins, setCoins] = useState<number>()
+    if (place && placesFile && !questions) setQuestions(makeQuiz(place, placesFile.places, CITIES))
+  }, [place, placesFile, questions, setQuestions])
+  const [queue, setQueue] = usePageState<number[] | undefined>('queue', undefined)
+  const [choice, setChoice] = usePageState<number | undefined>('choice', undefined)
+  const [result, setResult] = usePageState<'right' | 'wrong' | undefined>('result', undefined)
+  const [coins, setCoins] = usePageState<number | undefined>('coins', undefined)
+  const glossary = placesFile?.glossary
   if (!place || !questions?.length) return <Loading />
   const q0 = queue ?? questions.map((_, i) => i)
   const color = regionColor(place.region)
@@ -286,6 +284,7 @@ export function StampQuiz({ id }: { id: string }) {
   const qi = q0[0]
   const q = questions[qi]
   const wide = q.options.some((o) => [...o].length > 6)
+  const source: WordSource = { kind: 'place', route: `place/${id}`, title: `集章 · ${place.name}` }
   function check() {
     if (choice === undefined) return
     setResult(choice === q.answer ? 'right' : 'wrong')
@@ -307,25 +306,28 @@ export function StampQuiz({ id }: { id: string }) {
           <StampIcon size={18} weight="fill" /> 集章 · {place.name}
         </div>
         <motion.div key={`${qi}-${q0.length}`} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}>
-          {q.photo && <Photo k={q.photo} ratio="16 / 10" credit={false} className="mt-3 rounded-2xl" />}
-          <h2 className="mt-3 text-[24px] font-black">{q.q}</h2>
+          <h2 className="mt-3 text-[24px] font-black">
+            <TapText inline id={`stamp-q-${qi}`} text={q.q} glossary={glossary} source={source} className="!leading-snug" />
+          </h2>
           <div className={`mt-5 grid gap-3 ${wide ? 'grid-cols-1' : 'grid-cols-2'}`}>
             {q.options.map((o, oi) => {
               const on = choice === oi
               const showRight = result && oi === q.answer
               const showWrong = result === 'wrong' && on
+              const single = o.length === 1
               return (
+                // not `disabled` once answered: the options stay pressable for their pinyin
                 <button
                   key={o}
-                  disabled={!!result}
-                  onClick={() => setChoice(oi)}
-                  className={`tile flex items-center px-4 font-black transition-colors ${wide ? 'min-h-14 py-3 text-left text-[18px]' : `h-20 justify-center ${o.length === 1 ? 'font-book text-[36px]' : 'text-[20px]'}`}`}
+                  aria-disabled={!!result}
+                  onClick={() => !result && setChoice(oi)}
+                  className={`tile flex items-center px-4 font-black transition-colors ${wide ? 'min-h-14 py-3 text-left text-[18px]' : `h-20 justify-center ${single ? 'font-book text-[36px]' : 'text-[20px]'}`}`}
                   style={{
                     borderColor: showRight ? 'var(--color-lv)' : showWrong ? 'var(--color-zhu)' : on ? color : undefined,
                     background: showRight ? 'var(--color-lv-soft)' : showWrong ? 'var(--color-zhu-soft)' : on ? `color-mix(in oklab, ${color} 10%, var(--surface))` : undefined,
                   }}
                 >
-                  {o}
+                  <TapText inline ui={!single} id={`stamp-o-${qi}-${oi}`} text={o} glossary={glossary} source={source} />
                 </button>
               )
             })}
@@ -343,11 +345,11 @@ export function StampQuiz({ id }: { id: string }) {
       )}
       <FeedbackBanner
         state={result}
-        answer={q.options[q.answer]}
+        answer={<TapText inline id={`stamp-a-${qi}`} text={q.options[q.answer]} glossary={glossary} source={source} />}
         onContinue={next}
         extra={
           <>
-            <div className="mt-1 text-[16px] font-bold text-mute">{q.why}</div>
+            <TapText id={`stamp-why-${qi}`} text={q.why} glossary={glossary} source={source} className="mt-1 text-[16px] font-bold text-mute" />
             {q.more && (
               <button onClick={() => go(q.more!.route)} className="mt-2 flex items-center gap-1 text-[15px] font-black text-[var(--link)]">
                 读一读：{q.more.title} <ArrowRightIcon size={15} weight="bold" />

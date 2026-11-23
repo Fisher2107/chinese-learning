@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 import { ArrowRightIcon, CardsIcon, ChatCircleDotsIcon, CheckCircleIcon, FireIcon, SpeakerHighIcon, XIcon } from '@phosphor-icons/react'
 import type { Rating } from 'ts-fsrs'
-import type { EggNote, SavedWord } from '../lib/db.ts'
+import { db, type EggNote, type SavedWord } from '../lib/db.ts'
 import { dueWords, grade, GRADES, previewCard } from '../lib/srs.ts'
 import { dueEggs, eggForCard, eggLabel, eggRoute, gradeEgg, isHometown } from '../lib/eggs.ts'
 import { tokenizeText } from '../lib/dict.ts'
 import { loadCities, loadDialect, loadPlaces, useLoad } from '../lib/content.ts'
 import type { Para } from '../lib/types.ts'
-import { go } from '../lib/router.ts'
+import { go, usePageState } from '../lib/router.ts'
 import { speak } from '../lib/speech.ts'
 import { useStats } from '../lib/stats.ts'
 import { Button, Loading, ProgressBar } from '../components/ui.tsx'
-import { ZhText } from '../components/ZhText.tsx'
+import { TapText, ZhText } from '../components/ZhText.tsx'
 
 const EDGE: Record<string, string> = { zhu: 'zhu', huang: 'huang', lv: 'lv', dai: 'dai' }
 
@@ -21,29 +21,56 @@ type Item = { kind: 'word'; id: string; due: number; word: SavedWord } | { kind:
 
 const itemCard = (it: Item) => (it.kind === 'word' ? it.word.card : it.egg.card!)
 
+const toItem = {
+  word: (w: SavedWord): Item => ({ kind: 'word', id: `w${w.id}`, due: w.due, word: w }),
+  egg: (e: EggNote): Item => ({ kind: 'egg', id: `e${e.key}`, due: e.due!, egg: e }),
+}
+
+/** The cards of a session, by their ids, as they are now (gone ones dropped). */
+async function itemsById(ids: string[]): Promise<Item[]> {
+  const items = await Promise.all(
+    ids.map(async (id) => {
+      if (id.startsWith('w')) {
+        const w = await db.words.get(Number(id.slice(1)))
+        return w && toItem.word(w)
+      }
+      const e = await db.eggs.get(id.slice(1))
+      return e?.card ? toItem.egg(e) : undefined
+    }),
+  )
+  return items.filter((it): it is Item => !!it)
+}
+
 export function Review() {
   const [queue, setQueue] = useState<Item[]>()
-  const [total, setTotal] = useState(0)
-  const [shown, setShown] = useState(false)
+  // the session is kept with the page by card ids (the rows are read again: their cards hold Dates),
+  // so following 去…看看 and coming back carries on where you were
+  const [ids, setIds] = usePageState<string[] | undefined>('ids', undefined)
+  const [total, setTotal] = usePageState('total', 0)
+  const [shown, setShown] = usePageState('shown', false)
   const [intervals, setIntervals] = useState<string[]>([])
-  const [reviewed, setReviewed] = useState(0)
-  const [right, setRight] = useState(0)
+  const [reviewed, setReviewed] = usePageState('reviewed', 0)
+  const [right, setRight] = usePageState('right', 0)
   const stats = useStats()
 
   useEffect(() => {
+    if (ids) {
+      itemsById(ids).then(setQueue)
+      return
+    }
     Promise.all([dueWords(50), dueEggs(50)]).then(([words, eggs]) => {
-      const items: Item[] = [
-        ...words.map((w) => ({ kind: 'word' as const, id: `w${w.id}`, due: w.due, word: w })),
-        ...eggs.map((e) => ({ kind: 'egg' as const, id: `e${e.key}`, due: e.due!, egg: e })),
-      ].sort((a, b) => a.due - b.due)
+      const items: Item[] = [...words.map(toItem.word), ...eggs.map(toItem.egg)].sort((a, b) => a.due - b.due)
       setQueue(items)
       setTotal(items.length)
     })
+    // once, when opened: a session kept from before carries on instead
   }, [])
+  useEffect(() => {
+    if (queue) setIds(queue.map((it) => it.id))
+  }, [queue, setIds])
 
   const item = queue?.[0]
   useEffect(() => {
-    setShown(false)
     if (item) previewCard(itemCard(item)).then(setIntervals)
   }, [item])
 
@@ -80,6 +107,7 @@ export function Review() {
     else it = { ...it, egg: await gradeEgg(it.egg, rating) }
     setReviewed((n) => n + 1)
     if (rating !== 1) setRight((n) => n + 1)
+    setShown(false)
     // 忘了 → see it again at the end of this session
     setQueue((q) => (rating === 1 ? [...q!.slice(1), it] : q!.slice(1)))
   }
@@ -202,7 +230,9 @@ function EggFace({ row, shown }: { row: EggNote; shown: boolean }) {
         <ChatCircleDotsIcon size={18} weight="fill" /> {eggLabel(row.page)} · {row.title}
       </div>
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-        <h2 className="mt-3 text-[24px] leading-snug font-black">{egg.q}</h2>
+        <h2 className="mt-3 text-[24px] leading-snug font-black">
+          <TapText inline id={`review-egg-q-${row.key}`} text={egg.q} glossary={glossary} source={source} className="!leading-snug" />
+        </h2>
         {!shown && <p className="mt-3 text-[15px] font-bold text-mute">先在心里说一说，再看答案。</p>}
         {shown && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-5">
