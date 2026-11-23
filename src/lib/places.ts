@@ -1,6 +1,6 @@
 import { useLiveQuery } from './live.ts'
 import MAP from '../data/china-map.json'
-import { db } from './db.ts'
+import { progressKey, db } from './db.ts'
 import { addChars, addCoins, recordActivity } from './stats.ts'
 import type { FeedCard, Place, Region, Sentence, SeriesSummary, WikiIndex } from './types.ts'
 
@@ -91,15 +91,15 @@ export function usePlaceStats(feedCards: FeedCard[] = [], seriesList: SeriesSumm
 
 /** Opening a page only notes the visit; it doesn't count as reading or as activity for the day. */
 export async function visitPlace(id: string) {
-  const prev = await db.places.get(id)
-  if (!prev) await db.places.put({ id, visited: Date.now(), updated: Date.now() })
+  const prev = await db.places.get(progressKey(id))
+  if (!prev) await db.places.upsert(progressKey(id), { id, visited: Date.now(), updated: Date.now() })
 }
 
 /** 我读完了 on a place page. Returns coins earned (5, only the first time). */
 export async function markPlaceRead(id: string, chars: number): Promise<number> {
-  const prev = await db.places.get(id)
+  const prev = await db.places.get(progressKey(id))
   if (prev?.read) return 0
-  await db.places.put({ ...prev, id, visited: prev?.visited ?? Date.now(), read: Date.now(), updated: Date.now() })
+  await db.places.upsert(progressKey(id), { id, visited: prev?.visited ?? Date.now(), read: Date.now(), updated: Date.now() })
   await addChars(chars)
   await addCoins(5)
   await recordActivity()
@@ -107,8 +107,8 @@ export async function markPlaceRead(id: string, chars: number): Promise<number> 
 }
 
 export async function markPlaceUnread(id: string) {
-  const prev = await db.places.get(id)
-  if (prev) await db.places.put({ ...prev, read: undefined, updated: Date.now() })
+  const prev = await db.places.get(progressKey(id))
+  if (prev) await db.places.upsert(progressKey(id), { read: undefined, updated: Date.now() })
 }
 
 /** Provinces the user has read about or stamped: what quizzes and the feed lean on. */
@@ -116,9 +116,9 @@ export const explored = (rows: { id: string; read?: number; stamp?: number }[]) 
 
 /** Passing the 集章 quiz. Returns coins earned (only the first time). */
 export async function earnStamp(id: string): Promise<number> {
-  const prev = await db.places.get(id)
+  const prev = await db.places.get(progressKey(id))
   if (prev?.stamp) return 0
-  await db.places.put({ ...prev, id, visited: prev?.visited ?? Date.now(), stamp: Date.now(), updated: Date.now() })
+  await db.places.upsert(progressKey(id), { id, visited: prev?.visited ?? Date.now(), stamp: Date.now(), updated: Date.now() })
   await addCoins(15)
   await recordActivity()
   return 15

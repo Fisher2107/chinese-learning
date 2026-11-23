@@ -1,5 +1,5 @@
 import { DefaultScheduler, Rating } from 'ts-fsrs'
-import { db, type SavedWord, type WordSource } from './db.ts'
+import { progressKey, inCloud, db, type SavedWord, type WordSource } from './db.ts'
 import type { Token } from './types.ts'
 import { addCoins, bumpDay, recordActivity } from './stats.ts'
 
@@ -24,6 +24,7 @@ export async function saveWord(input: { word: string; p: string; d: string; sent
   const card = s.newCard({ now }) as unknown as CardLike
   const id = await db.words.add({
     ...input,
+    ...(inCloud ? { id: progressKey(input.word) } : {}),
     created: now.getTime(),
     due: card.dueAt.getTime(),
     card: card as unknown as Record<string, unknown>,
@@ -77,8 +78,10 @@ export async function grade(word: SavedWord, rating: Rating) {
   const s = await getScheduler()
   const now = new Date()
   const { card } = s.review({ card: reviveCard(word.card), grade: rating as never, now }) as unknown as { card: CardLike }
-  await db.words.update(word.id!, { card: card as unknown as Record<string, unknown>, due: card.dueAt.getTime() })
-  await db.reviews.add({ wordId: word.id!, rating, at: now.getTime() })
+  await db.transaction('rw', db.words, db.reviews, async () => {
+    const updated = await db.words.update(word.id!, { card: card as unknown as Record<string, unknown>, due: card.dueAt.getTime() })
+    if (updated) await db.reviews.add({ ...(inCloud ? { id: crypto.randomUUID() } : {}), wordId: word.id!, rating, at: now.getTime() })
+  })
   if (rating !== Rating.Again) await addCoins(2)
   await bumpDay('reviews')
   await recordActivity()
