@@ -7,6 +7,7 @@
 //   content/places/<id>.md           one page per province: intro, then ## 聊天彩蛋 bullets (each with 问： and maybe 查：);
 //                                    frontmatter dialect + quiz: the 集章 questions (see README)
 //   content/feed/<slug>.md           刷一刷 cards: title is the hook question, body 150–300 字
+//   content/weishenme.md             大家都在问: per province, the 为什么 questions people search for, answered
 //   content/wiki/<id>.md             百科: one page per place, person, river, event, legend, dish…
 // Output: public/content/{index.json, series/<id>.json, texts/<id>.json, places.json, feed.json,
 //         wiki-index.json, wiki/<id>.json}
@@ -278,8 +279,12 @@ function parseEggs(src, page, name, glossary, where) {
       raw.push({ text: l.slice(2).trim(), q: '', find: '', sources: [] })
       continue
     }
-    const m = l.match(/^(问|查|源)[:：]\s*(.+)$/)
-    if (m && raw.length && m[1] === '源') {
+    const m = l.match(/^(问|查|源|注)[:：]\s*(.+)$/)
+    if (m && raw.length && m[1] === '注') {
+      // a stereotype or a touchy subject, flagged on the card
+      if (m[2].trim() === '偏见' || m[2].trim() === '敏感') raw.at(-1).flag = m[2].trim()
+      else errors.push(`${where}: a flag line is "  注：偏见" or "  注：敏感" (got "${l}")`)
+    } else if (m && raw.length && m[1] === '源') {
       const link = m[2].trim().match(/^\[(.+)\]\((https?:\/\/[^\s)]+)\)$/)
       if (link) raw.at(-1).sources.push({ title: link[1], url: link[2] })
       else errors.push(`${where}: a source line is "  源：[标题](https://…)" (got "${l}")`)
@@ -300,6 +305,7 @@ function parseEggs(src, page, name, glossary, where) {
       q: e.q,
       find: e.find || plainText(e.text).match(/[“《]([^”》]{2,14})[”》]/)?.[1] || name,
       ...(e.sources.length ? { sources: e.sources } : {}),
+      ...(e.flag ? { flag: e.flag } : {}),
     }
   })
 }
@@ -451,6 +457,32 @@ if (existsSync('content/dialect.md')) {
     if (dialect[id]) errors.push(`${where}: this province has two sections`)
     onPage(`collection/hometown/${id}`, `${place.name} · 家乡话`)
     dialect[id] = parseEggs(parts[i + 1], `hometown/${id}`, place.name, dialectGlossary, where)
+  }
+}
+
+// ---------- 大家都在问: `## <province id>`, then 聊天彩蛋-style entries whose 问 is what a search box
+// suggests after “<省>为什么” or “<省>人为什么”, and whose text is the story behind it ----------
+const asked = {}
+const askedGlossary = {}
+let askedOn = ''
+if (existsSync('content/weishenme.md')) {
+  const parts = (await readFile('content/weishenme.md', 'utf8')).split(/^## +(.+?)\s*$/m)
+  // suggestions change, so the file says when they were looked up
+  askedOn = parts[0].match(/^搜索日期[:：]\s*(\d{4}-\d{2})\s*$/m)?.[1] ?? ''
+  if (!askedOn) errors.push('weishenme.md: say when the suggestions were looked up, as "搜索日期：2026-11" before the first ## section')
+  for (let i = 1; i < parts.length; i += 2) {
+    const id = parts[i]
+    const where = `weishenme.md ## ${id}`
+    const place = places.find((p) => p.id === id)
+    if (!place) {
+      errors.push(`${where}: "${id}" is not a province id (use the file name in content/places)`)
+      continue
+    }
+    if (asked[id]) errors.push(`${where}: this province has two sections`)
+    onPage(`place/${id}`, `${place.name} · 大家都在问`)
+    asked[id] = parseEggs(parts[i + 1], `why/${id}`, place.name, askedGlossary, where)
+    for (const [n, e] of asked[id].entries())
+      if (!e.q.includes('为什么')) errors.push(`${where}: entry ${n + 1}'s 问 should be the “……为什么……？” question people search for`)
   }
 }
 
@@ -700,6 +732,7 @@ if (!CHECK) {
   await writeFile('public/content/jieqi.json', JSON.stringify({ hooks: jieqi, glossary: jieqiGlossary }))
   await writeFile('public/content/places.json', JSON.stringify({ places, glossary: placesGlossary }))
   await writeFile('public/content/dialect.json', JSON.stringify({ provinces: dialect, glossary: dialectGlossary }))
+  await writeFile('public/content/weishenme.json', JSON.stringify({ provinces: asked, glossary: askedGlossary, asked: askedOn }))
   await writeFile('public/content/feed.json', JSON.stringify({ cards: feed, glossary: feedGlossary }))
   await writeFile('public/content/cities.json', JSON.stringify({ cities, glossary: citiesGlossary }))
   await writeFile('public/content/photos.json', JSON.stringify(photos))

@@ -147,13 +147,23 @@ export interface Egg {
   find: string
   /** where it comes from */
   sources?: SourceLink[]
+  /** 大家都在问: a stereotype (偏见), or a political or otherwise touchy subject (敏感) */
+  flag?: EggFlag
 }
+
+export type EggFlag = '偏见' | '敏感'
 
 /** 家乡话: a province's sayings, in the 家乡话与地方梗 collection. Same shape as 聊天彩蛋. */
 export interface DialectFile {
   /** province id → its entries; provinces with none are missing */
   provinces: Record<string, Egg[]>
   glossary: Record<string, string>
+}
+
+/** 大家都在问: per province, the 为什么 questions people search for (an egg's q), answered (its text). */
+export interface AskedFile extends DialectFile {
+  /** when the search suggestions were looked up, e.g. 2026-11 */
+  asked: string
 }
 
 export interface CitiesFile {

@@ -2,19 +2,21 @@ import type { Rating } from 'ts-fsrs'
 import { db, keyed, progressKey, type EggNote } from './db.ts'
 import { newCard, reviewCard } from './srs.ts'
 import { addCoins, bumpDay, recordActivity } from './stats.ts'
-import type { CitiesFile, DialectFile, Egg, PlacesFile, Sentence, SourceLink } from './types.ts'
+import type { AskedFile, CitiesFile, DialectFile, Egg, EggFlag, PlacesFile, Sentence, SourceLink } from './types.ts'
 
 /**
  * Where eggs live: place/<id> and city/<id> are 聊天彩蛋 on those pages; hometown/<id> is a province's
- * 家乡话 in the 家乡话与地方梗 collection.
+ * 家乡话 in the 家乡话与地方梗 collection; why/<id> is its 大家都在问 (the 为什么 people search for),
+ * on the province page.
  */
 export const isHometown = (page: string) => page.startsWith('hometown/')
+export const isAsked = (page: string) => page.startsWith('why/')
 
 /** The app route that shows an egg's page. */
-export const eggRoute = (page: string) => (isHometown(page) ? `collection/${page}` : page)
+export const eggRoute = (page: string) => (isHometown(page) ? `collection/${page}` : isAsked(page) ? `place/${page.slice(4)}` : page)
 
 /** What eggs on that page are called. */
-export const eggLabel = (page: string) => (isHometown(page) ? '家乡话' : '聊天彩蛋')
+export const eggLabel = (page: string) => (isHometown(page) ? '家乡话' : isAsked(page) ? '大家都在问' : '聊天彩蛋')
 
 /** A 聊天彩蛋 as the user sees it: the content's egg with their changes, or one they wrote. */
 export interface EggView {
@@ -35,6 +37,8 @@ export interface EggView {
   due?: number
   /** where the content's egg comes from */
   sources?: SourceLink[]
+  /** a stereotype or a touchy subject: say so on the card */
+  flag?: EggFlag
   /** the content's version, for 还原 */
   base?: Egg
 }
@@ -60,6 +64,7 @@ export function mergeEggs(page: string, title: string, eggs: Egg[], rows: EggNot
       card: !!r?.card,
       due: r?.due,
       sources: e.sources,
+      flag: e.flag,
       base: e,
     }
   })
@@ -193,14 +198,16 @@ export async function gradeEgg(row: EggNote, rating: Rating): Promise<EggNote> {
 }
 
 /** The egg behind a flashcard: today's content (with the user's changes) or what was saved. */
-export function eggForCard(row: EggNote, places?: PlacesFile, cities?: CitiesFile, dialect?: DialectFile): EggView {
+export function eggForCard(row: EggNote, places?: PlacesFile, cities?: CitiesFile, dialect?: DialectFile, asked?: AskedFile): EggView {
   const [kind, id] = row.page.split('/')
   const eggs =
     (kind === 'place'
       ? places?.places.find((p) => p.id === id)?.eggs
       : kind === 'hometown'
         ? dialect?.provinces[id]
-        : cities?.cities.find((c) => c.id === id)?.eggs) ?? []
+        : kind === 'why'
+          ? asked?.provinces[id]
+          : cities?.cities.find((c) => c.id === id)?.eggs) ?? []
   return mergeEggs(row.page, row.title, eggs, [row]).find((e) => e.key === row.key) ?? {
     key: row.key,
     page: row.page,

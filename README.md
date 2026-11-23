@@ -48,6 +48,8 @@ content/
                             written like 聊天彩蛋 (every province has a section in the app, written or not)
   feed/<slug>.md            刷一刷 cards: id (= file name), date, title (the hook question), province?, series?,
                             tags, sources [{ title, url }], inspiration; body 150–300 字 ending on a question
+  weishenme.md              大家都在问: `## <province id>`, then entries written like 聊天彩蛋 whose 问 is what Baidu
+                            suggests after “<省>为什么” / “<省>人为什么”, and whose text says why (see below)
 ```
 
 Each 聊天彩蛋 bullet on a province or city page needs a question under it, which becomes its
@@ -73,6 +75,22 @@ listed under 深入. dialect.md entries use the same format and should have one:
 
 The app keeps the user's own edits, notes and flashcards for an egg under an id made from its page
 and its text, so fixing an egg's wording gives it a new id; the old notes stay, shown as the user's own.
+
+weishenme.md holds 大家都在问 (on each province page, and in 家乡话与地方梗): type “浙江人为什么” into
+Baidu and see what it suggests. Each entry's 问 is one of those questions (it must have 为什么); its text
+is why people ask it and whether it's true. The rude, political and looks-based ones are kept, since
+people really search for them, with a flag line the card shows: `注：偏见` for a stereotype, `注：敏感`
+for politics, religion, disease and the like. Suggestions change, so the file starts with the date they
+were looked up (`搜索日期：2026-11`); look them up again now and then.
+
+```markdown
+## guangdong
+- 有没有狐臭，主要看一个叫ABCC11的基因……没有可靠的数据说广东人特别多。
+  问：广东人为什么狐臭那么多？
+  查：ABCC11 狐臭
+  注：偏见
+  源：[Nature Genetics · A SNP in the ABCC11 gene…（2006）](https://pubmed.ncbi.nlm.nih.gov/16444273/)
+```
 
 A province's 集章 test asks its 省会 first (made from `capital`; a 直辖市 or 特别行政区 is asked what
 kind of place it is), then four questions from its `quiz` list and its 简称, then its `dialect`

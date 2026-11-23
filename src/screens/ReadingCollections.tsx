@@ -1,13 +1,13 @@
 import { useEffect, useMemo } from 'react'
-import { ArrowRightIcon } from '@phosphor-icons/react'
+import { ArrowRightIcon, MagnifyingGlassIcon } from '@phosphor-icons/react'
 import { PageHeader, Loading } from '../components/ui.tsx'
 import { Fold, JumpBar, jumpTo } from '../components/Fold.tsx'
 import { EggList, placeLinks, useEggRows } from '../components/Eggs.tsx'
-import { loadDialect, loadFeed, loadPlaces, useLoad } from '../lib/content.ts'
+import { loadAsked, loadDialect, loadFeed, loadPlaces, useLoad } from '../lib/content.ts'
 import { mergeEggs } from '../lib/eggs.ts'
 import { REGIONS } from '../lib/places.ts'
 import { go } from '../lib/router.ts'
-import type { DialectFile, FeedCard, Place } from '../lib/types.ts'
+import type { AskedFile, DialectFile, FeedCard, Place } from '../lib/types.ts'
 
 import { collections } from '../lib/collections.ts'
 
@@ -41,6 +41,8 @@ export function ReadingCollection({ id, focus }: { id: string; focus?: string })
   const { data: feed } = useLoad(loadFeed, 'feed')
   const places = useLoad(loadPlaces, 'places').data?.places
   const dialect = useLoad(loadDialect, 'dialect').data
+  // 大家都在问 sits with each province's 家乡话; the page works without it
+  const asked = useLoad(loadAsked, 'asked').data
   const collection = collections.find(c => c.id === id)
   if (!collection) return <PageHeader title="找不到这个专题" fallback="shelf" />
   if (!feed) return <Loading />
@@ -56,6 +58,7 @@ export function ReadingCollection({ id, focus }: { id: string; focus?: string })
     groups.set(group, items)
   }
   const sayings = dialect ? Object.values(dialect.provinces).reduce((n, e) => n + e.length, 0) : 0
+  const whys = asked ? Object.values(asked.provinces).reduce((n, e) => n + e.length, 0) : 0
 
   return <>
     <PageHeader
@@ -66,7 +69,7 @@ export function ReadingCollection({ id, focus }: { id: string; focus?: string })
     <div className="mx-auto max-w-xl px-4 pb-10">
       <h1 className="mt-3 text-[28px] font-black">{collection.name}</h1>
       <p className="mt-1 text-mute">
-        {collection.description} · {cards.length} 张卡{hometown && ` · ${sayings} 句家乡话`}
+        {collection.description} · {cards.length} 张卡{hometown && ` · ${sayings} 句家乡话`}{hometown && whys > 0 && ` · ${whys} 个“为什么”`}
       </p>
       <section className="tile mt-5 p-4">
         <h2 className="text-lg font-black">{collection.id === 'stratagems' ? '聊天先读哪几计？' : '最适合讲给朋友听的三张卡'}</h2>
@@ -80,7 +83,7 @@ export function ReadingCollection({ id, focus }: { id: string; focus?: string })
         })}</ol>
       </section>
       {hometown && places && dialect
-        ? <Hometown places={places} cards={cards} dialect={dialect} focus={focus} />
+        ? <Hometown places={places} cards={cards} dialect={dialect} asked={asked} focus={focus} />
         : Array.from(groups, ([group, items]) => <section key={group} className="mt-6">
           <h2 className="mb-2 text-lg font-black">{group}</h2>
           <ul className="tile divide-y divide-line">{items.map(c => <li key={c.id}>
@@ -96,7 +99,7 @@ export function ReadingCollection({ id, focus }: { id: string; focus?: string })
  * its 家乡话 (sayings, built like 聊天彩蛋: a question to review, 深入, editing), and the user can add
  * the ones they hear.
  */
-function Hometown({ places, cards, dialect, focus }: { places: Place[]; cards: FeedCard[]; dialect: DialectFile; focus?: string }) {
+function Hometown({ places, cards, dialect, asked, focus }: { places: Place[]; cards: FeedCard[]; dialect: DialectFile; asked?: AskedFile; focus?: string }) {
   const rows = useEggRows()
   const links = useMemo(() => placeLinks(places), [places])
   const sections = useMemo(
@@ -104,9 +107,16 @@ function Hometown({ places, cards, dialect, focus }: { places: Place[]; cards: F
       places.map(p => {
         const page = `hometown/${p.id}`
         const group = { page, title: p.name, eggs: dialect.provinces[p.id] ?? [], glossary: dialect.glossary }
-        return { place: p, group, eggs: mergeEggs(page, p.name, group.eggs, rows), cards: cards.filter(c => c.province === p.id) }
+        const whyGroup = { page: `why/${p.id}`, title: p.name, eggs: asked?.provinces[p.id] ?? [], glossary: asked?.glossary ?? {} }
+        return {
+          place: p,
+          group,
+          eggs: mergeEggs(page, p.name, group.eggs, rows),
+          why: { group: whyGroup, eggs: mergeEggs(whyGroup.page, p.name, whyGroup.eggs, rows) },
+          cards: cards.filter(c => c.province === p.id),
+        }
       }),
-    [places, dialect, rows, cards],
+    [places, dialect, asked, rows, cards],
   )
 
   useEffect(() => {
@@ -116,7 +126,7 @@ function Hometown({ places, cards, dialect, focus }: { places: Place[]; cards: F
 
   return <>
     <p className="mt-6 px-1 text-[13px] leading-snug font-bold text-mute">
-      每个省一节：那里的故事卡，和那里的人常说的话。听到一句家乡话？写进去，加入复习，下次跟那儿的朋友说一句。
+      每个省一节：那里的故事卡，那里的人常说的话，还有大家最好奇的“为什么”。听到一句家乡话？写进去，加入复习，下次跟那儿的朋友说一句。
     </p>
     {REGIONS.map(r => {
       const here = sections.filter(s => s.place.region === r.name)
@@ -127,17 +137,17 @@ function Hometown({ places, cards, dialect, focus }: { places: Place[]; cards: F
           id={`hometown-r-${r.name}`}
           title={r.name}
           icon={<span className="size-3 shrink-0 rounded-full" style={{ background: r.color }} />}
-          count={here.reduce((n, s) => n + s.cards.length + s.eggs.length, 0) || undefined}
+          count={here.reduce((n, s) => n + s.cards.length + s.eggs.length + s.why.eggs.length, 0) || undefined}
         >
           <div className="divide-y-2 divide-line">
-            {here.map(({ place, group, eggs, cards }) => (
+            {here.map(({ place, group, eggs, why, cards }) => (
               <Fold
                 key={place.id}
                 small
                 defaultOpen={false}
                 id={`hometown-${place.id}`}
                 title={place.name}
-                count={cards.length + eggs.length || undefined}
+                count={cards.length + eggs.length + why.eggs.length || undefined}
               >
                 {cards.length > 0 && (
                   <ul className="tile mb-3 divide-y divide-line">
@@ -152,6 +162,14 @@ function Hometown({ places, cards, dialect, focus }: { places: Place[]; cards: F
                   </ul>
                 )}
                 <EggList group={group} eggs={eggs} links={links} />
+                {why.eggs.length > 0 && (
+                  <div className="mt-5">
+                    <div className="mb-2 flex items-center gap-1.5 px-1 text-sm font-black text-dai">
+                      <MagnifyingGlassIcon size={16} weight="bold" /> 大家都在问：{place.name}为什么……
+                    </div>
+                    <EggList group={why.group} eggs={why.eggs} links={links} />
+                  </div>
+                )}
                 <button onClick={() => go(`place/${place.id}`)} className="mt-2 flex items-center gap-1 px-1 py-1.5 text-sm font-extrabold text-lv">
                   去{place.name}看看 <ArrowRightIcon size={14} weight="bold" />
                 </button>

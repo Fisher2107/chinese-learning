@@ -23,6 +23,7 @@ import {
   editEgg,
   eggLabel,
   eggRoute,
+  isAsked,
   isHometown,
   mergeEggs,
   removeEggCard,
@@ -34,13 +35,13 @@ import {
 } from '../lib/eggs.ts'
 import { CITIES } from '../lib/cities.ts'
 import { go } from '../lib/router.ts'
-import type { Egg, Para, Place } from '../lib/types.ts'
+import type { AskedFile, Egg, Para, Place } from '../lib/types.ts'
 import { Button } from './ui.tsx'
 import { TapText, ZhText } from './ZhText.tsx'
 
 /** One page's 聊天彩蛋: the page itself first, then related pages (its province, its cities…). */
 export interface EggGroup {
-  /** place/<id>, city/<id>, or hometown/<id> (a province's 家乡话) */
+  /** place/<id>, city/<id>, hometown/<id> (a province's 家乡话) or why/<id> (its 大家都在问) */
   page: string
   title: string
   eggs: Egg[]
@@ -117,6 +118,25 @@ export function EggSection({ groups, links }: { groups: EggGroup[]; links: Place
 }
 
 /**
+ * 大家都在问: what people search for after “<省>为什么” and “<省>人为什么”, each with the story behind
+ * it. They're eggs (page why/<id>), so each can be reviewed, looked into and added to.
+ */
+export function AskedSection({ id, name, file, links }: { id: string; name: string; file: AskedFile; links?: PlaceLinks }) {
+  const rows = useEggRows()
+  const group = useMemo(() => ({ page: `why/${id}`, title: name, eggs: file.provinces[id] ?? [], glossary: file.glossary }), [id, name, file])
+  const eggs = useMemo(() => mergeEggs(group.page, name, group.eggs, rows), [group, name, rows])
+  const [y, m] = file.asked.split('-').map(Number)
+  return (
+    <div>
+      <p className="mb-3 px-1 text-[13px] leading-snug font-bold text-mute">
+        在百度搜“{name}为什么”“{name}人为什么”，跳出来的就是大家最好奇的事{y ? `（${y}年${m}月）` : ''}。下面是这些问题背后的原因。标着“偏见”的是刻板印象：知道它从哪儿来，别当真；标着“敏感”的，跟不熟的人最好别主动聊。
+      </p>
+      <EggList group={group} eggs={eggs} links={links} here={`place/${id}`} />
+    </div>
+  )
+}
+
+/**
  * One page's eggs (a page's 聊天彩蛋, or a province's 家乡话) with buttons to write your own and to
  * put them all into review. `eggs` are the group's eggs merged with the user's (mergeEggs).
  */
@@ -124,13 +144,16 @@ export function EggList({ group, eggs, links, here }: { group: EggGroup; eggs: E
   const [adding, setAdding] = useState(false)
   const notCards = eggs.filter((e) => !e.card)
   const hometown = isHometown(group.page)
+  const asked = isAsked(group.page)
   return (
     <>
       {eggs.length === 0 && !adding && (
         <p className="tile p-4 text-[15px] font-bold text-mute">
           {hometown
             ? `还没有${group.title}的家乡话。听${group.title}朋友说过哪句？写下来吧。`
-            : `${group.title}还没有聊天彩蛋。你知道什么好玩的事吗？写一个吧。`}
+            : asked
+              ? `还没有写。你对${group.title}有什么“为什么”？写下来，问问${group.title}朋友。`
+              : `${group.title}还没有聊天彩蛋。你知道什么好玩的事吗？写一个吧。`}
         </p>
       )}
       <div className="space-y-3">
@@ -143,7 +166,7 @@ export function EggList({ group, eggs, links, here }: { group: EggGroup; eggs: E
       ) : (
         <div className="mt-3 flex gap-2">
           <Button tone="plain" size="md" className="min-w-0 flex-1 !px-2" onClick={() => setAdding(true)}>
-            <PlusIcon size={18} weight="bold" /> {hometown ? '写一句我听到的' : '写一个我的彩蛋'}
+            <PlusIcon size={18} weight="bold" /> {hometown ? '写一句我听到的' : asked ? '写一个我的为什么' : '写一个我的彩蛋'}
           </Button>
           {notCards.length > 1 && (
             <Button tone="plain" size="md" className="min-w-0 flex-1 !px-2" onClick={() => addEggCards(notCards)}>
@@ -203,6 +226,14 @@ export function EggCard({ egg, glossary, links, here }: { egg: EggView; glossary
           <span className="min-w-0 flex-1 text-[15px] leading-snug font-extrabold">
             {egg.q ? <TapText inline id={`egg-q-${egg.key}`} text={egg.q} glossary={glossary} source={source} className="!leading-snug" /> : '还没有问题：点“改”写一个'}
           </span>
+          {egg.flag && (
+            <span
+              title={egg.flag === '偏见' ? '这是一种刻板印象：知道它从哪儿来，但别当真' : '敏感话题：跟不熟的人最好别主动聊'}
+              className={`shrink-0 rounded-md px-1.5 text-xs leading-5 font-extrabold ${egg.flag === '偏见' ? 'bg-huang/30 text-huang-dark' : 'bg-zhu-soft text-zhu-ink'}`}
+            >
+              {egg.flag}
+            </span>
+          )}
           {egg.mine && <span className="shrink-0 rounded-md bg-huang/30 px-1.5 text-xs leading-5 font-extrabold text-huang-dark">我的</span>}
           {egg.edited && <span className="shrink-0 rounded-md bg-sunken px-1.5 text-xs leading-5 font-extrabold text-mute">改过</span>}
         </div>
@@ -261,7 +292,7 @@ function Dig({ egg, source }: { egg: EggView; source: WordSource }) {
   const [saved, setSaved] = useState(false)
   const aiSource: WordSource = { ...source, kind: 'ai', title: `AI 展开 · ${egg.title}` }
   // what the AI is told the student is reading about
-  const topic = isHometown(egg.page) ? `${egg.title}的方言和地方说法` : egg.title
+  const topic = isHometown(egg.page) ? `${egg.title}的方言和地方说法` : isAsked(egg.page) ? `大家为什么会这样问${egg.title}：背后的原因和故事` : egg.title
 
   // An 展开 asked before shows straight away (it's kept on the device)
   useEffect(() => {
@@ -490,12 +521,15 @@ function AddEgg({ page, title, onDone }: { page: string; title: string; onDone: 
   const [note, setNote] = useState('')
   const [card, setCard] = useState(true)
   const hometown = isHometown(page)
+  const asked = isAsked(page)
   // the first “quoted” words are usually the saying itself
   const said = text.match(/[“"「]([^”"」]{1,14})[”"」]/)?.[1]
-  const defaultQ = hometown ? (said ? `${title}话“${said}”是什么意思？` : `${title}人说的这句话是什么意思？`) : `关于${title}，这个彩蛋说的是什么？`
+  const defaultQ = hometown
+    ? said ? `${title}话“${said}”是什么意思？` : `${title}人说的这句话是什么意思？`
+    : asked ? `${title}人为什么……？` : `关于${title}，这个彩蛋说的是什么？`
   return (
     <div className="tile mt-3 space-y-2 p-4">
-      <div className="text-[16px] font-extrabold">{hometown ? `写一句${title}话` : `写一个${title}的彩蛋`}</div>
+      <div className="text-[16px] font-extrabold">{hometown ? `写一句${title}话` : asked ? `写一个关于${title}的“为什么”` : `写一个${title}的彩蛋`}</div>
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -504,11 +538,13 @@ function AddEgg({ page, title, onDone }: { page: string; title: string; onDone: 
         placeholder={
           hometown
             ? '这句话怎么说，什么意思，什么时候说，在哪儿听到的……比如：“得劲”就是“舒服、好”。'
-            : '你听说的、读到的、朋友告诉你的……用中文写。'
+            : asked
+              ? '为什么会这样？是真的吗？是从哪儿来的？（问题写在下面）'
+              : '你听说的、读到的、朋友告诉你的……用中文写。'
         }
         className={`${field} py-2 leading-relaxed`}
       />
-      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={hometown ? `复习时的问题，不写就是：${defaultQ}` : '复习时问自己的问题，比如：为什么……？'} className={`${field} h-11`} />
+      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={hometown ? `复习时的问题，不写就是：${defaultQ}` : asked ? `你的问题，比如：${title}人为什么……？` : '复习时问自己的问题，比如：为什么……？'} className={`${field} h-11`} />
       <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={2} placeholder="笔记或者链接（可以不写）" className={`${field} py-2`} />
       <label className="flex items-center gap-2 py-1 text-[15px] font-bold">
         <input type="checkbox" checked={card} onChange={(e) => setCard(e.target.checked)} className="size-5 accent-[var(--color-lv)]" />
@@ -519,7 +555,8 @@ function AddEgg({ page, title, onDone }: { page: string; title: string; onDone: 
           tone="lv"
           size="md"
           className="flex-1"
-          disabled={!text.trim()}
+          // a 为什么 is its question: it needs one written
+          disabled={!text.trim() || (asked && !q.trim())}
           onClick={async () => {
             await addMyEgg(page, title, text, q.trim() || defaultQ, note, card)
             onDone()

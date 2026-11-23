@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 import { ArrowRightIcon, CardsIcon, ChatCircleDotsIcon, CheckCircleIcon, FireIcon, SpeakerHighIcon, XIcon } from '@phosphor-icons/react'
 import type { Rating } from 'ts-fsrs'
-import { db, type EggNote, type SavedWord } from '../lib/db.ts'
+import { db, progressKey, type EggNote, type SavedWord } from '../lib/db.ts'
 import { dueWords, grade, GRADES, previewCard } from '../lib/srs.ts'
-import { dueEggs, eggForCard, eggLabel, eggRoute, gradeEgg, isHometown } from '../lib/eggs.ts'
+import { dueEggs, eggForCard, eggLabel, eggRoute, gradeEgg, isAsked, isHometown } from '../lib/eggs.ts'
 import { tokenizeText } from '../lib/dict.ts'
-import { loadCities, loadDialect, loadPlaces, useLoad } from '../lib/content.ts'
+import { loadAsked, loadCities, loadDialect, loadPlaces, useLoad } from '../lib/content.ts'
 import type { Para } from '../lib/types.ts'
 import { go, usePageState } from '../lib/router.ts'
 import { speak } from '../lib/speech.ts'
@@ -21,8 +21,9 @@ type Item = { kind: 'word'; id: string; due: number; word: SavedWord } | { kind:
 
 const itemCard = (it: Item) => (it.kind === 'word' ? it.word.card : it.egg.card!)
 
+// an item's id keeps the row's own key: a word's id is a number on the device and a string in the cloud
 const toItem = {
-  word: (w: SavedWord): Item => ({ kind: 'word', id: `w${w.id}`, due: w.due, word: w }),
+  word: (w: SavedWord): Item => ({ kind: 'word', id: `w${JSON.stringify(w.id)}`, due: w.due, word: w }),
   egg: (e: EggNote): Item => ({ kind: 'egg', id: `e${e.key}`, due: e.due!, egg: e }),
 }
 
@@ -30,12 +31,17 @@ const toItem = {
 async function itemsById(ids: string[]): Promise<Item[]> {
   const items = await Promise.all(
     ids.map(async (id) => {
-      if (id.startsWith('w')) {
-        const w = await db.words.get(Number(id.slice(1)))
-        return w && toItem.word(w)
+      try {
+        if (id.startsWith('w')) {
+          const w = await db.words.get(JSON.parse(id.slice(1)))
+          return w && toItem.word(w)
+        }
+        const e = await db.eggs.get(progressKey(id.slice(1)))
+        return e?.card ? toItem.egg(e) : undefined
+      } catch {
+        // an id kept by an older version of this page
+        return undefined
       }
-      const e = await db.eggs.get(id.slice(1))
-      return e?.card ? toItem.egg(e) : undefined
     }),
   )
   return items.filter((it): it is Item => !!it)
@@ -211,7 +217,8 @@ function EggFace({ row, shown }: { row: EggNote; shown: boolean }) {
   const places = useLoad(loadPlaces, 'places').data
   const cities = useLoad(loadCities, 'cities').data
   const dialect = useLoad(loadDialect, 'dialect').data
-  const egg = eggForCard(row, places, cities, dialect)
+  const asked = useLoad(loadAsked, 'asked').data
+  const egg = eggForCard(row, places, cities, dialect, asked)
   const [paras, setParas] = useState<Para[]>()
   useEffect(() => {
     if (egg.sentences || !shown) return
@@ -222,7 +229,7 @@ function EggFace({ row, shown }: { row: EggNote; shown: boolean }) {
     }
   }, [egg.sentences, egg.text, shown])
   const text = egg.sentences ? [{ kind: 'p' as const, sentences: egg.sentences }] : paras
-  const glossary = row.page.startsWith('place/') ? places?.glossary : isHometown(row.page) ? dialect?.glossary : cities?.glossary
+  const glossary = row.page.startsWith('place/') ? places?.glossary : isHometown(row.page) ? dialect?.glossary : isAsked(row.page) ? asked?.glossary : cities?.glossary
   const source = { kind: 'place' as const, route: eggRoute(row.page), title: `${row.title} · ${eggLabel(row.page)}` }
   return (
     <>

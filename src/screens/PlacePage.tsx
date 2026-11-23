@@ -1,10 +1,10 @@
 import { Photo } from '../components/Photo.tsx'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'motion/react'
-import { ArrowRightIcon, BooksIcon, CaretRightIcon, ChatCircleDotsIcon, CheckCircleIcon, DiceFiveIcon, InfoIcon, MapPinIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
+import { ArrowRightIcon, BooksIcon, CaretRightIcon, ChatCircleDotsIcon, CheckCircleIcon, DiceFiveIcon, InfoIcon, MagnifyingGlassIcon, MapPinIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
 import { useLiveQuery } from '../lib/live.ts'
 import { progressKey, db, type WordSource } from '../lib/db.ts'
-import { loadCities, loadFeed, loadIndex, loadPhotos, loadPlaces, loadWikiIndex, useLoad } from '../lib/content.ts'
+import { loadAsked, loadCities, loadFeed, loadIndex, loadPhotos, loadPlaces, loadWikiIndex, useLoad } from '../lib/content.ts'
 import { CITIES, citiesOf } from '../lib/cities.ts'
 import { FOOD_KINDS, pagesAbout, randomPage, SIGHT_KINDS, STORY_KINDS, useWikiProgress } from '../lib/wiki.ts'
 import { PeopleRow, PhotoRow } from '../components/WikiCards.tsx'
@@ -20,7 +20,7 @@ import { Seal } from '../components/Seal.tsx'
 import { FeedbackBanner } from '../components/chrome.tsx'
 import { Button, Loading, PageHeader, Pill, ProgressBar } from '../components/ui.tsx'
 import { Fold, JumpBar, Sub } from '../components/Fold.tsx'
-import { EggSection, placeLinks, useEggCount, type EggGroup } from '../components/Eggs.tsx'
+import { AskedSection, EggSection, placeLinks, useEggCount, type EggGroup } from '../components/Eggs.tsx'
 import { MapKey, ProvinceMap } from '../components/ProvinceMap.tsx'
 import { TapText, ZhText } from '../components/ZhText.tsx'
 
@@ -35,6 +35,8 @@ export function PlacePage({ id }: { id: string }) {
   const marks = useMarks()
   const place = placesFile?.places.find((p) => p.id === id)
   const eggCount = useEggCount(`place/${id}`, place?.eggs.length ?? 0)
+  const asked = useLoad(loadAsked, 'asked').data
+  const askedCount = useEggCount(`why/${id}`, asked?.provinces[id]?.length ?? 0)
   useEffect(() => {
     visitPlace(id)
   }, [id])
@@ -83,6 +85,7 @@ export function PlacePage({ id }: { id: string }) {
             items={[
               { id: 'place-intro', label: '简介' },
               { id: 'place-eggs', label: '聊天彩蛋', count: eggCount, hot: true },
+              { id: 'place-asked', label: '大家都在问', count: askedCount || undefined },
               { id: 'place-map', label: '地图', count: cities.length || undefined },
               ...(sections.length ? [{ id: 'place-more', label: '读更多', count: sections.length }] : []),
               ...(pages.length ? [{ id: 'place-wiki', label: '百科', count: pages.length }] : []),
@@ -143,6 +146,10 @@ export function PlacePage({ id }: { id: string }) {
 
         <Fold id="place-eggs" title="聊天彩蛋" count={eggCount} icon={<ChatCircleDotsIcon size={22} weight="fill" className="shrink-0 text-lv" />}>
           {links && <EggSection key={id} groups={groups} links={links} />}
+        </Fold>
+
+        <Fold id="place-asked" title="大家都在问" count={askedCount || undefined} icon={<MagnifyingGlassIcon size={22} weight="bold" className="shrink-0 text-dai" />}>
+          {asked && <AskedSection key={id} id={id} name={place.name} file={asked} links={links} />}
         </Fold>
 
         <Fold id="place-map" title={cities.length ? `地图 · ${cities.length}个城市` : '地图'}>
