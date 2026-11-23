@@ -283,6 +283,12 @@
   .map-sight {
     fill: var(--color-zhu-ink);
   }
+  /* the +n on a dot that stands for several crowded places */
+  .map-badge {
+    font-family: var(--font-ui);
+    font-weight: 900;
+    fill: var(--map-halo);
+  }
   .map-river-name {
     font-weight: 900;
   }

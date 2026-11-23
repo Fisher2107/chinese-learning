@@ -29,10 +29,16 @@ export interface Sight {
   name: string
 }
 
+/** On screen, places closer than this many pixels share one dot with a +n badge; zooming in splits them. */
+const CLUSTER_PX = 28
+
+/** A dot on the map: a city or a sight, standing in for `more` places hidden under it. */
+type Pin = ({ kind: 'city'; c: MapCity } | { kind: 'sight'; s: Sight }) & { x: number; y: number; more: number }
+
 /**
  * One province with its cities and sights named. Tap a city to open its page, a sight to open its
- * 百科 page, or a neighbouring province to go there; tap where places crowd together (or the
- * province itself) to zoom in. There's no dragging, so it never traps a scrolling finger
+ * 百科 page, or a neighbouring province to go there. Places that would touch share one dot with a
+ * +n badge; tap it (or the province itself) to zoom in. Sights are named once zoomed in. There's no dragging, so it never traps a scrolling finger
  * (在大地图上看 under it opens the explorable map).
  */
 export function ProvinceMap({
@@ -84,6 +90,32 @@ export function ProvinceMap({
   // map units per screen pixel
   const u = width ? vw / width : vw / 360
 
+  // the dots at this zoom: the capital and this page's city always; others only where there's room
+  const pins = useMemo(() => {
+    const order = [...cities].sort(
+      (a, b) =>
+        +(b.id === current) - +(a.id === current) ||
+        +(b.kind === 'capital') - +(a.kind === 'capital') ||
+        a.rank - b.rank ||
+        +stories.has(b.id) - +stories.has(a.id) ||
+        b.pop - a.pop,
+    )
+    const out: Pin[] = []
+    const near = (x: number, y: number) => out.find((p) => Math.hypot(p.x - x, p.y - y) < CLUSTER_PX * u)
+    for (const c of order) {
+      const host = c.id === current || c.kind === 'capital' ? undefined : near(c.x, c.y)
+      if (host) host.more++
+      else out.push({ kind: 'city', c, x: c.x, y: c.y, more: 0 })
+    }
+    for (const p of sights) {
+      const host = near(p.x, p.y)
+      if (host) host.more++
+      else out.push({ kind: 'sight', s: p, x: p.x, y: p.y, more: 0 })
+    }
+    return out
+  }, [cities, sights, current, stories, u])
+
+
   const labels = useMemo(() => {
     if (!width || !still) return []
     const placed: Box[] = []
@@ -95,17 +127,17 @@ export function ProvinceMap({
       return [left - 2 * u, y - px * 0.95 * u, left + w + 2 * u, y + px * 0.3 * u]
     }
     // the dots come first: names go around them, never over them
-    for (const c of cities) {
-      const r = dotR(c, c.id === current) * u + 1.5 * u
-      placed.push([c.x - r, c.y - r, c.x + r, c.y + r])
+    for (const p of pins) {
+      const r = (p.kind === 'city' ? dotR(p.c, p.c.id === current) : 4) * u + 1.5 * u
+      placed.push([p.x - r, p.y - r, p.x + r, p.y + r])
     }
-    for (const p of sights) placed.push([p.x - 5 * u, p.y - 5 * u, p.x + 5 * u, p.y + 5 * u])
-    const order = [...cities].sort(
-      (a, b) => +(b.id === current) - +(a.id === current) || a.rank - b.rank || +stories.has(b.id) - +stories.has(a.id) || b.pop - a.pop,
-    )
-    for (const c of order) {
+    // a placed name keeps a little air around it, so names never touch
+    const keep = (b: Box) => placed.push([b[0] - 2 * u, b[1] - 2 * u, b[2] + 2 * u, b[3] + 2 * u])
+    for (const pin of pins) {
+      if (pin.kind !== 'city') continue
+      const c = pin.c
       const here = c.id === current
-      const px = here ? 16 : c.rank <= 2 ? 14.5 : c.kind === 'spot' ? 12.5 : 13.5
+      const px = here ? 16 : c.rank <= 2 ? 14.5 : c.kind === 'spot' ? 12 : 13
       const gap = (dotR(c, here) + 4) * u
       const text = c.name + (learnt(c.id) ? ' ✓' : '')
       const g = gap * 0.75
@@ -125,11 +157,13 @@ export function ProvinceMap({
       if (!spot) continue
       const [x, y, anchor] = spot
       const b = textBox(x, y, text, px, anchor)
-      placed.push(b)
+      keep(b)
       out.push({ key: `c-${c.id}`, x, y, text, px, anchor, cls, route: here ? undefined : `city/${c.id}`, box: b })
     }
-    // sights: after cities, before the background
-    for (const p of sights) {
+    // sights: after cities, before the background, and only once zoomed in
+    for (const pin of zoomed ? pins : []) {
+      if (pin.kind !== 'sight') continue
+      const p = pin.s
       const px = 12.5
       const gap = 8 * u
       const spots: [number, number, Anchor][] = [
@@ -142,14 +176,14 @@ export function ProvinceMap({
       if (!spot) continue
       const [x, y, anchor] = spot
       const b = textBox(x, y, p.name, px, anchor)
-      placed.push(b)
+      keep(b)
       out.push({ key: `s-${p.id}`, x, y, text: p.name, px, anchor, cls: 'map-city map-sight', route: `wiki/${p.id}`, box: b })
     }
     for (const r of DETAIL.rivers) {
       if (!rivers.includes(r.zh)) continue
       const b = textBox(r.x, r.y - 4 * u, r.zh, 13, 'middle')
       if (!free(b)) continue
-      placed.push(b)
+      keep(b)
       out.push({ key: `r-${r.zh}`, x: r.x, y: r.y - 4 * u, text: r.zh, px: 13, anchor: 'middle', cls: 'map-water map-river-name', box: b })
     }
     // neighbouring provinces (and this one, on a city page), then countries and seas, where there's room
@@ -162,24 +196,57 @@ export function ProvinceMap({
       const [x, y] = spot
       const b = textBox(x, y + 5 * u, name, 14, 'middle')
       if (!free(b)) continue
-      placed.push(b)
+      keep(b)
       out.push({ key: `p-${p.id}`, x, y: y + 5 * u, text: name, px: 14, anchor: 'middle', cls: 'map-province map-other', route: `place/${p.id}`, box: b })
     }
     for (const n of DETAIL.neighbours) {
       const b = textBox(n.x, n.y, n.zh, 12, 'middle')
       if (!free(b)) continue
-      placed.push(b)
+      keep(b)
       out.push({ key: `n-${n.zh}`, x: n.x, y: n.y, text: n.zh, px: 12, anchor: 'middle', cls: 'map-country', box: b })
     }
     for (const l of DETAIL.labels) {
       if (l.kind !== 'sea') continue
       const b = textBox(l.x, l.y, l.zh, 12, 'middle')
       if (!free(b)) continue
-      placed.push(b)
+      keep(b)
       out.push({ key: `s-${l.zh}`, x: l.x, y: l.y, text: l.zh, px: 12, anchor: 'middle', cls: 'map-sea', box: b })
     }
     return out
-  }, [width, still, u, view, x0, y0, x1, y1, cities, current, stories, learnt, names, prov, sights, rivers])
+  }, [width, still, u, view, x0, y0, x1, y1, pins, zoomed, current, stories, learnt, names, prov, rivers])
+
+  // the +n badges, at a corner of their dot that no name or other dot covers
+  const badges = useMemo(() => {
+    if (maxed) return []
+    const radius = (p: Pin) => (p.kind === 'city' ? dotR(p.c, p.c.id === current) : 4) * u
+    const taken: Box[] = labels.map((l) => l.box)
+    const out: { key: string; cx: number; cy: number; text: string; box: Box }[] = []
+    for (const p of pins) {
+      if (!p.more) continue
+      const r = radius(p) * 0.6
+      const text = `+${p.more}`
+      const w = (text.length * 6.5 + 8) * u
+      const h = 14 * u
+      const R = radius(p) + 1 * u
+      // its corners, then its sides; with no room anywhere, on the dot itself
+      const spots: Box[] = [
+        [p.x + r, p.y - r - h, p.x + r + w, p.y - r],
+        [p.x - r - w, p.y - r - h, p.x - r, p.y - r],
+        [p.x + r, p.y + r, p.x + r + w, p.y + r + h],
+        [p.x - r - w, p.y + r, p.x - r, p.y + r + h],
+        [p.x - w / 2, p.y - R - h, p.x + w / 2, p.y - R],
+        [p.x - w / 2, p.y + R, p.x + w / 2, p.y + R + h],
+        [p.x + R, p.y - h / 2, p.x + R + w, p.y + h / 2],
+        [p.x - R - w, p.y - h / 2, p.x - R, p.y + h / 2],
+      ]
+      const dots = pins.filter((q) => q !== p).map((q): Box => [q.x - radius(q), q.y - radius(q), q.x + radius(q), q.y + radius(q)])
+      const hits = (b: Box) => [...taken, ...dots].some((t) => b[0] < t[2] && b[2] > t[0] && b[1] < t[3] && b[3] > t[1])
+      const box = spots.find((b) => !hits(b)) ?? ([p.x - w / 2, p.y - h / 2, p.x + w / 2, p.y + h / 2] as Box)
+      taken.push(box)
+      out.push({ key: p.kind === 'city' ? p.c.id : p.s.id, cx: p.x, cy: p.y, text, box })
+    }
+    return out
+  }, [labels, pins, maxed, current, u])
 
   function flyTo(target: Box) {
     cancelAnimationFrame(anim.current)
@@ -206,6 +273,10 @@ export function ProvinceMap({
 
   function tap(e: MouseEvent<SVGSVGElement>) {
     const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(e.currentTarget.getScreenCTM()!.inverse())
+    // a +n badge: zoom in on the places under it
+    const pad = 6 * u
+    for (const b of badges)
+      if (pt.x >= b.box[0] - pad && pt.x <= b.box[2] + pad && pt.y >= b.box[1] - pad && pt.y <= b.box[3] + pad) return zoomAt(b.cx, b.cy)
     for (const l of labels) if (l.route && pt.x >= l.box[0] && pt.x <= l.box[2] && pt.y >= l.box[1] && pt.y <= l.box[3]) return go(l.route)
     // places within a fingertip: one clear one opens; several close together zoom in first
     const near = [
@@ -261,21 +332,27 @@ export function ProvinceMap({
           <path d={PROVINCES[prov]} fill="none" stroke={color} strokeWidth={2.5} vectorEffect="non-scaling-stroke" pointerEvents="none" />
         </g>
         <g pointerEvents="none">
-          {sights.map((p) => (
-            <rect
-              key={p.id}
-              x={p.x - 3.6 * u}
-              y={p.y - 3.6 * u}
-              width={7.2 * u}
-              height={7.2 * u}
-              transform={`rotate(45 ${p.x} ${p.y})`}
-              fill="var(--color-zhu)"
-              stroke="var(--map-halo)"
-              strokeWidth={1.5}
-              vectorEffect="non-scaling-stroke"
-            />
-          ))}
-          {cities.map((c) => {
+          {pins.map((pin) => {
+            if (pin.kind !== 'sight') return null
+            const p = pin.s
+            return (
+              <rect
+                key={p.id}
+                x={p.x - 3.6 * u}
+                y={p.y - 3.6 * u}
+                width={7.2 * u}
+                height={7.2 * u}
+                transform={`rotate(45 ${p.x} ${p.y})`}
+                fill="var(--color-zhu)"
+                stroke="var(--map-halo)"
+                strokeWidth={1.5}
+                vectorEffect="non-scaling-stroke"
+              />
+            )
+          })}
+          {pins.map((pin) => {
+            if (pin.kind !== 'city') return null
+            const c = pin.c
             const here = c.id === current
             const r = dotR(c, here) * u
             if (here)
@@ -300,6 +377,24 @@ export function ProvinceMap({
               />
             )
           })}
+          {badges.map((b) => (
+            <g key={`b-${b.key}`}>
+              <rect
+                x={b.box[0]}
+                y={b.box[1]}
+                width={b.box[2] - b.box[0]}
+                height={b.box[3] - b.box[1]}
+                rx={7 * u}
+                fill="var(--map-ink)"
+                stroke="var(--map-halo)"
+                strokeWidth={1.5}
+                vectorEffect="non-scaling-stroke"
+              />
+              <text x={(b.box[0] + b.box[2]) / 2} y={b.box[3] - 3.6 * u} fontSize={10.5 * u} textAnchor="middle" className="map-badge">
+                {b.text}
+              </text>
+            </g>
+          ))}
           {labels.map((l) => (
             <text key={l.key} x={l.x} y={l.y} fontSize={l.px * u} textAnchor={l.anchor} className={l.cls} style={{ strokeWidth: 3.5 * u }}>
               {l.text}
@@ -392,7 +487,7 @@ export function MapKey({ sights = false }: { sights?: boolean }) {
         <span className="inline-block size-2.5 rounded-full bg-[#F7A43A]" /> 小城·名胜
       </span>
       <span className="text-lv">✓ 学会了</span>
-      <span className="w-full">点城市去看看；城市挤在一起的地方，点一下就放大。</span>
+      <span className="w-full">点城市去看看；点“+2”这样的数字，放大看挤在一起的地方。</span>
     </div>
   )
 }
