@@ -11,6 +11,8 @@ sources:
   - { title: "新华网：走进衢州（美食之辣：三头一掌）", url: "https://www.xinhuanet.com/travel/zt3.htm" }
   - { title: "人民日报海外版：访衢州南孔圣地（2022）", url: "https://paper.people.com.cn/hwbwap/html/2022-11/11/content_25948591.htm" }
   - { title: "中国社会科学网：孔氏南宗与孔洙让爵（2026）", url: "https://www.cssn.cn/skgz/bwyc/202609/t20260901_6065306.shtml" }
+  - { title: "凤凰网：孔洙让爵（2007）", url: "https://news.ifeng.com/opinion/200708/0829_23_206098_5.shtml" }
+  - { title: "Wikipedia: Longyou Caves", url: "https://en.wikipedia.org/wiki/Longyou_Caves" }
   - { title: "儒家网：韦力《衢州孔庙：宗子南迁，高风让爵》（2021）", url: "https://www.rujiazg.com/article/20510" }
 inspiration:
   - https://www.instagram.com/p/Dfg45ufhTn0/

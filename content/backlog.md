@@ -2,6 +2,18 @@
 
 Researched or half-researched topics waiting to be written. Newest first. Reels are links only (inspiration, never copied).
 
+## 2026-11-24
+
+### 衢州 · 家乡必做（进行中）
+- 已写：第3集 反转“让出去的爵位”（孔洙让爵，约1282年；南宗失去爵位两百多年）。
+- 下一集 第4集 故事：明朝正德元年（1506）南宗重新得到“五经博士”世袭官职（来源：https://www.cssn.cn/skgz/bwyc/202609/t20260901_6065306.shtml ，还要找第二个来源），可接楷木像1959年借去曲阜的故事（仍只有一个来源，见 11-23）。
+- 第5–6集候选：烂柯山与围棋、龙游石窟（已作彩蛋）、今天的南北祭孔。
+
+### 新的 刷一刷 选题
+- 张家界天门洞 → 已写（content/feed/tianmendong.md）。没用的线索：飞行员姓名和国籍（来源说法不一）；“公元263年”这个具体年份只在旅游网站上看到，正文只写“三国的时候”。
+- “台球厅指数”：台球厅多少能说明经济吗？（🎬 https://www.instagram.com/ur.chinese.unc/reel/DgFRgEgT6Bu/ ）待研究：这个说法从哪来、有没有数据。
+- 王菲和谢霆锋（🎬 https://www.instagram.com/ur.chinese.unc/reel/Df_UgkEzjPq/ ）：娱乐话题，可做“聊天工具包”用的流行文化卡片，涉及真人私生活，慎用。
+
 ## 2026-11-23
 
 ### 衢州 · 家乡必做（进行中）
@@ -37,3 +49,4 @@ Researched or half-researched topics waiting to be written. Newest first. Reels 
 ## 已用 Used
 - 2026-11-22 深圳拖鞋与APEC → content/feed/shenzhen-tuoxie.md
 - 2026-11-23 山西午睡 → content/feed/shanxi-wushui.md
+- 2026-11-24 张家界天门洞 → content/feed/tianmendong.md
