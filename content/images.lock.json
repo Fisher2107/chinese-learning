@@ -1,4 +1,16 @@
 {
+ "city/aba": {
+  "spec": "黄龙风景名胜区",
+  "qid": "Q4107",
+  "label": "黄龙风景名胜区",
+  "desc": "中国的一处世界自然遗产",
+  "file": "Water-of-Five-colored-Pond Huanglong Sichuan China.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Water-of-Five-colored-Pond_Huanglong_Sichuan_China.jpg",
+  "artist": "Kounosu",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
  "city/baoding": {
   "spec": "直隶总督署",
   "qid": "Q17040584",
@@ -8,6 +20,18 @@
   "page": "https://commons.wikimedia.org/wiki/File:%E7%9B%B4%E9%9A%B6%E6%80%BB%E7%9D%A3%E7%BD%B2_-_%E5%A4%A7%E9%97%A8_-_2025-10-24_01.jpg",
   "artist": "瑞丽江的河水",
   "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
+ "city/bazhong": {
+  "spec": "Q178945?",
+  "qid": "Q178945",
+  "label": "巴中市",
+  "desc": "中国四川省的地级市",
+  "file": "巴中 - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%B7%B4%E4%B8%AD_-_panoramio.jpg",
+  "artist": "Xiaohui",
+  "license": "CC BY 3.0",
   "w": 640,
   "h": 480
  },
@@ -95,6 +119,18 @@
   "w": 640,
   "h": 480
  },
+ "city/daocheng": {
+  "spec": "亚丁国家级自然保护区",
+  "qid": "Q1059996",
+  "label": "亚丁国家级自然保护区",
+  "desc": "中国自然保护区",
+  "file": "Yading Sacred Mountain 2017-11-08.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Yading_Sacred_Mountain_2017-11-08.jpg",
+  "artist": "Toni Wöhrl",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
  "city/datong": {
   "spec": "悬空寺",
   "qid": "Q1276887",
@@ -106,6 +142,42 @@
   "license": "Public domain",
   "w": 640,
   "h": 426
+ },
+ "city/dazhou": {
+  "spec": "Q427488?",
+  "qid": "Q427488",
+  "label": "达州市",
+  "desc": "中国四川省的地级市",
+  "file": "万源-向前广场 - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E4%B8%87%E6%BA%90-%E5%90%91%E5%89%8D%E5%B9%BF%E5%9C%BA_-_panoramio.jpg",
+  "artist": "Nyx Ning",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "city/deyang": {
+  "spec": "Q425996?",
+  "qid": "Q425996",
+  "label": "德阳市",
+  "desc": "中国四川省的地级市",
+  "file": "Deyang skyline.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Deyang_skyline.jpg",
+  "artist": "Brian Dell",
+  "license": "CC0",
+  "w": 640,
+  "h": 480
+ },
+ "city/dujiangyan": {
+  "spec": "Dujiangyan",
+  "qid": "Q824157",
+  "label": "Dujiangyan",
+  "desc": "四川水利系统",
+  "file": "Dujiang Weir.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Dujiang_Weir.jpg",
+  "artist": "星星",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 270
  },
  "city/eerduosi": {
   "spec": "成吉思汗陵",
@@ -130,6 +202,42 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 478
+ },
+ "city/ganzi": {
+  "spec": "贡嘎山",
+  "qid": "Q1537157",
+  "label": "贡嘎山",
+  "desc": "四川最高峰",
+  "file": "Minya Konka Northwest Ridge.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Minya_Konka_Northwest_Ridge.JPG",
+  "artist": "Kogo",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 425
+ },
+ "city/guangan": {
+  "spec": "Q427367?",
+  "qid": "Q427367",
+  "label": "广安市",
+  "desc": "中国四川省的地级市",
+  "file": "普新镇 - panoramio (1).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E6%99%AE%E6%96%B0%E9%95%87_-_panoramio_(1).jpg",
+  "artist": "比克曼QQ554305747",
+  "license": "CC BY 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "city/guangyuan": {
+  "spec": "Q426237?",
+  "qid": "Q426237",
+  "label": "广元市",
+  "desc": "中国四川省的地级市",
+  "file": "Guangyuan skyline.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Guangyuan_skyline.jpg",
+  "artist": "Brian Dell",
+  "license": "CC0",
+  "w": 640,
+  "h": 480
  },
  "city/guangzhou": {
   "spec": "File:Canton Tower.jpg",
@@ -285,6 +393,18 @@
   "w": 640,
   "h": 426
  },
+ "city/jiuzhaigou": {
+  "spec": "九寨沟",
+  "qid": "Q4111",
+  "label": "九寨沟",
+  "desc": "四川北部的国家公园",
+  "file": "1 nuorilang jiuzhaigou 2023.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1_nuorilang_jiuzhaigou_2023.jpg",
+  "artist": "Chensiyuan",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 504
+ },
  "city/kunming": {
   "spec": "Stone Forest",
   "qid": "Q2735583",
@@ -332,6 +452,30 @@
   "w": 640,
   "h": 481
  },
+ "city/leshan": {
+  "spec": "乐山大佛",
+  "qid": "Q205131",
+  "label": "乐山大佛",
+  "desc": "四川省佛像",
+  "file": "Leshan Giant Buddha, 20161102.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Leshan_Giant_Buddha,_20161102.jpg",
+  "artist": "王计",
+  "license": "CC BY 2.5",
+  "w": 640,
+  "h": 360
+ },
+ "city/liangshan": {
+  "spec": "Q666884?",
+  "qid": "Q666884",
+  "label": "凉山彝族自治州",
+  "desc": "中国四川省下辖的自治州",
+  "file": "Huidong, Liangshan, Sichuan, China - panoramio (6).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Huidong,_Liangshan,_Sichuan,_China_-_panoramio_(6).jpg",
+  "artist": "刘二少",
+  "license": "CC BY 3.0",
+  "w": 640,
+  "h": 426
+ },
  "city/lianyungang": {
   "spec": "Q57756?",
   "qid": "Q57756",
@@ -354,6 +498,42 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 368
+ },
+ "city/luzhou": {
+  "spec": "Q425492?",
+  "qid": "Q425492",
+  "label": "泸州市",
+  "desc": "中国四川省的地级市",
+  "file": "Luzhou, Sichuan.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Luzhou,_Sichuan.jpg",
+  "artist": "PhiLiP",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 360
+ },
+ "city/meishan": {
+  "spec": "三苏祠",
+  "qid": "Q10866733",
+  "label": "三苏祠",
+  "desc": "位于四川省眉山市的祠庙",
+  "file": "South gate of Sansu Shrine (20250115173325).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:South_gate_of_Sansu_Shrine_(20250115173325).jpg",
+  "artist": "N509FZ",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "city/mianyang": {
+  "spec": "Q426130?",
+  "qid": "Q426130",
+  "label": "绵阳市",
+  "desc": "中国四川省第二大城市，地级市",
+  "file": "Mianyang montage.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Mianyang_montage.jpg",
+  "artist": "沧海夜风",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 982
  },
  "city/mohe": {
   "spec": "北极村",
@@ -379,6 +559,18 @@
   "w": 640,
   "h": 853
  },
+ "city/nanchong": {
+  "spec": "Q426996?",
+  "qid": "Q426996",
+  "label": "南充市",
+  "desc": "中国四川省的地级市",
+  "file": "Nanchong night.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Nanchong_night.jpg",
+  "artist": "Mengyl97",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 452
+ },
  "city/nanjing": {
   "spec": "中山陵",
   "qid": "Q1338405",
@@ -403,6 +595,18 @@
   "w": 640,
   "h": 480
  },
+ "city/neijiang": {
+  "spec": "Q426756?",
+  "qid": "Q426756",
+  "label": "内江市",
+  "desc": "中国四川省的地级市",
+  "file": "NeiJiang.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:NeiJiang.JPG",
+  "artist": "PanShiBo",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
  "city/ningbo": {
   "spec": "天一阁",
   "qid": "Q2066117",
@@ -414,6 +618,18 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 426
+ },
+ "city/panzhihua": {
+  "spec": "Q425415?",
+  "qid": "Q425415",
+  "label": "攀枝花市",
+  "desc": "中国四川省的地级市",
+  "file": "攀枝花市中心全图（炳草岗）chaselei - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E6%94%80%E6%9E%9D%E8%8A%B1%E5%B8%82%E4%B8%AD%E5%BF%83%E5%85%A8%E5%9B%BE%EF%BC%88%E7%82%B3%E8%8D%89%E5%B2%97%EF%BC%89chaselei_-_panoramio.jpg",
+  "artist": "chaselei雷厚取",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
  },
  "city/qinhuangdao": {
   "spec": "山海关",
@@ -451,6 +667,18 @@
   "w": 640,
   "h": 426
  },
+ "city/sanxingdui": {
+  "spec": "Sanxingdui",
+  "qid": "Q929072",
+  "label": "Sanxingdui",
+  "desc": "中國新石器时代末期至商代的大型遺址，位於四川廣漢市南興镇和三星镇之間",
+  "file": "Sichuan Ancient Cultural Relics 02.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Sichuan_Ancient_Cultural_Relics_02.jpg",
+  "artist": "Cyclohexane233",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 853
+ },
  "city/shaoxing": {
   "spec": "File:绍兴乌篷船.JPG",
   "label": "",
@@ -485,6 +713,18 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 480
+ },
+ "city/suining": {
+  "spec": "Q426644?",
+  "qid": "Q426644",
+  "label": "遂宁市",
+  "desc": "中国四川省的地级市",
+  "file": "Suining 8022.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Suining_8022.jpg",
+  "artist": "Anheizhe",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 360
  },
  "city/suqian": {
   "spec": "Q57787?",
@@ -654,6 +894,18 @@
   "w": 640,
   "h": 480
  },
+ "city/yaan": {
+  "spec": "Q427557?",
+  "qid": "Q427557",
+  "label": "雅安市",
+  "desc": "中国四川省的地级市",
+  "file": "Ya'an, August 2020.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ya%27an,_August_2020.jpg",
+  "artist": "Song Yanbo",
+  "license": "CC0",
+  "w": 640,
+  "h": 426
+ },
  "city/yancheng": {
   "spec": "Q57866?",
   "qid": "Q57866",
@@ -675,6 +927,17 @@
   "page": "https://commons.wikimedia.org/wiki/File:Thin_West_Lake_south_entrance.JPG",
   "artist": "Gisling",
   "license": "CC BY 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "city/yibin": {
+  "spec": "File:Shunan Bamboo Forest (31924833097).jpg",
+  "label": "",
+  "desc": "",
+  "file": "Shunan Bamboo Forest (31924833097).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Shunan_Bamboo_Forest_(31924833097).jpg",
+  "artist": "David Stanley from Nanaimo, Canada",
+  "license": "CC BY 2.0",
   "w": 640,
   "h": 480
  },
@@ -736,6 +999,30 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 283
+ },
+ "city/zigong": {
+  "spec": "自贡恐龙博物馆",
+  "qid": "Q827778",
+  "label": "自贡恐龙博物馆",
+  "desc": "四川省自贡市的博物馆",
+  "file": "Zigong Dinosaur Museum 2014.04.24 09-57-38.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zigong_Dinosaur_Museum_2014.04.24_09-57-38.jpg",
+  "artist": "Zhangzhugang",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "city/ziyang": {
+  "spec": "Q207030?",
+  "qid": "Q207030",
+  "label": "资阳市",
+  "desc": "中国四川省的地级市",
+  "file": "Ziyang.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Ziyang.JPG",
+  "artist": "PanShiBo",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
  },
  "feed/taishan": {
   "spec": "File:Mount Tai.jpg",
@@ -1176,6 +1463,42 @@
   "w": 640,
   "h": 853
  },
+ "wiki/changjiang": {
+  "spec": "长江三峡",
+  "qid": "Q673287",
+  "label": "长江三峡",
+  "desc": "位于中国湖北省宜昌市至重庆市奉节县的长江干流",
+  "file": "Qutang Gorge on Changjiang.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Qutang_Gorge_on_Changjiang.jpg",
+  "artist": "Tan Wei Liang Byorn",
+  "license": "CC BY 3.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/chuancai": {
+  "spec": "回锅肉",
+  "qid": "Q3238049",
+  "label": "回锅肉",
+  "desc": "川菜",
+  "file": "Huiguorou made from Neijiang local pork at Daqian Restaurant, Beidadi (20251011111845).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Huiguorou_made_from_Neijiang_local_pork_at_Daqian_Restaurant,_Beidadi_(20251011111845).jpg",
+  "artist": "N509FZ",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/daxiongmao": {
+  "spec": "大熊猫",
+  "qid": "Q33602",
+  "label": "大熊猫",
+  "desc": "熊科大熊猫属哺乳动物",
+  "file": "Giant Panda 2004-03-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Giant_Panda_2004-03-2.jpg",
+  "artist": "Jeff Kubina",
+  "license": "Public domain",
+  "w": 640,
+  "h": 426
+ },
  "wiki/dazhaxie": {
   "spec": "中华绒螯蟹",
   "qid": "Q823941",
@@ -1197,6 +1520,54 @@
   "page": "https://commons.wikimedia.org/wiki/File:%E7%9B%90%E5%AE%98%E7%BC%B8%E8%82%892.jpg",
   "artist": "三猎",
   "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/dufu": {
+  "spec": "杜甫",
+  "qid": "Q33772",
+  "label": "杜甫",
+  "desc": "唐代詩人（712～770）",
+  "file": "Dufu.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Dufu.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 885
+ },
+ "wiki/dufu-caotang": {
+  "spec": "杜甫草堂",
+  "qid": "Q4390891",
+  "label": "杜甫草堂",
+  "desc": "",
+  "file": "Du Fu cao tang.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Du_Fu_cao_tang.jpg",
+  "artist": "User:唐戈",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/dujiangyan-gongcheng": {
+  "spec": "都江堰",
+  "qid": "Q824157",
+  "label": "都江堰",
+  "desc": "四川水利系统",
+  "file": "Dujiang Weir.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Dujiang_Weir.jpg",
+  "artist": "星星",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 270
+ },
+ "wiki/emeishan": {
+  "spec": "峨眉山",
+  "qid": "Q134927",
+  "label": "峨眉山",
+  "desc": "中国四川省山峰、世界遗产",
+  "file": "峨眉山风景区 Mount Emei Scenic Area 07.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%B3%A8%E7%9C%89%E5%B1%B1%E9%A3%8E%E6%99%AF%E5%8C%BA_Mount_Emei_Scenic_Area_07.jpg",
+  "artist": "George N",
+  "license": "CC BY 2.0",
   "w": 640,
   "h": 426
  },
@@ -1247,6 +1618,18 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 426
+ },
+ "wiki/gushu": {
+  "spec": "太阳神鸟",
+  "qid": "Q5579845",
+  "label": "太阳神鸟",
+  "desc": "成都金沙遺址出土金箔，禁止出境展覽文物",
+  "file": "太阳神鸟金箔片, 2017-09-17.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%A4%AA%E9%98%B3%E7%A5%9E%E9%B8%9F%E9%87%91%E7%AE%94%E7%89%87,_2017-09-17.jpg",
+  "artist": "Siyuwj",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 427
  },
  "wiki/hanshansi": {
   "spec": "File:Hanshan Temple, Suzhou.JPG",
@@ -1353,6 +1736,18 @@
   "w": 640,
   "h": 480
  },
+ "wiki/leshan-dafo": {
+  "spec": "乐山大佛",
+  "qid": "Q205131",
+  "label": "乐山大佛",
+  "desc": "四川省佛像",
+  "file": "Leshan Giant Buddha, 20161102.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Leshan_Giant_Buddha,_20161102.jpg",
+  "artist": "王计",
+  "license": "CC BY 2.5",
+  "w": 640,
+  "h": 360
+ },
  "wiki/liangzhu": {
   "spec": "File:West City Wall of Liangzhu Ancient City.JPG",
   "label": "",
@@ -1363,6 +1758,30 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 480
+ },
+ "wiki/libai": {
+  "spec": "李白",
+  "qid": "Q7071",
+  "label": "李白",
+  "desc": "唐代詩人（701～762）",
+  "file": "李白.png",
+  "page": "https://commons.wikimedia.org/wiki/File:%E6%9D%8E%E7%99%BD.png",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 330,
+  "h": 472
+ },
+ "wiki/liubei": {
+  "spec": "刘备",
+  "qid": "Q245315",
+  "label": "刘备",
+  "desc": "中国三国时期政治家、军事家、蜀汉开国皇帝",
+  "file": "Liu Bei Tang.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Liu_Bei_Tang.jpg",
+  "artist": "Yan Liben (閻立本)",
+  "license": "Public domain",
+  "w": 330,
+  "h": 476
  },
  "wiki/liuchao": {
   "spec": "File:Jiming Temple Nanjing - 南京 鸡鸣寺 (2024) - img 05.jpg",
@@ -1410,6 +1829,42 @@
   "w": 250,
   "h": 407
  },
+ "wiki/mapo-doufu": {
+  "spec": "麻婆豆腐",
+  "qid": "Q1298577",
+  "label": "麻婆豆腐",
+  "desc": "川菜",
+  "file": "Billyfoodmabodofu3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Billyfoodmabodofu3.jpg",
+  "artist": "Archon6812",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 960
+ },
+ "wiki/mingxiaoling": {
+  "spec": "明孝陵",
+  "qid": "Q28769",
+  "label": "明孝陵",
+  "desc": "明太祖朱元璋及馬皇后合葬墓",
+  "file": "Nanjing Ming Xiaoling 2017.11.11 08-10-27.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Nanjing_Ming_Xiaoling_2017.11.11_08-10-27.jpg",
+  "artist": "Zhangzhugang",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/minjiang": {
+  "spec": "岷江",
+  "qid": "Q729269",
+  "label": "岷江",
+  "desc": "长江的一级支流",
+  "file": "Yibin Yangtze Begins Here.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Yibin_Yangtze_Begins_Here.jpg",
+  "artist": "David Cowhig",
+  "license": "Public domain",
+  "w": 500,
+  "h": 375
+ },
  "wiki/nansong": {
   "spec": "宋高宗",
   "qid": "Q7489",
@@ -1444,6 +1899,17 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 960
+ },
+ "wiki/qianlong": {
+  "spec": "File:Portrait of the Qianlong Emperor in Court Dress.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Portrait of the Qianlong Emperor in Court Dress.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Portrait_of_the_Qianlong_Emperor_in_Court_Dress.jpg",
+  "artist": "Unidentified painter",
+  "license": "Public domain",
+  "w": 640,
+  "h": 844
  },
  "wiki/qiantangchao": {
   "spec": "File:Tidal bore of the Qiantang River at Old Yanguan Town.jpg",
@@ -1481,16 +1947,27 @@
   "h": 426
  },
  "wiki/qinhuaihe": {
-  "spec": "秦淮河",
-  "qid": "Q835550",
-  "label": "秦淮河",
-  "desc": "中华人民共和国河流",
-  "file": "2024Apr - Nanjing City Wall -- south section - img 04.jpg",
-  "page": "https://commons.wikimedia.org/wiki/File:2024Apr_-_Nanjing_City_Wall_--_south_section_-_img_04.jpg",
-  "artist": "Chainwit.",
-  "license": "CC BY 4.0",
+  "spec": "File:Qinhuai River along Fuzimiao 2008.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Qinhuai River along Fuzimiao 2008.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Qinhuai_River_along_Fuzimiao_2008.jpg",
+  "artist": "Jaye Z",
+  "license": "CC BY-SA 2.0",
   "w": 640,
-  "h": 480
+  "h": 960
+ },
+ "wiki/sanxingdui-yizhi": {
+  "spec": "三星堆遗址",
+  "qid": "Q929072",
+  "label": "三星堆遗址",
+  "desc": "中國新石器时代末期至商代的大型遺址，位於四川廣漢市南興镇和三星镇之間",
+  "file": "Sichuan Ancient Cultural Relics 02.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Sichuan_Ancient_Cultural_Relics_02.jpg",
+  "artist": "Cyclohexane233",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 853
  },
  "wiki/shaoxing-huangjiu": {
   "spec": "绍兴酒",
@@ -1515,6 +1992,29 @@
   "license": "CC BY 3.0",
   "w": 640,
   "h": 480
+ },
+ "wiki/shudaonan": {
+  "spec": "剑门关",
+  "qid": "Q6191827",
+  "label": "剑门关",
+  "desc": "",
+  "file": "劍門關關口 - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%8A%8D%E9%96%80%E9%97%9C%E9%97%9C%E5%8F%A3_-_panoramio.jpg",
+  "artist": "ping lin",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 478
+ },
+ "wiki/shuhan": {
+  "spec": "File:ThreeKingdoms262.png",
+  "label": "",
+  "desc": "",
+  "file": "ThreeKingdoms262.png",
+  "page": "https://commons.wikimedia.org/wiki/File:ThreeKingdoms262.png",
+  "artist": "Zhoudadudu",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 452
  },
  "wiki/sushi": {
   "spec": "苏轼",
@@ -1550,6 +2050,18 @@
   "license": "Public domain",
   "w": 640,
   "h": 798
+ },
+ "wiki/wuhouci": {
+  "spec": "成都武侯祠",
+  "qid": "Q1069942",
+  "label": "成都武侯祠",
+  "desc": "成都祭祀诸葛亮、刘备等的祠庙",
+  "file": "成都的武侯祠.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E6%88%90%E9%83%BD%E7%9A%84%E6%AD%A6%E4%BE%AF%E7%A5%A0.jpg",
+  "artist": "螺钉",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
  },
  "wiki/wuyueguo": {
   "spec": "保俶塔",
@@ -1646,6 +2158,18 @@
   "license": "CC BY-SA 2.0",
   "w": 640,
   "h": 853
+ },
+ "wiki/zhugeliang": {
+  "spec": "诸葛亮",
+  "qid": "Q198211",
+  "label": "诸葛亮",
+  "desc": "三國時期蜀漢丞相（181～234）",
+  "file": "蜀汉丞相忠武侯诸葛亮.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E8%9C%80%E6%B1%89%E4%B8%9E%E7%9B%B8%E5%BF%A0%E6%AD%A6%E4%BE%AF%E8%AF%B8%E8%91%9B%E4%BA%AE.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 500,
+  "h": 677
  },
  "wiki/zhuozhengyuan": {
   "spec": "拙政园",
