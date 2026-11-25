@@ -3,6 +3,7 @@ id: jinghang-dayunhe
 name: 京杭大运河
 en: Grand Canal (Beijing–Hangzhou)
 kind: 河流
+era: [spring, sui, yuan]
 aka: [大运河, 中国大运河, 运河, 邗沟]
 province: [jiangsu, zhejiang, shandong, hebei, tianjin, beijing]
 city: [yangzhou, huaian, suzhou, hangzhou, wuxi, zhenjiang, changzhou, xuzhou, suqian]

@@ -3,6 +3,7 @@ id: dufu
 name: 杜甫
 en: Du Fu
 kind: 人物
+era: [tang]
 aka: [杜子美, 杜少陵, 杜工部, 诗圣, 少陵野老]
 province: [henan, sichuan, shaanxi, hunan]
 city: [chengdu]

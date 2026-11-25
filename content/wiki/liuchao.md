@@ -3,6 +3,7 @@ id: liuchao
 name: 六朝
 en: Six Dynasties (capital at Nanjing)
 kind: 朝代
+era: [three, east-jin, north-south]
 aka: [六朝古都, 建康, 建业, 南朝]
 province: jiangsu
 city: [nanjing]

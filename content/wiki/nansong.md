@@ -3,6 +3,7 @@ id: nansong
 name: 南宋
 en: Southern Song dynasty
 kind: 朝代
+era: [south-song]
 province: [zhejiang]
 city: [hangzhou]
 image: 宋高宗

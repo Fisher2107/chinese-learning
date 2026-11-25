@@ -3,6 +3,7 @@ id: xishi
 name: 西施
 en: Xi Shi
 kind: 人物
+era: [spring]
 aka: [西子]
 province: zhejiang
 city: [shaoxing]

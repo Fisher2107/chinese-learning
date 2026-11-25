@@ -3,6 +3,7 @@ id: hanshansi
 name: 寒山寺
 en: Hanshan Temple
 kind: 景点
+era: [north-south, tang]
 aka: [枫桥夜泊, 枫桥, 妙利普明塔院]
 province: jiangsu
 city: [suzhou]

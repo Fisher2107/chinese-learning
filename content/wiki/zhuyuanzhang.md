@@ -3,6 +3,7 @@ id: zhuyuanzhang
 name: 朱元璋
 en: Zhu Yuanzhang, Hongwu Emperor
 kind: 人物
+era: [ming]
 aka: [明太祖, 洪武帝, 朱重八, 洪武]
 province: [anhui, jiangsu]
 city: [nanjing]

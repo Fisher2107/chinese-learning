@@ -4,6 +4,7 @@ name: 钱镠
 py: qiánliú
 en: Qian Liu, founder of Wuyue
 kind: 人物
+era: [five]
 aka: [钱王, 吴越王]
 province: zhejiang
 city: [hangzhou]

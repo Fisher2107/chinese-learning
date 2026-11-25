@@ -4,6 +4,7 @@ name: 夫差
 py: fūchāi
 en: Fuchai, King of Wu
 kind: 人物
+era: [spring]
 aka: [吴王夫差]
 province: [jiangsu, zhejiang, hubei]
 city: [suzhou, yangzhou]

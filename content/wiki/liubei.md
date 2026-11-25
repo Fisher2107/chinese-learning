@@ -3,6 +3,7 @@ id: liubei
 name: 刘备
 en: Liu Bei
 kind: 人物
+era: [three]
 aka: [刘玄德, 汉昭烈帝, 昭烈帝, 先主]
 province: [sichuan, hebei, chongqing, hubei]
 city: [chengdu]

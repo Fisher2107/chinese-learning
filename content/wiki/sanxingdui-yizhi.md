@@ -3,6 +3,7 @@ id: sanxingdui-yizhi
 name: 三星堆
 en: Sanxingdui
 kind: 景点
+era: [shang]
 aka: [三星堆遗址, 三星堆博物馆, 纵目面具, 青铜神树, 青铜大立人]
 province: sichuan
 city: [sanxingdui, deyang]

@@ -3,6 +3,7 @@ id: dujiangyan-gongcheng
 name: 都江堰
 en: Dujiangyan irrigation system
 kind: 建筑
+era: [warring]
 aka: [都江堰水利工程, 鱼嘴, 宝瓶口, 飞沙堰]
 province: sichuan
 city: [dujiangyan, chengdu]

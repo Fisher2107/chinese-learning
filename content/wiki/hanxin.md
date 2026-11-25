@@ -3,6 +3,7 @@ id: hanxin
 name: 韩信
 en: Han Xin
 kind: 人物
+era: [west-han]
 aka: [淮阴侯, 兵仙]
 province: [jiangsu, shaanxi]
 city: [huaian]

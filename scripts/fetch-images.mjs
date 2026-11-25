@@ -49,6 +49,25 @@ if (existsSync('content/wiki'))
     const m = (await readFile(`content/wiki/${file}`, 'utf8')).match(/^---\n([\s\S]*?)\n---/)
     const meta = m ? parseYaml(m[1]) : {}
     if (meta?.id && meta.image && !jobs.has(`wiki/${meta.id}`)) jobs.set(`wiki/${meta.id}`, String(meta.image).trim())
+    if (meta?.id) pictureLines(await readFile(`content/wiki/${file}`, 'utf8'), `wiki/${meta.id}`)
+  }
+// Pictures in the text: `![说明](照片)` lines, numbered in order (wiki/<id>/<n>, series/<id>/<NN>/<n>),
+// the same way build-content numbers them
+function pictureLines(src, prefix) {
+  let n = 0
+  for (const m of src.matchAll(/^\s*!\[[^\]]*\]\((.+)\)\s*$/gm)) if (!jobs.has(`${prefix}/${++n}`)) jobs.set(`${prefix}/${n}`, m[1].trim())
+}
+if (existsSync('content/series'))
+  for (const dir of await readdir('content/series', { withFileTypes: true }))
+    if (dir.isDirectory())
+      for (const file of (await readdir(`content/series/${dir.name}`)).filter((f) => /^\d+\.md$/.test(f)))
+        pictureLines(await readFile(`content/series/${dir.name}/${file}`, 'utf8'), `series/${dir.name}/${file.slice(0, -3)}`)
+// each era of the 历史长卷 names its picture (image: 越王勾践剑 / File:… / =wiki/<id>)
+if (existsSync('content/history'))
+  for (const file of (await readdir('content/history')).filter((f) => f.endsWith('.md') && f !== 'README.md')) {
+    const m = (await readFile(`content/history/${file}`, 'utf8')).match(/^---\n([\s\S]*?)\n---/)
+    const meta = m ? parseYaml(m[1]) : {}
+    if (meta?.id && meta.image && !jobs.has(`history/${meta.id}`)) jobs.set(`history/${meta.id}`, String(meta.image).trim())
   }
 for (const c of detail.cities) {
   const key = `city/${c.id}`

@@ -3,6 +3,7 @@ id: zhongshanling
 name: 中山陵
 en: Sun Yat-sen Mausoleum
 kind: 建筑
+era: [republic]
 aka: [孙中山陵, 中山陵园]
 province: jiangsu
 city: [nanjing]

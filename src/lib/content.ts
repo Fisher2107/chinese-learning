@@ -1,4 +1,4 @@
-import type { HistoryAtlas } from './history.ts'
+import type { Era, HistoryIndex } from './history.ts'
 import { useEffect, useState } from 'react'
 import type { CitiesFile, ContentIndex, DialectFile, FeedFile, PhotosFile, PlacesFile, RegionsFile, SeriesFile, TextFile, WikiIndex, WikiPage } from './types.ts'
 
@@ -26,7 +26,8 @@ export const loadFeed = () => getJson<FeedFile>('content/feed.json')
 export const loadCities = () => getJson<CitiesFile>('content/cities.json')
 export const loadDialect = () => getJson<DialectFile>('content/dialect.json')
 export const loadRegions = () => getJson<RegionsFile>('content/regions.json')
-export const loadHistory = () => getJson<HistoryAtlas>('content/history.json')
+export const loadHistory = () => getJson<HistoryIndex>('content/history.json')
+export const loadEra = (id: string) => getJson<Era>(`content/history/${id}.json`)
 export const loadPhotos = () => getJson<PhotosFile>('content/photos.json')
 export const loadWikiIndex = () => getJson<WikiIndex>('content/wiki-index.json')
 export const loadWiki = (id: string) => getJson<WikiPage>(`content/wiki/${id}.json`)
