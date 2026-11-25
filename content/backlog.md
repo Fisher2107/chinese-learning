@@ -2,6 +2,20 @@
 
 Researched or half-researched topics waiting to be written. Newest first. Reels are links only (inspiration, never copied).
 
+## 2026-11-25
+
+### 衢州 · 家乡必做（进行中）
+- 已写：第4集 故事“等了两百多年的小官”（知府沈杰上书；1506年孔彦绳得到世袭翰林院五经博士；只是八品，衍圣公是二品；一直传到民国）。
+- 没用的线索：孔彦绳是第58代还是第59代（社科网和凤凰网说法不同）；沈杰上书是1505年还是1506年（同上）；1913年改为“奉祀官”只有凤凰网一个来源。
+- 下一集 第5集 新闻：2024年曲阜、衢州一起祭孔（南北同祭），要找两个新闻来源；可加今天的衢州孔氏家庙。第6集候选：楷木像1959年借去曲阜（仍只有一个来源）、烂柯山与围棋。
+- 第6集写完后，系列结束，开始选下一个城市。
+
+### 新的 刷一刷 选题
+- 南京“零元面馆” → 已写（content/feed/lingyuan-mianguan.md）。没用的线索：免费范围的名单各报道不一样（有的有快递员、外卖员，有的有退伍军人），正文只写“老人、残障人士、环卫工人等”；每天成本1.5万元、房租15万元只有澎湃一个来源（光明网是转载）。
+- 成都都江堰“两千两百年的秘密”（🎬 https://www.instagram.com/joemi.in.chengdu/reel/DgD-oKDN8or/ ）：百科已有 dujiangyan-gongcheng，以后做卡片的话要换角度（比如“没有大坝”）。
+- “带北京口音的英语单词”（#中国冷知识 搜索里看到，链接没记下）：儿化音卡片，待研究。
+- 梨的视频（🎬 https://www.instagram.com/p/DfIyQRCzoAQ/ ）看过了，说明里没写是哪里的梨，这条线索先放下。
+
 ## 2026-11-24
 
 ### 衢州 · 家乡必做（进行中）
@@ -50,3 +64,4 @@ Researched or half-researched topics waiting to be written. Newest first. Reels 
 - 2026-11-22 深圳拖鞋与APEC → content/feed/shenzhen-tuoxie.md
 - 2026-11-23 山西午睡 → content/feed/shanxi-wushui.md
 - 2026-11-24 张家界天门洞 → content/feed/tianmendong.md
+- 2026-11-25 南京零元面馆 → content/feed/lingyuan-mianguan.md

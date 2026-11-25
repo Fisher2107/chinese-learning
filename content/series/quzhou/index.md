@@ -14,6 +14,9 @@ sources:
   - { title: "凤凰网：孔洙让爵（2007）", url: "https://news.ifeng.com/opinion/200708/0829_23_206098_5.shtml" }
   - { title: "Wikipedia: Longyou Caves", url: "https://en.wikipedia.org/wiki/Longyou_Caves" }
   - { title: "儒家网：韦力《衢州孔庙：宗子南迁，高风让爵》（2021）", url: "https://www.rujiazg.com/article/20510" }
+  - { title: "凤凰网：衢州孔氏南宗与“八品”五经博士（2014）", url: "https://news.ifeng.com/a/20140827/41753026_0.shtml" }
+  - { title: "潮新闻：钱江源（开化）", url: "https://tidenews.com.cn/news.html?id=2552512" }
+  - { title: "新华网：钱江源国家公园（2026）", url: "https://www.news.cn/local/20260804/02fb9ed5fc624099b55a39bf3fefb38c/c.html" }
 inspiration:
   - https://www.instagram.com/p/Dfg45ufhTn0/
 ---
