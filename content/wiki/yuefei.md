@@ -3,6 +3,7 @@ id: yuefei
 name: 岳飞
 en: Yue Fei, Song general
 kind: 人物
+era: [south-song]
 aka: [岳武穆]
 province: [zhejiang, henan]
 city: [hangzhou, anyang]

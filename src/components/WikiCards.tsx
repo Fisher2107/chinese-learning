@@ -8,26 +8,42 @@ import { Section } from './ui.tsx'
 
 /**
  * A row of photo cards you swipe through, like the "top sights" of a maps app. Each card opens its
- * 百科 page. Pages already opened get a tick, so you can see what's left.
+ * 百科 page. Pages already opened get a tick, so you can see what's left. `tag` replaces the kind
+ * next to the name (这里的历史 shows the era); sensitive topics carry a 敏感 badge.
  */
-export function PhotoRow({ title, sub, pages, seen, action }: { title: ReactNode; sub?: string; pages: WikiSummary[]; seen: Set<string>; action?: ReactNode }) {
+export function PhotoRow({
+  title,
+  sub,
+  pages,
+  seen,
+  action,
+  tag,
+}: {
+  title: ReactNode
+  sub?: string
+  pages: WikiSummary[]
+  seen: Set<string>
+  action?: ReactNode
+  tag?: (p: WikiSummary) => string | undefined
+}) {
   if (!pages.length) return null
   return (
     <Section title={title} action={action}>
       {sub && <p className="-mt-1 mb-3 px-1 text-sm font-bold text-mute">{sub}</p>}
       <div className="no-scrollbar -mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2">
         {pages.map((p) => (
-          <SightCard key={p.id} page={p} seen={seen.has(p.id)} />
+          <SightCard key={p.id} page={p} seen={seen.has(p.id)} tag={tag?.(p)} />
         ))}
       </div>
     </Section>
   )
 }
 
-function SightCard({ page, seen }: { page: WikiSummary; seen: boolean }) {
+/** One 百科 page as a photo card: in a row (fixed width) or, `wide`, filling a grid cell. */
+export function SightCard({ page, seen, tag, wide }: { page: WikiSummary; seen: boolean; tag?: string; wide?: boolean }) {
   const photo = usePhoto(`wiki/${page.id}`)
   return (
-    <button onClick={() => go(`wiki/${page.id}`)} className="tile w-44 shrink-0 snap-start overflow-hidden text-left">
+    <button onClick={() => go(`wiki/${page.id}`)} className={`tile overflow-hidden text-left ${wide ? 'w-full' : 'w-44 shrink-0 snap-start'}`}>
       <div className="relative">
         {photo ? <Photo k={`wiki/${page.id}`} ratio="4 / 3" credit={false} /> : <NoPhoto name={page.name} ratio="4 / 3" />}
         {seen && (
@@ -35,11 +51,12 @@ function SightCard({ page, seen }: { page: WikiSummary; seen: boolean }) {
             <CheckCircleIcon size={13} weight="fill" /> 看过
           </span>
         )}
+        {page.sensitive && <SensitiveBadge className="absolute top-1.5 left-1.5" />}
       </div>
       <div className="p-2.5">
         <div className="flex items-baseline gap-1.5">
           <span className="truncate text-[17px] font-black">{page.name}</span>
-          <span className="shrink-0 text-[12px] font-extrabold text-mute">{page.kind}</span>
+          <span className="shrink-0 text-[12px] font-extrabold text-mute">{tag ?? page.kind}</span>
         </div>
         <p className="mt-0.5 line-clamp-2 text-[13px] leading-snug font-bold text-mute">{plain(page.lede)}</p>
       </div>
@@ -71,6 +88,11 @@ function Portrait({ id, name }: { id: string; name: string }) {
   const photo = usePhoto(`wiki/${id}`)
   if (photo) return <Photo k={`wiki/${id}`} ratio="1 / 1" credit={false} className="h-full w-full" />
   return <div className="grid h-full w-full place-items-center bg-sunken font-book text-[34px] text-dai">{name[0]}</div>
+}
+
+/** A topic that is 敏感 in China: its page says why. */
+export function SensitiveBadge({ className = '' }: { className?: string }) {
+  return <span className={`rounded-full bg-huang px-1.5 py-0.5 text-[11px] leading-none font-black text-[#3a3000] ${className}`}>敏感</span>
 }
 
 /** Where there's no photo yet: the name, big, on paper. */

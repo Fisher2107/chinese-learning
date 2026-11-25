@@ -3,6 +3,7 @@ id: caoxueqin
 name: 曹雪芹
 en: Cao Xueqin
 kind: 人物
+era: [qing]
 aka: [曹霑, 雪芹]
 province: [jiangsu, beijing]
 city: [nanjing]

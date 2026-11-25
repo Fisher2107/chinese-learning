@@ -17,7 +17,9 @@ import {
   SquaresFourIcon,
   XIcon,
 } from '@phosphor-icons/react'
-import { loadCities, loadFeed, loadIndex, loadPlaces, loadRegions, useLoad } from '../lib/content.ts'
+import { loadCities, loadEra, loadFeed, loadHistory, loadIndex, loadPlaces, loadRegions, loadWikiIndex, useLoad } from '../lib/content.ts'
+import { useHistoryProgress, type Era } from '../lib/history.ts'
+import { EraCard, EraStrip, PinCard, StateCard } from '../components/HistoryMap.tsx'
 import { CITY_BY_ID, CITIES, cityBox, cityKind, type MapCity } from '../lib/cities.ts'
 import { markKey, setLearnt, useMarks } from '../lib/learn.ts'
 import { LIGHT, MAP_BY_ID, REGIONS, regionColor, usePlaceStats } from '../lib/places.ts'
@@ -35,20 +37,46 @@ import { ZhText } from '../components/ZhText.tsx'
 
 const STEPS = ['读完介绍', '考一考盖章', '再读两篇', '存三个词']
 
-/** The last selection survives switching tabs, and so does the 分区 view. */
+/** The last selection survives switching tabs, and so do the 分区 and 历史 views. */
 let remembered: Selection | undefined
 let rememberedBlocks: { on: boolean; id?: string } = { on: false }
+let rememberedHistory: { on: boolean; era?: string } = { on: false }
+
+/** 卷二 is written first: the map opens on 晚清 until you pick another era. */
+const FIRST_ERA = 'late-qing'
+const nothing = () => Promise.resolve(undefined)
 
 /**
  * 点亮中国: a map to wander around, like a maps app, with every province and city tappable.
  * 分区 colours it by the seven regions instead; `blocks` (from map/regions/<id>) opens that view.
+ * 历史 lays an era over it: its states, capitals, marches and stories; `history` (from
+ * map/history/<era>) opens that view.
  */
-export function MapScreen({ focus, blocks: blocksRoute }: { focus?: Selection; blocks?: string }) {
+export function MapScreen({ focus, blocks: blocksRoute, history: historyRoute }: { focus?: Selection; blocks?: string; history?: string }) {
   const placesFile = useLoad(loadPlaces, 'places').data
   const regionsFile = useLoad(loadRegions, 'regions').data
   const [blocks, setBlocksState] = useState(() =>
-    blocksRoute !== undefined ? (rememberedBlocks = { on: true, id: blocksRoute || undefined }) : focus ? (rememberedBlocks = { on: false }) : rememberedBlocks,
+    blocksRoute !== undefined ? (rememberedBlocks = { on: true, id: blocksRoute || undefined }) : focus || historyRoute !== undefined ? (rememberedBlocks = { on: false }) : rememberedBlocks,
   )
+  const [hist, setHistState] = useState(() =>
+    historyRoute !== undefined
+      ? (rememberedHistory = { on: true, era: historyRoute || rememberedHistory.era })
+      : focus || blocksRoute !== undefined
+        ? (rememberedHistory = { ...rememberedHistory, on: false })
+        : rememberedHistory,
+  )
+  const [histSel, setHistSel] = useState<Selection>()
+  const historyIndex = useLoad(hist.on ? loadHistory : nothing, hist.on ? 'history' : 'off').data
+  const eraId = hist.era && (!historyIndex || historyIndex.eras.some((e) => e.id === hist.era)) ? hist.era : FIRST_ERA
+  const loadedEra = useLoad(hist.on ? () => loadEra(eraId) : nothing, hist.on ? `era/${eraId}` : 'off').data
+  // the era before stays up while the next one loads, so the map never goes blank
+  const lastEra = useRef<Era>(undefined)
+  if (loadedEra) lastEra.current = loadedEra
+  const era = hist.on ? (loadedEra ?? lastEra.current) : undefined
+  const wiki = useLoad(hist.on ? loadWikiIndex : nothing, hist.on ? 'wiki-index' : 'off').data
+  const progress = useHistoryProgress()
+  /** fly to the era once it has loaded (picked, or 历史 just turned on) */
+  const flyToEra = useRef(false)
   const citiesFile = useLoad(loadCities, 'cities').data
   const feed = useLoad(loadFeed, 'feed').data
   const index = useLoad(loadIndex, 'index').data
@@ -62,7 +90,29 @@ export function MapScreen({ focus, blocks: blocksRoute }: { focus?: Selection; b
   const card = useRef<HTMLDivElement>(null)
 
   const setSel = (s?: Selection) => setSelState((remembered = s))
-  const setBlocks = (b: { on: boolean; id?: string }) => setBlocksState((rememberedBlocks = b))
+  const setBlocks = (b: { on: boolean; id?: string }) => {
+    setBlocksState((rememberedBlocks = b))
+    if (b.on && hist.on) setHistState((rememberedHistory = { ...hist, on: false }))
+  }
+  const setHist = (h: { on: boolean; era?: string }) => {
+    setHistState((rememberedHistory = h))
+    setHistSel(undefined)
+    if (h.on) {
+      flyToEra.current = true
+      if (blocks.on) setBlocksState((rememberedBlocks = { on: false }))
+    }
+  }
+  /** 历史: another era from the strip (on a map/history link, the link follows along) */
+  function pickEra(id: string) {
+    if (id === eraId) return
+    setHist({ on: true, era: id })
+    if (historyRoute !== undefined) go(`map/history/${id}`, true)
+  }
+  useEffect(() => {
+    if (!era || !flyToEra.current) return
+    flyToEra.current = false
+    api.current?.flyToBox(era.layer.box, 6)
+  }, [era])
 
   useEffect(() => {
     const prev = document.body.style.overflow
@@ -85,19 +135,22 @@ export function MapScreen({ focus, blocks: blocksRoute }: { focus?: Selection; b
   /** 分区: each province's region colour, and the region names over them */
   const regionOf = useMemo(() => new Map((placesFile?.places ?? []).map((p) => [p.id, regionColor(p.region)])), [placesFile])
   const areas = useMemo<Area[] | undefined>(() => {
+    if (hist.on) return era?.layer.states.map((st, i) => ({ key: `st-${i}`, text: st.name, x: st.x, y: st.y, color: st.color, small: st.kind !== 'state' }))
     if (!blocks.on || !regionsFile || !placesFile) return undefined
     const shown = regionsFile.regions.filter((r) => r.kind === '分区' || r.id === blocks.id).sort((a, b) => +(b.id === blocks.id) - +(a.id === blocks.id))
     return shown.map((r) => {
       const [x, y] = blockCentre(r)
       return { key: r.id, text: r.name, x, y, color: blockColor(r, placesFile.places) }
     })
-  }, [blocks.on, blocks.id, regionsFile, placesFile])
-  if (!placesFile || (blocksRoute && !regionsFile)) return <Loading />
+  }, [blocks.on, blocks.id, regionsFile, placesFile, hist.on, era])
+  if (!placesFile || (blocksRoute && !regionsFile) || (historyRoute !== undefined && hist.on && !era)) return <Loading />
 
   const light = (id: string) => stats.get(id)?.light ?? 0
-  const fill = blocks.on
-    ? (id: string) => `color-mix(in oklab, ${regionOf.get(id) ?? '#888'} ${picked ? (picked.provinces.includes(id) ? 62 : 10) : 40}%, var(--map-china))`
-    : (id: string) => (light(id) ? LIGHT[light(id)] : 'var(--map-china)')
+  const fill = hist.on
+    ? () => 'var(--map-china)'
+    : blocks.on
+      ? (id: string) => `color-mix(in oklab, ${regionOf.get(id) ?? '#888'} ${picked ? (picked.provinces.includes(id) ? 62 : 10) : 40}%, var(--map-china))`
+      : (id: string) => (light(id) ? LIGHT[light(id)] : 'var(--map-china)')
   const lit = placesFile.places.filter((p) => light(p.id) > 0).length
   const place = sel?.kind === 'province' ? placesFile.places.find((p) => p.id === sel.id) : undefined
   const city = sel?.kind === 'city' ? CITY_BY_ID.get(sel.id) : undefined
@@ -126,40 +179,51 @@ export function MapScreen({ focus, blocks: blocksRoute }: { focus?: Selection; b
     pickBlock(blocksOf(prov, regionsFile.regions).region?.id)
   }
   const routeBlock = blocksRoute ? regionsFile?.regions.find((r) => r.id === blocksRoute) : undefined
+  const layer = hist.on ? era?.layer : undefined
+  const histState = layer && histSel?.kind === 'state' ? layer.states[Number(histSel.id)] : undefined
+  const histPin = layer && histSel?.kind === 'pin' ? layer.pins.find((p) => p.id === histSel.id) : undefined
 
   return (
     <div className="fixed inset-x-0 top-0 overflow-hidden" style={{ bottom: 'calc(4rem + 2px + env(safe-area-inset-bottom))' }}>
       <ExploreMap
         names={names}
         fill={fill}
-        selected={blocks.on ? undefined : sel}
-        onSelect={blocks.on ? tapBlocks : setSel}
+        selected={hist.on ? histSel : blocks.on ? undefined : sel}
+        onSelect={hist.on ? setHistSel : blocks.on ? tapBlocks : setSel}
         learnt={marks.learnt}
         stories={stories}
         insets={{ top: 112, bottom: cardH + 16 }}
-        initialBox={initialBox ?? (routeBlock && blockBox(routeBlock))}
+        initialBox={initialBox ?? (routeBlock && blockBox(routeBlock)) ?? (historyRoute !== undefined ? era?.layer.box : undefined)}
         areas={areas}
+        layer={layer}
         api={api}
       />
 
-      {/* search bar */}
+      {/* search bar, or the eras on 历史 */}
       <div className="safe-top pointer-events-none absolute inset-x-0 top-0 px-3 pt-3">
-        <button
-          onClick={() => setSearching(true)}
-          className="tile pointer-events-auto mx-auto flex h-12 w-full max-w-xl items-center gap-2.5 px-4 text-left shadow-[0_2px_10px_rgba(0,0,0,0.08)]"
-        >
-          <MagnifyingGlassIcon size={20} weight="bold" className="text-mute" />
-          <span className="flex-1 text-[16px] font-bold text-mute">找一个省或者城市</span>
-          <span className="text-sm font-black text-huang-dark">点亮 {lit}/34</span>
-        </button>
-        <div className="mx-auto mt-2 flex max-w-xl">
+        {hist.on ? (
+          historyIndex ? (
+            <EraStrip index={historyIndex} current={eraId} seals={progress.seals} onPick={pickEra} />
+          ) : (
+            <div className="h-10" />
+          )
+        ) : (
           <button
-            onClick={() => (blocks.on ? setBlocks({ on: false }) : setBlocks({ on: true, id: undefined }))}
-            aria-pressed={blocks.on}
-            className={`pointer-events-auto flex h-9 items-center gap-1.5 rounded-full border-2 px-3.5 text-[15px] font-extrabold shadow-[0_2px_8px_rgba(0,0,0,0.08)] ${blocks.on ? 'border-dai bg-dai text-white' : 'border-line bg-surface'}`}
+            onClick={() => setSearching(true)}
+            className="tile pointer-events-auto mx-auto flex h-12 w-full max-w-xl items-center gap-2.5 px-4 text-left shadow-[0_2px_10px_rgba(0,0,0,0.08)]"
           >
-            <SquaresFourIcon size={17} weight="fill" /> 分区
+            <MagnifyingGlassIcon size={20} weight="bold" className="text-mute" />
+            <span className="flex-1 text-[16px] font-bold text-mute">找一个省或者城市</span>
+            <span className="text-sm font-black text-huang-dark">点亮 {lit}/34</span>
           </button>
+        )}
+        <div className="mx-auto mt-2 flex max-w-xl gap-2">
+          <ModeChip on={blocks.on} onClick={() => (blocks.on ? setBlocks({ on: false }) : setBlocks({ on: true, id: undefined }))}>
+            <SquaresFourIcon size={17} weight="fill" /> 分区
+          </ModeChip>
+          <ModeChip on={hist.on} onClick={() => setHist({ ...hist, on: !hist.on })}>
+            <ScrollIcon size={17} weight="fill" /> 历史
+          </ModeChip>
         </div>
       </div>
 
@@ -183,7 +247,25 @@ export function MapScreen({ focus, blocks: blocksRoute }: { focus?: Selection; b
       <div ref={card} className="absolute inset-x-0 bottom-0 px-3 pb-3">
         <div className="mx-auto max-w-xl">
           <AnimatePresence mode="wait" initial={false}>
-            {blocks.on && regionsFile ? (
+            {hist.on ? (
+              !era || !historyIndex ? (
+                <Slide key="era-loading">
+                  <div className="tile h-40 shadow-[0_4px_18px_rgba(0,0,0,0.1)]" />
+                </Slide>
+              ) : histState ? (
+                <Slide key={`st-${era.id}-${histSel!.id}`}>
+                  <StateCard era={era} state={histState} wiki={wiki} onClose={() => setHistSel(undefined)} />
+                </Slide>
+              ) : histPin ? (
+                <Slide key={`pin-${era.id}-${histPin.id}`}>
+                  <PinCard era={era} pin={histPin} wiki={wiki} onClose={() => setHistSel(undefined)} />
+                </Slide>
+              ) : (
+                <Slide key={`era-${era.id}`}>
+                  <EraCard era={era} index={historyIndex} wiki={wiki} read={progress.read} sealed={progress.seals.has(era.id)} />
+                </Slide>
+              )
+            ) : blocks.on && regionsFile ? (
               <Slide key="blocks">
                 <BlocksCard file={regionsFile} places={placesFile.places} feed={feed?.cards} picked={picked} onPick={pickBlock} onClose={() => setBlocks({ on: false })} />
               </Slide>
@@ -215,7 +297,7 @@ export function MapScreen({ focus, blocks: blocksRoute }: { focus?: Selection; b
               </Slide>
             ) : (
               <Slide key="home">
-                <HomeCard learnt={marks.learnt.size} stamps={placesFile.places.filter((p) => stats.get(p.id)?.stamp).length} />
+                <HomeCard learnt={marks.learnt.size} stamps={placesFile.places.filter((p) => stats.get(p.id)?.stamp).length} onHistory={() => setHist({ ...hist, on: true })} />
               </Slide>
             )}
           </AnimatePresence>
@@ -237,6 +319,19 @@ function boxFor(s: Selection): [number, number, number, number] | undefined {
   return c && cityBox(c, 40)
 }
 
+/** 分区 and 历史: the two ways to colour the map, under the search bar. */
+function ModeChip({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={on}
+      className={`pointer-events-auto flex h-9 items-center gap-1.5 rounded-full border-2 px-3.5 text-[15px] font-extrabold shadow-[0_2px_8px_rgba(0,0,0,0.08)] ${on ? 'border-dai bg-dai text-white' : 'border-line bg-surface'}`}
+    >
+      {children}
+    </button>
+  )
+}
+
 function Slide({ children }: { children: React.ReactNode }) {
   return (
     <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 30, opacity: 0 }} transition={{ duration: 0.18 }}>
@@ -245,7 +340,7 @@ function Slide({ children }: { children: React.ReactNode }) {
   )
 }
 
-function HomeCard({ learnt, stamps }: { learnt: number; stamps: number }) {
+function HomeCard({ learnt, stamps, onHistory }: { learnt: number; stamps: number; onHistory: () => void }) {
   return (
     <div className="tile p-4 shadow-[0_4px_18px_rgba(0,0,0,0.1)]">
       <p className="text-[15px] font-bold text-mute">拖一拖、放大看看，点一个省、城市或者国家。缩小就能看到全世界。</p>
@@ -254,7 +349,7 @@ function HomeCard({ learnt, stamps }: { learnt: number; stamps: number }) {
           <BooksIcon size={24} weight="fill" className="text-dai" />
           百科
         </button>
-        <button onClick={() => go('map/history')} className="flex flex-col items-center gap-1 rounded-2xl bg-sunken py-2.5 text-[14px] font-extrabold">
+        <button onClick={onHistory} className="flex flex-col items-center gap-1 rounded-2xl bg-sunken py-2.5 text-[14px] font-extrabold">
           <ScrollIcon size={24} weight="fill" className="text-zhu-dark" />
           历史地图
         </button>

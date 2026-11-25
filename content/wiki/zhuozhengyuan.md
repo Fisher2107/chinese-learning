@@ -3,6 +3,7 @@ id: zhuozhengyuan
 name: 拙政园
 en: Humble Administrator's Garden
 kind: 景点
+era: [ming]
 aka: [苏州园林, 苏州古典园林, 留园]
 province: jiangsu
 city: [suzhou]

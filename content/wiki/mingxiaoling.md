@@ -3,6 +3,7 @@ id: mingxiaoling
 name: 明孝陵
 en: Ming Xiaoling Mausoleum
 kind: 建筑
+era: [ming]
 aka: [孝陵, 明孝陵神道, 石象路]
 province: jiangsu
 city: [nanjing]

@@ -4,6 +4,7 @@ name: 范蠡
 py: fànlǐ
 en: Fan Li
 kind: 人物
+era: [spring]
 aka: [陶朱公, 朱公, 鸱夷子皮]
 province: [zhejiang, shandong, henan]
 city: [shaoxing]

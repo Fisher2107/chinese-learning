@@ -3,6 +3,7 @@ id: liangzhu
 name: 良渚古城
 en: Liangzhu ancient city
 kind: 景点
+era: [legend]
 aka: [良渚古城遗址, 良渚文化, 良渚]
 province: zhejiang
 city: [hangzhou]

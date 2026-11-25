@@ -3,6 +3,7 @@ id: gushu
 name: 古蜀
 en: Ancient Shu
 kind: 传说
+era: [shang, warring]
 aka: [古蜀国, 蜀国, 蚕丛, 鱼凫, 杜宇, 望帝, 开明, 望帝啼鹃]
 province: sichuan
 city: [chengdu, sanxingdui]

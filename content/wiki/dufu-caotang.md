@@ -3,6 +3,7 @@ id: dufu-caotang
 name: 杜甫草堂
 en: Du Fu Thatched Cottage
 kind: 景点
+era: [tang]
 aka: [草堂, 浣花溪, 少陵草堂, 茅屋为秋风所破歌]
 province: sichuan
 city: [chengdu]

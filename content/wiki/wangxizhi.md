@@ -3,6 +3,7 @@ id: wangxizhi
 name: 王羲之
 en: Wang Xizhi, calligrapher
 kind: 人物
+era: [east-jin]
 aka: [书圣, 王右军]
 province: [zhejiang, shandong]
 city: [shaoxing, linyi]

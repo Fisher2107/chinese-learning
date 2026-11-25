@@ -25,6 +25,7 @@
   --map-water: #7fb3d8;
   --map-halo: #ffffff;
   --map-ink: #3b4450;
+  --map-route: #8e3b1f;
   --link: #1f63a8;
   --link-seen: #7b4fa6;
   color-scheme: light;
@@ -54,6 +55,7 @@
     --map-water: #2e6a92;
     --map-halo: #15181c;
     --map-ink: #c9d1da;
+    --map-route: #f0a07a;
     --link: #7fb6ea;
     --link-seen: #c3a6e6;
     color-scheme: dark;
@@ -326,6 +328,25 @@
     font-weight: 700;
   }
   /* 分区: a region's name over its provinces, in the region's colour */
+  /* 历史: a route's name, and the characters inside pins */
+  .map-route {
+    font-family: var(--font-ui);
+    font-weight: 800;
+    fill: var(--map-route);
+    paint-order: stroke;
+    stroke: var(--map-halo);
+    stroke-width: 3px;
+    stroke-linejoin: round;
+  }
+  .map-pin-text {
+    font-family: var(--font-book);
+    fill: #fff6ee;
+  }
+  .map-pin-story {
+    font-family: var(--font-book);
+    fill: var(--color-zhu);
+    font-weight: 900;
+  }
   .map-region {
     font-family: var(--font-ui);
     font-weight: 900;

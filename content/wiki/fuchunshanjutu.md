@@ -3,11 +3,12 @@ id: fuchunshanjutu
 name: 富春山居图
 en: Dwelling in the Fuchun Mountains
 kind: 作品
+era: [yuan]
 province: zhejiang
 city: [hangzhou]
 at: [119.68, 29.8]
 river: 钱塘江
-image: 富春山居图
+image: File:Dwelling in the Fuchun Mountains (first half).JPG
 dates: 元朝，约1347—1350年画成
 lede: '中国最有名的山水画之一，画的是[[钱塘江]]中游的富春江。三百多年前，它的主人想带着它一起死，把它扔进了火里。'
 facts:

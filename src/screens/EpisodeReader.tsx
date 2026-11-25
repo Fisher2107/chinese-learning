@@ -1,3 +1,4 @@
+import { InlinePicture } from '../components/Picture.tsx'
 import { Photo } from '../components/Photo.tsx'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLiveQuery } from '../lib/live.ts'
@@ -142,7 +143,7 @@ function Reader({
   const lines = useMemo(() => {
     const out: Line[] = []
     ep.blocks.forEach((b, bi) => {
-      const paras = b.kind === 'excerpt' ? b.paras : [b]
+      const paras = b.kind === 'excerpt' ? b.paras : b.kind === 'img' ? [] : [b]
       paras.forEach((p, pi) => p.sentences.forEach((s, si) => out.push({ block: bi, sid: `${pi}.${si}`, text: sentenceText(s.tokens) })))
     })
     return out
@@ -199,6 +200,8 @@ function Reader({
           <div key={bi} data-block={bi} className="mb-[0.9em]">
             {b.kind === 'excerpt' ? (
               <ExcerptCard ex={b} glossary={series.glossary} source={source} id={`ep${ep.n}-b${bi}`} speaking={speaking?.block === bi ? speaking.sid : undefined} />
+            ) : b.kind === 'img' ? (
+              <InlinePicture pic={b} glossary={series.glossary} source={source} id={`ep${ep.n}-b${bi}`} />
             ) : (
               <ZhText
                 id={`ep${ep.n}-b${bi}`}

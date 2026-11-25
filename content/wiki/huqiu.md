@@ -3,6 +3,7 @@ id: huqiu
 name: 虎丘
 en: Tiger Hill, Suzhou
 kind: 景点
+era: [spring]
 aka: [虎丘塔, 云岩寺塔, 剑池, 海涌山]
 province: jiangsu
 city: [suzhou]

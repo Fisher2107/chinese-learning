@@ -3,6 +3,7 @@ id: libai
 name: 李白
 en: Li Bai
 kind: 人物
+era: [tang]
 aka: [李太白, 青莲居士, 诗仙, 谪仙人]
 province: [sichuan, shaanxi, anhui, hubei]
 city: [mianyang]

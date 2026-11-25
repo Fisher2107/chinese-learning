@@ -749,6 +749,18 @@
   "w": 640,
   "h": 296
  },
+ "city/shenzhen": {
+  "spec": "Q15174?",
+  "qid": "Q15174",
+  "label": "深圳市",
+  "desc": "中国广东省的副省级市",
+  "file": "The west panorama of Shenzhen2021.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:The_west_panorama_of_Shenzhen2021.jpg",
+  "artist": "Charlie fong",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 215
+ },
  "city/shijiazhuang": {
   "spec": "隆兴寺",
   "qid": "Q1507370",
@@ -1138,6 +1150,292 @@
   "license": "CC BY 2.0",
   "w": 640,
   "h": 425
+ },
+ "history/east-han": {
+  "spec": "铜奔马",
+  "qid": "Q15914818",
+  "label": "铜奔马",
+  "desc": "东汉青铜器",
+  "file": "Gansu Museum 2007 257.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gansu_Museum_2007_257.jpg",
+  "artist": "G41rn8",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
+ "history/east-jin": {
+  "spec": "File:LantingXu.jpg",
+  "label": "",
+  "desc": "",
+  "file": "LantingXu.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:LantingXu.jpg",
+  "artist": "Feng Chengsu (馮承素), original by Wang Xizhi (王羲之)",
+  "license": "Public domain",
+  "w": 640,
+  "h": 210
+ },
+ "history/five": {
+  "spec": "=wiki/leifengta"
+ },
+ "history/late-qing": {
+  "spec": "圆明园",
+  "qid": "Q907894",
+  "label": "圆明园",
+  "desc": "位于中华人民共和国北京市海淀区的清代皇家园林，现仅存遗址，是“圆明三园”（圆明园、长春园，绮春园）的合称",
+  "file": "Yuanmingyuan Haiyantang 20130126.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Yuanmingyuan_Haiyantang_20130126.JPG",
+  "artist": "颐园新居",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 424
+ },
+ "history/legend": {
+  "spec": "大禹陵",
+  "qid": "Q10937154",
+  "label": "大禹陵",
+  "desc": "",
+  "file": "Yu the Great mausoleum stele in Shaoxing, Zhejiang, China.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Yu_the_Great_mausoleum_stele_in_Shaoxing,_Zhejiang,_China.jpg",
+  "artist": "Gisling",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 483
+ },
+ "history/mao": {
+  "spec": "天安门",
+  "qid": "Q83973",
+  "label": "天安门",
+  "desc": "中国北京市中心的一座建筑，始建于1417年（明朝永乐年间）",
+  "file": "天安门夜景.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%A4%A9%E5%AE%89%E9%97%A8%E5%A4%9C%E6%99%AF.jpg",
+  "artist": "Charlie fong 冯成",
+  "license": "Public domain",
+  "w": 640,
+  "h": 349
+ },
+ "history/ming": {
+  "spec": "八达岭长城",
+  "qid": "Q798826",
+  "label": "八达岭长城",
+  "desc": "",
+  "file": "GreatWall Badaling.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:GreatWall_Badaling.jpg",
+  "artist": "DF08 at English Wikipedia",
+  "license": "Public domain",
+  "w": 640,
+  "h": 480
+ },
+ "history/new-era": {
+  "spec": "港珠澳大桥",
+  "qid": "Q1191515",
+  "label": "港珠澳大桥",
+  "desc": "珠江口連接香港、澳門及珠海的跨海橋隧結合體",
+  "file": "West section of Hong Kong-Zhuhai-Macau Bridge (20180902174105).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:West_section_of_Hong_Kong-Zhuhai-Macau_Bridge_(20180902174105).jpg",
+  "artist": "N509FZ",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 416
+ },
+ "history/north-song": {
+  "spec": "File:Along the River During the Qingming Festival (detail of original).jpg",
+  "label": "",
+  "desc": "",
+  "file": "Along the River During the Qingming Festival (detail of original).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Along_the_River_During_the_Qingming_Festival_(detail_of_original).jpg",
+  "artist": "Zhang Zeduan",
+  "license": "Public domain",
+  "w": 640,
+  "h": 320
+ },
+ "history/north-south": {
+  "spec": "云冈石窟",
+  "qid": "Q308805",
+  "label": "云冈石窟",
+  "desc": "山西大同的佛教寺廟石窟",
+  "file": "Yungang11 2010.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Yungang11_2010.JPG",
+  "artist": "Marcin Białek",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 444
+ },
+ "history/qin": {
+  "spec": "秦始皇兵马俑",
+  "qid": "Q47672",
+  "label": "秦始皇兵马俑",
+  "desc": "秦始皇陵卫戍性质的墓葬雕塑群",
+  "file": "51714-Terracota-Army.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:51714-Terracota-Army.jpg",
+  "artist": "xiquinhosilva",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 424
+ },
+ "history/qing": {
+  "spec": "颐和园",
+  "qid": "Q4132",
+  "label": "颐和园",
+  "desc": "北京皇家园林",
+  "file": "Longevity Hill of the Summer Palace.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Longevity_Hill_of_the_Summer_Palace.jpg",
+  "artist": "xiquinhosilva",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 425
+ },
+ "history/reform": {
+  "spec": "=city/shenzhen"
+ },
+ "history/republic": {
+  "spec": "=wiki/zhongshanling"
+ },
+ "history/shang": {
+  "spec": "后母戊鼎",
+  "qid": "Q10917916",
+  "label": "后母戊鼎",
+  "desc": "出土于河南安陽的商代青銅器",
+  "file": "HouMuWuDingFullView.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:HouMuWuDingFullView.jpg",
+  "artist": "Mlogic",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 833
+ },
+ "history/south-song": {
+  "spec": "岳王庙",
+  "qid": "Q579874",
+  "label": "岳王庙",
+  "desc": "",
+  "file": "Yue Fei Temple, 2015-03-22 26.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Yue_Fei_Temple,_2015-03-22_26.jpg",
+  "artist": "Siyuwj",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "history/spring": {
+  "spec": "越王勾践剑",
+  "qid": "Q836117",
+  "label": "越王勾践剑",
+  "desc": "中国湖北省博物馆镇馆之宝之一",
+  "file": "20230208 Bronze sword used by King Goujian of Yue 01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:20230208_Bronze_sword_used_by_King_Goujian_of_Yue_01.jpg",
+  "artist": "Windmemories",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "history/sui": {
+  "spec": "赵州桥",
+  "qid": "Q551446",
+  "label": "赵州桥",
+  "desc": "",
+  "file": "Anji Bridge, Zhao County, 2020-09-06 05.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Anji_Bridge,_Zhao_County,_2020-09-06_05.jpg",
+  "artist": "Siyuwj",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 427
+ },
+ "history/tang": {
+  "spec": "大雁塔",
+  "qid": "Q1047061",
+  "label": "大雁塔",
+  "desc": "",
+  "file": "Giant Wild Goose Pagoda.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Giant_Wild_Goose_Pagoda.jpg",
+  "artist": "Alex Kwok",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "history/three": {
+  "spec": "=wiki/wuhouci"
+ },
+ "history/warring": {
+  "spec": "曾侯乙编钟",
+  "qid": "Q4902549",
+  "label": "曾侯乙编钟",
+  "desc": "首批国家级重点禁止出境展览文物",
+  "file": "20230208 Chime bells of Marquis Yi of Zeng.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:20230208_Chime_bells_of_Marquis_Yi_of_Zeng.jpg",
+  "artist": "Windmemories",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "history/west-han": {
+  "spec": "File:20250118 Changxin Palace Lamp 01.jpg",
+  "label": "",
+  "desc": "",
+  "file": "20250118 Changxin Palace Lamp 01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:20250118_Changxin_Palace_Lamp_01.jpg",
+  "artist": "Windmemories",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 960
+ },
+ "history/west-jin": {
+  "spec": "File:Ping Fu Tie by Lu Ji.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Ping Fu Tie by Lu Ji.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ping_Fu_Tie_by_Lu_Ji.jpg",
+  "artist": "Lu Ji",
+  "license": "Public domain",
+  "w": 640,
+  "h": 547
+ },
+ "history/west-zhou": {
+  "spec": "毛公鼎",
+  "qid": "Q11126402",
+  "label": "毛公鼎",
+  "desc": "",
+  "file": "Ding cauldron of Duke Mao.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ding_cauldron_of_Duke_Mao.jpg",
+  "artist": "anonymous",
+  "license": "CC BY 4.0",
+  "w": 640,
+  "h": 708
+ },
+ "history/wu-zhou": {
+  "spec": "龙门石窟",
+  "qid": "Q273834",
+  "label": "龙门石窟",
+  "desc": "中国洛陽的佛教遗迹",
+  "file": "Longmen Grottoes 3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Longmen_Grottoes_3.jpg",
+  "artist": "Rialfver Original uploader was Rialfver at nl.wikipedia",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "history/xia": {
+  "spec": "二里头遗址",
+  "qid": "Q2692927",
+  "label": "二里头遗址",
+  "desc": "疑似夏朝都城遺址",
+  "file": "20240815 Erlitou Site 05.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:20240815_Erlitou_Site_05.jpg",
+  "artist": "Windmemories",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "history/xin": {
+  "spec": "File:Chinese Money 9 - Xin (Wang Mang) Knife Coin.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Chinese Money 9 - Xin (Wang Mang) Knife Coin.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Chinese_Money_9_-_Xin_(Wang_Mang)_Knife_Coin.jpg",
+  "artist": "Gary Todd",
+  "license": "CC0",
+  "w": 640,
+  "h": 960
+ },
+ "history/yuan": {
+  "spec": "=wiki/fuchunshanjutu"
  },
  "place/anhui": {
   "spec": "黄山",
@@ -1543,6 +1841,65 @@
   "w": 640,
   "h": 426
  },
+ "series/yapian": {
+  "spec": "第一次鸦片战争",
+  "qid": "Q191282",
+  "label": "第一次鸦片战争",
+  "desc": "19世紀40年代左右大清帝國與大英帝國之間的軍事衝突",
+  "file": "Destroying Chinese war junks, by E. Duncan (1843).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Destroying_Chinese_war_junks,_by_E._Duncan_(1843).jpg",
+  "artist": "Edward Duncan",
+  "license": "Public domain",
+  "w": 640,
+  "h": 419
+ },
+ "series/yapian/01": {
+  "spec": "广州十三行",
+  "qid": "Q371818",
+  "label": "广州十三行",
+  "desc": "",
+  "file": "Canton factories.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Canton_factories.jpg",
+  "artist": "Unknown Chinese artist",
+  "license": "Public domain",
+  "w": 640,
+  "h": 420
+ },
+ "series/yapian/02": {
+  "spec": "鸦片战争博物馆",
+  "qid": "Q11174401",
+  "label": "鸦片战争博物馆",
+  "desc": "",
+  "file": "Opium War Museum 11433-Humen (48754798691).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Opium_War_Museum_11433-Humen_(48754798691).jpg",
+  "artist": "xiquinhosilva",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 436
+ },
+ "series/yapian/03": {
+  "spec": "维多利亚港",
+  "qid": "Q155643",
+  "label": "维多利亚港",
+  "desc": "香港天然海港",
+  "file": "HK YTM 西九龍文化區 West Kowloon Cultural District M+ Plus Museum 天台花園 roof garden view Victoria Harbour July 2022 Px3 13.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:HK_YTM_%E8%A5%BF%E4%B9%9D%E9%BE%8D%E6%96%87%E5%8C%96%E5%8D%80_West_Kowloon_Cultural_District_M%2B_Plus_Museum_%E5%A4%A9%E5%8F%B0%E8%8A%B1%E5%9C%92_roof_garden_view_Victoria_Harbour_July_2022_Px3_13.jpg",
+  "artist": "Bkemaoe HOMA",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
+ "series/yapian/04": {
+  "spec": "File:圆明园铜版画册-8.jpg",
+  "label": "",
+  "desc": "",
+  "file": "圆明园铜版画册-8.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%9C%86%E6%98%8E%E5%9B%AD%E9%93%9C%E7%89%88%E7%94%BB%E5%86%8C-8.jpg",
+  "artist": "Giuseppe Castiglione",
+  "license": "Public domain",
+  "w": 640,
+  "h": 374
+ },
  "wiki/baijuyi": {
   "spec": "白居易",
   "qid": "Q313324",
@@ -1612,6 +1969,53 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 426
+ },
+ "wiki/cixi": {
+  "spec": "慈禧太后",
+  "qid": "Q47842",
+  "label": "慈禧太后",
+  "desc": "中國清朝晚期政治人物、實際國家統治者",
+  "file": "The Ci-Xi Imperial Dowager Empress (9.2).PNG",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Ci-Xi_Imperial_Dowager_Empress_(9.2).PNG",
+  "artist": "John Yu Shuinling",
+  "license": "Public domain",
+  "w": 640,
+  "h": 1024
+ },
+ "wiki/cixi/1": {
+  "spec": "养心殿",
+  "qid": "Q5642706",
+  "label": "养心殿",
+  "desc": "",
+  "file": "Beijing 2006 2-58.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Beijing_2006_2-58.jpg",
+  "artist": "G41rn8",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
+ "wiki/cixi/2": {
+  "spec": "颐和园",
+  "qid": "Q4132",
+  "label": "颐和园",
+  "desc": "北京皇家园林",
+  "file": "Longevity Hill of the Summer Palace.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Longevity_Hill_of_the_Summer_Palace.jpg",
+  "artist": "xiquinhosilva",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 425
+ },
+ "wiki/cixi/3": {
+  "spec": "File:Zhongnanhai16.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Zhongnanhai16.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zhongnanhai16.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 500,
+  "h": 342
  },
  "wiki/daxiongmao": {
   "spec": "大熊猫",
@@ -1734,16 +2138,15 @@
   "h": 853
  },
  "wiki/fuchunshanjutu": {
-  "spec": "富春山居图",
-  "qid": "Q706846",
-  "label": "富春山居图",
+  "spec": "File:Dwelling in the Fuchun Mountains (first half).JPG",
+  "label": "",
   "desc": "",
-  "file": "富春山居圖(無用師卷).jpg",
-  "page": "https://commons.wikimedia.org/wiki/File:%E5%AF%8C%E6%98%A5%E5%B1%B1%E5%B1%85%E5%9C%96(%E7%84%A1%E7%94%A8%E5%B8%AB%E5%8D%B7).jpg",
+  "file": "Dwelling in the Fuchun Mountains (first half).JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Dwelling_in_the_Fuchun_Mountains_(first_half).JPG",
   "artist": "Huang Gongwang",
   "license": "Public domain",
   "w": 640,
-  "h": 22
+  "h": 342
  },
  "wiki/goujian": {
   "spec": "越王勾践剑",
@@ -1910,6 +2313,100 @@
   "w": 640,
   "h": 420
  },
+ "wiki/humen-xiaoyan": {
+  "spec": "虎门销烟",
+  "qid": "Q1825430",
+  "label": "虎门销烟",
+  "desc": "1839年中国历史事件，鸦片战争的导火索",
+  "file": "Destruction of opium in 1839.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Destruction_of_opium_in_1839.jpg",
+  "artist": "Chinese artist",
+  "license": "Public domain",
+  "w": 640,
+  "h": 392
+ },
+ "wiki/humen-xiaoyan/1": {
+  "spec": "罂粟",
+  "qid": "Q131584",
+  "label": "罂粟",
+  "desc": "罂粟科罂粟属植物",
+  "file": "Zaaddozen van een Papaver somniferum. 23-08-2025. (actm.) 01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zaaddozen_van_een_Papaver_somniferum._23-08-2025._(actm.)_01.jpg",
+  "artist": "Agnes Monkelbaan",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/humen-xiaoyan/2": {
+  "spec": "Q11625313",
+  "qid": "Q11625313",
+  "label": "虎门炮台",
+  "desc": "鸦片战争时期的抗英遗址",
+  "file": "Dongguan003.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Dongguan003.jpg",
+  "artist": "Wikimedia Commons",
+  "license": "CC BY-SA 3.0",
+  "w": 500,
+  "h": 333
+ },
+ "wiki/humen-xiaoyan/3": {
+  "spec": "鸦片战争博物馆",
+  "qid": "Q11174401",
+  "label": "鸦片战争博物馆",
+  "desc": "",
+  "file": "Opium War Museum 11433-Humen (48754798691).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Opium_War_Museum_11433-Humen_(48754798691).jpg",
+  "artist": "xiquinhosilva",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 436
+ },
+ "wiki/huoshao-yuanmingyuan": {
+  "spec": "大水法",
+  "qid": "Q10936157",
+  "label": "大水法",
+  "desc": "",
+  "file": "Ruins of Dashuifa 20130126.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ruins_of_Dashuifa_20130126.jpg",
+  "artist": "New house in the Summer Palace ( 颐园新居 )",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "wiki/huoshao-yuanmingyuan/1": {
+  "spec": "File:圆明园铜版画册-8.jpg",
+  "label": "",
+  "desc": "",
+  "file": "圆明园铜版画册-8.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%9C%86%E6%98%8E%E5%9B%AD%E9%93%9C%E7%89%88%E7%94%BB%E5%86%8C-8.jpg",
+  "artist": "Giuseppe Castiglione",
+  "license": "Public domain",
+  "w": 640,
+  "h": 374
+ },
+ "wiki/huoshao-yuanmingyuan/2": {
+  "spec": "File:VM Yuanmingyuan Haiyantang bronze heads 4431.jpg",
+  "label": "",
+  "desc": "",
+  "file": "VM Yuanmingyuan Haiyantang bronze heads 4431.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:VM_Yuanmingyuan_Haiyantang_bronze_heads_4431.jpg",
+  "artist": "User:Vmenkov",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "wiki/huoshao-yuanmingyuan/3": {
+  "spec": "维克多·雨果",
+  "qid": "Q535",
+  "label": "维克多·雨果",
+  "desc": "法國作家（1802－1885）",
+  "file": "Victor Hugo by Étienne Carjat 1876 - full.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Victor_Hugo_by_%C3%89tienne_Carjat_1876_-_full.jpg",
+  "artist": "Étienne Carjat",
+  "license": "Public domain",
+  "w": 640,
+  "h": 787
+ },
  "wiki/huqiu": {
   "spec": "虎丘塔",
   "qid": "Q1581102",
@@ -1921,6 +2418,52 @@
   "license": "CC BY 4.0",
   "w": 640,
   "h": 853
+ },
+ "wiki/jiawu-zhanzheng": {
+  "spec": "File:Zhiyuan cruiser.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Zhiyuan cruiser.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zhiyuan_cruiser.jpg",
+  "artist": "Unknown author Unknown author Published in the The Century Magazine in August 18",
+  "license": "Public domain",
+  "w": 640,
+  "h": 437
+ },
+ "wiki/jiawu-zhanzheng/1": {
+  "spec": "邓世昌",
+  "qid": "Q716227",
+  "label": "邓世昌",
+  "desc": "清朝北洋水师将领 (1849-1894)",
+  "file": "DengXiChang CHN.png",
+  "page": "https://commons.wikimedia.org/wiki/File:DengXiChang_CHN.png",
+  "artist": "Wikimedia Commons",
+  "license": "Public domain",
+  "w": 330,
+  "h": 454
+ },
+ "wiki/jiawu-zhanzheng/2": {
+  "spec": "刘公岛",
+  "qid": "Q842587",
+  "label": "刘公岛",
+  "desc": "山东的岛屿",
+  "file": "Weihai.port de Liugong dao.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Weihai.port_de_Liugong_dao.jpg",
+  "artist": "Popolon",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 360
+ },
+ "wiki/jiawu-zhanzheng/3": {
+  "spec": "File:威海刘公岛 甲午战争博物馆 陈列馆 - panoramio.jpg",
+  "label": "",
+  "desc": "",
+  "file": "威海刘公岛 甲午战争博物馆 陈列馆 - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%A8%81%E6%B5%B7%E5%88%98%E5%85%AC%E5%B2%9B_%E7%94%B2%E5%8D%88%E6%88%98%E4%BA%89%E5%8D%9A%E7%89%A9%E9%A6%86_%E9%99%88%E5%88%97%E9%A6%86_-_panoramio.jpg",
+  "artist": "mayanming",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 414
  },
  "wiki/jinghang-dayunhe": {
   "spec": "File:Yangzhou-Modern-Grand-Canal-barges-3361.JPG",
@@ -1991,6 +2534,99 @@
   "w": 500,
   "h": 667
  },
+ "wiki/lihongzhang": {
+  "spec": "李鸿章",
+  "qid": "Q378517",
+  "label": "李鸿章",
+  "desc": "中国清朝末期高官",
+  "file": "Li Hung Chang in 1896.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Li_Hung_Chang_in_1896.jpg",
+  "artist": "Russell & Sons",
+  "license": "Public domain",
+  "w": 640,
+  "h": 930
+ },
+ "wiki/lihongzhang/1": {
+  "spec": "李鸿章故居",
+  "qid": "Q11098395",
+  "label": "李鸿章故居",
+  "desc": "安徽省合肥市淮河路中段208号",
+  "file": "Former Residence of Li Hongzhang 2012-06.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Former_Residence_of_Li_Hongzhang_2012-06.JPG",
+  "artist": "猫猫的日记本",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "wiki/lihongzhang/2": {
+  "spec": "File:ChineseTing-yuen.jpg",
+  "label": "",
+  "desc": "",
+  "file": "ChineseTing-yuen.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:ChineseTing-yuen.jpg",
+  "artist": "Wikimedia Commons",
+  "license": "Public domain",
+  "w": 640,
+  "h": 490
+ },
+ "wiki/lihongzhang/3": {
+  "spec": "File:View of Shumpanro Hotel, Shimonoseki, Yamaguchi.JPG",
+  "label": "",
+  "desc": "",
+  "file": "View of Shumpanro Hotel, Shimonoseki, Yamaguchi.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:View_of_Shumpanro_Hotel,_Shimonoseki,_Yamaguchi.JPG",
+  "artist": "そらみみ",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
+ "wiki/linzexu": {
+  "spec": "林则徐",
+  "qid": "Q184999",
+  "label": "林则徐",
+  "desc": "晚清政治家、思想家、詩人",
+  "file": "Portrait of Lin Zexu.jpeg",
+  "page": "https://commons.wikimedia.org/wiki/File:Portrait_of_Lin_Zexu.jpeg",
+  "artist": "Lam Qua",
+  "license": "Public domain",
+  "w": 640,
+  "h": 759
+ },
+ "wiki/linzexu/1": {
+  "spec": "File:Lin Zexu Memorial in Fuzhou.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Lin Zexu Memorial in Fuzhou.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Lin_Zexu_Memorial_in_Fuzhou.jpg",
+  "artist": "Christina Ke Xu",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
+ "wiki/linzexu/2": {
+  "spec": "海国图志",
+  "qid": "Q11150428",
+  "label": "海国图志",
+  "desc": "清人魏源著作",
+  "file": "Haiguotuzhi.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Haiguotuzhi.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 844
+ },
+ "wiki/linzexu/3": {
+  "spec": "伊犁河",
+  "qid": "Q192567",
+  "label": "伊犁河",
+  "desc": "流经中国和哈萨克斯坦的跨境河流",
+  "file": "River-ili-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:River-ili-2.jpg",
+  "artist": "en:User:Edmon2004",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
  "wiki/liubang": {
   "spec": "刘邦",
   "qid": "Q7210",
@@ -2049,6 +2685,52 @@
   "w": 640,
   "h": 854
  },
+ "wiki/maguan-tiaoyue": {
+  "spec": "马关条约",
+  "qid": "Q269655",
+  "label": "马关条约",
+  "desc": "1895年中国和日本签订的条约",
+  "file": "Treaty of Shimonoseki.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Treaty_of_Shimonoseki.png",
+  "artist": "Government of Japan/Strongold Headquarters",
+  "license": "Public domain",
+  "w": 339,
+  "h": 218
+ },
+ "wiki/maguan-tiaoyue/1": {
+  "spec": "File:2014-09-01 Shimonoseki Shunpanro Honten.jpg",
+  "label": "",
+  "desc": "",
+  "file": "2014-09-01 Shimonoseki Shunpanro Honten.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2014-09-01_Shimonoseki_Shunpanro_Honten.jpg",
+  "artist": "Cheng-en Cheng",
+  "license": "CC BY-SA 2.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/maguan-tiaoyue/2": {
+  "spec": "伊藤博文",
+  "qid": "Q174971",
+  "label": "伊藤博文",
+  "desc": "日本政治家、军事家、外交家，首任内阁总理大臣",
+  "file": "ITŌ Hirobumi.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:IT%C5%8C_Hirobumi.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 870
+ },
+ "wiki/maguan-tiaoyue/3": {
+  "spec": "File:Aerial photograph of the main island in Penghu on 12 July 2011.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Aerial photograph of the main island in Penghu on 12 July 2011.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Aerial_photograph_of_the_main_island_in_Penghu_on_12_July_2011.jpg",
+  "artist": "tomscoffin",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 425
+ },
  "wiki/maoyisheng": {
   "spec": "Q6753608",
   "qid": "Q6753608",
@@ -2096,6 +2778,54 @@
   "license": "Public domain",
   "w": 500,
   "h": 375
+ },
+ "wiki/nanjing-tiaoyue": {
+  "spec": "南京条约",
+  "qid": "Q238262",
+  "label": "南京条约",
+  "desc": "1842年中國清朝與英國簽訂之條約，割讓香港，結束第一次鴉片戰爭",
+  "file": "The Signing of the Treaty of Nanking.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Signing_of_the_Treaty_of_Nanking.jpg",
+  "artist": "Painted by Captain John Platt, Bengal Volunteers. Engraved by John Burnet.",
+  "license": "Public domain",
+  "w": 640,
+  "h": 240
+ },
+ "wiki/nanjing-tiaoyue/1": {
+  "spec": "香港岛",
+  "qid": "Q19483",
+  "label": "香港岛",
+  "desc": "香港第二大的島嶼",
+  "file": "Hong Kong Island Skyline 201108.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Hong_Kong_Island_Skyline_201108.jpg",
+  "artist": "momo from Hong Kong",
+  "license": "CC BY 3.0",
+  "w": 640,
+  "h": 321
+ },
+ "wiki/nanjing-tiaoyue/2": {
+  "spec": "界限街",
+  "qid": "Q1143080",
+  "label": "界限街",
+  "desc": "香港九龍半島的一條東西向街道",
+  "file": "3 HK Boundary Street Taxi Motorola RAZR2 V9.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:3_HK_Boundary_Street_Taxi_Motorola_RAZR2_V9.JPG",
+  "artist": "KamTANGO",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "wiki/nanjing-tiaoyue/3": {
+  "spec": "维多利亚港",
+  "qid": "Q155643",
+  "label": "维多利亚港",
+  "desc": "香港天然海港",
+  "file": "HK YTM 西九龍文化區 West Kowloon Cultural District M+ Plus Museum 天台花園 roof garden view Victoria Harbour July 2022 Px3 13.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:HK_YTM_%E8%A5%BF%E4%B9%9D%E9%BE%8D%E6%96%87%E5%8C%96%E5%8D%80_West_Kowloon_Cultural_District_M%2B_Plus_Museum_%E5%A4%A9%E5%8F%B0%E8%8A%B1%E5%9C%92_roof_garden_view_Victoria_Harbour_July_2022_Px3_13.jpg",
+  "artist": "Bkemaoe HOMA",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
  },
  "wiki/nansong": {
   "spec": "宋高宗",
@@ -2354,6 +3084,42 @@
   "w": 640,
   "h": 224
  },
+ "wiki/taiping-tianguo": {
+  "spec": "太平天国",
+  "qid": "Q3486676",
+  "label": "太平天国",
+  "desc": "1851年至1864年間存在的東亞政權",
+  "file": "Model-of-palace-of-heavenly-kingdom.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Model-of-palace-of-heavenly-kingdom.JPG",
+  "artist": "Wikimedia Commons",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "wiki/taiping-tianguo/1": {
+  "spec": "洪秀全",
+  "qid": "Q334732",
+  "label": "洪秀全",
+  "desc": "太平天国创建者",
+  "file": "Hong Xiuquan.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Hong_Xiuquan.jpg",
+  "artist": "Ford & West Lith.",
+  "license": "Public domain",
+  "w": 349,
+  "h": 396
+ },
+ "wiki/taiping-tianguo/2": {
+  "spec": "南京总统府",
+  "qid": "Q1065016",
+  "label": "南京总统府",
+  "desc": "在中國南京的博物館和前總統府",
+  "file": "Entrance to the Former ROC Presidents Residence(5616558734).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Entrance_to_the_Former_ROC_Presidents_Residence(5616558734).jpg",
+  "artist": "Ken Marshall from China",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 480
+ },
  "wiki/wangxizhi": {
   "spec": "王羲之",
   "qid": "Q378564",
@@ -2388,6 +3154,54 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 480
+ },
+ "wiki/wuxu-bianfa": {
+  "spec": "光绪帝",
+  "qid": "Q299710",
+  "label": "光绪帝",
+  "desc": "中国清朝皇帝",
+  "file": "The Imperial Portrait of Emperor Guangxu2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Imperial_Portrait_of_Emperor_Guangxu2.jpg",
+  "artist": "Qing Dynasty Court Painter",
+  "license": "Public domain",
+  "w": 640,
+  "h": 1213
+ },
+ "wiki/wuxu-bianfa/1": {
+  "spec": "康有为",
+  "qid": "Q360135",
+  "label": "康有为",
+  "desc": "中國學者、政治家",
+  "file": "Kang-youwei2-large.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Kang-youwei2-large.jpg",
+  "artist": "Wikimedia Commons",
+  "license": "Public domain",
+  "w": 330,
+  "h": 482
+ },
+ "wiki/wuxu-bianfa/2": {
+  "spec": "谭嗣同",
+  "qid": "Q1191225",
+  "label": "谭嗣同",
+  "desc": "中国清朝末期改革运动家、思想家",
+  "file": "Tansitong.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tansitong.jpg",
+  "artist": "Wikimedia Commons",
+  "license": "Public domain",
+  "w": 369,
+  "h": 770
+ },
+ "wiki/wuxu-bianfa/3": {
+  "spec": "北京大学",
+  "qid": "Q16952",
+  "label": "北京大学",
+  "desc": "位於中國北京的綜合性大學",
+  "file": "PekingUniversityPic6.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:PekingUniversityPic6.jpg",
+  "artist": "galaygobi",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 425
  },
  "wiki/wuyueguo": {
   "spec": "保俶塔",
@@ -2520,6 +3334,65 @@
   "w": 640,
   "h": 853
  },
+ "wiki/yihetuan": {
+  "spec": "义和团运动",
+  "qid": "Q150229",
+  "label": "义和团运动",
+  "desc": "清末农民暴动",
+  "file": "Boxer-tianjing-left.jpeg",
+  "page": "https://commons.wikimedia.org/wiki/File:Boxer-tianjing-left.jpeg",
+  "artist": "Stereo copyrighted 1901 by Whiting View Company",
+  "license": "Public domain",
+  "w": 572,
+  "h": 616
+ },
+ "wiki/yihetuan/1": {
+  "spec": "File:024 Yihetuan (Boxer) Flag, Drum, Bugle.jpg",
+  "label": "",
+  "desc": "",
+  "file": "024 Yihetuan (Boxer) Flag, Drum, Bugle.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:024_Yihetuan_(Boxer)_Flag,_Drum,_Bugle.jpg",
+  "artist": "Gary Lee Todd, Ph.D.",
+  "license": "CC0",
+  "w": 640,
+  "h": 960
+ },
+ "wiki/yihetuan/2": {
+  "spec": "东交民巷",
+  "qid": "Q2663651",
+  "label": "东交民巷",
+  "desc": "胡同",
+  "file": "The Legation Street, Peking.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Legation_Street,_Peking.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 250,
+  "h": 155
+ },
+ "wiki/yihetuan/3": {
+  "spec": "八国联军",
+  "qid": "Q320404",
+  "label": "八国联军",
+  "desc": "八國聯軍之役時列強組成的聯軍",
+  "file": "BoxerTroops.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:BoxerTroops.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 438
+ },
+ "wiki/yihetuan/4": {
+  "spec": "清华学堂",
+  "qid": "Q16955",
+  "label": "清华学堂",
+  "desc": "中华人民共和国北京市综合性大学",
+  "file": "Thu gate.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Thu_gate.JPG",
+  "artist": "User:Yaoleilei",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 768
+ },
  "wiki/yuefei": {
   "spec": "岳飞",
   "qid": "Q334398",
@@ -2531,6 +3404,53 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 1338
+ },
+ "wiki/zengguofan": {
+  "spec": "曾国藩",
+  "qid": "Q189512",
+  "label": "曾国藩",
+  "desc": "清朝政治家",
+  "file": "Tseng Kwo-Fan.tif",
+  "page": "https://commons.wikimedia.org/wiki/File:Tseng_Kwo-Fan.tif",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 906
+ },
+ "wiki/zengguofan/1": {
+  "spec": "富厚堂",
+  "qid": "Q10953984",
+  "label": "富厚堂",
+  "desc": "",
+  "file": "Tseng Kuo-fan's Former Residence 036.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Tseng_Kuo-fan%27s_Former_Residence_036.JPG",
+  "artist": "Huangdan2060",
+  "license": "CC BY 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "wiki/zengguofan/2": {
+  "spec": "File:Gun transportation at Jiangnan Arsenal.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Gun transportation at Jiangnan Arsenal.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gun_transportation_at_Jiangnan_Arsenal.jpg",
+  "artist": "Own work",
+  "license": "Public domain",
+  "w": 640,
+  "h": 471
+ },
+ "wiki/zengguofan/3": {
+  "spec": "詹天佑",
+  "qid": "Q1397430",
+  "label": "詹天佑",
+  "desc": "中国清朝及中华民国初年铁路工程师（1861～1919），中国近代科学技术先驱",
+  "file": "1918年詹天佑.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1918%E5%B9%B4%E8%A9%B9%E5%A4%A9%E4%BD%91.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 273,
+  "h": 374
  },
  "wiki/zhangqian": {
   "spec": "File:Statue of Zhang Qian.jpg",

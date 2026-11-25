@@ -3,6 +3,7 @@ id: hongloumeng
 name: 红楼梦
 en: Dream of the Red Chamber
 kind: 作品
+era: [qing]
 aka: [石头记, 金陵十二钗, 红学]
 province: [jiangsu, beijing]
 city: [nanjing]
