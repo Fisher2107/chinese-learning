@@ -2,16 +2,16 @@ import { Photo } from '../components/Photo.tsx'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useLiveQuery } from '../lib/live.ts'
 import { motion } from 'motion/react'
-import { ArrowDownIcon, ArrowUpIcon, ArrowRightIcon, ArrowsClockwiseIcon, CardsIcon, CaretRightIcon, CheckCircleIcon, CheckIcon, HeartIcon, MapTrifoldIcon, PlayIcon, XCircleIcon } from '@phosphor-icons/react'
+import { ArrowDownIcon, ArrowUpIcon, ArrowRightIcon, ArrowsClockwiseIcon, CardsIcon, CaretRightIcon, CheckCircleIcon, BookOpenTextIcon, CheckIcon, HeartIcon, MapTrifoldIcon, PlayIcon, XCircleIcon, XIcon } from '@phosphor-icons/react'
 import { Rating } from 'ts-fsrs'
 import { progressKey, db, setSetting, type SavedWord, type WordSource } from '../lib/db.ts'
-import { loadFeed, loadIndex, loadPlaces, useLoad } from '../lib/content.ts'
-import { buildQueue, markRead, markSeen, quizAnswered, toggleLike, type FeedItem } from '../lib/feed.ts'
+import { loadFeed, loadIndex, loadPlaces, loadWikiIndex, useLoad } from '../lib/content.ts'
+import { buildQueue, markRead, markSeen, markUnread, quizAnswered, toggleLike, type FeedItem } from '../lib/feed.ts'
 import { explored, regionColor, type QuizQuestion } from '../lib/places.ts'
 import { go } from '../lib/router.ts'
 import { dueWords, grade } from '../lib/srs.ts'
 import { today, useToday } from '../lib/stats.ts'
-import type { FeedCard, FeedFile, Place, SeriesSummary } from '../lib/types.ts'
+import type { FeedCard, FeedFile, Place, SeriesSummary, WikiSummary } from '../lib/types.ts'
 import { Seal } from '../components/Seal.tsx'
 import { Button, Loading } from '../components/ui.tsx'
 import { TapText, ZhText } from '../components/ZhText.tsx'
@@ -24,16 +24,18 @@ export function Feed({ start }: { start?: string }) {
   const feed = useLoad(loadFeed, 'feed').data
   const placesFile = useLoad(loadPlaces, 'places').data
   const index = useLoad(loadIndex, 'index').data
+  const wikiIndex = useLoad(loadWikiIndex, 'wiki-index').data
   const [items, setItems] = useState<FeedItem[]>()
   const [round, setRound] = useState(0)
   const box = useRef<HTMLDivElement>(null)
 
   // Build the session once (per start card / 再刷一遍), so the order doesn't shift while swiping
   useEffect(() => {
-    if (!feed || !placesFile) return
+    if (!feed || !placesFile || !wikiIndex) return
     let live = true
     ;(async () => {
-      const [seen, due, visited] = await Promise.all([db.feed.toArray(), dueWords(8), db.places.toArray()])
+      const [seen, due, visited, wikiRows] = await Promise.all([db.feed.toArray(), dueWords(8), db.places.toArray(), db.wiki.toArray()])
+      const wikiRead = new Set(wikiRows.filter((r) => r.read).map((r) => r.id))
       if (!live) return
       setItems(
         buildQueue({
@@ -44,6 +46,7 @@ export function Feed({ start }: { start?: string }) {
           explored: explored(visited),
           start,
           again: round > 0,
+          wiki: wikiIndex.pages.filter((p) => p.hook && !wikiRead.has(p.id)),
         }),
       )
       box.current?.scrollTo({ top: 0 })
@@ -51,7 +54,7 @@ export function Feed({ start }: { start?: string }) {
     return () => {
       live = false
     }
-  }, [feed, placesFile, start, round])
+  }, [feed, placesFile, wikiIndex, start, round])
 
   useEffect(() => {
     setSetting('feedVisited', today())
@@ -92,7 +95,7 @@ export function Feed({ start }: { start?: string }) {
     }
   }, [items])
 
-  if (!feed || !placesFile || !items) return <Loading />
+  if (!feed || !placesFile || !wikiIndex || !items) return <Loading />
   const places = new Map(placesFile.places.map((p) => [p.id, p]))
   const series = new Map((index?.series ?? []).map((s) => [s.id, s]))
   const next = () => box.current?.scrollBy({ top: box.current.clientHeight, behavior: 'smooth' })
@@ -107,6 +110,7 @@ export function Feed({ start }: { start?: string }) {
         <section key={`${round}-${i}`} data-i={i} className="relative h-full snap-start snap-always overflow-hidden">
           {item.kind === 'card' && <StoryCard card={item.card} feed={feed} place={places.get(item.card.province)} series={series.get(item.card.series)} first={i === 0} onNext={next} />}
           {item.kind === 'review' && <ReviewCard word={item.word} onDone={next} />}
+          {item.kind === 'wiki' && <WikiHookCard page={item.page} glossary={wikiIndex.glossary} place={places.get(item.page.provinces[0])} />}
           {item.kind === 'quiz' && <QuizCard place={item.place} q={item.q} glossary={placesFile.glossary} onDone={next} />}
           {item.kind === 'end' && <EndCard onAgain={() => setRound((r) => r + 1)} />}
         </section>
@@ -185,9 +189,13 @@ function StoryCard({
       <div className="flex h-12 items-center gap-1.5 text-xs font-extrabold">
         <span className="mr-auto text-[15px] font-black opacity-90">刷一刷</span>
         {read && (
-          <span className="flex items-center gap-1 rounded-full bg-white/25 px-2.5 py-1">
-            <CheckIcon size={12} weight="bold" /> 读过
-          </span>
+          <button
+            onClick={() => markUnread(card.id)}
+            aria-label="标成没读"
+            className="flex h-7 items-center gap-1 rounded-full bg-white/25 px-2.5 active:bg-white/40"
+          >
+            <CheckIcon size={12} weight="bold" /> 读过 <XIcon size={11} weight="bold" className="opacity-80" />
+          </button>
         )}
         {series && (
           <button onClick={() => go(`series/${series.id}`)} className="flex h-7 items-center gap-1 rounded-full bg-white px-2.5 text-[#333]">
@@ -245,9 +253,18 @@ function StoryCard({
           </motion.span>
         </button>
         {read ? (
-          <Button tone="plain" className="min-w-0 flex-1 !border-0" onClick={onNext}>
-            <CheckCircleIcon size={22} weight="fill" className="text-lv" /> 读过了 · 下一张
-          </Button>
+          <>
+            <button
+              onClick={() => markUnread(card.id)}
+              className="chunky h-13 shrink-0 rounded-2xl bg-white px-3 text-sm font-extrabold text-[#555]"
+              style={{ ['--edge' as string]: 'rgba(0,0,0,0.25)' }}
+            >
+              标成没读
+            </button>
+            <Button tone="plain" className="min-w-0 flex-1 !border-0" onClick={onNext}>
+              <CheckCircleIcon size={22} weight="fill" className="text-lv" /> 下一张
+            </Button>
+          </>
         ) : (
           <Button
             tone="plain"
@@ -322,6 +339,36 @@ function ReviewCard({ word, onDone }: { word: SavedWord; onDone: () => void }) {
           </Button>
         </div>
       )}
+    </Frame>
+  )
+}
+
+/** 你知道吗: a question one 百科 page asks about another, with its photo; the answer is on the page. */
+function WikiHookCard({ page, glossary, place }: { page: WikiSummary; glossary: Record<string, string>; place?: Place }) {
+  const source: WordSource = { kind: 'feed', route: `wiki/${page.id}`, title: `你知道吗 · ${page.name}` }
+  const color = place ? regionColor(place.region) : NO_PLACE
+  return (
+    <Frame color={color}>
+      <div className="flex h-12 items-center gap-1.5 text-xs font-extrabold">
+        <span className="mr-auto text-[15px] font-black opacity-90">你知道吗？</span>
+        <span className="rounded-full bg-black/15 px-2.5 py-1">百科 · {page.kind}</span>
+      </div>
+      <ZhText ui id={`feed-wh-${page.id}`} paras={[{ kind: 'p', sentences: page.hook ?? page.lede }]} glossary={glossary} source={source} className="mt-1 text-[25px] !leading-snug font-black" />
+      <div className="relative mt-4 min-h-0 flex-1">
+        <div className="no-scrollbar h-full overflow-y-auto rounded-[20px] bg-paper px-4 pt-4 pb-3 text-paper-text shadow-[0_4px_0_rgba(0,0,0,0.15)]">
+          <Photo k={`wiki/${page.id}`} ratio="3 / 2" className="-mx-4 -mt-4 mb-3" />
+          <div className="mb-1 font-ui text-sm font-extrabold text-mute">
+            {page.name}
+            {page.dates ? ` · ${page.dates}` : ''}
+          </div>
+          <ZhText id={`feed-wl-${page.id}`} paras={[{ kind: 'p', sentences: page.lede }]} glossary={glossary} source={source} className="text-[18px]" />
+        </div>
+      </div>
+      <div className="mt-3">
+        <Button tone="plain" className="w-full !border-0" onClick={() => go(`wiki/${page.id}`)}>
+          <BookOpenTextIcon size={22} weight="fill" style={{ color }} /> 去百科看答案
+        </Button>
+      </div>
     </Frame>
   )
 }

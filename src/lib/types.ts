@@ -251,8 +251,12 @@ export interface WikiSummary {
   xy?: [number, number]
   /** a river on the map to draw over */
   river: string
+  /** what the map pin is called when it isn't the page's name (a person's 纪念地: 司马迁祠) */
+  pin?: string
   /** one sentence that makes you want to open it */
   lede: Sentence[]
+  /** a question another page asks about this one (its next: hook), for 你知道吗 cards */
+  hook?: Sentence[]
   chars: number
   /** how many pages link here */
   links: number

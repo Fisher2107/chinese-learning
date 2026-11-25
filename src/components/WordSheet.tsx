@@ -6,6 +6,7 @@ import {
   BookOpenTextIcon,
   ChatCircleDotsIcon,
   CheckIcon,
+  CopyIcon,
   LightbulbIcon,
   PaperPlaneRightIcon,
   SpeakerHighIcon,
@@ -174,6 +175,16 @@ function WordView({ target, canBack, onBack, onChat }: { target: WordTarget; can
   const [extra, setExtra] = useState<Extra>()
   const saved = useLiveQuery(() => db.words.where('word').equals(token.t).first(), [token.t])
   const text = sentenceText(sentence)
+  const [copied, setCopied] = useState<'word' | 'sentence'>()
+  async function copy(what: 'word' | 'sentence', value: string) {
+    try {
+      await navigator.clipboard.writeText(value)
+      setCopied(what)
+      setTimeout(() => setCopied((c) => (c === what ? undefined : c)), 1500)
+    } catch {
+      /* clipboard refused (an old browser or a denied permission): nothing to show */
+    }
+  }
 
   useEffect(() => {
     if (!target.gloss && token.p) lookupGloss(token.t, token.p).then(setGloss, () => setGloss('（查不到）'))
@@ -207,6 +218,9 @@ function WordView({ target, canBack, onBack, onChat }: { target: WordTarget; can
         <button aria-label="朗读" onClick={() => speak(token.t, 0.8)} className="mb-0.5 grid size-9 place-items-center rounded-xl bg-sunken text-dai">
           <SpeakerHighIcon size={20} weight="fill" />
         </button>
+        <button aria-label="复制这个词" onClick={() => copy('word', token.t)} className="mb-0.5 grid size-9 place-items-center rounded-xl bg-sunken text-dai">
+          {copied === 'word' ? <CheckIcon size={20} weight="bold" /> : <CopyIcon size={20} weight="bold" />}
+        </button>
         {token.l ? <Pill color={token.l > 5 ? 'var(--color-zhu)' : 'var(--color-lv)'}>HSK {token.l === 7 ? '7–9' : token.l}</Pill> : null}
       </div>
       <p className="mt-3 min-h-6 text-[15px] leading-relaxed text-text">{gloss ?? '…'}</p>
@@ -233,6 +247,10 @@ function WordView({ target, canBack, onBack, onChat }: { target: WordTarget; can
           </Chip>
           <Chip on={extra?.kind === 'translate'} onClick={() => runExtra('translate')}>
             <TranslateIcon size={16} weight="bold" /> 翻译
+          </Chip>
+          <Chip on={copied === 'sentence'} onClick={() => copy('sentence', text)}>
+            {copied === 'sentence' ? <CheckIcon size={16} weight="bold" /> : <CopyIcon size={16} weight="bold" />}
+            {copied === 'sentence' ? '已复制' : '复制句子'}
           </Chip>
         </div>
         {extra && (

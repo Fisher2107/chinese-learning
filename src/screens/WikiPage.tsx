@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowRightIcon, BooksIcon, CaretRightIcon, CheckCircleIcon, DiceFiveIcon, LinkIcon, MagnifyingGlassIcon, MapTrifoldIcon, PathIcon, QuestionIcon, XCircleIcon } from '@phosphor-icons/react'
+import { ArrowRightIcon, BooksIcon, CaretRightIcon, CheckCircleIcon, DiceFiveIcon, LinkIcon, MagnifyingGlassIcon, MapTrifoldIcon, PathIcon, QuestionIcon, RabbitIcon, XCircleIcon } from '@phosphor-icons/react'
 import { loadPlaces, loadWiki, loadWikiIndex, useLoad } from '../lib/content.ts'
 import { useLiveQuery } from '../lib/live.ts'
 import { progressKey, db, type WordSource } from '../lib/db.ts'
@@ -7,7 +7,7 @@ import { go } from '../lib/router.ts'
 import { regionColor } from '../lib/places.ts'
 import { CITY_BY_ID } from '../lib/cities.ts'
 import type { Block, Para, WikiPage as Page, WikiQuiz } from '../lib/types.ts'
-import { markWikiRead, markWikiUnread, plain, pushTrail, randomPage, useWikiProgress, visitWiki, type Crumb } from '../lib/wiki.ts'
+import { countRun, markWikiRead, markWikiUnread, plain, pushTrail, randomPage, useWikiProgress, visitWiki, type Crumb, type Run } from '../lib/wiki.ts'
 import { Photo, usePhoto } from '../components/Photo.tsx'
 import { ReadMark } from '../components/ReadMark.tsx'
 import { StaticMap, provinceBox, riverBox, type Pin } from '../components/StaticMap.tsx'
@@ -17,16 +17,25 @@ import { TapText, ZhText } from '../components/ZhText.tsx'
 import { ExcerptCard } from './EpisodeReader.tsx'
 
 /** One 百科 page: a place, a person, a river… with links onward at every turn. */
+/** how long the trail was on the page before, to tell a followed link from going back */
+const trailLength = { current: 0 }
+
 export function WikiPage({ id }: { id: string }) {
   const { data: page, error } = useLoad(() => loadWiki(id), `wiki/${id}`)
   const places = useLoad(loadPlaces, 'places').data
   const progress = useLiveQuery(() => db.wiki.get(progressKey(id)), [id])
   const [trail, setTrail] = useState<Crumb[]>([])
+  const [run, setRun] = useState<Run>()
   useEffect(() => {
     visitWiki(id)
   }, [id])
   useEffect(() => {
-    if (page) setTrail(pushTrail(id, page.name))
+    if (!page) return
+    const t = pushTrail(id, page.name)
+    setTrail(t)
+    // followed from the page before it: the trail grew by this page
+    setRun(countRun(id, t.length > 1 && t.length > trailLength.current ? 'followed' : t.length > 1 ? 'back' : 'fresh'))
+    trailLength.current = t.length
   }, [page, id])
 
   if (error) return <PageHeader title="这一页还没有写" fallback="wiki" />
@@ -41,6 +50,7 @@ export function WikiPage({ id }: { id: string }) {
       <PageHeader title={page.name} fallback="wiki" right={<button aria-label="百科" onClick={() => go('wiki')} className="grid size-11 place-items-center text-mute"><BooksIcon size={22} weight="bold" /></button>} />
       <div className="mx-auto max-w-xl px-4">
         {trail.length > 1 && <Trail trail={trail} />}
+        {run && run.now >= 2 && <RunBadge run={run} />}
 
         <div className="tile overflow-hidden">
           <HeroPhoto id={id} />
@@ -169,6 +179,18 @@ function HeroPhoto({ id }: { id: string }) {
 }
 
 /** 你的路线: the pages that led here. */
+/** 连着逛: how deep down the rabbit hole you are today. */
+function RunBadge({ run }: { run: Run }) {
+  const big = run.now >= 10 ? '停不下来了！' : run.now >= 5 ? '越逛越深了' : ''
+  return (
+    <div className="mb-3 flex items-center gap-2 rounded-2xl bg-lv-soft px-3 py-2 text-[14px] font-extrabold text-lv-ink">
+      <RabbitIcon size={20} weight="fill" className="shrink-0" />
+      <span>连着逛了 {run.now} 页{big && ` · ${big}`}</span>
+      {run.best > run.now && <span className="ml-auto text-xs opacity-75">今天最多 {run.best} 页</span>}
+    </div>
+  )
+}
+
 function Trail({ trail }: { trail: Crumb[] }) {
   return (
     <div className="no-scrollbar -mx-4 mb-3 flex items-center gap-1 overflow-x-auto px-4 text-[14px] font-extrabold whitespace-nowrap">

@@ -83,7 +83,9 @@ export function HistoricalAtlas({ periodId, eventId }: { periodId?: string; even
               <a href={BASE + image.src} target="_blank" rel="noreferrer" className="shrink-0">
                 <img className="h-28 w-20 rounded-lg bg-sunken object-contain" loading="lazy" width="80" height="112" src={BASE + image.src} alt={image.caption} />
               </a>
-              <div className="min-w-0"><h4 className="font-black">{person.name}</h4><p className="text-sm">{person.role}</p>
+              <div className="min-w-0"><h4 className="font-black">{person.wiki
+                  ? <a className="text-[var(--link)] underline decoration-1 underline-offset-4" href={'#/' + person.wiki}>{person.name} · 百科</a>
+                  : person.name}</h4><p className="text-sm">{person.role}</p>
                 <p className="mt-1 text-xs text-mute">{image.caption}</p><ImageCredit image={image} /></div>
             </li>
           })}</ul>

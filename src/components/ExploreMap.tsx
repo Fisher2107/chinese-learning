@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type Ref } from 'react'
 import { MAP } from '../lib/places.ts'
-import { CITIES, DETAIL, type MapCity } from '../lib/cities.ts'
+import { CITIES, DETAIL, isCanal, type MapCity } from '../lib/cities.ts'
 
 export type Selection = { kind: 'province' | 'city' | 'country'; id: string }
 /** a big name over a block of provinces (分区), in map coordinates */
@@ -8,6 +8,10 @@ export type Area = { key: string; text: string; x: number; y: number; color: str
 type Box = [number, number, number, number]
 type LabelHit = { selection: Selection; box: Box }
 type CityHit = { id: string; x: number; y: number; r: number }
+/** a 百科 page pinned on the map (a sight, or where a person is remembered), in map coordinates */
+export type MapSight = { id: string; name: string; x: number; y: number; person?: boolean }
+/** sights show from this zoom on (all of China = 1) */
+const SIGHT_Z = 2.4
 
 /** screen = map · k + (x, y) */
 interface View {
@@ -54,6 +58,8 @@ export function ExploreMap({
   insets = { top: 0, bottom: 0 },
   initialBox,
   areas,
+  sights = [],
+  onSight,
   api,
 }: {
   /** open looking at this box instead of where the user left off */
@@ -72,6 +78,9 @@ export function ExploreMap({
   insets?: { top: number; bottom: number }
   /** region names drawn big over their provinces, ahead of every other label (分区) */
   areas?: Area[]
+  /** 百科 pages with a place, drawn as pins once zoomed in; tapping one calls onSight */
+  sights?: MapSight[]
+  onSight?: (id: string) => void
   api?: Ref<MapApi>
 }) {
   const wrap = useRef<HTMLDivElement>(null)
@@ -81,7 +90,7 @@ export function ExploreMap({
   const base = useRef<View>(undefined)
   const live = useRef<View>(undefined)
   const anim = useRef(0)
-  const hits = useRef<{ labels: LabelHit[]; cities: CityHit[] }>({ labels: [], cities: [] })
+  const hits = useRef<{ labels: LabelHit[]; cities: CityHit[]; sights: CityHit[] }>({ labels: [], cities: [], sights: [] })
   const insetsRef = useRef(insets)
   insetsRef.current = insets
 
@@ -363,6 +372,10 @@ export function ExploreMap({
     for (const { selection, box } of hits.current.labels) {
       if (x >= box[0] && x <= box[2] && y >= box[1] && y <= box[3]) return onSelect(selection)
     }
+    // a 百科 pin (or its name) opens its page
+    for (const h of hits.current.sights) {
+      if (Math.hypot(h.x - x, h.y - y) / scale < h.r) return onSight?.(h.id)
+    }
 
     // Then try the nearest city dot.
     let best: string | undefined
@@ -483,6 +496,26 @@ export function ExploreMap({
     const ranked = dots.filter((c) => c.rank > 1 && c !== selCity && z >= labelZ(c)).sort((a, b) => a.rank - b.rank || +stories.has(b.id) - +stories.has(a.id) || b.pop - a.pop)
     for (const c of ranked) cityLabel(c)
 
+    // 百科 pins: once zoomed in, after cities, before the background geography
+    const pins: (MapSight & { px: number; py: number })[] = []
+    const sightHits: CityHit[] = []
+    if (z >= SIGHT_Z && onSight)
+      for (const p of sights) {
+        const px = sx(p.x)
+        const py = sy(p.y)
+        if (!onScreen(px, py, 0)) continue
+        pins.push({ ...p, px, py })
+        sightHits.push({ id: p.id, x: px, y: py, r: 16 })
+        const size = 12
+        for (const [x, y, anchor] of [[px + 9, py + 4, 'start'], [px - 9, py + 4, 'end'], [px, py + 19, 'middle']] as [number, number, Anchor][]) {
+          const box = textBox(x, y, p.name, size, anchor)
+          if (!fits(box)) continue
+          labels.push({ key: `s-${p.id}`, x, y, text: p.name, size, anchor, cls: p.person ? 'map-city map-person' : 'map-city map-sight' })
+          sightHits.push({ id: p.id, x: (box[0] + box[2]) / 2, y: (box[1] + box[3]) / 2, r: Math.max(14, (box[2] - box[0]) / 2) })
+          break
+        }
+      }
+
     for (const l of DETAIL.labels)
       if (l.kind === 'sea' && z >= 0.6 && onScreen(sx(l.x), sy(l.y)) && fits(textBox(sx(l.x), sy(l.y), l.zh, 13, 'middle', 0.4)))
         labels.push({ key: `l-${l.zh}`, x: sx(l.x), y: sy(l.y), text: l.zh, size: 13, anchor: 'middle', cls: 'map-sea' })
@@ -519,9 +552,9 @@ export function ExploreMap({
       if (onScreen(sx(l.x), sy(l.y)) && fits(textBox(sx(l.x), sy(l.y), text, size, 'middle', l.kind === 'land' ? 0.3 : 0)))
         labels.push({ key: `g-${l.zh}`, x: sx(l.x), y: sy(l.y), text, size, anchor: 'middle', cls: l.kind === 'land' ? 'map-land' : 'map-shan' })
     }
-    return { z, dots, labels, hits: { labels: labelHits, cities: cityHits } }
+    return { z, dots, pins, labels, hits: { labels: labelHits, cities: cityHits, sights: sightHits } }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view, size.w, size.h, insets.top, insets.bottom, selected?.kind, selected?.id, learnt, stories, names, areas])
+  }, [view, size.w, size.h, insets.top, insets.bottom, selected?.kind, selected?.id, learnt, stories, names, areas, sights, onSight])
 
   useLayoutEffect(() => {
     if (layout) hits.current = layout.hits
@@ -553,9 +586,13 @@ export function ExploreMap({
               <path key={id} data-prov={id} d={d} fill={fill(id)} stroke="var(--map-province-line)" strokeWidth={1.3} vectorEffect="non-scaling-stroke" />
             ))}
             <path d={DETAIL.lakes.d} className="map-lake" />
-            {DETAIL.rivers.map((r) => (
-              <path key={r.zh} d={r.d} fill="none" className="map-river" strokeWidth={riverW(r.major)} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-            ))}
+            {DETAIL.rivers.map((r) =>
+              isCanal(r.zh) ? (
+                <path key={r.zh} d={r.d} fill="none" className="map-canal" strokeWidth={riverW(false) + 0.4} strokeDasharray="5 4" vectorEffect="non-scaling-stroke" />
+              ) : (
+                <path key={r.zh} d={r.d} fill="none" className="map-river" strokeWidth={riverW(r.major)} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+              ),
+            )}
             {selCountry && (
               <path
                 d={DETAIL.neighbours.find((n) => n.id === selCountry)?.d}
@@ -607,6 +644,17 @@ export function ExploreMap({
                   </g>
                 )
               })}
+              {layout.pins.map((p) =>
+                p.person ? (
+                  <g key={`pin-${p.id}`}>
+                    <circle cx={p.px} cy={p.py} r={6} fill="#8E5BB5" stroke="var(--map-halo)" strokeWidth={1.5} />
+                    <circle cx={p.px} cy={p.py - 1.6} r={1.7} fill="white" />
+                    <path d={`M${p.px - 3} ${p.py + 3.2}a3 2.6 0 0 1 6 0z`} fill="white" />
+                  </g>
+                ) : (
+                  <rect key={`pin-${p.id}`} x={p.px - 4} y={p.py - 4} width={8} height={8} transform={`rotate(45 ${p.px} ${p.py})`} fill="var(--color-zhu)" stroke="var(--map-halo)" strokeWidth={1.5} />
+                ),
+              )}
               {layout.labels.map((l) => (
                 <text
                   key={l.key}

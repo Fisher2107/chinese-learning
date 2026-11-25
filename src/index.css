@@ -173,12 +173,25 @@
     color: var(--link-seen);
     text-decoration-color: color-mix(in oklab, var(--link-seen) 40%, transparent);
   }
-  /* pressing a word shows its meaning: don't let the phone select text or show a menu instead */
+  /* pressing a word shows its meaning: don't let the phone (or a held trackpad) select text or
+     show a menu instead. Copying is a button in the word card (复制). On touch screens nothing
+     outside a text box selects, so holding near the text can't start a selection either. */
+  .zh {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
   @media (pointer: coarse) {
-    .zh {
+    body {
       -webkit-user-select: none;
       user-select: none;
       -webkit-touch-callout: none;
+    }
+    input,
+    textarea,
+    [contenteditable='true'] {
+      -webkit-user-select: text;
+      user-select: text;
     }
   }
   .peek {
@@ -282,6 +295,15 @@
   }
   .map-sight {
     fill: var(--color-zhu-ink);
+  }
+  /* where a person is remembered (a tomb, a hall, a hometown) */
+  .map-person {
+    fill: #7a4aa0;
+  }
+  /* canals: dashed, so they don't read as rivers */
+  .map-canal {
+    stroke: var(--map-water);
+    stroke-linecap: butt;
   }
   /* the +n on a dot that stands for several crowded places */
   .map-badge {

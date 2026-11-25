@@ -14,7 +14,7 @@ export interface HistoryEvent {
   date: string
   place: string
   story: Para[]
-  figures: { id: string; name: string; role: string }[]
+  figures: { id: string; name: string; role: string; wiki?: string }[]
   sources: SourceLink[]
   rank?: number
   hook?: string

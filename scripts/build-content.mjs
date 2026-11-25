@@ -609,6 +609,7 @@ for (const { file, meta, body } of wikiRaw) {
     if (!Array.isArray(meta.at) || meta.at.length !== 2 || !proj) errors.push(`${where}: at should be [lon, lat]`)
     else xy = proj(meta.at).map((n) => Math.round(n * 10) / 10)
   }
+  if (meta.at && meta.kind === '人物' && !meta.pin) errors.push(`${where}: a person's at: needs pin: naming the place (e.g. 司马迁祠)`)
   if (meta.river && !mapDetail.rivers.some((r) => r.zh === meta.river)) errors.push(`${where}: no river "${meta.river}" on the map`)
   if (!Array.isArray(meta.sources) || !meta.sources.length) errors.push(`${where}: needs at least one source`)
   const glossary = {}
@@ -644,6 +645,7 @@ for (const { file, meta, body } of wikiRaw) {
     cities: cityIds,
     xy,
     river: meta.river ?? '',
+    pin: meta.pin ? String(meta.pin) : undefined,
     lede: makeSentences(meta.lede ?? '', glossary, where),
     ledeIndex: makeSentences(meta.lede ?? '', wikiIndexGlossary, where),
     facts: (meta.facts ?? []).map(([k, v]) => ({ k: String(k), v: makeSentences(String(v), glossary, where) })),
@@ -655,6 +657,17 @@ for (const { file, meta, body } of wikiRaw) {
     glossary,
   })
 }
+
+// the questions other pages ask about each page (their next: hooks): the 你知道吗 cards in 刷一刷
+onPage('', '')
+const hookTo = new Map()
+for (const { file, meta } of wikiRaw)
+  for (const n of meta.next ?? []) {
+    const route = routeOf.get(String(n.to))
+    if (!route?.startsWith('wiki/') || !n.hook) continue
+    const id = route.slice(5)
+    if (!hookTo.has(id)) hookTo.set(id, makeSentences(String(n.hook), wikiIndexGlossary, `wiki/${file}`, false))
+  }
 
 // 节气 hooks for the home banner, tokenized so every word can be tapped
 onPage('', '')
@@ -672,6 +685,26 @@ if (errors.length) {
   console.error(`\n${errors.length} content error(s):\n  ${errors.join('\n  ')}`)
   process.exit(1)
 }
+/**
+ * The 历史地图 texts are hand-written without [[links]]: link the first mention of every 百科 page
+ * (by its own name, never an aka, so 秦朝 doesn't jump to 秦始皇), longest names first.
+ */
+const wikiNames = wikiRaw.map(({ meta }) => meta.name).filter((n) => n && [...n].length >= 2 && /^[㐀-鿿]+$/.test(n)).sort((a, b) => b.length - a.length)
+function autoLink(text) {
+  let out = String(text)
+  const taken = []
+  for (const name of wikiNames) {
+    const at = out.indexOf(name)
+    if (at < 0) continue
+    // skip a name inside one already linked (西湖 inside [[西湖十景]])
+    if (taken.some(([a, b]) => at < b && at + name.length > a)) continue
+    out = out.slice(0, at) + `[[${name}]]` + out.slice(at + name.length)
+    const shift = 4
+    for (const t of taken) if (t[0] > at) (t[0] += shift), (t[1] += shift)
+    taken.push([at, at + name.length + shift])
+  }
+  return out
+}
 // Historical maps are dated snapshots. Keep event descriptions tappable like the rest of the reader.
 const periods = JSON.parse(await readFile('src/data/history-periods.json', 'utf8'))
 const historyMedia = JSON.parse(await readFile('src/data/history-media.json', 'utf8'))
@@ -685,9 +718,19 @@ for (const [id, image] of Object.entries(historyMedia)) {
 for (const period of periods) {
   if (!historyMedia['map-' + period.id] || !period.events.length) throw new Error(`Missing map or events: ${period.id}`)
   onPage(`map/history/${period.id}`, `历史地图 · ${period.title}`)
-  const paragraph = text => [{ kind: 'p', sentences: makeSentences(text, historyGlossary, 'atlas/' + period.id) }]
+  const paragraph = text => [{ kind: 'p', sentences: makeSentences(autoLink(text), historyGlossary, 'atlas/' + period.id) }]
   period.overview = paragraph(period.overview)
   for (const event of period.events) {
+    // people with a 百科 page open it from their card
+    for (const figure of event.figures) {
+      const route = routeOf.get(figure.name)
+      if (route?.startsWith('wiki/')) {
+        figure.wiki = route
+        const from = backlinks.get(route) ?? new Map()
+        from.set(page.route, page.title)
+        backlinks.set(route, from)
+      }
+    }
     if (!event.sources.length || !event.figures.length) throw new Error(`Missing event sources or figures: ${event.title}`)
     for (const figure of event.figures) if (!historyMedia[figure.id]) throw new Error(`Missing historical image: ${figure.id}`)
     if (event.rank !== undefined) {
@@ -730,7 +773,7 @@ if (!CHECK) {
   await writeFile(
     'public/content/wiki-index.json',
     JSON.stringify({
-      pages: wiki.map((w) => ({ id: w.id, name: w.name, en: w.en, py: w.py, kind: w.kind, dates: w.dates, provinces: w.provinces, cities: w.cities, xy: w.xy, river: w.river, lede: w.ledeIndex, chars: w.chars, links: (backlinks.get(`wiki/${w.id}`)?.size ?? 0) })),
+      pages: wiki.map((w) => ({ id: w.id, name: w.name, en: w.en, py: w.py, kind: w.kind, dates: w.dates, provinces: w.provinces, cities: w.cities, xy: w.xy, river: w.river, pin: w.pin, lede: w.ledeIndex, hook: hookTo.get(w.id), chars: w.chars, links: (backlinks.get(`wiki/${w.id}`)?.size ?? 0) })),
       quiz: Object.fromEntries(wiki.filter((w) => w.quiz.length).map((w) => [w.id, w.quiz])),
       wanted: wantedList,
       glossary: wikiIndexGlossary,

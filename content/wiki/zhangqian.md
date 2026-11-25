@@ -6,6 +6,8 @@ kind: 人物
 aka: [博望侯, 张骞出使西域, 凿空]
 province: shaanxi
 city: [hanzhong, xian]
+at: [107.2800, 33.1700]
+pin: 张骞墓
 image: 'File:Statue of Zhang Qian.jpg'
 dates: ？—前114年；前138年前后第一次出使西域
 lede: '他出发时带着一百多个人，回来时只剩他和一个匈奴向导。他没有完成任务，可是司马迁说他做了一件以前没人做过的事：“凿空”。'

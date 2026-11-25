@@ -1,7 +1,7 @@
 import { Photo } from '../components/Photo.tsx'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'motion/react'
-import { ArrowRightIcon, BooksIcon, CaretRightIcon, ChatCircleDotsIcon, CheckCircleIcon, DiceFiveIcon, InfoIcon, MapPinIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
+import { ArrowRightIcon, BooksIcon, CaretRightIcon, ChatCircleDotsIcon, CheckCircleIcon, DiceFiveIcon, InfoIcon, MapPinIcon, PathIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
 import { useLiveQuery } from '../lib/live.ts'
 import { progressKey, db, type WordSource } from '../lib/db.ts'
 import { loadCities, loadFeed, loadIndex, loadPhotos, loadPlaces, loadRegions, loadWikiIndex, useLoad } from '../lib/content.ts'
@@ -49,6 +49,20 @@ export function PlacePage({ id }: { id: string }) {
   const sights = useMemo(() => pages.filter((p) => SIGHT_KINDS.has(p.kind)), [pages])
   const pins = useMemo(() => sights.filter((p) => p.xy).map((p) => ({ id: p.id, x: p.xy![0], y: p.xy![1], name: p.name })), [sights])
   const rivers = useMemo(() => [...new Set(pages.filter((p) => p.river).map((p) => p.river))], [pages])
+  // 顺着…去…: pages that belong to this province and another, as a way across (most-linked first)
+  const onward = useMemo(() => {
+    // a page shared by two provinces is a better bridge than a river through nine; one link per page
+    const out: { page: (typeof pages)[number]; to: string }[] = []
+    const used = new Set<string>()
+    const bridges = pages.filter((p) => p.provinces.length > 1).sort((a, b) => a.provinces.length - b.provinces.length || b.links - a.links)
+    for (const p of bridges) {
+      const to = p.provinces.find((x) => x !== id && !used.has(x))
+      if (!to || out.length >= 3) continue
+      used.add(to)
+      out.push({ page: p, to })
+    }
+    return out
+  }, [pages, id])
   const groups = useMemo<EggGroup[]>(() => {
     if (!place || !placesFile) return []
     const content = new Map((citiesFile?.cities ?? []).map((c) => [c.id, c]))
@@ -188,6 +202,22 @@ export function PlacePage({ id }: { id: string }) {
         <div className="mt-5">
           <ReadMark readAt={progress?.read} onRead={() => markPlaceRead(id, place.chars ?? 0)} onUnread={() => markPlaceUnread(id)} />
         </div>
+
+        {onward.length > 0 && (
+          <div className="mt-4 space-y-2">
+            {onward.map(({ page, to }) => (
+              <div key={to} className="tile flex items-center gap-2 p-2 pl-3.5">
+                <PathIcon size={20} weight="fill" className="shrink-0 text-zhu" />
+                <button onClick={() => go(`wiki/${page.id}`)} className="min-w-0 flex-1 truncate py-1.5 text-left text-[16px] font-black">
+                  顺着<span className="text-[var(--link)]">{page.name}</span>去{names.get(to) ?? to}
+                </button>
+                <button onClick={() => go(`place/${to}`)} className="flex h-10 shrink-0 items-center gap-1 rounded-xl bg-sunken px-3 text-[14px] font-extrabold">
+                  {names.get(to) ?? to} <ArrowRightIcon size={14} weight="bold" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
 
         {pages.length > 0 && (
           <Fold id="place-wiki" title={`${place.name}百科`} count={pages.length} icon={<BooksIcon size={22} weight="fill" className="shrink-0" style={{ color }} />}>
