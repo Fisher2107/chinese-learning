@@ -3,7 +3,7 @@ id: huoshao-yuanmingyuan
 name: 火烧圆明园
 kind: 事件
 era: [late-qing]
-aka: [圆明园, 十二兽首, 圆明园兽首]
+aka: [十二兽首, 圆明园兽首]
 province: [beijing]
 at: [116.30, 40.01]
 image: 大水法

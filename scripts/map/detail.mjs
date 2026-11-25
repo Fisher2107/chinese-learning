@@ -47,6 +47,8 @@ const RIVERS = [
   { zh: '沅江', ne: ['Yuan'], box: [106, 26, 112.5, 29.5] },
   { zh: '渭河', ne: ['Wei'], box: [104, 34, 110.5, 35.5] },
   { zh: '汾河', ne: ['Fen'] },
+  // 北京's river: 卢沟桥 crosses it
+  { zh: '永定河', ne: ['Yongding'], box: [113, 39, 117.5, 41], at: [116.0, 39.95], lz: 1.6 },
   // 新安江 → 富春江 → 钱塘江: Natural Earth calls the whole river "Fuchun" and stops at 杭州, so the
   // estuary out past 盐官 (where people watch the tidal bore) is added by hand.
   {
