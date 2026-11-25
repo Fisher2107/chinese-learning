@@ -11,6 +11,18 @@
   "w": 640,
   "h": 480
  },
+ "city/ankang": {
+  "spec": "瀛湖",
+  "qid": "Q46718193",
+  "label": "瀛湖",
+  "desc": "",
+  "file": "安康水电站 03.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%AE%89%E5%BA%B7%E6%B0%B4%E7%94%B5%E7%AB%99_03.jpg",
+  "artist": "Liuxingy",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
  "city/baoding": {
   "spec": "直隶总督署",
   "qid": "Q17040584",
@@ -22,6 +34,18 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 480
+ },
+ "city/baoji": {
+  "spec": "法门寺",
+  "qid": "Q614916",
+  "label": "法门寺",
+  "desc": "中国陕西省扶风县佛寺",
+  "file": "Famensi.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Famensi.jpg",
+  "artist": "Gisling",
+  "license": "CC BY 2.5",
+  "w": 640,
+  "h": 390
  },
  "city/bazhong": {
   "spec": "Q178945?",
@@ -285,6 +309,17 @@
   "license": "CC BY-SA 2.5",
   "w": 640,
   "h": 853
+ },
+ "city/hanzhong": {
+  "spec": "File:Tianhan bridge in Hanzhong2021.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Tianhan bridge in Hanzhong2021.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tianhan_bridge_in_Hanzhong2021.jpg",
+  "artist": "Charlie fong",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 360
  },
  "city/hefei": {
   "spec": "包公园",
@@ -679,6 +714,18 @@
   "w": 640,
   "h": 853
  },
+ "city/shangluo": {
+  "spec": "商洛",
+  "qid": "Q515983",
+  "label": "商洛",
+  "desc": "中国陕西省的地级市",
+  "file": "Skyline of Shangluo, April 30 2023.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Skyline_of_Shangluo,_April_30_2023.jpg",
+  "artist": "A Chinese ID",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
  "city/shaoxing": {
   "spec": "File:绍兴乌篷船.JPG",
   "label": "",
@@ -798,6 +845,28 @@
   "w": 640,
   "h": 474
  },
+ "city/tongchuan": {
+  "spec": "File:Song Celadon Plate, Yaozhou Kiln (10096167713).jpg",
+  "label": "",
+  "desc": "",
+  "file": "Song Celadon Plate, Yaozhou Kiln (10096167713).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Song_Celadon_Plate,_Yaozhou_Kiln_(10096167713).jpg",
+  "artist": "Gary Todd from Xinzheng, China",
+  "license": "CC0",
+  "w": 640,
+  "h": 426
+ },
+ "city/weinan": {
+  "spec": "File:Temple of Sima Qian, Hancheng (20250113111702).jpg",
+  "label": "",
+  "desc": "",
+  "file": "Temple of Sima Qian, Hancheng (20250113111702).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Temple_of_Sima_Qian,_Hancheng_(20250113111702).jpg",
+  "artist": "N509FZ",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
  "city/wenzhou": {
   "spec": "雁荡山",
   "qid": "Q21283576",
@@ -870,6 +939,17 @@
   "w": 640,
   "h": 480
  },
+ "city/xianyang": {
+  "spec": "File:Tomb of Huo Qubing. Horse trampling a Xiongnu warrior.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Tomb of Huo Qubing. Horse trampling a Xiongnu warrior.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tomb_of_Huo_Qubing._Horse_trampling_a_Xiongnu_warrior.jpg",
+  "artist": "Hanming Huang",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 329
+ },
  "city/xining": {
   "spec": "塔尔寺",
   "qid": "Q1791988",
@@ -905,6 +985,18 @@
   "license": "CC0",
   "w": 640,
   "h": 426
+ },
+ "city/yanan": {
+  "spec": "延安宝塔",
+  "qid": "Q133237893",
+  "label": "延安宝塔",
+  "desc": "",
+  "file": "延安宝塔.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%BB%B6%E5%AE%89%E5%AE%9D%E5%A1%94.jpg",
+  "artist": "Sunatnight",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 960
  },
  "city/yancheng": {
   "spec": "Q57866?",
@@ -952,6 +1044,18 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 425
+ },
+ "city/yulin-shaanxi": {
+  "spec": "镇北台",
+  "qid": "Q126951091",
+  "label": "镇北台",
+  "desc": "",
+  "file": "Zhenbeitai Fortress, Yulin, Shaanxi - Aug 28 2024.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zhenbeitai_Fortress,_Yulin,_Shaanxi_-_Aug_28_2024.jpg",
+  "artist": "Asanatsa",
+  "license": "CC BY 4.0",
+  "w": 640,
+  "h": 480
  },
  "city/yuncheng": {
   "spec": "解州关帝庙",
@@ -1451,6 +1555,28 @@
   "w": 640,
   "h": 902
  },
+ "wiki/biangbiangmian": {
+  "spec": "File:Biangbiang noodles.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Biangbiang noodles.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Biangbiang_noodles.jpg",
+  "artist": "我乃野云鹤",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
+ "wiki/bingmayong": {
+  "spec": "File:Qin Terracotta Army, Pit 1 01.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Qin Terracotta Army, Pit 1 01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Qin_Terracotta_Army,_Pit_1_01.jpg",
+  "artist": "Gary Lee Todd, Ph.D.",
+  "license": "CC0",
+  "w": 640,
+  "h": 960
+ },
  "wiki/caoxueqin": {
   "spec": "曹雪芹",
   "qid": "Q182874",
@@ -1498,6 +1624,18 @@
   "license": "Public domain",
   "w": 640,
   "h": 426
+ },
+ "wiki/dayanta": {
+  "spec": "大雁塔",
+  "qid": "Q1047061",
+  "label": "大雁塔",
+  "desc": "",
+  "file": "Giant Wild Goose Pagoda.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Giant_Wild_Goose_Pagoda.jpg",
+  "artist": "Alex Kwok",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
  },
  "wiki/dazhaxie": {
   "spec": "中华绒螯蟹",
@@ -1642,6 +1780,18 @@
   "w": 640,
   "h": 853
  },
+ "wiki/hanwudi": {
+  "spec": "汉武帝",
+  "qid": "Q7225",
+  "label": "汉武帝",
+  "desc": "中国汉朝（西汉）皇帝",
+  "file": "漢武帝.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E6%BC%A2%E6%AD%A6%E5%B8%9D.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 330,
+  "h": 450
+ },
  "wiki/hanxin": {
   "spec": "韩信",
   "qid": "Q574498",
@@ -1678,6 +1828,17 @@
   "w": 272,
   "h": 319
  },
+ "wiki/hongmenyan": {
+  "spec": "File:Hongmen Banquet Luoyang Museum.png",
+  "label": "",
+  "desc": "",
+  "file": "Hongmen Banquet Luoyang Museum.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Hongmen_Banquet_Luoyang_Museum.png",
+  "artist": "ChenDaoIsHere",
+  "license": "Public domain",
+  "w": 640,
+  "h": 347
+ },
  "wiki/huaiyangcai": {
   "spec": "File:Lions head meatballs in brown sauce.jpg",
   "label": "",
@@ -1700,6 +1861,54 @@
   "license": "Public domain",
   "w": 640,
   "h": 447
+ },
+ "wiki/huanghe": {
+  "spec": "黄河",
+  "qid": "Q7355",
+  "label": "黄河",
+  "desc": "中國第二長河",
+  "file": "Yellow River - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Yellow_River_-_panoramio.jpg",
+  "artist": "fading",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 395
+ },
+ "wiki/huaqingchi": {
+  "spec": "华清池",
+  "qid": "Q4133842",
+  "label": "华清池",
+  "desc": "西安的5A级景区",
+  "file": "华清宫.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%8D%8E%E6%B8%85%E5%AE%AB.jpg",
+  "artist": "Gisling",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 435
+ },
+ "wiki/huashan": {
+  "spec": "华山",
+  "qid": "Q112568",
+  "label": "华山",
+  "desc": "五岳之一，位于中国陕西",
+  "file": "Hua Shan.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Hua_Shan.jpg",
+  "artist": "Ondřej Žváček",
+  "license": "CC BY 2.5",
+  "w": 640,
+  "h": 960
+ },
+ "wiki/hukou-pubu": {
+  "spec": "壶口瀑布",
+  "qid": "Q602973",
+  "label": "壶口瀑布",
+  "desc": "中国仅次于黄果树的第二大瀑布",
+  "file": "Hukou Waterfall.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Hukou_Waterfall.jpg",
+  "artist": "Leruswing",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 420
  },
  "wiki/huqiu": {
   "spec": "虎丘塔",
@@ -1770,6 +1979,29 @@
   "license": "Public domain",
   "w": 330,
   "h": 472
+ },
+ "wiki/libing": {
+  "spec": "File:Li Bing Statue.JPG",
+  "label": "",
+  "desc": "",
+  "file": "Li Bing Statue.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Li_Bing_Statue.JPG",
+  "artist": "Mutt",
+  "license": "CC BY-SA 4.0",
+  "w": 500,
+  "h": 667
+ },
+ "wiki/liubang": {
+  "spec": "刘邦",
+  "qid": "Q7210",
+  "label": "刘邦",
+  "desc": "中国汉朝开国皇帝",
+  "file": "Liu-bang.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Liu-bang.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 500,
+  "h": 572
  },
  "wiki/liubei": {
   "spec": "刘备",
@@ -1888,6 +2120,18 @@
   "w": 640,
   "h": 480
  },
+ "wiki/qianling": {
+  "spec": "乾陵",
+  "qid": "Q950653",
+  "label": "乾陵",
+  "desc": "",
+  "file": "Qianling.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Qianling.jpg",
+  "artist": "国家公园网(GJGY.com)",
+  "license": "CC BY-SA 2.5",
+  "w": 450,
+  "h": 600
+ },
  "wiki/qianliu": {
   "spec": "钱镠",
   "qid": "Q1074727",
@@ -1957,6 +2201,30 @@
   "w": 640,
   "h": 960
  },
+ "wiki/qinshihuang": {
+  "spec": "秦始皇",
+  "qid": "Q7192",
+  "label": "秦始皇",
+  "desc": "中国秦朝开国皇帝、中国历史上首位皇帝",
+  "file": "Qinshihuangdi3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Qinshihuangdi3.jpg",
+  "artist": "Wikimedia Commons",
+  "license": "Public domain",
+  "w": 224,
+  "h": 235
+ },
+ "wiki/roujiamo": {
+  "spec": "肉夹馍",
+  "qid": "Q5690018",
+  "label": "肉夹馍",
+  "desc": "食品",
+  "file": "古城樊氏腊汁肉夹馍1.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%8F%A4%E5%9F%8E%E6%A8%8A%E6%B0%8F%E8%85%8A%E6%B1%81%E8%82%89%E5%A4%B9%E9%A6%8D1.JPG",
+  "artist": "Steetsweet",
+  "license": "CC BY-SA 4.0",
+  "w": 500,
+  "h": 335
+ },
  "wiki/sanxingdui-yizhi": {
   "spec": "三星堆遗址",
   "qid": "Q929072",
@@ -2016,6 +2284,41 @@
   "w": 640,
   "h": 452
  },
+ "wiki/sichouzhilu": {
+  "spec": "File:WLA vanda Camel and Rider Tang dynasty.jpg",
+  "label": "",
+  "desc": "",
+  "file": "WLA vanda Camel and Rider Tang dynasty.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:WLA_vanda_Camel_and_Rider_Tang_dynasty.jpg",
+  "artist": "Wikipedia Loves Art participant \" VeronikaB \"",
+  "license": "CC BY 2.5",
+  "w": 640,
+  "h": 853
+ },
+ "wiki/simaqian": {
+  "spec": "司马迁",
+  "qid": "Q9372",
+  "label": "司马迁",
+  "desc": "西漢史學家、文學家",
+  "file": "Si maqian.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Si_maqian.jpg",
+  "artist": "Wikimedia Commons",
+  "license": "Public domain",
+  "w": 330,
+  "h": 337
+ },
+ "wiki/sunzhongshan": {
+  "spec": "孙中山",
+  "qid": "Q8573",
+  "label": "孙中山",
+  "desc": "近代中國政治人物、革命家，中國國民黨總理，中華民國國父（1866—1925）",
+  "file": "孙中山肖像.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%AD%99%E4%B8%AD%E5%B1%B1%E8%82%96%E5%83%8F.jpg",
+  "artist": "上海波尔照相馆",
+  "license": "Public domain",
+  "w": 640,
+  "h": 840
+ },
  "wiki/sushi": {
   "spec": "苏轼",
   "qid": "Q36020",
@@ -2027,6 +2330,18 @@
   "license": "Public domain",
   "w": 640,
   "h": 1507
+ },
+ "wiki/suzhe": {
+  "spec": "苏辙",
+  "qid": "Q1155951",
+  "label": "苏辙",
+  "desc": "唐宋八大家",
+  "file": "宋门下侍郎苏文定公辙.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%AE%8B%E9%97%A8%E4%B8%8B%E4%BE%8D%E9%83%8E%E8%8B%8F%E6%96%87%E5%AE%9A%E5%85%AC%E8%BE%99.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 400,
+  "h": 553
  },
  "wiki/taihu": {
   "spec": "File:Tai Lake boat 2.jpg",
@@ -2050,6 +2365,17 @@
   "license": "Public domain",
   "w": 640,
   "h": 798
+ },
+ "wiki/weihe": {
+  "spec": "File:Wei River (Xianyang Section) 2.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Wei River (Xianyang Section) 2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Wei_River_(Xianyang_Section)_2.jpg",
+  "artist": "H2v5o68z",
+  "license": "CC0",
+  "w": 640,
+  "h": 360
  },
  "wiki/wuhouci": {
   "spec": "成都武侯祠",
@@ -2075,6 +2401,18 @@
   "w": 640,
   "h": 853
  },
+ "wiki/wuzetian": {
+  "spec": "武则天",
+  "qid": "Q9738",
+  "label": "武则天",
+  "desc": "武周皇帝，中國史上唯一的女皇帝",
+  "file": "唐后行從圖 (局部) - 武則天.png",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%94%90%E5%90%8E%E8%A1%8C%E5%BE%9E%E5%9C%96_(%E5%B1%80%E9%83%A8)_-_%E6%AD%A6%E5%89%87%E5%A4%A9.png",
+  "artist": "Likely to be Zhang Xuan (张萱)",
+  "license": "Public domain",
+  "w": 640,
+  "h": 1133
+ },
  "wiki/wuzixu": {
   "spec": "伍子胥",
   "qid": "Q1268609",
@@ -2086,6 +2424,29 @@
   "license": "Public domain",
   "w": 640,
   "h": 862
+ },
+ "wiki/xian-chengqiang": {
+  "spec": "西安城墙",
+  "qid": "Q1334336",
+  "label": "西安城墙",
+  "desc": "陕西省文物",
+  "file": "City wall of Xi'an 51550-Xian (27959363326).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:City_wall_of_Xi%27an_51550-Xian_(27959363326).jpg",
+  "artist": "xiquinhosilva",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 424
+ },
+ "wiki/xian-shibian": {
+  "spec": "File:Zhang Xueliang and Yang Hucheng.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Zhang Xueliang and Yang Hucheng.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zhang_Xueliang_and_Yang_Hucheng.jpg",
+  "artist": "ROC reporter",
+  "license": "Public domain",
+  "w": 500,
+  "h": 673
  },
  "wiki/xiangyu": {
   "spec": "项羽",
@@ -2123,6 +2484,30 @@
   "w": 400,
   "h": 490
  },
+ "wiki/xuanzang": {
+  "spec": "玄奘",
+  "qid": "Q42063",
+  "label": "玄奘",
+  "desc": "中國唐朝僧人，知名譯經師，漢傳佛教法相宗創始人",
+  "file": "Xuanzang w.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Xuanzang_w.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 1432
+ },
+ "wiki/yangrou-paomo": {
+  "spec": "羊肉泡馍",
+  "qid": "Q7132274",
+  "label": "羊肉泡馍",
+  "desc": "陕西小吃",
+  "file": "Yangrou Paomo.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Yangrou_Paomo.JPG",
+  "artist": "Danielinblue",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 426
+ },
  "wiki/yanshuiya": {
   "spec": "盐水鸭",
   "qid": "Q3704951",
@@ -2146,6 +2531,17 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 1338
+ },
+ "wiki/zhangqian": {
+  "spec": "File:Statue of Zhang Qian.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Statue of Zhang Qian.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Statue_of_Zhang_Qian.jpg",
+  "artist": "John Hill",
+  "license": "CC BY-SA 3.0",
+  "w": 330,
+  "h": 751
  },
  "wiki/zhongshanling": {
   "spec": "中山陵",
