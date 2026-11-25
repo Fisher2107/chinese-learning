@@ -26,7 +26,7 @@ export function AfterPage({ id }: { id: string }) {
         </div>
 
         <div className="mt-6 text-[19px]">
-          <ZhText id={`after-${id}`} paras={series.after.flatMap((b) => (b.kind === 'excerpt' ? b.paras : [b]))} glossary={series.glossary} source={{ kind: 'episode', route: `series/${id}/after`, title: `${series.title} · 读后` }} />
+          <ZhText id={`after-${id}`} paras={series.after.flatMap((b) => (b.kind === 'excerpt' ? b.paras : b.kind === 'img' ? [] : [b]))} glossary={series.glossary} source={{ kind: 'episode', route: `series/${id}/after`, title: `${series.title} · 读后` }} />
         </div>
 
         <h3 className="mt-10 mb-2 text-sm font-black tracking-wide text-mute">资料来源</h3>

@@ -1,5 +1,6 @@
 import { DETAIL } from '../lib/cities.ts'
 import { isCanal } from '../lib/cities.ts'
+import type { EraLayer } from '../lib/history.ts'
 
 type Box = [number, number, number, number]
 
@@ -10,6 +11,8 @@ export interface Pin {
   label?: string
   /** drawn big and pulsing */
   main?: boolean
+  /** 历史: a capital is a red 都 square */
+  kind?: 'capital' | 'story' | 'place' | 'event'
 }
 
 /**
@@ -25,9 +28,12 @@ export function StaticMap({
   color = '#ED5126',
   className = '',
   rivers = [],
-  pins = [],
+  pins: given = [],
   onPin,
+  layer,
 }: {
+  /** 历史: an era's states, routes and capitals over today's map */
+  layer?: EraLayer
   rivers?: string[]
   pins?: Pin[]
   onPin?: (id: string) => void
@@ -40,6 +46,10 @@ export function StaticMap({
   color?: string
   className?: string
 }) {
+  const pins: Pin[] = [
+    ...given,
+    ...(layer?.pins ?? []).filter((p) => p.kind === 'capital' && !given.some((g) => g.id === p.id)).map((p) => ({ id: p.id, x: p.x, y: p.y, label: p.name, kind: p.kind })),
+  ]
   const w = box[2] - box[0]
   const h = box[3] - box[1]
   const unit = Math.max(w, h) / 320
@@ -76,10 +86,32 @@ export function StaticMap({
             vectorEffect="non-scaling-stroke"
           />
         ))}
+        {layer?.states.map((st, i) => (
+          <path
+            key={`st-${i}`}
+            d={st.d}
+            fillRule="evenodd"
+            fill={`color-mix(in oklab, ${st.color} 34%, transparent)`}
+            stroke={st.color}
+            strokeWidth={1.2}
+            strokeDasharray={st.kind === 'state' ? undefined : '4 3'}
+            vectorEffect="non-scaling-stroke"
+          />
+        ))}
         <path d={DETAIL.lakes.d} className="map-lake" />
         {DETAIL.rivers.map((r) => (
           <path key={r.zh} d={r.d} fill="none" className={isCanal(r.zh) ? 'map-canal' : 'map-river'} strokeDasharray={isCanal(r.zh) ? '5 4' : undefined} strokeWidth={r.major ? 1.6 : 0.8} vectorEffect="non-scaling-stroke" />
         ))}
+        {layer?.routes.map((r) => (
+          <path key={`rt-${r.name}`} d={r.d} fill="none" stroke="var(--map-route)" strokeWidth={2} strokeDasharray="6 4" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+        ))}
+        {layer?.states
+          .filter((st) => st.x >= box[0] && st.x <= box[2] && st.y >= box[1] && st.y <= box[3])
+          .map((st, i) => (
+            <text key={`stn-${i}`} x={st.x} y={st.y} fontSize={unit * 15} textAnchor="middle" className="map-region" style={{ fill: st.color, strokeWidth: unit * 3.5 }}>
+              {st.name}
+            </text>
+          ))}
         {highlighted.map((r) => (
           <path key={`hl-${r.zh}`} d={r.d} fill="none" stroke="var(--map-water)" strokeWidth={4.5} strokeLinecap={isCanal(r.zh) ? 'butt' : 'round'} strokeDasharray={isCanal(r.zh) ? '8 5' : undefined} vectorEffect="non-scaling-stroke" />
         ))}
@@ -105,7 +137,16 @@ export function StaticMap({
           <g key={p.id} onClick={onPin && (() => onPin(p.id))} className={onPin ? 'cursor-pointer' : undefined}>
             {p.main && <circle cx={p.x} cy={p.y} r={unit * 10} className="map-pulse" style={{ stroke: 'var(--color-zhu)' }} />}
             {onPin && <circle cx={p.x} cy={p.y} r={unit * 9} fill="transparent" />}
-            <circle cx={p.x} cy={p.y} r={unit * (p.main ? 5.5 : 4)} fill="var(--color-zhu)" stroke="var(--map-halo)" strokeWidth={2} vectorEffect="non-scaling-stroke" />
+            {p.kind === 'capital' ? (
+              <>
+                <rect x={p.x - unit * 6} y={p.y - unit * 6} width={unit * 12} height={unit * 12} rx={unit * 2} fill="#C8341A" stroke="var(--map-halo)" strokeWidth={1.5} vectorEffect="non-scaling-stroke" />
+                <text x={p.x} y={p.y + unit * 3.4} fontSize={unit * 9} textAnchor="middle" className="map-pin-text">
+                  都
+                </text>
+              </>
+            ) : (
+              <circle cx={p.x} cy={p.y} r={unit * (p.main ? 5.5 : 4)} fill="var(--color-zhu)" stroke="var(--map-halo)" strokeWidth={2} vectorEffect="non-scaling-stroke" />
+            )}
             {pinLabels[i] && (
               <text x={pinLabels[i]!.x} y={p.y + fs * 0.35} fontSize={fs} textAnchor={pinLabels[i]!.anchor} className="map-city" style={{ fontWeight: 800, strokeWidth: unit * 2.6 }}>
                 {p.label}

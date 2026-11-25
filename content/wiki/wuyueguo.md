@@ -3,6 +3,7 @@ id: wuyueguo
 name: 吴越国
 en: Wuyue Kingdom
 kind: 朝代
+era: [five]
 province: [zhejiang, jiangsu, fujian]
 city: [hangzhou]
 image: 保俶塔

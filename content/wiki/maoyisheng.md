@@ -3,6 +3,7 @@ id: maoyisheng
 name: 茅以升
 en: Mao Yisheng, bridge engineer
 kind: 人物
+era: [republic]
 province: [jiangsu, zhejiang]
 city: [zhenjiang, hangzhou]
 image: Q6753608

@@ -3,6 +3,7 @@ id: qianlong
 name: 乾隆
 en: Qianlong Emperor
 kind: 人物
+era: [qing]
 aka: [乾隆皇帝, 弘历, 清高宗, 十全老人, 乾隆下江南]
 province: [beijing, hebei, jiangsu, zhejiang]
 city: [chengde, yangzhou, suzhou, hangzhou]

@@ -3,6 +3,7 @@ id: shudaonan
 name: 蜀道难
 en: The Hard Road to Shu
 kind: 作品
+era: [tang]
 aka: [蜀道, 金牛道, 剑门关, 剑门蜀道, 五丁开山]
 province: [sichuan, shaanxi]
 city: [guangyuan, chengdu]

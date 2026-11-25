@@ -3,6 +3,7 @@ id: luxun
 name: 鲁迅
 en: Lu Xun, writer
 kind: 人物
+era: [republic]
 aka: [周树人]
 province: zhejiang
 city: [shaoxing]

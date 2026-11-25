@@ -3,8 +3,17 @@ import type { Sentence } from './zh-core.ts'
 export type { Sentence, Token } from './zh-core.ts'
 
 export interface Para {
-  kind: 'p' | 'li' | 'h'
+  /** q: a line quoted from an original text (a poem, 《史记》…) */
+  kind: 'p' | 'li' | 'h' | 'q'
   sentences: Sentence[]
+}
+
+/** A picture in the text of a 百科 page, under the paragraph it belongs to. */
+export interface Picture {
+  kind: 'img'
+  /** photo key (wiki/<id>/<n>) */
+  key: string
+  caption: Sentence[]
 }
 
 /** A real excerpt dropped into a story, opening into the full text. */
@@ -19,7 +28,7 @@ export interface Excerpt {
   paras: Para[]
 }
 
-export type Block = Para | Excerpt
+export type Block = Para | Excerpt | Picture
 
 export interface GateQuestion {
   q: Sentence
@@ -39,6 +48,8 @@ export interface Episode {
 export interface SourceLink {
   title: string
   url: string
+  /** whose account it is: 原典 (the original text), 官方, 学者, 媒体, 百科 */
+  kind?: '原典' | '官方' | '学者' | '媒体' | '百科'
 }
 
 export interface SeriesSummary {
@@ -245,6 +256,10 @@ export interface WikiSummary {
   py: string
   kind: WikiKind
   dates: string
+  /** eras of the 历史长卷 it belongs to */
+  era: string[]
+  /** a sensitive topic: its page says why */
+  sensitive: boolean
   provinces: string[]
   cities: string[]
   /** where it is on the map (map coordinates), if it's a place */
@@ -273,6 +288,10 @@ export interface WikiIndex {
 export interface WikiPage extends Omit<WikiSummary, 'links'> {
   facts: { k: string; v: Sentence[] }[]
   body: Block[]
+  /** 为什么敏感: 官方, 争议, 在中国, 聊天 */
+  why: { k: string; v: Sentence[] }[]
+  /** 读原文: the original lines (kind q) and what they mean */
+  original: Block[]
   /** 下一站: where to go next, each with a question that pulls you there */
   next: { route: string; title: string; hook: Sentence[] }[]
   quiz: WikiQuiz[]

@@ -4,6 +4,7 @@ name: 阖闾
 py: hélǘ
 en: Helü, King of Wu
 kind: 人物
+era: [spring]
 aka: [吴王阖闾, 阖庐, 公子光]
 province: [jiangsu, zhejiang, hubei]
 city: [suzhou]

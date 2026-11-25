@@ -3,6 +3,7 @@ id: leifengta
 name: 雷峰塔
 en: Leifeng Pagoda
 kind: 建筑
+era: [five]
 province: zhejiang
 city: [hangzhou]
 at: [120.149, 30.231]

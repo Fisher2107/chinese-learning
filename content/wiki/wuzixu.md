@@ -3,6 +3,7 @@ id: wuzixu
 name: 伍子胥
 en: Wu Zixu
 kind: 人物
+era: [spring]
 province: [jiangsu, zhejiang, hubei]
 city: [suzhou]
 image: 伍子胥

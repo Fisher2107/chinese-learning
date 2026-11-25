@@ -3,6 +3,7 @@ id: wuhouci
 name: 武侯祠
 en: Wuhou Shrine, Chengdu
 kind: 建筑
+era: [three]
 aka: [成都武侯祠, 汉昭烈庙, 惠陵, 攻心联]
 province: sichuan
 city: [chengdu]

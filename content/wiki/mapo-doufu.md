@@ -3,6 +3,7 @@ id: mapo-doufu
 name: 麻婆豆腐
 en: Mapo tofu
 kind: 美食
+era: [late-qing]
 aka: [陈麻婆豆腐]
 province: sichuan
 city: [chengdu]

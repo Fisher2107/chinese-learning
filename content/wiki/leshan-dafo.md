@@ -3,6 +3,7 @@ id: leshan-dafo
 name: 乐山大佛
 en: Leshan Giant Buddha
 kind: 景点
+era: [tang]
 aka: [凌云大佛, 嘉定大佛]
 province: sichuan
 city: [leshan]

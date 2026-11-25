@@ -3,6 +3,7 @@ id: baijuyi
 name: 白居易
 en: Bai Juyi
 kind: 人物
+era: [tang]
 aka: [白乐天, 香山居士, 白刺史]
 province: [henan, shaanxi, zhejiang, jiangsu, jiangxi]
 city: [suzhou, hangzhou]

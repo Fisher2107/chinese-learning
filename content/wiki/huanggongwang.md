@@ -3,6 +3,7 @@ id: huanggongwang
 name: 黄公望
 en: Huang Gongwang
 kind: 人物
+era: [yuan]
 aka: [大痴道人, 黄子久]
 province: [zhejiang, jiangsu]
 city: [hangzhou, suzhou]

@@ -3,6 +3,7 @@ id: sushi
 name: 苏轼
 en: Su Shi (Su Dongpo), poet
 kind: 人物
+era: [north-song]
 aka: [苏东坡, 东坡]
 province: [zhejiang, sichuan]
 city: [hangzhou, meishan]

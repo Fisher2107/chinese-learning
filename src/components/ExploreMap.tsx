@@ -1,10 +1,13 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type Ref } from 'react'
 import { MAP } from '../lib/places.ts'
 import { CITIES, DETAIL, isCanal, type MapCity } from '../lib/cities.ts'
+import type { EraLayer, MapPin } from '../lib/history.ts'
 
-export type Selection = { kind: 'province' | 'city' | 'country'; id: string }
+/** What a tap picked: on the 历史 map also a state (its index in the layer) or a pin (its id). */
+export type Selection = { kind: 'province' | 'city' | 'country' | 'state' | 'pin'; id: string }
 /** a big name over a block of provinces (分区), in map coordinates */
-export type Area = { key: string; text: string; x: number; y: number; color: string }
+/** A name over an area: a 分区 region, or a state on the 历史 map (`small`: a port or a lost territory). */
+export type Area = { key: string; text: string; x: number; y: number; color: string; small?: boolean }
 type Box = [number, number, number, number]
 type LabelHit = { selection: Selection; box: Box }
 type CityHit = { id: string; x: number; y: number; r: number }
@@ -60,6 +63,7 @@ export function ExploreMap({
   areas,
   sights = [],
   onSight,
+  layer,
   api,
 }: {
   /** open looking at this box instead of where the user left off */
@@ -81,6 +85,8 @@ export function ExploreMap({
   /** 百科 pages with a place, drawn as pins once zoomed in; tapping one calls onSight */
   sights?: MapSight[]
   onSight?: (id: string) => void
+  /** 历史: an era's states, routes and pins over today's map (province names stand back) */
+  layer?: EraLayer
   api?: Ref<MapApi>
 }) {
   const wrap = useRef<HTMLDivElement>(null)
@@ -298,7 +304,8 @@ export function ExploreMap({
           return
         }
         lastTap = { t: now, x: p.x, y: p.y }
-        tap(p.x, p.y, e.clientX, e.clientY)
+        // through the ref: this handler is set up once, the props it needs change
+        tapRef.current(p.x, p.y, e.clientX, e.clientY)
         return
       }
       // a flick keeps gliding for a moment
@@ -369,6 +376,20 @@ export function ExploreMap({
     const scale = b.k / v.k
     const x = (sx - v.x) * scale + b.x
     const y = (sy - v.y) * scale + b.y
+    if (layer) {
+      // 历史: a pin, then the state under the finger (events only once they're drawn)
+      const z = v.k / fitK(size.w, size.h)
+      let pin: string | undefined
+      let pinD = 18
+      for (const p of layer.pins) {
+        if (p.kind === 'event' && z < 1.4 && p.id !== selected?.id) continue
+        const d = Math.hypot(p.x * v.k + v.x - sx, p.y * v.k + v.y - sy)
+        if (d < pinD) [pin, pinD] = [p.id, d]
+      }
+      if (pin) return onSelect({ kind: 'pin', id: pin })
+      const st = document.elementFromPoint(clientX, clientY)?.closest('[data-state]')?.getAttribute('data-state')
+      return onSelect(st ? { kind: 'state', id: st } : undefined)
+    }
     for (const { selection, box } of hits.current.labels) {
       if (x >= box[0] && x <= box[2] && y >= box[1] && y <= box[3]) return onSelect(selection)
     }
@@ -395,6 +416,9 @@ export function ExploreMap({
     const country = el?.getAttribute('data-country')
     onSelect(id ? { kind: 'province', id } : country ? { kind: 'country', id: country } : undefined)
   }
+
+  const tapRef = useRef(tap)
+  tapRef.current = tap
 
   // ---------- what to draw at this zoom ----------
   const layout = useMemo(() => {
@@ -478,17 +502,37 @@ export function ExploreMap({
     // Region names first: they're what the 分区 map is for. Taps go through them to the province.
     if (areas && z < 5)
       for (const a of areas) {
-        const size = z < 1.3 ? 21 : 26
+        const size = a.small ? (z < 1.3 ? 14 : 16) : z < 1.3 ? 21 : 26
         const box = textBox(sx(a.x), sy(a.y), a.text, size, 'middle', 0.12)
         if (onScreen(sx(a.x), sy(a.y), 0) && fits(box)) labels.push({ key: `a-${a.key}`, x: sx(a.x), y: sy(a.y), text: a.text, size, anchor: 'middle', cls: 'map-region', color: a.color })
       }
+
+    // 历史: the era's capitals, stories and places, named where there's room
+    if (layer) {
+      const order = { capital: 0, story: 1, event: 2, place: 3 } as const
+      const pins = [...layer.pins].sort((a, b) => +(b.id === selected?.id) - +(a.id === selected?.id) || order[a.kind] - order[b.kind])
+      for (const p of pins) {
+        const px = sx(p.x)
+        const py = sy(p.y)
+        if (!onScreen(px, py, 0)) continue
+        if (p.kind === 'event' && z < 1.4 && p.id !== selected?.id) continue
+        const size = p.id === selected?.id ? 17 : p.kind === 'capital' ? 15 : 14
+        for (const [lx, anchor] of [[px + 12, 'start'], [px - 12, 'end']] as const) {
+          const box = textBox(lx, py + size * 0.32, p.name, size, anchor)
+          if (fits(box)) {
+            labels.push({ key: `pin-${p.id}`, x: lx, y: py + size * 0.32, text: p.name, size, anchor, cls: p.id === selected?.id ? 'map-city map-selected' : 'map-city map-capital' })
+            break
+          }
+        }
+      }
+    }
 
     // Keep the selection and nearby place names ahead of background geography.
     if (selCity) cityLabel(selCity, true)
     const selProvince = selected?.kind === 'province' ? PROVINCE_CENTRE.get(selected.id) : undefined
     if (selProvince) provinceLabel(selProvince, true)
     for (const c of dots.filter((c) => c.rank === 1)) if (c !== selCity) cityLabel(c)
-    if (z < 2.9 && z >= 0.6)
+    if (z < 2.9 && z >= 0.6 && !layer)
       for (const p of MAP.provinces)
         if (p !== selProvince && (!p.small || z >= 1.6)) provinceLabel(p)
     if (z < 0.6 && fits(textBox(sx(W * 0.55), sy(H * 0.55), '中国', 20, 'middle', 0.2)))
@@ -534,6 +578,10 @@ export function ExploreMap({
           labelHits.push({ selection: { kind: 'country', id: n.id }, box })
         }
       }
+    if (layer && z >= 0.8)
+      for (const r of layer.routes)
+        if (onScreen(sx(r.x), sy(r.y)) && fits(textBox(sx(r.x), sy(r.y) - 6, r.name, 12, 'middle')))
+          labels.push({ key: `route-${r.name}`, x: sx(r.x), y: sy(r.y) - 6, text: r.name, size: 12, anchor: 'middle', cls: 'map-route' })
     // water and land last: they give way to cities
     for (const r of DETAIL.rivers)
       if (z >= r.lz && onScreen(sx(r.x), sy(r.y)) && fits(textBox(sx(r.x), sy(r.y) - 4, r.zh, 11, 'middle')))
@@ -554,7 +602,7 @@ export function ExploreMap({
     }
     return { z, dots, pins, labels, hits: { labels: labelHits, cities: cityHits, sights: sightHits } }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view, size.w, size.h, insets.top, insets.bottom, selected?.kind, selected?.id, learnt, stories, names, areas, sights, onSight])
+  }, [view, size.w, size.h, insets.top, insets.bottom, selected?.kind, selected?.id, learnt, stories, names, areas, sights, onSight, layer])
 
   useLayoutEffect(() => {
     if (layout) hits.current = layout.hits
@@ -564,6 +612,7 @@ export function ExploreMap({
   const selProv = selected?.kind === 'province' ? selected.id : undefined
   const selCity = selected?.kind === 'city' ? selected.id : undefined
   const selCountry = selected?.kind === 'country' ? selected.id : undefined
+  const selState = selected?.kind === 'state' ? selected.id : undefined
   const riverW = (major: boolean) => (layout ? (major ? Math.min(3.2, 1.3 + layout.z * 0.12) : Math.min(2, 0.6 + layout.z * 0.1)) : 1)
 
   return (
@@ -585,6 +634,19 @@ export function ExploreMap({
             {Object.entries(DETAIL.provinces).map(([id, d]) => (
               <path key={id} data-prov={id} d={d} fill={fill(id)} stroke="var(--map-province-line)" strokeWidth={1.3} vectorEffect="non-scaling-stroke" />
             ))}
+            {layer?.states.map((st, i) => (
+              <path
+                key={`${st.name}-${i}`}
+                data-state={i}
+                d={st.d}
+                fillRule="evenodd"
+                fill={`color-mix(in oklab, ${st.color} ${selState === String(i) ? 52 : 34}%, transparent)`}
+                stroke={st.color}
+                strokeWidth={selState === String(i) ? 2.6 : 1.4}
+                strokeDasharray={st.kind === 'state' ? undefined : '5 3'}
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
             <path d={DETAIL.lakes.d} className="map-lake" />
             {DETAIL.rivers.map((r) =>
               isCanal(r.zh) ? (
@@ -593,6 +655,9 @@ export function ExploreMap({
                 <path key={r.zh} d={r.d} fill="none" className="map-river" strokeWidth={riverW(r.major)} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
               ),
             )}
+            {layer?.routes.map((r) => (
+              <path key={r.name} d={r.d} fill="none" stroke="var(--map-route)" strokeWidth={2.4} strokeDasharray="7 5" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" pointerEvents="none" />
+            ))}
             {selCountry && (
               <path
                 d={DETAIL.neighbours.find((n) => n.id === selCountry)?.d}
@@ -655,6 +720,12 @@ export function ExploreMap({
                   <rect key={`pin-${p.id}`} x={p.px - 4} y={p.py - 4} width={8} height={8} transform={`rotate(45 ${p.px} ${p.py})`} fill="var(--color-zhu)" stroke="var(--map-halo)" strokeWidth={1.5} />
                 ),
               )}
+              {layer?.pins.map((p) => (
+                <PinMark key={p.id} pin={p} x={p.x * v.k + v.x} y={p.y * v.k + v.y} on={selected?.kind === 'pin' && selected.id === p.id} z={layout.z} />
+              ))}
+              {layer?.routes.map((r) => (
+                <circle key={`end-${r.name}`} cx={r.end[0] * v.k + v.x} cy={r.end[1] * v.k + v.y} r={4.5} fill="var(--map-route)" stroke="var(--map-halo)" strokeWidth={1.5} />
+              ))}
               {layout.labels.map((l) => (
                 <text
                   key={l.key}
@@ -673,6 +744,45 @@ export function ExploreMap({
         </svg>
       )}
     </div>
+  )
+}
+
+/** 历史 pins: 都 for capitals, the first character of a story, a dot for places, a diamond for events. */
+function PinMark({ pin, x, y, on, z }: { pin: MapPin; x: number; y: number; on: boolean; z: number }) {
+  if (pin.kind === 'event' && z < 1.4 && !on) return null
+  const ring = on ? <circle cx={x} cy={y} r={15} className="map-pulse" /> : null
+  if (pin.kind === 'capital')
+    return (
+      <g>
+        {ring}
+        <rect x={x - 8} y={y - 8} width={16} height={16} rx={3} fill="#C8341A" stroke="var(--map-halo)" strokeWidth={1.5} />
+        <text x={x} y={y + 4.5} fontSize={12} textAnchor="middle" className="map-pin-text">
+          都
+        </text>
+      </g>
+    )
+  if (pin.kind === 'story')
+    return (
+      <g>
+        {ring}
+        <circle cx={x} cy={y} r={on ? 11 : 10} fill="var(--map-halo)" stroke="var(--color-zhu)" strokeWidth={2.5} />
+        <text x={x} y={y + 4.5} fontSize={12} textAnchor="middle" className="map-pin-story">
+          {[...pin.name][0]}
+        </text>
+      </g>
+    )
+  if (pin.kind === 'event')
+    return (
+      <g>
+        {ring}
+        <path d={`M${x},${y - 7}L${x + 7},${y}L${x},${y + 7}L${x - 7},${y}Z`} fill="var(--color-huang)" stroke="var(--text)" strokeWidth={1.5} />
+      </g>
+    )
+  return (
+    <g>
+      {ring}
+      <circle cx={x} cy={y} r={on ? 6.5 : 5} fill="var(--color-dai)" stroke="var(--map-halo)" strokeWidth={2} />
+    </g>
   )
 }
 

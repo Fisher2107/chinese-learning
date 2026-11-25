@@ -3,6 +3,7 @@ id: libing
 name: 李冰
 en: Li Bing
 kind: 人物
+era: [warring]
 aka: [川主, 李冰父子]
 province: sichuan
 city: [dujiangyan, chengdu]

@@ -3,6 +3,7 @@ id: xiangyu
 name: 项羽
 en: Xiang Yu
 kind: 人物
+era: [west-han]
 aka: [西楚霸王, 楚霸王, 项籍, 霸王]
 province: [jiangsu, anhui, henan, shaanxi]
 city: [suqian, xuzhou]

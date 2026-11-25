@@ -3,6 +3,7 @@ id: dongporou
 name: 东坡肉
 en: Dongpo pork
 kind: 美食
+era: [north-song]
 province: [zhejiang]
 city: [hangzhou]
 image: 东坡肉

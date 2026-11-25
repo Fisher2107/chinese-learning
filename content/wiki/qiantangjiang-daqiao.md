@@ -3,6 +3,7 @@ id: qiantangjiang-daqiao
 name: 钱塘江大桥
 en: Qiantang River Bridge
 kind: 建筑
+era: [republic]
 province: zhejiang
 city: [hangzhou]
 at: [120.139, 30.201]

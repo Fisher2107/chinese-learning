@@ -160,6 +160,12 @@ export const ZhText = memo(function ZhText({ paras, glossary, source, id, speaki
               {content}
             </h3>
           )
+        if (para.kind === 'q')
+          return (
+            <blockquote key={pi} className="mb-[0.9em] border-l-4 border-zhu/40 pl-3 font-bold tracking-wide last:mb-0">
+              {content}
+            </blockquote>
+          )
         if (para.kind === 'li')
           return (
             <div key={pi} className="relative mb-2 pl-5">

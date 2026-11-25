@@ -4,7 +4,7 @@ import { motion } from 'motion/react'
 import { ArrowRightIcon, BooksIcon, CaretRightIcon, ChatCircleDotsIcon, CheckCircleIcon, DiceFiveIcon, InfoIcon, MapPinIcon, PathIcon, PlayIcon, SealCheckIcon, StampIcon } from '@phosphor-icons/react'
 import { useLiveQuery } from '../lib/live.ts'
 import { progressKey, db, type WordSource } from '../lib/db.ts'
-import { loadCities, loadFeed, loadIndex, loadPhotos, loadPlaces, loadRegions, loadWikiIndex, useLoad } from '../lib/content.ts'
+import { loadCities, loadFeed, loadHistory, loadIndex, loadPhotos, loadPlaces, loadRegions, loadWikiIndex, useLoad } from '../lib/content.ts'
 import { CITIES, citiesOf } from '../lib/cities.ts'
 import { FOOD_KINDS, pagesAbout, randomPage, SIGHT_KINDS, STORY_KINDS, useWikiProgress } from '../lib/wiki.ts'
 import { PeopleRow, PhotoRow } from '../components/WikiCards.tsx'
@@ -33,6 +33,7 @@ export function PlacePage({ id }: { id: string }) {
   const citiesFile = useLoad(loadCities, 'cities').data
   const regionsFile = useLoad(loadRegions, 'regions').data
   const wikiIndex = useLoad(loadWikiIndex, 'wiki-index').data
+  const history = useLoad(loadHistory, 'history').data
   const wikiProgress = useWikiProgress()
   const marks = useMarks()
   const place = placesFile?.places.find((p) => p.id === id)
@@ -82,8 +83,15 @@ export function PlacePage({ id }: { id: string }) {
   const cards = (feed?.cards ?? []).filter((c) => c.province === id)
   const stamped = !!progress?.stamp
   const learnt = marks.learnt.has(markKey('province', id))
-  const people = pages.filter((p) => p.kind === '人物')
-  const stories = pages.filter((p) => STORY_KINDS.has(p.kind))
+  // 这里的历史: the province's history stories in the order of the 长卷 (湖南: 屈原 … 毛泽东); sights and
+  // food that belong to an era stay in their own rows
+  const eraOrder = new Map((history?.eras ?? []).map((e, i) => [e.id, i]))
+  const eraName = new Map((history?.eras ?? []).map((e) => [e.id, e.name]))
+  const told = pages
+    .filter((p) => p.era.length && !SIGHT_KINDS.has(p.kind) && !FOOD_KINDS.has(p.kind))
+    .sort((a, b) => (eraOrder.get(a.era[0]) ?? 99) - (eraOrder.get(b.era[0]) ?? 99))
+  const people = pages.filter((p) => p.kind === '人物' && !told.includes(p))
+  const stories = pages.filter((p) => STORY_KINDS.has(p.kind) && !told.includes(p))
   const food = pages.filter((p) => FOOD_KINDS.has(p.kind))
   const { lede, sections } = splitSections(place.intro)
   const seenHere = pages.filter((p) => wikiProgress.seen.has(p.id)).length
@@ -241,6 +249,7 @@ export function PlacePage({ id }: { id: string }) {
               </div>
             )}
             <PhotoRow title={`去${place.name}，必看`} sub="点开一张，读它的故事。" pages={sights} seen={wikiProgress.seen} />
+            {history && <PhotoRow title="这里的历史" sub="按朝代排：从最早的说起。" pages={told} seen={wikiProgress.seen} tag={(p) => eraName.get(p.era[0])} action={<button onClick={() => go('history')} className="text-sm font-extrabold text-[var(--link)]">历史长卷</button>} />}
             <PeopleRow title={`${place.name}的人物`} pages={people} seen={wikiProgress.seen} />
             <PhotoRow title="故事 · 传说 · 历史" pages={stories} seen={wikiProgress.seen} />
             <PhotoRow title="吃什么、带什么回家" pages={food} seen={wikiProgress.seen} />

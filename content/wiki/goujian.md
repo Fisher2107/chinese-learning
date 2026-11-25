@@ -3,6 +3,7 @@ id: goujian
 name: 勾践
 en: Goujian, King of Yue
 kind: 人物
+era: [spring]
 aka: [越王勾践]
 province: [zhejiang, hubei]
 city: [shaoxing]

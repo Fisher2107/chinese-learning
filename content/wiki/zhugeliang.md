@@ -4,6 +4,7 @@ name: 诸葛亮
 py: zhūgěliàng
 en: Zhuge Liang
 kind: 人物
+era: [three]
 aka: [孔明, 诸葛孔明, 卧龙, 武侯, 诸葛武侯]
 province: [sichuan, shandong, hubei, shaanxi]
 city: [chengdu]

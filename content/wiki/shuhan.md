@@ -3,6 +3,7 @@ id: shuhan
 name: 蜀汉
 en: Shu Han
 kind: 朝代
+era: [three]
 aka: [蜀国, 季汉, 刘禅, 阿斗, 乐不思蜀]
 province: [sichuan, chongqing, yunnan, guizhou]
 city: [chengdu]
