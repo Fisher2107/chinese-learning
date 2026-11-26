@@ -737,6 +737,7 @@ for (const { file, meta, body: fullBody } of wikiRaw) {
     cities: cityIds,
     xy,
     river: meta.river ?? '',
+    pin: meta.pin ? String(meta.pin) : undefined,
     lede: makeSentences(meta.lede ?? '', glossary, where),
     ledeIndex: makeSentences(meta.lede ?? '', wikiIndexGlossary, where),
     facts: (meta.facts ?? []).map(([k, v]) => ({ k: String(k), v: makeSentences(String(v), glossary, where) })),
@@ -750,6 +751,17 @@ for (const { file, meta, body: fullBody } of wikiRaw) {
     glossary,
   })
 }
+
+// the questions other pages ask about each page (their next: hooks): the 你知道吗 cards in 刷一刷
+onPage('', '')
+const hookTo = new Map()
+for (const { file, meta } of wikiRaw)
+  for (const n of meta.next ?? []) {
+    const route = routeOf.get(String(n.to))
+    if (!route?.startsWith('wiki/') || !n.hook) continue
+    const id = route.slice(5)
+    if (!hookTo.has(id)) hookTo.set(id, makeSentences(String(n.hook), wikiIndexGlossary, `wiki/${file}`, false))
+  }
 
 // ---------- 历史长卷 (content/history/<era>.md, in the order of content/history/order.yml) ----------
 // Each era: 一分钟读懂 (more after a ---more--- line), its stories (百科 pages with era:), 聊天提示
@@ -941,7 +953,7 @@ if (!CHECK) {
   await writeFile(
     'public/content/wiki-index.json',
     JSON.stringify({
-      pages: wiki.map((w) => ({ id: w.id, name: w.name, en: w.en, py: w.py, kind: w.kind, dates: w.dates, era: w.era, sensitive: w.sensitive, provinces: w.provinces, cities: w.cities, xy: w.xy, river: w.river, lede: w.ledeIndex, chars: w.chars, links: (backlinks.get(`wiki/${w.id}`)?.size ?? 0) })),
+      pages: wiki.map((w) => ({ id: w.id, name: w.name, en: w.en, py: w.py, kind: w.kind, dates: w.dates, era: w.era, sensitive: w.sensitive, provinces: w.provinces, cities: w.cities, xy: w.xy, river: w.river, pin: w.pin, lede: w.ledeIndex, hook: hookTo.get(w.id), chars: w.chars, links: (backlinks.get(`wiki/${w.id}`)?.size ?? 0) })),
       quiz: Object.fromEntries(wiki.filter((w) => w.quiz.length).map((w) => [w.id, w.quiz])),
       wanted: wantedList,
       glossary: wikiIndexGlossary,

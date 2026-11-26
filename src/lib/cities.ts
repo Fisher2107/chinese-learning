@@ -28,3 +28,6 @@ export function citiesOf(prov: string): MapCity[] {
 export function cityBox(c: MapCity, r = 18): [number, number, number, number] {
   return [c.x - r, c.y - r, c.x + r, c.y + r]
 }
+
+/** canals are drawn dashed, so they don't read as rivers */
+export const isCanal = (zh: string) => zh.endsWith('运河')

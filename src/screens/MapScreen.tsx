@@ -25,7 +25,7 @@ import { markKey, setLearnt, useMarks } from '../lib/learn.ts'
 import { LIGHT, MAP_BY_ID, REGIONS, regionColor, usePlaceStats } from '../lib/places.ts'
 import { go } from '../lib/router.ts'
 import type { CitiesFile, Place, PlacesFile } from '../lib/types.ts'
-import { ExploreMap, WORLD_BOX, type Area, type MapApi, type Selection } from '../components/ExploreMap.tsx'
+import { ExploreMap, WORLD_BOX, type Area, type MapApi, type MapSight, type Selection } from '../components/ExploreMap.tsx'
 import { BlocksCard } from '../components/Regions.tsx'
 import { blockBox, blockCentre, blockColor, blocksOf } from '../lib/regions.ts'
 import { DETAIL } from '../lib/cities.ts'
@@ -80,6 +80,12 @@ export function MapScreen({ focus, blocks: blocksRoute, history: historyRoute }:
   const citiesFile = useLoad(loadCities, 'cities').data
   const feed = useLoad(loadFeed, 'feed').data
   const index = useLoad(loadIndex, 'index').data
+  const wikiIndex = useLoad(loadWikiIndex, 'wiki-index').data
+  // 百科 pages with a place: sights, and where people are remembered
+  const sights = useMemo<MapSight[]>(
+    () => (wikiIndex?.pages ?? []).filter((p) => p.xy).sort((a, b) => b.links - a.links).map((p) => ({ id: p.id, name: p.pin || p.name, x: p.xy![0], y: p.xy![1], person: p.kind === '人物' })),
+    [wikiIndex],
+  )
   const stats = usePlaceStats(feed?.cards, index?.series)
   const marks = useMarks()
   const [sel, setSelState] = useState(() => (focus ? (remembered = focus) : remembered))
@@ -195,6 +201,8 @@ export function MapScreen({ focus, blocks: blocksRoute, history: historyRoute }:
         insets={{ top: 112, bottom: cardH + 16 }}
         initialBox={initialBox ?? (routeBlock && blockBox(routeBlock)) ?? (historyRoute !== undefined ? era?.layer.box : undefined)}
         areas={areas}
+        sights={blocks.on || layer ? undefined : sights}
+        onSight={(id) => go(`wiki/${id}`)}
         layer={layer}
         api={api}
       />
@@ -570,6 +578,12 @@ export function StampBook() {
   const places = useLoad(loadPlaces, 'places').data?.places
   const feed = useLoad(loadFeed, 'feed').data
   const index = useLoad(loadIndex, 'index').data
+  const wikiIndex = useLoad(loadWikiIndex, 'wiki-index').data
+  // 百科 pages with a place: sights, and where people are remembered
+  const sights = useMemo<MapSight[]>(
+    () => (wikiIndex?.pages ?? []).filter((p) => p.xy).sort((a, b) => b.links - a.links).map((p) => ({ id: p.id, name: p.pin || p.name, x: p.xy![0], y: p.xy![1], person: p.kind === '人物' })),
+    [wikiIndex],
+  )
   const stats = usePlaceStats(feed?.cards, index?.series)
   if (!places) return <Loading />
   const stamped = places.filter((p) => stats.get(p.id)?.stamp)

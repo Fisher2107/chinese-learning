@@ -80,3 +80,52 @@ export function randomPage(index: WikiIndex, seen: Set<string>, province?: strin
   const from = fresh.length ? fresh : pool
   return from[Math.floor(Math.random() * from.length)]
 }
+
+const RUN = 'zgt-wiki-run'
+export interface Run {
+  /** local day, YYYY-MM-DD */
+  day: string
+  /** pages followed one after another, link to link, right now */
+  now: number
+  /** the longest run today */
+  best: number
+  /** the last page counted, and when */
+  last: string
+  at: number
+}
+
+/**
+ * The rabbit-hole streak: how many 百科 pages in a row you followed from one to the next today.
+ * A page reached from the page before it (the trail grew) adds one; coming in from anywhere else,
+ * or after half an hour away, starts again at one. Kept on this device only.
+ */
+export function countRun(id: string, how: 'followed' | 'back' | 'fresh'): Run {
+  const d = new Date()
+  const day = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  let run: Run | undefined
+  try {
+    run = JSON.parse(localStorage.getItem(RUN) ?? 'null') ?? undefined
+  } catch {
+    run = undefined
+  }
+  if (!run || run.day !== day) run = { day, now: 0, best: 0, last: '', at: 0 }
+  if (run.last === id) return run
+  // stepping back along the trail neither adds nor breaks the run
+  if (how === 'back' && run.now > 0) {
+    run.last = id
+    run.at = Date.now()
+  } else {
+    const followed = how === 'followed'
+    const fresh = Date.now() - run.at < 30 * 60_000
+    run.now = followed && fresh && run.now > 0 ? run.now + 1 : 1
+    run.best = Math.max(run.best, run.now)
+    run.last = id
+    run.at = Date.now()
+  }
+  try {
+    localStorage.setItem(RUN, JSON.stringify(run))
+  } catch {
+    // private mode: the streak lives for this page only
+  }
+  return run
+}

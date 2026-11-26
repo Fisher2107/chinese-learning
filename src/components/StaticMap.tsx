@@ -1,4 +1,5 @@
 import { DETAIL } from '../lib/cities.ts'
+import { isCanal } from '../lib/cities.ts'
 import type { EraLayer } from '../lib/history.ts'
 
 type Box = [number, number, number, number]
@@ -99,7 +100,7 @@ export function StaticMap({
         ))}
         <path d={DETAIL.lakes.d} className="map-lake" />
         {DETAIL.rivers.map((r) => (
-          <path key={r.zh} d={r.d} fill="none" className="map-river" strokeWidth={r.major ? 1.6 : 0.8} vectorEffect="non-scaling-stroke" />
+          <path key={r.zh} d={r.d} fill="none" className={isCanal(r.zh) ? 'map-canal' : 'map-river'} strokeDasharray={isCanal(r.zh) ? '5 4' : undefined} strokeWidth={r.major ? 1.6 : 0.8} vectorEffect="non-scaling-stroke" />
         ))}
         {layer?.routes.map((r) => (
           <path key={`rt-${r.name}`} d={r.d} fill="none" stroke="var(--map-route)" strokeWidth={2} strokeDasharray="6 4" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
@@ -112,7 +113,7 @@ export function StaticMap({
             </text>
           ))}
         {highlighted.map((r) => (
-          <path key={`hl-${r.zh}`} d={r.d} fill="none" stroke="var(--map-water)" strokeWidth={4.5} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+          <path key={`hl-${r.zh}`} d={r.d} fill="none" stroke="var(--map-water)" strokeWidth={4.5} strokeLinecap={isCanal(r.zh) ? 'butt' : 'round'} strokeDasharray={isCanal(r.zh) ? '8 5' : undefined} vectorEffect="non-scaling-stroke" />
         ))}
         {highlighted.map((r) => (
           <text key={`hlt-${r.zh}`} x={r.x} y={r.y - unit * 5} fontSize={unit * 12} textAnchor="middle" className="map-water" style={{ fontWeight: 900, strokeWidth: unit * 2.6 }}>

@@ -2,12 +2,14 @@ import { add } from 'dexie'
 import { progressKey, db, type FeedSeen, type SavedWord } from './db.ts'
 import { shortQuestion, type QuizQuestion } from './places.ts'
 import { addChars, addCoins, bumpDay, recordActivity } from './stats.ts'
-import type { FeedCard, Place } from './types.ts'
+import type { FeedCard, Place, WikiSummary } from './types.ts'
 
 export type FeedItem =
   | { kind: 'card'; card: FeedCard }
   | { kind: 'review'; word: SavedWord }
   | { kind: 'quiz'; place: Place; q: QuizQuestion }
+  /** 你知道吗: a question another 百科 page asks about this one */
+  | { kind: 'wiki'; page: WikiSummary }
   | { kind: 'end' }
 
 /** About this many story cards per session; the daily updater adds new ones. */
@@ -65,6 +67,7 @@ export function buildQueue({
   explored,
   start,
   again,
+  wiki = [],
 }: {
   cards: FeedCard[]
   seen: FeedSeen[]
@@ -75,6 +78,8 @@ export function buildQueue({
   start?: string
   /** include cards already read (再刷一遍) */
   again?: boolean
+  /** 百科 pages with a hook question, not read yet: one 你知道吗 card every few cards */
+  wiki?: WikiSummary[]
 }): FeedItem[] {
   const readIds = new Set(seen.filter((s) => s.read).map((s) => s.id))
   const pool = again ? cards : cards.filter((c) => !readIds.has(c.id))
@@ -84,6 +89,9 @@ export function buildQueue({
   ranked = ranked.slice(0, SESSION_CARDS)
 
   const quizPlaces = shuffle(places.filter((p) => explored.has(p.id)))
+  // pages about provinces they've read about first, then the rest
+  const wikiCards = shuffle(wiki).sort((a, b) => +b.provinces.some((p) => explored.has(p)) - +a.provinces.some((p) => explored.has(p)))
+  let w = 0
   const out: FeedItem[] = []
   let r = 0
   let q = 0
@@ -94,6 +102,7 @@ export function buildQueue({
       const place = quizPlaces[q++]
       out.push({ kind: 'quiz', place, q: shortQuestion(place, places) })
     }
+    if ((i + 1) % 5 === 2 && w < wikiCards.length) out.push({ kind: 'wiki', page: wikiCards[w++] })
   })
   out.push({ kind: 'end' })
   return out

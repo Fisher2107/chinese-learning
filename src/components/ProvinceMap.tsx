@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
 import { ArrowsOutIcon } from '@phosphor-icons/react'
 import { DETAIL, citiesOf, type MapCity } from '../lib/cities.ts'
+import { isCanal } from '../lib/cities.ts'
 import { MAP } from '../lib/places.ts'
 import { go } from '../lib/router.ts'
 import { provinceBox } from './StaticMap.tsx'
@@ -322,12 +323,12 @@ export function ProvinceMap({
           ))}
           <path d={DETAIL.lakes.d} className="map-lake" pointerEvents="none" />
           {DETAIL.rivers.map((r) => (
-            <path key={r.zh} d={r.d} fill="none" className="map-river" strokeWidth={r.major ? 1.8 : 1} vectorEffect="non-scaling-stroke" pointerEvents="none" />
+            <path key={r.zh} d={r.d} fill="none" className={isCanal(r.zh) ? 'map-canal' : 'map-river'} strokeDasharray={isCanal(r.zh) ? '5 4' : undefined} strokeWidth={r.major ? 1.8 : 1} vectorEffect="non-scaling-stroke" pointerEvents="none" />
           ))}
           {DETAIL.rivers
             .filter((r) => rivers.includes(r.zh))
             .map((r) => (
-              <path key={`hl-${r.zh}`} d={r.d} fill="none" stroke="var(--map-water)" strokeWidth={4.5} strokeLinecap="round" vectorEffect="non-scaling-stroke" pointerEvents="none" />
+              <path key={`hl-${r.zh}`} d={r.d} fill="none" stroke="var(--map-water)" strokeWidth={4.5} strokeLinecap={isCanal(r.zh) ? 'butt' : 'round'} strokeDasharray={isCanal(r.zh) ? '8 5' : undefined} vectorEffect="non-scaling-stroke" pointerEvents="none" />
             ))}
           <path d={PROVINCES[prov]} fill="none" stroke={color} strokeWidth={2.5} vectorEffect="non-scaling-stroke" pointerEvents="none" />
         </g>

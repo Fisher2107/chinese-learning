@@ -45,7 +45,7 @@ aka: [浙江水, 之江]           # other names that should link here
 province: [zhejiang, anhui]  # first one is "home"
 city: [hangzhou]             # map city ids (the build prints them)
 at: [120.15, 30.2]           # lon, lat: a pin on the map
-pin: 司马迁祠                 # 人物 with at: only — the name shown on the pin (must be set; PR #27)
+pin: 司马迁祠                 # 人物 with at: — the place the pin is named after (else the person's name)
 river: 钱塘江                 # a river drawn on the map, shown bold
 image: 钱塘江                 # Chinese name, Q-id, or 'File:Something.jpg'
 dates: 1937年通车
