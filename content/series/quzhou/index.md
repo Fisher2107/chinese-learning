@@ -17,6 +17,12 @@ sources:
   - { title: "凤凰网：衢州孔氏南宗与“八品”五经博士（2014）", url: "https://news.ifeng.com/a/20140827/41753026_0.shtml" }
   - { title: "潮新闻：钱江源（开化）", url: "https://tidenews.com.cn/news.html?id=2552512" }
   - { title: "新华网：钱江源国家公园（2026）", url: "https://www.news.cn/local/20260804/02fb9ed5fc624099b55a39bf3fefb38c/c.html" }
+  - { title: "新华网：甲辰年公祭孔子大典，曲阜主会场、衢州分会场（2024-09-29）", url: "https://www.news.cn/local/20240929/bc4d6e674f6f4b8cb431b2284905304a/c.html" }
+  - { title: "儒家网（转澎湃）：衢州孔子诞辰2575年祭典（2024-09-29）", url: "https://www.rujiazg.com/article/28591" }
+  - { title: "中国非物质文化遗产网：祭孔大典（南孔祭典）", url: "https://www.ihchina.cn/project_details/14983.html" }
+  - { title: "杭州网：孔氏南宗纪念先师诞辰2573年大典（2022-09-29）", url: "https://hznews.hangzhou.com.cn/wenti/content/2022-09/29/content_8364799_0.htm" }
+  - { title: "网易：南孔爷爷城市IP", url: "https://m.163.com/dy/article/L3C7M8US05568W0A.html" }
+  - { title: "人民日报·中国城市报：衢州有礼（2024-10-21）", url: "https://paper.people.com.cn/zgcsb/html/2024-10/21/content_26086532.htm" }
 inspiration:
   - https://www.instagram.com/p/Dfg45ufhTn0/
 ---

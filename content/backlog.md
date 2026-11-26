@@ -2,6 +2,19 @@
 
 Researched or half-researched topics waiting to be written. Newest first. Reels are links only (inspiration, never copied).
 
+## 2026-11-26
+
+### 衢州 · 家乡必做（进行中）
+- 已写：第5集 新闻“不穿古装的祭孔”（2024-09-28 曲阜主会场、衢州分会场；衢州穿正装、鞠躬、献五谷；2004年孔祥楷提出恢复，“当代人祭孔”；2011年列入国家级非遗）。
+- 没用的线索：“2024年是衢州恢复祭孔20周年”只有搜索摘要，原文里没看到；衢州祭典读不读《论语》，来源没写，正文只写了典礼形式。
+- 下一集 第6集（最后一集）：孔祥楷——第七十五代嫡长孙、“最后一位奉祀官”（杭州网2022）。要找两个来源：他小时候怎么当上奉祀官、1949年以后的经历、回衢州做了什么。备选：楷木像1959年借去曲阜（仍只有一个来源）、烂柯山与围棋。
+- 第6集写完后系列结束，下一个城市候选：成都（川剧变脸、方言，🎬 https://www.instagram.com/joemi.in.chengdu/reel/DgBk-mVts9v/ ）。
+
+### 新的 刷一刷 选题
+- 西贝预制菜之争 → 已写（content/feed/xibei-yuzhicai.md）。🎬 https://www.instagram.com/ur.chinese.unc/reel/Df1jVopzrMk/ （标题说一个中国CEO“搞垮自己的公司”，带 #restaurant 标签；视频本身没看，卡片内容全部来自新闻）。没用的线索：罗永浩点了几道菜、一共多少钱（13道830元还是14道833元，来源不一样）；亏损5亿、6亿只是内部估计；约4000名员工受影响西贝没确认；2026年1月两人被平台禁言只有一篇复盘文章。
+- “衢州三怪”（钟楼独角兽、白布怪、鸭怪）的传说，和南孔爷爷一起出现在文博会上，待查来源，可做衢州彩蛋或卡片。
+- 中国人的审美变了？（🎬 https://www.instagram.com/ur.chinese.unc/reel/DfyCnxJzGaO/ ）从“白瘦”到健身、肌肉，可做社会话题卡片，要找调查数据。
+
 ## 2026-11-25
 
 ### 衢州 · 家乡必做（进行中）
@@ -65,3 +78,4 @@ Researched or half-researched topics waiting to be written. Newest first. Reels 
 - 2026-11-23 山西午睡 → content/feed/shanxi-wushui.md
 - 2026-11-24 张家界天门洞 → content/feed/tianmendong.md
 - 2026-11-25 南京零元面馆 → content/feed/lingyuan-mianguan.md
+- 2026-11-26 西贝预制菜 → content/feed/xibei-yuzhicai.md
