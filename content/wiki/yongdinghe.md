@@ -3,7 +3,7 @@ id: yongdinghe
 name: 永定河
 en: Yongding River
 kind: 河流
-aka: [卢沟桥, 卢沟河, 无定河, 桑干河, 七七事变, 卢沟晓月]
+aka: [卢沟桥, 卢沟河, 无定河, 桑干河, 卢沟晓月]
 province: [beijing, hebei, shanxi]
 at: [116.2140, 39.8490]
 river: 永定河

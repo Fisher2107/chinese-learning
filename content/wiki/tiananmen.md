@@ -3,7 +3,7 @@ id: tiananmen
 name: 天安门
 en: Tiananmen
 kind: 建筑
-aka: [天安门广场, 承天门, 天安门城楼, 开国大典, 人民英雄纪念碑]
+aka: [天安门广场, 承天门, 天安门城楼, 人民英雄纪念碑]
 province: beijing
 at: [116.3975, 39.9087]
 image: 天安门

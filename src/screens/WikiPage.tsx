@@ -94,7 +94,8 @@ export function WikiPage({ id }: { id: string }) {
                   {places?.places.find((x) => x.id === p)?.name ?? p}
                 </Chip>
               ))}
-              {page.cities.map((c) => (
+              {/* 北京, 上海…: a city with the same name as a province chip would show twice */}
+              {page.cities.filter((c) => !page.provinces.some((p) => (places?.places.find((x) => x.id === p)?.name ?? p) === CITY_BY_ID.get(c)?.name)).map((c) => (
                 <Chip key={c} onClick={() => go(`city/${c}`)}>
                   {CITY_BY_ID.get(c)?.name ?? c}
                 </Chip>
