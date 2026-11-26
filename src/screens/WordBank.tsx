@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useLiveQuery } from '../lib/live.ts'
 import { ArrowSquareOutIcon, DropIcon, MagnifyingGlassIcon, PlantIcon, SpeakerHighIcon, TrashIcon } from '@phosphor-icons/react'
-import { db, type SavedWord } from '../lib/db.ts'
+import { db, patchRow, type SavedWord } from '../lib/db.ts'
 import { formatInterval, unsaveWord } from '../lib/srs.ts'
 import { back, go } from '../lib/router.ts'
 import { speak } from '../lib/speech.ts'
@@ -110,7 +110,7 @@ function WordRow({ w, open, onToggle, now }: { w: SavedWord; open: boolean; onTo
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            onBlur={() => note !== (w.note ?? '') && db.words.update(w.id!, { note: note.trim() || undefined })}
+            onBlur={() => note !== (w.note ?? '') && patchRow(db.words, w.id!, { note: note.trim() || undefined })}
             placeholder="写个笔记：怎么记住它？在哪儿听到过？"
             rows={2}
             className="mt-3 w-full resize-none rounded-xl border-2 border-line bg-sunken p-3 text-[15px] outline-none focus:border-huang"

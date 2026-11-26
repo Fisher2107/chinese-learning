@@ -1,6 +1,10 @@
 import { useSyncExternalStore } from 'react'
 import { useLiveQuery as useDexieLiveQuery } from 'dexie-react-hooks'
-import { db } from './db.ts'
+import { db, deviceDb } from './db.ts'
+
+// Signed in, study progress is in the cloud database, while settings, the AI cache and pasted
+// articles stay in the device one. A dropped connection can hit either, so both are reopened.
+const databases = db === deviceDb ? [db] : [db, deviceDb]
 
 /*
  * WebKit (Safari, and every browser on iPhone) sometimes drops its IndexedDB connection while
@@ -39,8 +43,8 @@ export function reconnect(): Promise<boolean> {
   tries.push(Date.now())
   reopening = (async () => {
     try {
-      db.close({ disableAutoOpen: false })
-      await db.open()
+      for (const d of databases) d.close({ disableAutoOpen: false })
+      await Promise.all(databases.map((d) => d.open()))
       return true
     } catch {
       return false
@@ -64,6 +68,7 @@ export function watchConnection() {
     if (Date.now() - hiddenAt < 5_000) return
     try {
       await db.words.orderBy('created').reverse().limit(1).toArray()
+      if (deviceDb !== db) await deviceDb.settings.limit(1).toArray()
     } catch (e) {
       if (isLostConnection(e)) reconnect()
     }

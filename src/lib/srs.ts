@@ -1,5 +1,5 @@
 import { DefaultScheduler, Rating } from 'ts-fsrs'
-import { progressKey, inCloud, db, type SavedWord, type WordSource } from './db.ts'
+import { cloudDb, patchRow, progressKey, inCloud, db, type SavedWord, type WordSource } from './db.ts'
 import type { Token } from './types.ts'
 import { addCoins, bumpDay, recordActivity } from './stats.ts'
 
@@ -24,13 +24,46 @@ export async function saveWord(input: { word: string; p: string; d: string; sent
   const card = s.newCard({ now }) as unknown as CardLike
   const id = await db.words.add({
     ...input,
-    ...(inCloud ? { id: progressKey(input.word) } : {}),
+    // A fresh id for every save: a device that saves a word offline must not overwrite the card
+    // another device has been reviewing. mergeDuplicateWords() folds the copies together after a sync.
+    ...(inCloud ? { id: progressKey(crypto.randomUUID()) } : {}),
     created: now.getTime(),
     due: card.dueAt.getTime(),
     card: card as unknown as Record<string, unknown>,
   })
   await bumpDay('saved')
   return id
+}
+
+/**
+ * Two devices that saved the same word offline each have a row for it. Keep the one with the most
+ * reviews (then the oldest), move the other rows' reviews and note onto it, and delete them.
+ * Every device picks the same row, so running this on several at once is safe.
+ */
+export async function mergeDuplicateWords() {
+  await db.transaction('rw', db.words, db.reviews, async () => {
+    const byWord = new Map<string, SavedWord[]>()
+    for (const w of await db.words.toArray()) byWord.set(w.word, [...(byWord.get(w.word) ?? []), w])
+    for (const rows of byWord.values()) {
+      if (rows.length < 2) continue
+      const reviews = await db.reviews.where('wordId').anyOf(rows.map((r) => r.id!)).toArray()
+      const count = (w: SavedWord) => reviews.filter((r) => r.wordId === w.id).length
+      const [keep, ...rest] = rows.sort((a, b) => count(b) - count(a) || a.created - b.created || String(a.id).localeCompare(String(b.id)))
+      const note = keep.note ?? rest.find((w) => w.note)?.note
+      if (note !== keep.note) await db.words.upsert(keep.id!, { note })
+      const restIds = rest.map((w) => w.id!)
+      await db.reviews.where('wordId').anyOf(restIds).modify({ wordId: keep.id! })
+      await db.words.bulkDelete(restIds)
+    }
+  })
+}
+
+/** In the cloud profile, merge copies of a word after every sync. */
+export function watchDuplicateWords() {
+  if (!inCloud || !cloudDb) return
+  cloudDb.cloud.syncState.subscribe((s) => {
+    if (s.phase === 'in-sync') mergeDuplicateWords().catch((e) => console.warn('合并生词失败', e))
+  })
 }
 
 export async function unsaveWord(word: string) {
@@ -79,8 +112,9 @@ export async function grade(word: SavedWord, rating: Rating) {
   const now = new Date()
   const { card } = s.review({ card: reviveCard(word.card), grade: rating as never, now }) as unknown as { card: CardLike }
   await db.transaction('rw', db.words, db.reviews, async () => {
-    const updated = await db.words.update(word.id!, { card: card as unknown as Record<string, unknown>, due: card.dueAt.getTime() })
-    if (updated) await db.reviews.add({ ...(inCloud ? { id: crypto.randomUUID() } : {}), wordId: word.id!, rating, at: now.getTime() })
+    const updated = await patchRow(db.words, word.id!, { card: card as unknown as Record<string, unknown>, due: card.dueAt.getTime() })
+    // Private (#) ids belong to this account, so a backup restored into another account can't clash with them
+    if (updated) await db.reviews.add({ ...(inCloud ? { id: progressKey(crypto.randomUUID()) } : {}), wordId: word.id!, rating, at: now.getTime() })
   })
   if (rating !== Rating.Again) await addCoins(2)
   await bumpDay('reviews')

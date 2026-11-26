@@ -1,5 +1,5 @@
 import { db, deviceDb, inCloud, isStudySetting, keyed, progressKey, type SavedWord, type Setting } from './db.ts'
-import { reviveCard } from './srs.ts'
+import { mergeDuplicateWords, reviveCard } from './srs.ts'
 
 const progress = ['words', 'reviews', 'series', 'texts', 'known', 'places', 'feed', 'days', 'cities', 'wiki', 'eggs'] as const
 const privateTables = ['imports', 'ai'] as const
@@ -42,10 +42,14 @@ export async function restoreStudyBackup(json: string) {
       if (!Array.isArray(data[t])) continue
       let rows = data[t].map(portable)
       if (t === 'words') rows = words.map(w => ({ ...portable({ ...w }), id: inCloud ? ids.get(w.id) : w.id, card: reviveCard(w.card) }))
-      else if (t === 'reviews' && inCloud) rows = rows.map(r => {
+      else if (t === 'reviews' && inCloud) rows = rows.flatMap(r => {
+        // A review of a word that isn't in the backup has nothing to attach to
         const wordId = ids.get(r.wordId as string | number)
-        if (!wordId) throw new Error('复习记录缺少对应的生词')
-        return { ...r, wordId, id: typeof r.id === 'string' ? r.id : `#review:${wordId}:${r.at}:${r.id}` }
+        if (!wordId) return []
+        // Private (#) ids belong to this account. Any other id is rebuilt as one, so restoring
+        // another account's backup can't collide with that account's reviews on the server.
+        const own = typeof r.id === 'string' && r.id.startsWith('#')
+        return [{ ...r, wordId, id: own ? r.id : `#review:${wordId}:${r.at}:${r.id}` }]
       })
       else if (t !== 'reviews' && inCloud) {
         if (t === 'texts') rows = rows.filter(r => typeof r.id === 'string' && !r.id.startsWith('import:'))
@@ -57,6 +61,10 @@ export async function restoreStudyBackup(json: string) {
     await db.settings.bulkPut(settings.filter(s => isStudySetting(s.key)).map(s => keyed({ key: s.key, value: s.value })))
     if (!inCloud) await restorePrivate()
   })
-  if (inCloud) await deviceDb.transaction('rw', localTables, restorePrivate)
+  if (inCloud) {
+    await deviceDb.transaction('rw', localTables, restorePrivate)
+    // A restored word may already be saved under another id
+    await mergeDuplicateWords()
+  }
   return words.length
 }

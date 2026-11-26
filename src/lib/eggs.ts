@@ -1,5 +1,5 @@
 import type { Rating } from 'ts-fsrs'
-import { db, keyed, progressKey, type EggNote } from './db.ts'
+import { db, keyed, patchRow, progressKey, type EggNote } from './db.ts'
 import { newCard, reviewCard } from './srs.ts'
 import { addCoins, bumpDay, recordActivity } from './stats.ts'
 import type { CitiesFile, DialectFile, Egg, PlacesFile, Sentence, SourceLink } from './types.ts'
@@ -90,7 +90,8 @@ const now = () => Date.now()
 async function upsert(egg: Pick<EggView, 'key' | 'page' | 'title' | 'text' | 'q'>, patch: Partial<EggNote>) {
   await db.transaction('rw', db.eggs, async () => {
     const row = await db.eggs.get(progressKey(egg.key))
-    if (row) await db.eggs.update(progressKey(egg.key), { ...patch, updated: now() })
+    // upsert, not update: Dexie Cloud would send update() on a # id as the whole row
+    if (row) await db.eggs.upsert(progressKey(egg.key), { ...patch, updated: now() })
     else
       await db.eggs.put(keyed({
         key: egg.key,
@@ -146,7 +147,7 @@ export async function removeEggCard(egg: EggView) {
   if (!row) return
   // Nothing else of the user's on it: forget the row
   if (!row.mine && row.text === undefined && row.q === undefined && !row.note && !row.find) await db.eggs.delete(progressKey(egg.key))
-  else await db.eggs.update(progressKey(egg.key), { card: undefined, due: undefined, updated: now() })
+  else await patchRow(db.eggs, progressKey(egg.key), { card: undefined, due: undefined, updated: now() })
 }
 
 /** A 聊天彩蛋 the user wrote. */
@@ -185,7 +186,7 @@ export async function gradeEgg(row: EggNote, rating: Rating): Promise<EggNote> {
   const fresh = (await db.eggs.get(progressKey(row.key))) ?? row
   const { card, due } = await reviewCard(fresh.card!, rating)
   const next = { ...fresh, card, due, updated: now() }
-  await db.eggs.update(progressKey(row.key), { card, due, updated: next.updated })
+  await patchRow(db.eggs, progressKey(row.key), { card, due, updated: next.updated })
   if (rating !== 1) await addCoins(2)
   await bumpDay('reviews')
   await recordActivity()
