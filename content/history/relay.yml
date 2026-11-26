@@ -1,0 +1,57 @@
+# 权力接力: who held the top job from 毛泽东 to 习近平, shown on these chapters' pages.
+# page: the 百科 page (its photo is the portrait); era: the chapter where the runner is highlighted;
+# side: a branch off the runner above it (总书记 under 邓小平, both removed).
+eras: [mao, reform, new-era]
+runners:
+  - page: maozedong
+    name: 毛泽东
+    years: 1935/1943—1976年
+    era: mao
+    how: 遵义会议以后进入领导核心，延安整风以后成为最高领袖。
+    phrase: 为人民服务
+  - page: huaguofeng
+    name: 华国锋
+    years: 1976—1978年
+    era: reform
+    how: 毛泽东去世前给他写了“你办事，我放心”；一个月后他抓了“四人帮”。
+    phrase: 两个凡是
+  - page: dengxiaoping
+    name: 邓小平
+    years: 1978—1989年（1992年南巡）
+    era: reform
+    how: 十一届三中全会以后实际上的最高领导人，却从没当过总书记。
+    phrase: 黑猫白猫
+  - page: huyaobang
+    name: 胡耀邦
+    years: 总书记 1982—1987年
+    era: reform
+    side: true
+    how: 邓小平选的总书记，1987年被迫辞职。
+    phrase: 平反冤假错案
+  - page: zhaoziyang
+    name: 赵紫阳
+    years: 总书记 1987—1989年
+    era: reform
+    side: true
+    how: 邓小平选的第二个总书记，1989年反对戒严，被撤职、软禁。
+    phrase: 我们来得太晚了
+  - page: jiangzemin
+    name: 江泽民
+    years: 1989—2002年
+    era: reform
+    how: 1989年由邓小平和元老们选中，从上海调到北京。
+    phrase: 三个代表
+  - page: hujintao
+    name: 胡锦涛
+    years: 2002—2012年
+    era: reform
+    how: 1992年进政治局常委，人们说是邓小平“隔代指定”的接班人。
+    phrase: 和谐社会
+  - page: xijinping
+    name: 习近平
+    years: 2012年至今
+    era: new-era
+    how: 2007年进政治局常委、排在李克强前面，2012年十八大接班；2022年开始第三个任期。
+    phrase: 中国梦
+arc: |
+  毛泽东到去世都没有一套交接的规矩，他选的接班人刘少奇、林彪都没有好下场，华国锋靠的是一张纸条。邓小平吸取了教训，定下了一些规矩：最高领导人最多干两届，大事集体决定，接班人提前选好、提前锻炼，常委到了年龄就退。江泽民、胡锦涛都是按这套规矩交的班。2018年修宪取消了国家主席的任期限制，2022年习近平开始了第三个任期，这套规矩有一部分改变了。

@@ -621,7 +621,7 @@ for (const c of detail.cities) {
 // ---------- 百科 ----------
 // Pages about one thing each: a place, a person, a river, an event, a legend, a dish. Linked from
 // stories, provinces and each other, so one page leads to the next.
-const WIKI_KINDS = ['景点', '地点', '河流', '山', '湖', '人物', '事件', '朝代', '传说', '美食', '文化', '建筑', '作品', '物产']
+const WIKI_KINDS = ['景点', '地点', '河流', '山', '湖', '人物', '事件', '朝代', '传说', '美食', '文化', '建筑', '作品', '物产', '专题']
 const proj = mapDetail.proj && geoConicEqualArea().parallels([25, 47]).rotate([-105, 0]).scale(mapDetail.proj.scale).translate(mapDetail.proj.translate)
 const asList = (v) => (v == null ? [] : Array.isArray(v) ? v.map(String) : [String(v)])
 // whose account a source is: shown as a pill next to it
@@ -773,6 +773,37 @@ for (const [id, image] of Object.entries(historyMedia)) {
   else if (!existsSync(`public/${image.src}`)) errors.push(`src/data/history-media.json: ${id}: no file public/${image.src}`)
   else image.src += '?v=' + createHash('sha256').update(await readFile(`public/${image.src}`)).digest('hex').slice(0, 10)
 }
+// 权力接力 (relay.yml) and 今天的中国怎么运作 (system.yml): extra panels on a few 卷二 chapters
+const relaySrc = existsSync('content/history/relay.yml') ? parseYaml(await readFile('content/history/relay.yml', 'utf8')) : undefined
+const systemSrc = existsSync('content/history/system.yml') ? parseYaml(await readFile('content/history/system.yml', 'utf8')) : undefined
+function relayFor(id, glossary) {
+  if (!relaySrc?.eras?.includes(id)) return undefined
+  const w = 'history/relay.yml'
+  return {
+    runners: (relaySrc.runners ?? []).map((r, i) => {
+      if (!r.page || !r.name || !r.years || !r.era || !r.how || !r.phrase) errors.push(`${w}: runner ${i + 1} needs page, name, years, era, how and phrase`)
+      if (!wiki.some((p) => p.id === r.page)) errors.push(`${w}: no 百科 page "${r.page}"`)
+      if (!relaySrc.eras.includes(r.era)) errors.push(`${w}: ${r.name}'s era "${r.era}" isn't in eras:`)
+      return { page: String(r.page), name: String(r.name), years: String(r.years), era: String(r.era), side: !!r.side, how: makeSentences(String(r.how ?? ''), glossary, w), phrase: makeSentences(String(r.phrase ?? ''), glossary, w) }
+    }),
+    arc: parseBlocks(String(relaySrc.arc ?? ''), glossary, w),
+  }
+}
+function systemFor(id, glossary) {
+  if (systemSrc?.era !== id) return undefined
+  const w = 'history/system.yml'
+  const row = (x, keys) => {
+    for (const k of keys) if (!x?.[k]) errors.push(`${w}: every row needs ${keys.join(', ')}`)
+    return Object.fromEntries(keys.map((k) => [k, makeSentences(String(x?.[k] ?? ''), glossary, w)]))
+  }
+  return {
+    checked: String(systemSrc.checked ?? ''),
+    party: (systemSrc.party ?? []).map((x) => row(x, ['name', 'count', 'note'])),
+    state: (systemSrc.state ?? []).map((x) => row(x, ['name', 'note'])),
+    posts: parseBlocks(String(systemSrc.posts ?? ''), glossary, w),
+    calendar: (systemSrc.calendar ?? []).map((x) => row(x, ['when', 'what'])),
+  }
+}
 const drawEra = historyMap(mapDetail, proj, Object.fromEntries(places.map((p) => [p.id, p.name])), errors)
 const historyGlossary = {}
 const eras = []
@@ -874,6 +905,8 @@ for (const id of historyOrder) {
       timeline,
       quiz,
       layer,
+      ...(relaySrc?.eras?.includes(id) ? { relay: relayFor(id, glossary) } : {}),
+      ...(systemSrc?.era === id ? { system: systemFor(id, glossary) } : {}),
       glossary,
     },
   })

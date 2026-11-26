@@ -1,0 +1,23 @@
+# 今天的中国怎么运作: one diagram on the 新时代 page. Names and numbers go out of date, so
+# re-check them against the news (政治局 membership changes) and update `checked`.
+era: new-era
+checked: 2026-11
+party:
+  - { name: 党员, count: 1亿多, note: 2025年底一共10128.6万名 }
+  - { name: 全国代表大会, count: 两千多名代表, note: 每五年开一次，2022年是二十大，下一次二十一大在2027年 }
+  - { name: 中央委员会, count: 约两百人, note: 党代会选出来，每年开几次“全会” }
+  - { name: 中央政治局, count: 二十多人, note: 2022年选出24人，后来有几位落马 }
+  - { name: 政治局常委, count: 7人, note: 习近平、李强、赵乐际、王沪宁、蔡奇、丁薛祥、李希 }
+  - { name: 总书记, count: 1人, note: 习近平，2012年起 }
+state:
+  - { name: 全国人民代表大会, note: 宪法上的最高权力机关，近三千名代表，每年三月开会，通过法律、选国家领导人 }
+  - { name: 国务院, note: 中央政府，管经济和日常的事；总理是李强 }
+  - { name: 国家主席, note: 国家元首，见外国领导人、签发法律；习近平 }
+  - { name: 中央军事委员会, note: 指挥解放军；主席是习近平 }
+posts: |
+  最高领导人一个人同时担任三个职务：党的总书记、国家主席、中央军委主席。三个里面最重要的是总书记，因为在中国，党领导一切；“国家主席”更多是对外的身份。军委主席管枪，所以也非常重要。
+calendar:
+  - { when: 3月, what: 两会：全国人大和全国政协开会，总理做政府工作报告，宣布今年的经济增长目标 }
+  - { when: 7月1日, what: 建党节，1921年中国共产党成立 }
+  - { when: 10月1日, what: 国庆节，放七天假 }
+  - { when: 每五年的秋天, what: 党代会，换届、选出新的中央委员会和常委；下一次是2027年的二十一大 }

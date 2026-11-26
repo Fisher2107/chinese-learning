@@ -236,7 +236,7 @@ export interface Photo {
 }
 
 /** 百科 page kinds. 景点 and the like show in a place's "必去" photos; 人物 in its people. */
-export type WikiKind = '景点' | '地点' | '河流' | '山' | '湖' | '人物' | '事件' | '朝代' | '传说' | '美食' | '文化' | '建筑' | '作品' | '物产'
+export type WikiKind = '景点' | '地点' | '河流' | '山' | '湖' | '人物' | '事件' | '朝代' | '传说' | '美食' | '文化' | '建筑' | '作品' | '物产' | '专题'
 
 export interface WikiQuiz {
   q: string

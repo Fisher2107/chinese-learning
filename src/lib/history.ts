@@ -117,7 +117,30 @@ export interface Era extends EraSummary {
   timeline: TimelineItem[]
   quiz: WikiQuiz[]
   layer: EraLayer
+  /** 权力接力: who held the top job, 毛泽东 to 习近平 (on the 卷二 chapters after 1949) */
+  relay?: { runners: Relay[]; arc: Block[] }
+  /** 今天的中国怎么运作 (新时代 only) */
+  system?: {
+    checked: string
+    party: { name: Sentence[]; count: Sentence[]; note: Sentence[] }[]
+    state: { name: Sentence[]; note: Sentence[] }[]
+    posts: Block[]
+    calendar: { when: Sentence[]; what: Sentence[] }[]
+  }
   glossary: Record<string, string>
+}
+
+export interface Relay {
+  /** the 百科 page, whose photo is the portrait */
+  page: string
+  name: string
+  years: string
+  /** the chapter where this runner is highlighted */
+  era: string
+  /** a 总书记 under 邓小平 rather than the top leader */
+  side: boolean
+  how: Sentence[]
+  phrase: Sentence[]
 }
 
 /** 王朝至此完: what the second scroll is called. */

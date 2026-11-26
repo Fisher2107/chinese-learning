@@ -4,6 +4,7 @@ import {
   ArrowCounterClockwiseIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
+  BankIcon,
   BookOpenTextIcon,
   ChatCircleDotsIcon,
   CheckCircleIcon,
@@ -22,7 +23,7 @@ import {
 import { loadEra, loadHistory, loadIndex, loadPlaces, loadWikiIndex, useLoad } from '../lib/content.ts'
 import type { WordSource } from '../lib/db.ts'
 import { mergeEggs } from '../lib/eggs.ts'
-import { BOOK_TITLE, earnEraSeal, useHistoryProgress, visitEra, type Era, type EraLayer, type EraSummary, type Figure, type HistoryIndex, type TimelineItem } from '../lib/history.ts'
+import { BOOK_TITLE, earnEraSeal, useHistoryProgress, visitEra, type Era, type EraLayer, type Relay, type EraSummary, type Figure, type HistoryIndex, type TimelineItem } from '../lib/history.ts'
 import { back, go, usePageState } from '../lib/router.ts'
 import { speak } from '../lib/speech.ts'
 import type { WikiIndex, WikiSummary } from '../lib/types.ts'
@@ -494,6 +495,8 @@ export function EraPage({ id, n }: { id: string; n?: number }) {
         below={
           <JumpBar
             items={[
+              ...(era.relay ? [{ id: 'era-relay', label: '接力' }] : []),
+              ...(era.system ? [{ id: 'era-system', label: '怎么运作' }] : []),
               ...(pages.length || series.length ? [{ id: 'era-stories', label: '故事', count: pages.length }] : []),
               { id: 'era-eggs', label: '彩蛋', count: eggCount, hot: true },
               { id: 'era-map', label: '地图' },
@@ -563,9 +566,27 @@ export function EraPage({ id, n }: { id: string; n?: number }) {
                   </div>
                 ))}
               </div>
+              {era.tips.some((t) => t.k === '少提') && wiki?.pages.some((p) => p.id === 'mingan-huati') && (
+                <button onClick={() => go('wiki/mingan-huati')} className="mt-3 flex w-full items-center gap-2 rounded-xl bg-huang/20 px-3 py-2.5 text-left text-[15px] font-black text-huang-dark">
+                  <InfoIcon size={18} weight="fill" className="shrink-0" /> 敏感话题一览：哪些话题敏感，为什么
+                  <ArrowRightIcon size={16} weight="bold" className="ml-auto shrink-0" />
+                </button>
+              )}
             </div>
           )}
         </Fold>
+
+        {era.relay && (
+          <Fold id="era-relay" title="权力接力" icon={<UsersThreeIcon size={22} weight="fill" className="shrink-0" style={{ color: era.color }} />}>
+            <PowerRelay era={era} source={source} />
+          </Fold>
+        )}
+
+        {era.system && (
+          <Fold id="era-system" title="今天的中国怎么运作" icon={<BankIcon size={22} weight="fill" className="shrink-0" style={{ color: era.color }} />}>
+            <HowChinaWorks era={era} source={source} />
+          </Fold>
+        )}
 
         {(pages.length > 0 || series.length > 0) && (
           <Fold id="era-stories" title={`${era.name}的故事`} count={pages.length} icon={<BookOpenTextIcon size={21} weight="fill" className="shrink-0" style={{ color: era.color }} />}>
@@ -777,6 +798,117 @@ function TimelineBody({ t, era, n, source }: { t: TimelineItem; era: Era; n: num
 }
 
 /** A portrait from the 大事年表: the whole picture, never cropped, with the name and what they did. */
+/** 权力接力: 毛泽东 to 习近平, one runner after another, this chapter's runners marked. */
+function PowerRelay({ era, source }: { era: Era; source: WordSource }) {
+  const relay = era.relay!
+  return (
+    <div>
+      <ol className="relative">
+        {relay.runners.map((r, i) => (
+          <RelayRow key={r.page} r={r} n={i} era={era} source={source} last={i === relay.runners.length - 1} />
+        ))}
+      </ol>
+      <div className="mt-2">
+        <Sub title="接班的规矩">
+          <div className="rounded-2xl bg-paper p-4 text-[18px] text-paper-text">
+            <Blocks blocks={relay.arc} id={`era-${era.id}-relay`} glossary={era.glossary} source={source} />
+          </div>
+        </Sub>
+      </div>
+    </div>
+  )
+}
+
+function RelayRow({ r, n, era, source, last }: { r: Relay; n: number; era: Era; source: WordSource; last: boolean }) {
+  const photo = usePhoto(`wiki/${r.page}`)
+  const here = r.era === era.id
+  return (
+    <li className={`relative flex gap-3 pb-3 ${r.side ? 'ml-8' : ''}`}>
+      {!last && <span className={`absolute top-2 bottom-0 w-[3px] rounded-full bg-line ${r.side ? '-left-5' : 'left-[30px]'}`} />}
+      {r.side && <span className="absolute top-8 -left-5 h-[3px] w-4 rounded-full bg-line" />}
+      <button onClick={() => go(`wiki/${r.page}`)} aria-label={r.name} className="relative z-[1] w-[63px] shrink-0">
+        <div className="overflow-hidden rounded-xl border-[3px] bg-bg" style={{ borderColor: here ? era.color : 'var(--line)' }}>
+          {photo ? <Photo k={`wiki/${r.page}`} ratio="3 / 4" credit={false} /> : <NoPhoto name={r.name} ratio="3 / 4" />}
+        </div>
+      </button>
+      <div className={`tile min-w-0 flex-1 px-3 py-2 ${here ? '' : 'opacity-80'}`} style={here ? { boxShadow: `inset 4px 0 0 ${era.color}` } : undefined}>
+        <button onClick={() => go(`wiki/${r.page}`)} className="flex w-full flex-wrap items-baseline gap-x-2 text-left">
+          <span className="text-[18px] font-black text-[var(--link)]">{r.name}</span>
+          <span className="text-[13px] font-extrabold text-mute">{r.years}</span>
+          {here && n >= 0 && <span className="rounded-md px-1.5 text-[11px] leading-5 font-black" style={{ background: era.color, color: inkOn(era.color) }}>本章</span>}
+        </button>
+        <ZhText ui id={`relay-${era.id}-${r.page}-how`} paras={[{ kind: 'p', sentences: r.how }]} glossary={era.glossary} source={source} className="mt-0.5 text-[15px]" />
+        <div className="mt-1.5 flex items-center gap-1.5">
+          <span className="shrink-0 text-[12px] font-black text-mute">一句话</span>
+          <ZhText ui inline id={`relay-${era.id}-${r.page}-phrase`} paras={[{ kind: 'p', sentences: r.phrase }]} glossary={era.glossary} source={source} className="rounded-md bg-sunken px-2 text-[15px] font-bold" />
+        </div>
+      </div>
+    </li>
+  )
+}
+
+/** 今天的中国怎么运作: the party as a pyramid, the state beside it, and the year's political calendar. */
+function HowChinaWorks({ era, source }: { era: Era; source: WordSource }) {
+  const sys = era.system!
+  const top = [...sys.party].reverse()
+  const z = (key: string, sentences: Era['hook'], className: string, inline = false) => (
+    <ZhText ui inline={inline} id={`system-${key}`} paras={[{ kind: 'p', sentences }]} glossary={era.glossary} source={source} className={className} />
+  )
+  return (
+    <div>
+      <div className="mb-2 text-[15px] font-black text-mute">党：从一亿党员到一个总书记</div>
+      <div>
+        <div className="flex flex-col items-center gap-1.5">
+          {top.map((x, i) => {
+            const w = 38 + (62 * i) / Math.max(1, top.length - 1)
+            return (
+              <div key={i} className="flex w-full flex-col items-center">
+                <div className="rounded-xl px-2 py-1.5 text-center" style={{ width: `${w}%`, background: era.color, color: inkOn(era.color), opacity: 0.55 + (0.45 * (top.length - i)) / top.length }}>
+                  {z(`party-${i}-name`, x.name, 'text-center text-[17px] font-black')}
+                  {z(`party-${i}-count`, x.count, 'text-center text-[13px] font-extrabold opacity-90')}
+                </div>
+                {z(`party-${i}-note`, x.note, 'mt-0.5 mb-1 px-2 text-center text-[14px] text-mute')}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+      <div className="mt-3">
+        <Sub title="国家：人大、政府、主席、军委">
+          <div className="grid grid-cols-2 gap-2">
+            {sys.state.map((x, i) => (
+              <div key={i} className="tile px-3 py-2">
+                {z(`state-${i}-name`, x.name, 'text-[16px] font-black')}
+                {z(`state-${i}-note`, x.note, 'mt-0.5 text-[14px]')}
+              </div>
+            ))}
+          </div>
+        </Sub>
+      </div>
+      <div className="mt-3">
+        <Sub title="一个人，三个职务">
+          <div className="rounded-2xl bg-paper p-4 text-[18px] text-paper-text">
+            <Blocks blocks={sys.posts} id={`era-${era.id}-posts`} glossary={era.glossary} source={source} />
+          </div>
+        </Sub>
+      </div>
+      <div className="mt-3">
+        <Sub title="政治的一年">
+          <div className="space-y-2">
+            {sys.calendar.map((x, i) => (
+              <div key={i} className="flex gap-2.5">
+                {z(`cal-${i}-when`, x.when, 'mt-0.5 h-fit w-[5.5em] shrink-0 rounded-md bg-sunken px-1.5 text-center text-[13px] font-black')}
+                {z(`cal-${i}-what`, x.what, 'min-w-0 flex-1 text-[15px]')}
+              </div>
+            ))}
+          </div>
+        </Sub>
+      </div>
+      {sys.checked && <p className="mt-3 text-[12px] font-bold text-mute">人名和数字核对于{sys.checked.replace(/^(\d{4})-0?(\d+)$/, '$1年$2月')}，会随着换届变化。</p>}
+    </div>
+  )
+}
+
 function FigureCard({ f, small }: { f: Figure; small?: boolean }) {
   return (
     <div className={`${small ? 'w-24' : 'w-28'} shrink-0 snap-start`}>
