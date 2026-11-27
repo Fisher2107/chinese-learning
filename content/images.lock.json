@@ -47,6 +47,17 @@
   "w": 640,
   "h": 390
  },
+ "city/baoshan": {
+  "spec": "File:Heshun Tengchong - panoramio.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Heshun Tengchong - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Heshun_Tengchong_-_panoramio.jpg",
+  "artist": "oldhouse.yin",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
  "city/bazhong": {
   "spec": "Q178945?",
   "qid": "Q178945",
@@ -131,6 +142,30 @@
   "w": 640,
   "h": 426
  },
+ "city/chuxiong": {
+  "spec": "Q999163?",
+  "qid": "Q999163",
+  "label": "楚雄彝族自治州",
+  "desc": "云南省的一个自治州",
+  "file": "大姚三潭瀑布 - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E5%A7%9A%E4%B8%89%E6%BD%AD%E7%80%91%E5%B8%83_-_panoramio.jpg",
+  "artist": "zhanyoun",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "city/dali": {
+  "spec": "崇圣寺三塔",
+  "qid": "Q1257126",
+  "label": "崇圣寺三塔",
+  "desc": "",
+  "file": "Three Pagodas from bottom view.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Three_Pagodas_from_bottom_view.JPG",
+  "artist": "Tdxiang at English Wikipedia",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 478
+ },
  "city/dalian": {
   "spec": "星海广场",
   "qid": "Q6136716",
@@ -190,6 +225,18 @@
   "w": 640,
   "h": 426
  },
+ "city/dehong": {
+  "spec": "Q999132?",
+  "qid": "Q999132",
+  "label": "德宏傣族景颇族自治州",
+  "desc": "雲南省自治州",
+  "file": "芒市天际线 - 2024-05-27 03.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E8%8A%92%E5%B8%82%E5%A4%A9%E9%99%85%E7%BA%BF_-_2024-05-27_03.jpg",
+  "artist": "瑞丽江的河水",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 360
+ },
  "city/deyang": {
   "spec": "Q425996?",
   "qid": "Q425996",
@@ -201,6 +248,17 @@
   "license": "CC0",
   "w": 640,
   "h": 480
+ },
+ "city/diqing": {
+  "spec": "File:1 songzanlin monastery yunnan 2018.jpg",
+  "label": "",
+  "desc": "",
+  "file": "1 songzanlin monastery yunnan 2018.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1_songzanlin_monastery_yunnan_2018.jpg",
+  "artist": "Chensiyuan",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 232
  },
  "city/dongguan": {
   "spec": "Q59218?",
@@ -377,6 +435,18 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 853
+ },
+ "city/honghe": {
+  "spec": "Q999102?",
+  "qid": "Q999102",
+  "label": "红河哈尼族彝族自治州",
+  "desc": "云南省的一个自治州",
+  "file": "1 yuanyang county rice terrace bada view 2012.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1_yuanyang_county_rice_terrace_bada_view_2012.jpg",
+  "artist": "chensiyuan",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 467
  },
  "city/huaian": {
   "spec": "Q57818?",
@@ -603,6 +673,30 @@
   "w": 640,
   "h": 360
  },
+ "city/lijiang": {
+  "spec": "丽江古城",
+  "qid": "Q618394",
+  "label": "丽江古城",
+  "desc": "位于中国云南省丽江市的古城",
+  "file": "1 lijiang old town 2012a.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1_lijiang_old_town_2012a.jpg",
+  "artist": "chensiyuan",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 427
+ },
+ "city/lincang": {
+  "spec": "Q496837?",
+  "qid": "Q496837",
+  "label": "临沧市",
+  "desc": "中國雲南省的地級市",
+  "file": "临沧天际线 - 航拍 - 2024-10-14 08.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E4%B8%B4%E6%B2%A7%E5%A4%A9%E9%99%85%E7%BA%BF_-_%E8%88%AA%E6%8B%8D_-_2024-10-14_08.jpg",
+  "artist": "瑞丽江的河水",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 360
+ },
  "city/lishui": {
   "spec": "File:云和梯田.jpg",
   "label": "",
@@ -758,6 +852,18 @@
   "w": 640,
   "h": 426
  },
+ "city/nujiang": {
+  "spec": "Q767684?",
+  "qid": "Q767684",
+  "label": "怒江傈僳族自治州",
+  "desc": "云南省的一个自治州",
+  "file": "A Mountain in the Biluo Snow Mountain.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:A_Mountain_in_the_Biluo_Snow_Mountain.jpg",
+  "artist": "Zhangmoon618",
+  "license": "CC BY-SA 3.0",
+  "w": 500,
+  "h": 333
+ },
  "city/panzhihua": {
   "spec": "Q425415?",
   "qid": "Q425415",
@@ -769,6 +875,18 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 480
+ },
+ "city/puer": {
+  "spec": "普洱茶",
+  "qid": "Q690098",
+  "label": "普洱茶",
+  "desc": "",
+  "file": "Soultea-Pu-erh-first-grade-kanne.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Soultea-Pu-erh-first-grade-kanne.jpg",
+  "artist": "soultea.de /André Helbig",
+  "license": "CC BY 3.0",
+  "w": 640,
+  "h": 426
  },
  "city/qingyuan": {
   "spec": "File:千年瑶寨南岗排20151004 - panoramio.jpg",
@@ -805,6 +923,18 @@
   "w": 640,
   "h": 400
  },
+ "city/qujing": {
+  "spec": "Q496405?",
+  "qid": "Q496405",
+  "label": "曲靖市",
+  "desc": "中国云南省第二大城市，地级市",
+  "file": "曲靖市天际线 - 航拍 - 2024-10-02 10.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E6%9B%B2%E9%9D%96%E5%B8%82%E5%A4%A9%E9%99%85%E7%BA%BF_-_%E8%88%AA%E6%8B%8D_-_2024-10-02_10.jpg",
+  "artist": "瑞丽江的河水",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 360
+ },
  "city/quzhou": {
   "spec": "江郎山",
   "qid": "Q6112670",
@@ -816,6 +946,18 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 426
+ },
+ "city/ruili": {
+  "spec": "瑞丽市",
+  "qid": "Q1355911",
+  "label": "瑞丽市",
+  "desc": "中华人民共和国云南省德宏傣族景颇族自治州的县级市",
+  "file": "瑞丽口岸03.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E7%91%9E%E4%B8%BD%E5%8F%A3%E5%B2%B803.jpg",
+  "artist": "瑞丽江的河水",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 481
  },
  "city/sanxingdui": {
   "spec": "Sanxingdui",
@@ -1030,6 +1172,18 @@
   "w": 640,
   "h": 426
  },
+ "city/wenshan": {
+  "spec": "Q999145?",
+  "qid": "Q999145",
+  "label": "文山壮族苗族自治州",
+  "desc": "云南省的一个自治州",
+  "file": "Puzhehei Lake in Qiubei County (3974315868).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Puzhehei_Lake_in_Qiubei_County_(3974315868).jpg",
+  "artist": "SuSanA Secretariat",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 480
+ },
  "city/wenzhou": {
   "spec": "雁荡山",
   "qid": "Q21283576",
@@ -1124,6 +1278,18 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 436
+ },
+ "city/xishuangbanna": {
+  "spec": "Q868046?",
+  "qid": "Q868046",
+  "label": "西双版纳傣族自治州",
+  "desc": "中国云南省下辖的自治州",
+  "file": "Jinghongcity.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Jinghongcity.jpg",
+  "artist": "Chlukoe",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
  },
  "city/xuzhou": {
   "spec": "Q57719?",
@@ -1256,6 +1422,17 @@
   "w": 640,
   "h": 396
  },
+ "city/yuxi": {
+  "spec": "File:Sunset at Fuxian Lake (20210318185138).jpg",
+  "label": "",
+  "desc": "",
+  "file": "Sunset at Fuxian Lake (20210318185138).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Sunset_at_Fuxian_Lake_(20210318185138).jpg",
+  "artist": "N509FZ",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
  "city/zhanjiang": {
   "spec": "Q59144?",
   "qid": "Q59144",
@@ -1278,6 +1455,18 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 480
+ },
+ "city/zhaotong": {
+  "spec": "Q197519?",
+  "qid": "Q197519",
+  "label": "昭通市",
+  "desc": "中国云南省的地级市",
+  "file": "威信大坝子.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%A8%81%E4%BF%A1%E5%A4%A7%E5%9D%9D%E5%AD%90.jpg",
+  "artist": "ICYWATER",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 332
  },
  "city/zhengzhou": {
   "spec": "二七纪念塔",
@@ -2614,6 +2803,28 @@
   "w": 640,
   "h": 853
  },
+ "wiki/chama-gudao": {
+  "spec": "File:A Hui Muslim mule caravan passing through a village in western Yunnan c.1905.jpg",
+  "label": "",
+  "desc": "",
+  "file": "A Hui Muslim mule caravan passing through a village in western Yunnan c.1905.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:A_Hui_Muslim_mule_caravan_passing_through_a_village_in_western_Yunnan_c.1905.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 361
+ },
+ "wiki/chama-gudao/1": {
+  "spec": "File:Shaxi Old Town (43618035255).jpg",
+  "label": "",
+  "desc": "",
+  "file": "Shaxi Old Town (43618035255).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Shaxi_Old_Town_(43618035255).jpg",
+  "artist": "Rod Waddington from Kergunyah, Australia",
+  "license": "CC BY-SA 2.0",
+  "w": 640,
+  "h": 958
+ },
  "wiki/changcheng": {
   "spec": "File:The Mutianyu section of the Great Wall of China.jpg",
   "label": "",
@@ -2718,6 +2929,18 @@
   "w": 640,
   "h": 960
  },
+ "wiki/chongsheng-santa": {
+  "spec": "崇圣寺三塔",
+  "qid": "Q1257126",
+  "label": "崇圣寺三塔",
+  "desc": "",
+  "file": "Three Pagodas from bottom view.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Three_Pagodas_from_bottom_view.JPG",
+  "artist": "Tdxiang at English Wikipedia",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 478
+ },
  "wiki/chuancai": {
   "spec": "回锅肉",
   "qid": "Q3238049",
@@ -2810,6 +3033,39 @@
   "license": "CC BY 4.0",
   "w": 640,
   "h": 426
+ },
+ "wiki/daliguo": {
+  "spec": "File:South Gate, Dali Old Town - panoramio.jpg",
+  "label": "",
+  "desc": "",
+  "file": "South Gate, Dali Old Town - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:South_Gate,_Dali_Old_Town_-_panoramio.jpg",
+  "artist": "Colin W",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 1138
+ },
+ "wiki/daliguo/1": {
+  "spec": "File:南诏德化碑-阳面 01.jpg",
+  "label": "",
+  "desc": "",
+  "file": "南诏德化碑-阳面 01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%8D%97%E8%AF%8F%E5%BE%B7%E5%8C%96%E7%A2%91-%E9%98%B3%E9%9D%A2_01.jpg",
+  "artist": "Kcx36",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 1137
+ },
+ "wiki/daliguo/2": {
+  "spec": "File:20260223 Dali Chongsheng Temple, viewing the Three Pagodas and their reflections from the Juying Pool 07.jpg",
+  "label": "",
+  "desc": "",
+  "file": "20260223 Dali Chongsheng Temple, viewing the Three Pagodas and their reflections from the Juying Pool 07.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:20260223_Dali_Chongsheng_Temple,_viewing_the_Three_Pagodas_and_their_reflections_from_the_Juying_Pool_07.jpg",
+  "artist": "Ngguls",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
  },
  "wiki/danxiashan": {
   "spec": "丹霞山",
@@ -2930,6 +3186,29 @@
   "w": 640,
   "h": 426
  },
+ "wiki/dianchi": {
+  "spec": "滇池",
+  "qid": "Q83640",
+  "label": "滇池",
+  "desc": "云南湖泊",
+  "file": "Satellite picture of Dian Lake - ISS043-E-162686.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Satellite_picture_of_Dian_Lake_-_ISS043-E-162686.jpg",
+  "artist": "Earth Science and Remote Sensing Unit, NASA Johnson Space Center",
+  "license": "Public domain",
+  "w": 500,
+  "h": 835
+ },
+ "wiki/dianchi/1": {
+  "spec": "File:Daguan Park, Kunming.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Daguan Park, Kunming.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Daguan_Park,_Kunming.jpg",
+  "artist": "钉钉",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
  "wiki/dongporou": {
   "spec": "东坡肉",
   "qid": "Q1146046",
@@ -3034,6 +3313,30 @@
   "license": "CC BY 2.0",
   "w": 640,
   "h": 426
+ },
+ "wiki/erhai": {
+  "spec": "洱海",
+  "qid": "Q83628",
+  "label": "洱海",
+  "desc": "中国雲南省的湖泊",
+  "file": "Satellite picture of Erhai Lake - ISS043-E-162687.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Satellite_picture_of_Erhai_Lake_-_ISS043-E-162687.jpg",
+  "artist": "Earth Science and Remote Sensing Unit , Lyndon B. Johnson Space Center",
+  "license": "Public domain",
+  "w": 640,
+  "h": 1060
+ },
+ "wiki/erhai/1": {
+  "spec": "喜洲",
+  "qid": "Q10923614",
+  "label": "喜洲",
+  "desc": "中国云南省大理州大理市下辖镇",
+  "file": "Xizhou 03.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Xizhou_03.JPG",
+  "artist": "Brücke-Osteuropa",
+  "license": "Public domain",
+  "w": 640,
+  "h": 360
  },
  "wiki/fanfu": {
   "spec": "秦城监狱",
@@ -3222,6 +3525,39 @@
   "w": 640,
   "h": 427
  },
+ "wiki/gudianguo": {
+  "spec": "File:牛虎铜案.jpg",
+  "label": "",
+  "desc": "",
+  "file": "牛虎铜案.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E7%89%9B%E8%99%8E%E9%93%9C%E6%A1%88.jpg",
+  "artist": "Cangminzho",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 959
+ },
+ "wiki/gudianguo/1": {
+  "spec": "File:Gold Seal for King of Dian Kingdom.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Gold Seal for King of Dian Kingdom.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gold_Seal_for_King_of_Dian_Kingdom.jpg",
+  "artist": "幽灵巴尼",
+  "license": "CC BY-SA 3.0",
+  "w": 330,
+  "h": 328
+ },
+ "wiki/gudianguo/2": {
+  "spec": "File:Western Han Dian Bronze Cowrie Container Lid.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Western Han Dian Bronze Cowrie Container Lid.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Western_Han_Dian_Bronze_Cowrie_Container_Lid.jpg",
+  "artist": "Gary Todd",
+  "license": "CC0",
+  "w": 640,
+  "h": 426
+ },
  "wiki/gugong": {
   "spec": "故宫",
   "qid": "Q80290",
@@ -3270,6 +3606,30 @@
   "w": 640,
   "h": 425
  },
+ "wiki/guoqiao-mixian": {
+  "spec": "过桥米线",
+  "qid": "Q5188689",
+  "label": "过桥米线",
+  "desc": "云南名吃",
+  "file": "Crossing the Bridge Noodle at Qian Xiang Yuan.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Crossing_the_Bridge_Noodle_at_Qian_Xiang_Yuan.jpg",
+  "artist": "Baycrest",
+  "license": "CC BY-SA 2.5",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/guoqiao-mixian/1": {
+  "spec": "蒙自南湖",
+  "qid": "Q121029259",
+  "label": "蒙自南湖",
+  "desc": "中國雲南蒙自的一個湖泊",
+  "file": "蒙自南湖.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E8%92%99%E8%87%AA%E5%8D%97%E6%B9%96.jpg",
+  "artist": "鹿苑",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
  "wiki/gushu": {
   "spec": "太阳神鸟",
   "qid": "Q5579845",
@@ -3281,6 +3641,28 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 427
+ },
+ "wiki/hani-titian": {
+  "spec": "File:Yuanyang Hani Rice Terraces at Sunrise.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Yuanyang Hani Rice Terraces at Sunrise.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Yuanyang_Hani_Rice_Terraces_at_Sunrise.jpg",
+  "artist": "Chiu Ho-yang",
+  "license": "CC BY-SA 2.0",
+  "w": 640,
+  "h": 360
+ },
+ "wiki/hani-titian/1": {
+  "spec": "File:哈尼箐口民俗村Hani Qingkou village 20191225150916 01.jpg",
+  "label": "",
+  "desc": "",
+  "file": "哈尼箐口民俗村Hani Qingkou village 20191225150916 01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%93%88%E5%B0%BC%E7%AE%90%E5%8F%A3%E6%B0%91%E4%BF%97%E6%9D%91Hani_Qingkou_village_20191225150916_01.jpg",
+  "artist": "Ping an Chang",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 316
  },
  "wiki/hanshansi": {
   "spec": "File:Hanshan Temple, Suzhou.JPG",
@@ -4241,6 +4623,29 @@
   "w": 640,
   "h": 426
  },
+ "wiki/lancangjiang": {
+  "spec": "File:Mekong (Lancang Jiang) Yunnan.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Mekong (Lancang Jiang) Yunnan.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Mekong_(Lancang_Jiang)_Yunnan.jpg",
+  "artist": "Michael Woodhead",
+  "license": "CC BY-SA 2.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/lancangjiang/1": {
+  "spec": "湄公河",
+  "qid": "Q41179",
+  "label": "湄公河",
+  "desc": "東南亞跨國河流",
+  "file": "Chiang Saen, Mekong River, Thailand.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Chiang_Saen,_Mekong_River,_Thailand.jpg",
+  "artist": "Vyacheslav Argenberg",
+  "license": "CC BY 4.0",
+  "w": 640,
+  "h": 426
+ },
  "wiki/laoshe": {
   "spec": "老舍",
   "qid": "Q315167",
@@ -4566,6 +4971,30 @@
   "w": 640,
   "h": 480
  },
+ "wiki/lijiang-gucheng": {
+  "spec": "丽江古城",
+  "qid": "Q618394",
+  "label": "丽江古城",
+  "desc": "位于中国云南省丽江市的古城",
+  "file": "1 lijiang old town 2012a.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1_lijiang_old_town_2012a.jpg",
+  "artist": "chensiyuan",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 427
+ },
+ "wiki/lijiang-gucheng/1": {
+  "spec": "木府",
+  "qid": "Q11092976",
+  "label": "木府",
+  "desc": "",
+  "file": "Mu Mansion entrance.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Mu_Mansion_entrance.JPG",
+  "artist": "BrokenSphere",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
  "wiki/linbiao": {
   "spec": "林彪",
   "qid": "Q315475",
@@ -4719,6 +5148,29 @@
   "license": "CC BY 4.0",
   "w": 640,
   "h": 480
+ },
+ "wiki/liuheta": {
+  "spec": "六和塔",
+  "qid": "Q1195294",
+  "label": "六和塔",
+  "desc": "中国浙江省杭州市砖木混筑的楼阁式塔",
+  "file": "20240128 Liuhe Pagoda 01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:20240128_Liuhe_Pagoda_01.jpg",
+  "artist": "Windmemories",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 960
+ },
+ "wiki/liuheta/1": {
+  "spec": "File:Liuhe Pagoda on the side of Qiantang River.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Liuhe Pagoda on the side of Qiantang River.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Liuhe_Pagoda_on_the_side_of_Qiantang_River.jpg",
+  "artist": "Sekino Tadashi",
+  "license": "Public domain",
+  "w": 640,
+  "h": 442
  },
  "wiki/liusi": {
   "spec": "File:Tiananmen Square 2.jpg",
@@ -5234,6 +5686,41 @@
   "w": 640,
   "h": 426
  },
+ "wiki/nieer": {
+  "spec": "聂耳",
+  "qid": "Q527143",
+  "label": "聂耳",
+  "desc": "中国音乐家、作曲家 (1912-1935)",
+  "file": "Nieer.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Nieer.jpg",
+  "artist": "The original uploader was Caihongxu at Chinese Wikipedia .",
+  "license": "Public domain",
+  "w": 330,
+  "h": 454
+ },
+ "wiki/nieer/1": {
+  "spec": "风云儿女",
+  "qid": "Q7562279",
+  "label": "风云儿女",
+  "desc": "1935年上映的中国电影，中华人民共和国国歌《义勇军进行曲》的出处",
+  "file": "Sonsanddaughtersintimeofstormmovieposter.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Sonsanddaughtersintimeofstormmovieposter.jpg",
+  "artist": "Diantong Film Company",
+  "license": "Public domain",
+  "w": 250,
+  "h": 331
+ },
+ "wiki/nieer/2": {
+  "spec": "File:Nie Er Tomb in Western Mountain of Kunming.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Nie Er Tomb in Western Mountain of Kunming.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Nie_Er_Tomb_in_Western_Mountain_of_Kunming.jpg",
+  "artist": "Zhangmoon618",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 409
+ },
  "wiki/pingpang-waijiao": {
   "spec": "尼克松访华",
   "qid": "Q862054",
@@ -5269,6 +5756,29 @@
   "license": "Public domain",
   "w": 500,
   "h": 382
+ },
+ "wiki/puercha": {
+  "spec": "普洱茶",
+  "qid": "Q690098",
+  "label": "普洱茶",
+  "desc": "",
+  "file": "Soultea-Pu-erh-first-grade-kanne.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Soultea-Pu-erh-first-grade-kanne.jpg",
+  "artist": "soultea.de /André Helbig",
+  "license": "CC BY 3.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/puercha/1": {
+  "spec": "File:Old Tea Forest of the Jingmai Mountain.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Old Tea Forest of the Jingmai Mountain.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Old_Tea_Forest_of_the_Jingmai_Mountain.jpg",
+  "artist": "919sth.",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
  },
  "wiki/qiandaohu": {
   "spec": "File:Qiandao Lake on 7 Feb 2017.jpg",
@@ -5454,6 +5964,41 @@
   "w": 640,
   "h": 960
  },
+ "wiki/qinhui": {
+  "spec": "秦桧",
+  "qid": "Q731694",
+  "label": "秦桧",
+  "desc": "南宋太师",
+  "file": "秦檜.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E7%A7%A6%E6%AA%9C.jpg",
+  "artist": "Anonymous Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 1048
+ },
+ "wiki/qinhui/1": {
+  "spec": "岳王庙",
+  "qid": "Q579874",
+  "label": "岳王庙",
+  "desc": "",
+  "file": "Yue Fei Temple, 2015-03-22 26.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Yue_Fei_Temple,_2015-03-22_26.jpg",
+  "artist": "Siyuwj",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/qinhui/2": {
+  "spec": "File:Qin Hui and Lady Wang statues (Hangzhou) 2016 January.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Qin Hui and Lady Wang statues (Hangzhou) 2016 January.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Qin_Hui_and_Lady_Wang_statues_(Hangzhou)_2016_January.jpg",
+  "artist": "Morio",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
  "wiki/qinshihuang": {
   "spec": "秦始皇",
   "qid": "Q7192",
@@ -5511,6 +6056,30 @@
   "license": "CC BY 3.0",
   "w": 640,
   "h": 480
+ },
+ "wiki/sanguo-yanyi": {
+  "spec": "三国演义",
+  "qid": "Q70806",
+  "label": "三国演义",
+  "desc": "中國四大名著之一",
+  "file": "新刊校正古本大字音释三国志通俗演义 明万历十九年书林周曰校刊本 002.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E6%96%B0%E5%88%8A%E6%A0%A1%E6%AD%A3%E5%8F%A4%E6%9C%AC%E5%A4%A7%E5%AD%97%E9%9F%B3%E9%87%8A%E4%B8%89%E5%9B%BD%E5%BF%97%E9%80%9A%E4%BF%97%E6%BC%94%E4%B9%89_%E6%98%8E%E4%B8%87%E5%8E%86%E5%8D%81%E4%B9%9D%E5%B9%B4%E4%B9%A6%E6%9E%97%E5%91%A8%E6%9B%B0%E6%A0%A1%E5%88%8A%E6%9C%AC_002.jpg",
+  "artist": "周曰校（Before 1640）",
+  "license": "Public domain",
+  "w": 640,
+  "h": 594
+ },
+ "wiki/sanguo-yanyi/1": {
+  "spec": "关羽",
+  "qid": "Q222797",
+  "label": "关羽",
+  "desc": "東漢末年將領",
+  "file": "Guanyu.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Guanyu.jpg",
+  "artist": "Utagawa Kuniyoshi",
+  "license": "Public domain",
+  "w": 640,
+  "h": 914
  },
  "wiki/sanxingdui-yizhi": {
   "spec": "三星堆遗址",
@@ -5602,6 +6171,28 @@
   "license": "CC BY-SA 2.0",
   "w": 640,
   "h": 956
+ },
+ "wiki/shilin": {
+  "spec": "File:Shilin Yunnan China Shilin-Stone-Forest-01.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Shilin Yunnan China Shilin-Stone-Forest-01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Shilin_Yunnan_China_Shilin-Stone-Forest-01.jpg",
+  "artist": "CEphoto, Uwe Aranas",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/shilin/1": {
+  "spec": "File:Ashima rock 1.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Ashima rock 1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ashima_rock_1.jpg",
+  "artist": "LHOON",
+  "license": "CC BY-SA 2.0",
+  "w": 640,
+  "h": 960
  },
  "wiki/shisanhang": {
   "spec": "File:European factories in Canton.jpg",
@@ -6346,6 +6937,41 @@
   "w": 640,
   "h": 360
  },
+ "wiki/xinan-lianda": {
+  "spec": "国立西南联合大学",
+  "qid": "Q519556",
+  "label": "国立西南联合大学",
+  "desc": "中國抗日戰爭中的大學",
+  "file": "The Gate, National Southwestern Associated University, 1938.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Gate,_National_Southwestern_Associated_University,_1938.jpg",
+  "artist": "National Southwestern Associated University",
+  "license": "Public domain",
+  "w": 640,
+  "h": 435
+ },
+ "wiki/xinan-lianda/1": {
+  "spec": "File:西南联大旧址 火炬柱、原教室.jpg",
+  "label": "",
+  "desc": "",
+  "file": "西南联大旧址 火炬柱、原教室.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E8%A5%BF%E5%8D%97%E8%81%94%E5%A4%A7%E6%97%A7%E5%9D%80_%E7%81%AB%E7%82%AC%E6%9F%B1%E3%80%81%E5%8E%9F%E6%95%99%E5%AE%A4.jpg",
+  "artist": "Cangminzho",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/xinan-lianda/2": {
+  "spec": "西南联大纪念碑",
+  "qid": "Q10926177",
+  "label": "西南联大纪念碑",
+  "desc": "",
+  "file": "国立西南联大纪念碑碑亭.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%9B%BD%E7%AB%8B%E8%A5%BF%E5%8D%97%E8%81%94%E5%A4%A7%E7%BA%AA%E5%BF%B5%E7%A2%91%E7%A2%91%E4%BA%AD.jpg",
+  "artist": "Cangminzho",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 959
+ },
  "wiki/xinjiang-jiaopei": {
   "spec": "File:East gate of the Ancient City of Kashi (20230923104429).jpg",
   "label": "",
@@ -6533,6 +7159,40 @@
   "w": 640,
   "h": 1432
  },
+ "wiki/xuxiake": {
+  "spec": "File:Xu Xiake.png",
+  "label": "",
+  "desc": "",
+  "file": "Xu Xiake.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Xu_Xiake.png",
+  "artist": "Photoed and reproduced by User:Mountain",
+  "license": "Public domain",
+  "w": 500,
+  "h": 860
+ },
+ "wiki/xuxiake/1": {
+  "spec": "File:Xu Xiake statue, Huangshan, 2021-10-18 01.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Xu Xiake statue, Huangshan, 2021-10-18 01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Xu_Xiake_statue,_Huangshan,_2021-10-18_01.jpg",
+  "artist": "Siyuwj",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 427
+ },
+ "wiki/xuxiake/2": {
+  "spec": "鸡足山",
+  "qid": "Q1574635",
+  "label": "鸡足山",
+  "desc": "位于云南省大理州宾川县的佛教名山，传说中摩诃迦叶涅槃之地",
+  "file": "JizuShan.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:JizuShan.jpg",
+  "artist": "NoGhost",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 576
+ },
  "wiki/yangliwei": {
   "spec": "杨利伟",
   "qid": "Q147581",
@@ -6580,6 +7240,41 @@
   "w": 640,
   "h": 426
  },
+ "wiki/yangshen": {
+  "spec": "杨慎",
+  "qid": "Q711808",
+  "label": "杨慎",
+  "desc": "明代文學家（1488-1559）",
+  "file": "楊慎.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E6%A5%8A%E6%85%8E.jpg",
+  "artist": "錢杜繪",
+  "license": "Public domain",
+  "w": 330,
+  "h": 451
+ },
+ "wiki/yangshen/1": {
+  "spec": "File:杨升庵祠及桂湖照片.jpg",
+  "label": "",
+  "desc": "",
+  "file": "杨升庵祠及桂湖照片.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E6%9D%A8%E5%8D%87%E5%BA%B5%E7%A5%A0%E5%8F%8A%E6%A1%82%E6%B9%96%E7%85%A7%E7%89%87.jpg",
+  "artist": "Nekitarc",
+  "license": "CC BY-SA 4.0",
+  "w": 500,
+  "h": 334
+ },
+ "wiki/yangshen/2": {
+  "spec": "嘉靖帝",
+  "qid": "Q10011",
+  "label": "嘉靖帝",
+  "desc": "大明第11位皇帝、即嘉靖帝 (1507-1567)",
+  "file": "Portrait officiel de l'empereur Jiajing.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Portrait_officiel_de_l%27empereur_Jiajing.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 862
+ },
  "wiki/yanshuiya": {
   "spec": "盐水鸭",
   "qid": "Q3704951",
@@ -6591,6 +7286,28 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 853
+ },
+ "wiki/yeshengjun": {
+  "spec": "File:Lanmaoa asiatica.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Lanmaoa asiatica.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Lanmaoa_asiatica.jpg",
+  "artist": "Ruanxian Dai, Zhantao Duan, Bin Han, Yating Peng, Lan Zhu, Yuan Shen, Qiang Meng",
+  "license": "CC BY 4.0",
+  "w": 500,
+  "h": 531
+ },
+ "wiki/yeshengjun/1": {
+  "spec": "File:2010-08-19 Termitomyces 50732 Mushroom Observer 99432.jpg",
+  "label": "",
+  "desc": "",
+  "file": "2010-08-19 Termitomyces 50732 Mushroom Observer 99432.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2010-08-19_Termitomyces_50732_Mushroom_Observer_99432.jpg",
+  "artist": "This image was created by user Ryane Snow (snowman) at Mushroom Observer , a sou",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
  },
  "wiki/yidaiyilu": {
   "spec": "File:China-Laos train, going over the Mekong river north of Luang Prabang, Laos.jpg",
@@ -6958,6 +7675,40 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 480
+ },
+ "wiki/zhenghe": {
+  "spec": "郑和",
+  "qid": "Q7333",
+  "label": "郑和",
+  "desc": "明朝航海家、外交家",
+  "file": "Zheng He.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zheng_He.jpg",
+  "artist": "hassan saeed from Melaka, Malaysia",
+  "license": "CC BY-SA 2.0",
+  "w": 250,
+  "h": 375
+ },
+ "wiki/zhenghe/1": {
+  "spec": "File:Nanjing Treasure Boat - P1070978.JPG",
+  "label": "",
+  "desc": "",
+  "file": "Nanjing Treasure Boat - P1070978.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Nanjing_Treasure_Boat_-_P1070978.JPG",
+  "artist": "User:Vmenkov",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
+ },
+ "wiki/zhenghe/2": {
+  "spec": "File:Zheng He Park in Jinning.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Zheng He Park in Jinning.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zheng_He_Park_in_Jinning.jpg",
+  "artist": "Zhangmoon618",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 426
  },
  "wiki/zhonggong-yida": {
   "spec": "File:The First National Congress of CPC.jpg",
