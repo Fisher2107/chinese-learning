@@ -2,6 +2,19 @@
 
 Researched or half-researched topics waiting to be written. Newest first. Reels are links only (inspiration, never copied).
 
+## 2026-11-27
+
+### 衢州 · 家乡必做（已完结）
+- 已写：第6集（最后一集）反转“金矿里的奉祀官”（孔祥楷：1938年生于衢州；小时候当上南宗奉祀官；1949年后学建筑，在河北金厂峪金矿28年做到矿长；1989年才开始读《论语》；1993年回衢州，1999年管家庙；2021年9月28日孔子诞辰当晚去世）。读后加了“衢州三怪”彩蛋。
+- 没用的线索：他当奉祀官是1944年（讣告）还是1947年（凤凰网2007），两个来源不一样，正文只写“四十年代”；月俸430块大洋只有凤凰网一个来源，正文没写数字；2021年是新桥街家庙落成500周年，只有中新网一篇转载，没用。
+- 系列结束。下一个城市：成都（川剧变脸、方言，🎬 https://www.instagram.com/joemi.in.chengdu/reel/DgBk-mVts9v/ ）；备选：无锡（太湖、鼋头渚，🎬 https://www.instagram.com/p/DfH6p1FOma2/ ）。
+
+### 新的 刷一刷 选题
+- 太湖三白与禁捕 → 已写（content/feed/taihu-sanbai.md）。🎬 https://www.instagram.com/p/DfH6p1FOma2/ （无锡城市宣传）。没用的线索：禁捕涉及多少渔民、渔船（没找到全湖的数字）；三白当过贡品、康熙乾隆的故事（来源里没有）。
+- “全国最喜欢吃面的省份”（🎬 https://www.instagram.com/p/DgO3kAySEx7/ ）：要找外卖平台或调查数据，看看到底是山西、陕西还是河南。
+- 婚礼找品牌赞助（🎬 https://www.instagram.com/ur.chinese.unc/reel/DgNPhckx_JE/ ，奶茶品牌当伴手礼）：社会话题，待查是否有新闻报道。
+- “腊帮结派”（#家乡必做 搜索里看到的腊味视频，链接没记下）：可做湖南、广东、四川腊肉之争的卡片。
+
 ## 2026-11-26
 
 ### 衢州 · 家乡必做（进行中）
@@ -79,3 +92,4 @@ Researched or half-researched topics waiting to be written. Newest first. Reels 
 - 2026-11-24 张家界天门洞 → content/feed/tianmendong.md
 - 2026-11-25 南京零元面馆 → content/feed/lingyuan-mianguan.md
 - 2026-11-26 西贝预制菜 → content/feed/xibei-yuzhicai.md
+- 2026-11-27 太湖三白与禁捕 → content/feed/taihu-sanbai.md

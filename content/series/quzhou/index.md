@@ -23,6 +23,11 @@ sources:
   - { title: "杭州网：孔氏南宗纪念先师诞辰2573年大典（2022-09-29）", url: "https://hznews.hangzhou.com.cn/wenti/content/2022-09/29/content_8364799_0.htm" }
   - { title: "网易：南孔爷爷城市IP", url: "https://m.163.com/dy/article/L3C7M8US05568W0A.html" }
   - { title: "人民日报·中国城市报：衢州有礼（2024-10-21）", url: "https://paper.people.com.cn/zgcsb/html/2024-10/21/content_26086532.htm" }
+  - { title: "儒家网（转衢州市政协）：孔祥楷同志逝世讣告（2021）", url: "https://www.rujiazg.com/article/21597" }
+  - { title: "凤凰网（转南方网）：孔子世家·孔祥楷（2007）", url: "https://news.ifeng.com/opinion/200708/0829_23_206098_6.shtml" }
+  - { title: "儒家网（转中新网）：衢州纪念孔子诞辰2572年（2021-09-28）", url: "https://www.rujiazg.com/article/21537" }
+  - { title: "儒家网：孔氏南宗家庙祭典与孔祥楷公仙逝五周年墓祭（2026）", url: "https://www.rujiazg.com/article/32487" }
+  - { title: "5000yan 英译：聊斋志异·衢州三怪（The Three Monsters of Quzhou）", url: "https://en.5000yan.com/strange-tales-from-a-chinese-studio/three-monsters-quzhou.html" }
 inspiration:
   - https://www.instagram.com/p/Dfg45ufhTn0/
 ---
