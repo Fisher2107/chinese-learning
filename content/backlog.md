@@ -2,6 +2,22 @@
 
 Researched or half-researched topics waiting to be written. Newest first. Reels are links only (inspiration, never copied).
 
+## 2026-11-28
+
+### 成都 · 家乡必做（新系列，进行中：content/series/chengdu）
+- 已写：第1集 钩子“掏耳朵？”（采耳：耳勺、镊子、鹅毛棒、音叉；茶馆里师傅走来走去；结尾引到人民公园里开了一百多年的茶馆）。🎬 https://www.instagram.com/p/Dfv5PVhvO_w/ （#成都 采耳 搜索里看到的游客视频）、https://www.instagram.com/joemi.in.chengdu/reel/DgBk-mVts9v/
+- 第2集 揭晓：鹤鸣茶社。1923年大邑一位龚姓商人在少城公园（今人民公园）开的；1940年转给熊绰云，扩到五百多张桌子；老招牌1952年损坏，1988年重写；盖碗茶（盖、碗、托三件）。来源：新华网2023-08-14、澎湃（成都发布）2023-08-22（见 series/chengdu/index.md）。
+- 第3集 深挖：成都到底有多少茶馆？历史学家王笛的数字：1949年前约600多家，改革开放后约三四千家，2019年前后官方宣传片说“近万家”（澎湃2026-03-12，只有这一个来源，要再找一个）；茶馆是成都人的“公共客厅”。
+- 第4集 故事（候选）：1911年保路运动，少城公园（今人民公园）里的“辛亥秋保路死事纪念碑”，茶馆旁边就是改变中国的一段历史。要找两个来源。
+- 第5集 新闻：采耳的风险。2026年10月杭州一位29岁女子做“深度采耳”后，医生在耳道里取出鹅毛纤维（杭州网2026-10-28、光明网2026-10-21，同一件事，算一个来源）；36氪2025：宜宾一家店2024年因非法行医被罚22万元（单一来源）。医生建议：耳屎会自己出来，只擦外耳道口。
+- 第6集 反转（候选）：2025年12月鹤鸣开了第一家分店，开在地铁17号线踏水桥站附近的商场里（澎湃2026-03-12）。老茶馆搬进商场，还是老茶馆吗？
+- 没用的线索：采耳出师“三关”（剪烛芯、剥蛋壳不破膜、掏烟丝不破纸）只有澎湃2018一个来源，彩蛋里写了“听说”；采耳价格50–150元、约40分钟只有36氪一个来源，没写进正文；“采耳是非遗”没找到官方名录，别写。
+
+### 新的 刷一刷 选题
+- 小雪腊肉 → 已写（content/feed/larou-xiaoxue.md）。没用的线索：阳台上挂腊肉（来源里没有）；广式腊肠偏甜（来源里只写了“广味儿”）；成都香肠每斤约35元、腊肉约55元（中国日报2024，只有一个来源）；南充冬菜要腌三年（新华网2025，可做四川彩蛋）。
+- 街头身高挑战（🎬 https://www.instagram.com/pengpengxiaohui/reel/DgJ3nODglnF/ ）：中国男性平均身高，可找国家卫健委《中国居民营养与慢性病状况报告》数据做卡片。
+- “假男友”拍照服务（🎬 https://www.instagram.com/ur.chinese.unc/reel/DfbQYyYTDFL/ ）：社会新话题，待查是否有新闻报道。
+
 ## 2026-11-27
 
 ### 衢州 · 家乡必做（已完结）
@@ -93,3 +109,4 @@ Researched or half-researched topics waiting to be written. Newest first. Reels 
 - 2026-11-25 南京零元面馆 → content/feed/lingyuan-mianguan.md
 - 2026-11-26 西贝预制菜 → content/feed/xibei-yuzhicai.md
 - 2026-11-27 太湖三白与禁捕 → content/feed/taihu-sanbai.md
+- 2026-11-28 小雪腊肉 → content/feed/larou-xiaoxue.md
