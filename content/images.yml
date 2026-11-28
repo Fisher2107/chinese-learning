@@ -57,7 +57,7 @@ city/haerbin: 圣索菲亚教堂 (哈尔滨)
 city/nanjing: 中山陵
 city/hangzhou: 灵隐寺
 city/hefei: 包公园
-city/fuzhou: 三坊七巷
+city/fuzhou: 罗星塔
 city/nanchang: 滕王阁
 city/jinan: 趵突泉
 city/zhengzhou: 二七纪念塔
@@ -104,8 +104,6 @@ city/huzhou: 南浔镇
 city/quzhou: 江郎山
 city/lishui: 'File:云和梯田.jpg'
 city/huangshan: 迎客松
-city/xiamen: 鼓浪屿
-city/quanzhou: 开元寺 (泉州)
 city/jiujiang: 鄱阳湖
 city/qingdao: 栈桥
 city/taian: 岱庙
@@ -186,7 +184,6 @@ city/dujiangyan: Dujiangyan
 city/jiuzhaigou: 九寨沟
 city/manzhouli: 满洲里市
 city/huoerguosi: 霍尔果斯市
-city/wuyishan: 武夷山
 city/lushan: 庐山
 city/hongcun: 宏村
 city/sanxingdui: Sanxingdui
@@ -273,3 +270,13 @@ city/heyuan: 'File:Zhao Tuo(Heyuan).JPG'
 city/zhaoqing: 'File:Wulong Pavilion & Qixing Bridge, Seven Star Crags 20260217.jpg'
 city/qingyuan: 'File:千年瑶寨南岗排20151004 - panoramio.jpg'
 city/maoming: 冼夫人
+
+# ---- 福建 (2026-11-28) ----
+city/quanzhou: 'File:Laozi 002.jpg'
+city/xiamen: 厦门大学
+city/zhangzhou: 二宜楼
+city/putian: 木兰陂
+city/ningde: 太姥山
+city/longyan: 承启楼
+city/sanming: 'File:大金湖之十里平湖.png'
+city/wuyishan: 'File:天游峰全貌 - Tianyou Peak - 2015.07 - panoramio.jpg'

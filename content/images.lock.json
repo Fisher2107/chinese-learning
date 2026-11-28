@@ -309,16 +309,16 @@
   "h": 426
  },
  "city/fuzhou": {
-  "spec": "三坊七巷",
-  "qid": "Q6859970",
-  "label": "三坊七巷",
-  "desc": "福州历史文化街区三坊七巷",
-  "file": "东百中心A馆10楼瞭望台西三坊七巷.jpg",
-  "page": "https://commons.wikimedia.org/wiki/File:%E4%B8%9C%E7%99%BE%E4%B8%AD%E5%BF%83A%E9%A6%8610%E6%A5%BC%E7%9E%AD%E6%9C%9B%E5%8F%B0%E8%A5%BF%E4%B8%89%E5%9D%8A%E4%B8%83%E5%B7%B7.jpg",
-  "artist": "董辰兴",
-  "license": "CC BY-SA 4.0",
-  "w": 640,
-  "h": 478
+  "spec": "罗星塔",
+  "qid": "Q14528000",
+  "label": "罗星塔",
+  "desc": "",
+  "file": "Fuzhou Mawei Luoxing Pagoda 2007-05-05.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Fuzhou_Mawei_Luoxing_Pagoda_2007-05-05.jpg",
+  "artist": "Swing",
+  "license": "CC BY-SA 3.0",
+  "w": 330,
+  "h": 495
  },
  "city/ganzi": {
   "spec": "贡嘎山",
@@ -708,6 +708,18 @@
   "w": 640,
   "h": 368
  },
+ "city/longyan": {
+  "spec": "承启楼",
+  "qid": "Q11076331",
+  "label": "承启楼",
+  "desc": "",
+  "file": "Chengqi Tulou 20140829.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Chengqi_Tulou_20140829.JPG",
+  "artist": "颐园新居",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 400
+ },
  "city/luzhou": {
   "spec": "Q425492?",
   "qid": "Q425492",
@@ -816,6 +828,18 @@
   "w": 640,
   "h": 853
  },
+ "city/nanping": {
+  "spec": "Q68534?",
+  "qid": "Q68534",
+  "label": "南平市",
+  "desc": "中国福建省的地级市",
+  "file": "202101 Buildings in Shunchang Chengguan.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:202101_Buildings_in_Shunchang_Chengguan.jpg",
+  "artist": "赤阪風川",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
  "city/nantong": {
   "spec": "Q57947?",
   "qid": "Q57947",
@@ -849,6 +873,18 @@
   "page": "https://commons.wikimedia.org/wiki/File:Ningbo_Tianyige_2013.07.28_09-23-22.jpg",
   "artist": "Zhangzhugang",
   "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 426
+ },
+ "city/ningde": {
+  "spec": "太姥山",
+  "qid": "Q3322129",
+  "label": "太姥山",
+  "desc": "福建著名山岳、閩越古神太姥娘娘道場",
+  "file": "Mount Taimu 20230827.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Mount_Taimu_20230827.jpg",
+  "artist": "颐园居",
+  "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 426
  },
@@ -888,6 +924,18 @@
   "w": 640,
   "h": 426
  },
+ "city/putian": {
+  "spec": "木兰陂",
+  "qid": "Q11092859",
+  "label": "木兰陂",
+  "desc": "",
+  "file": "Putian Mulan Bei 20150314.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Putian_Mulan_Bei_20150314.jpg",
+  "artist": "Fanglongzong",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 480
+ },
  "city/qingyuan": {
   "spec": "File:千年瑶寨南岗排20151004 - panoramio.jpg",
   "label": "",
@@ -922,6 +970,17 @@
   "license": "CC BY 4.0",
   "w": 640,
   "h": 400
+ },
+ "city/quanzhou": {
+  "spec": "File:Laozi 002.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Laozi 002.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Laozi_002.jpg",
+  "artist": "Thanato",
+  "license": "CC BY-SA 3.0",
+  "w": 500,
+  "h": 375
  },
  "city/qujing": {
   "spec": "Q496405?",
@@ -958,6 +1017,17 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 481
+ },
+ "city/sanming": {
+  "spec": "File:大金湖之十里平湖.png",
+  "label": "",
+  "desc": "",
+  "file": "大金湖之十里平湖.png",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E9%87%91%E6%B9%96%E4%B9%8B%E5%8D%81%E9%87%8C%E5%B9%B3%E6%B9%96.png",
+  "artist": "Liedward390",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 1138
  },
  "city/sanxingdui": {
   "spec": "Sanxingdui",
@@ -1232,6 +1302,17 @@
   "w": 640,
   "h": 846
  },
+ "city/wuyishan": {
+  "spec": "File:天游峰全貌 - Tianyou Peak - 2015.07 - panoramio.jpg",
+  "label": "",
+  "desc": "",
+  "file": "天游峰全貌 - Tianyou Peak - 2015.07 - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%A4%A9%E6%B8%B8%E5%B3%B0%E5%85%A8%E8%B2%8C_-_Tianyou_Peak_-_2015.07_-_panoramio.jpg",
+  "artist": "rheins",
+  "license": "CC BY 3.0",
+  "w": 640,
+  "h": 505
+ },
  "city/wuzhen": {
   "spec": "乌镇",
   "qid": "Q1371343",
@@ -1243,6 +1324,18 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 480
+ },
+ "city/xiamen": {
+  "spec": "厦门大学",
+  "qid": "Q1153539",
+  "label": "厦门大学",
+  "desc": "创建于中国福建厦门的大学",
+  "file": "Panoramatic view of xiamen university at sunset.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Panoramatic_view_of_xiamen_university_at_sunset.jpg",
+  "artist": "Ratvirgin",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 341
  },
  "city/xian": {
   "spec": "大雁塔",
@@ -1432,6 +1525,18 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 426
+ },
+ "city/zhangzhou": {
+  "spec": "二宜楼",
+  "qid": "Q133311158",
+  "label": "二宜楼",
+  "desc": "",
+  "file": "二宜楼 - Eryi Lou - 2013.11 - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E4%BA%8C%E5%AE%9C%E6%A5%BC_-_Eryi_Lou_-_2013.11_-_panoramio.jpg",
+  "artist": "rheins",
+  "license": "CC BY 3.0",
+  "w": 640,
+  "h": 480
  },
  "city/zhanjiang": {
   "spec": "Q59144?",
@@ -2929,6 +3034,18 @@
   "w": 640,
   "h": 960
  },
+ "wiki/chenjiageng": {
+  "spec": "陈嘉庚",
+  "qid": "Q709049",
+  "label": "陈嘉庚",
+  "desc": "企业家、慈善家（1874—1961）",
+  "file": "Chenjiageng.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Chenjiageng.JPG",
+  "artist": "Yaoleilei",
+  "license": "CC BY-SA 3.0",
+  "w": 500,
+  "h": 667
+ },
  "wiki/chongsheng-santa": {
   "spec": "崇圣寺三塔",
   "qid": "Q1257126",
@@ -2952,6 +3069,40 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 426
+ },
+ "wiki/citonggang": {
+  "spec": "File:Quanzhou Qingjing Si 20120229-03.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Quanzhou Qingjing Si 20120229-03.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Quanzhou_Qingjing_Si_20120229-03.jpg",
+  "artist": "Zhangzhugang",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/citonggang/1": {
+  "spec": "File:Ancient Boat in Quanzhou.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Ancient Boat in Quanzhou.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ancient_Boat_in_Quanzhou.jpg",
+  "artist": "jonjanego",
+  "license": "CC BY 2.0",
+  "w": 640,
+  "h": 960
+ },
+ "wiki/citonggang/2": {
+  "spec": "安平桥",
+  "qid": "Q568461",
+  "label": "安平桥",
+  "desc": "",
+  "file": "Anping Bridge - looking toward the east end - DSCF9010.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Anping_Bridge_-_looking_toward_the_east_end_-_DSCF9010.JPG",
+  "artist": "User:Vmenkov",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 480
  },
  "wiki/cixi": {
   "spec": "慈禧太后",
@@ -2999,6 +3150,17 @@
   "license": "Public domain",
   "w": 500,
   "h": 342
+ },
+ "wiki/dahongpao": {
+  "spec": "File:大红袍景区的几棵大红袍母树 - panoramio.jpg",
+  "label": "",
+  "desc": "",
+  "file": "大红袍景区的几棵大红袍母树 - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E7%BA%A2%E8%A2%8D%E6%99%AF%E5%8C%BA%E7%9A%84%E5%87%A0%E6%A3%B5%E5%A4%A7%E7%BA%A2%E8%A2%8D%E6%AF%8D%E6%A0%91_-_panoramio.jpg",
+  "artist": "江上清风1961",
+  "license": "CC BY 3.0",
+  "w": 640,
+  "h": 480
  },
  "wiki/dajihuang": {
   "spec": "File:Grain Coupons across China, Hangzhou National Archives 70.jpg",
@@ -3455,6 +3617,18 @@
   "w": 500,
   "h": 467
  },
+ "wiki/fotiaoqiang": {
+  "spec": "佛跳墙",
+  "qid": "Q1133123",
+  "label": "佛跳墙",
+  "desc": "福建菜式",
+  "file": "Buddha soup boul.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Buddha_soup_boul.jpg",
+  "artist": "Photo taken by SunSuke (さんすけ)",
+  "license": "CC BY-SA 2.5",
+  "w": 500,
+  "h": 382
+ },
  "wiki/fuchai": {
   "spec": "吴王夫差矛",
   "qid": "Q3818256",
@@ -3477,6 +3651,17 @@
   "license": "Public domain",
   "w": 640,
   "h": 342
+ },
+ "wiki/fujian-tulou": {
+  "spec": "File:Tianluokeng Tulou cluster 20140829.JPG",
+  "label": "",
+  "desc": "",
+  "file": "Tianluokeng Tulou cluster 20140829.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Tianluokeng_Tulou_cluster_20140829.JPG",
+  "artist": "颐园新居",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 400
  },
  "wiki/goujian": {
   "spec": "越王勾践剑",
@@ -3569,6 +3754,18 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 426
+ },
+ "wiki/gulangyu": {
+  "spec": "鼓浪屿",
+  "qid": "Q1025339",
+  "label": "鼓浪屿",
+  "desc": "位於福建廈門的世界遺產",
+  "file": "鼓浪屿 - panoramio.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E9%BC%93%E6%B5%AA%E5%B1%BF_-_panoramio.jpg",
+  "artist": "gdczjkk",
+  "license": "CC BY 3.0",
+  "w": 640,
+  "h": 478
  },
  "wiki/guogong-neizhan": {
   "spec": "南京总统府",
@@ -5230,6 +5427,18 @@
   "w": 640,
   "h": 426
  },
+ "wiki/luoyangqiao": {
+  "spec": "洛阳桥",
+  "qid": "Q1877576",
+  "label": "洛阳桥",
+  "desc": "",
+  "file": "Luoyang Bridge, Quanzhou (20201001150149).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Luoyang_Bridge,_Quanzhou_(20201001150149).jpg",
+  "artist": "N509FZ",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
  "wiki/luxun": {
   "spec": "鲁迅",
   "qid": "Q23114",
@@ -5473,6 +5682,85 @@
   "w": 640,
   "h": 960
  },
+ "wiki/mawei-chuanzheng": {
+  "spec": "File:BattleFoochow.jpg",
+  "label": "",
+  "desc": "",
+  "file": "BattleFoochow.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:BattleFoochow.jpg",
+  "artist": "Joseph Nash",
+  "license": "Public domain",
+  "w": 640,
+  "h": 444
+ },
+ "wiki/mawei-chuanzheng/1": {
+  "spec": "File:Foochow Arsenal.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Foochow Arsenal.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Foochow_Arsenal.jpg",
+  "artist": "Unknown author Unknown author",
+  "license": "Public domain",
+  "w": 640,
+  "h": 182
+ },
+ "wiki/mawei-chuanzheng/2": {
+  "spec": "File:Chinese and French fleet in River Min on the eve of Battle of Fuzhou.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Chinese and French fleet in River Min on the eve of Battle of Fuzhou.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Chinese_and_French_fleet_in_River_Min_on_the_eve_of_Battle_of_Fuzhou.jpg",
+  "artist": "Mr. Maurice",
+  "license": "Public domain",
+  "w": 640,
+  "h": 490
+ },
+ "wiki/mazu": {
+  "spec": "湄洲妈祖祖庙",
+  "qid": "Q2057397",
+  "label": "湄洲妈祖祖庙",
+  "desc": "中國福建莆田湄洲島媽祖廟",
+  "file": "Mazu Temple.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Mazu_Temple.jpg",
+  "artist": "Jet.Xu",
+  "license": "CC BY-SA 3.0",
+  "w": 250,
+  "h": 366
+ },
+ "wiki/min-guo": {
+  "spec": "王审知",
+  "qid": "Q708354",
+  "label": "王审知",
+  "desc": "閩太祖皇帝、福建民間信仰神明",
+  "file": "Uong Sing-di.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Uong_Sing-di.JPG",
+  "artist": "LuHungnguong",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 800
+ },
+ "wiki/min-guo/1": {
+  "spec": "File:开闽三王，左一为王审知。照片摄于中国福建省泉州市王氏祖宗祠。.jpg",
+  "label": "",
+  "desc": "",
+  "file": "开闽三王，左一为王审知。照片摄于中国福建省泉州市王氏祖宗祠。.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%BC%80%E9%97%BD%E4%B8%89%E7%8E%8B%EF%BC%8C%E5%B7%A6%E4%B8%80%E4%B8%BA%E7%8E%8B%E5%AE%A1%E7%9F%A5%E3%80%82%E7%85%A7%E7%89%87%E6%91%84%E4%BA%8E%E4%B8%AD%E5%9B%BD%E7%A6%8F%E5%BB%BA%E7%9C%81%E6%B3%89%E5%B7%9E%E5%B8%82%E7%8E%8B%E6%B0%8F%E7%A5%96%E5%AE%97%E7%A5%A0%E3%80%82.jpg",
+  "artist": "Ongseokkim01",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/min-guo/2": {
+  "spec": "File:闽王祠门.jpg",
+  "label": "",
+  "desc": "",
+  "file": "闽王祠门.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E9%97%BD%E7%8E%8B%E7%A5%A0%E9%97%A8.jpg",
+  "artist": "不思議な彼女",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 853
+ },
  "wiki/mingan-huati": {
   "spec": "天安门",
   "qid": "Q83973",
@@ -5508,6 +5796,18 @@
   "license": "Public domain",
   "w": 500,
   "h": 375
+ },
+ "wiki/minjiang-fujian": {
+  "spec": "闽江",
+  "qid": "Q976458",
+  "label": "闽江",
+  "desc": "中华人民共和国河流",
+  "file": "Fuzhou zhongzhou island.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Fuzhou_zhongzhou_island.JPG",
+  "artist": "GnuDoyng",
+  "license": "Public domain",
+  "w": 640,
+  "h": 480
  },
  "wiki/nanjing-datusha": {
   "spec": "侵华日军南京大屠杀遇难同胞纪念馆",
@@ -5721,6 +6021,18 @@
   "w": 640,
   "h": 409
  },
+ "wiki/oujiang": {
+  "spec": "瓯江",
+  "qid": "Q713020",
+  "label": "瓯江",
+  "desc": "",
+  "file": "Oujiang River night.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Oujiang_River_night.jpg",
+  "artist": "Kratisto",
+  "license": "Public domain",
+  "w": 250,
+  "h": 167
+ },
  "wiki/pingpang-waijiao": {
   "spec": "尼克松访华",
   "qid": "Q862054",
@@ -5779,6 +6091,18 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 480
+ },
+ "wiki/putuoshan": {
+  "spec": "普陀山",
+  "qid": "Q716232",
+  "label": "普陀山",
+  "desc": "浙江舟山群島的島嶼",
+  "file": "远眺南海观音像.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E8%BF%9C%E7%9C%BA%E5%8D%97%E6%B5%B7%E8%A7%82%E9%9F%B3%E5%83%8F.jpg",
+  "artist": "Shizhao",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 283
  },
  "wiki/qiandaohu": {
   "spec": "File:Qiandao Lake on 7 Feb 2017.jpg",
@@ -6011,6 +6335,17 @@
   "w": 224,
   "h": 235
  },
+ "wiki/quanzhou-kaiyuansi": {
+  "spec": "File:Zhenguo Pagoda of Kaiyuan Temple (Quanzhou) 20170727.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Zhenguo Pagoda of Kaiyuan Temple (Quanzhou) 20170727.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zhenguo_Pagoda_of_Kaiyuan_Temple_(Quanzhou)_20170727.jpg",
+  "artist": "Tyg728",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 960
+ },
  "wiki/roujiamo": {
   "spec": "肉夹馍",
   "qid": "Q5690018",
@@ -6056,6 +6391,18 @@
   "license": "CC BY 3.0",
   "w": 640,
   "h": 480
+ },
+ "wiki/sanfang-qixiang": {
+  "spec": "三坊七巷",
+  "qid": "Q6859970",
+  "label": "三坊七巷",
+  "desc": "福州历史文化街区三坊七巷",
+  "file": "东百中心A馆10楼瞭望台西三坊七巷.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E4%B8%9C%E7%99%BE%E4%B8%AD%E5%BF%83A%E9%A6%8610%E6%A5%BC%E7%9E%AD%E6%9C%9B%E5%8F%B0%E8%A5%BF%E4%B8%89%E5%9D%8A%E4%B8%83%E5%B7%B7.jpg",
+  "artist": "董辰兴",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 478
  },
  "wiki/sanguo-yanyi": {
   "spec": "三国演义",
@@ -6415,6 +6762,18 @@
   "w": 640,
   "h": 426
  },
+ "wiki/tieguanyin": {
+  "spec": "铁观音",
+  "qid": "Q1328947",
+  "label": "铁观音",
+  "desc": "山茶科山茶属植物",
+  "file": "Tieguanyin2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tieguanyin2.jpg",
+  "artist": "Quelcrime",
+  "license": "Public domain",
+  "w": 640,
+  "h": 480
+ },
  "wiki/tudi-gaige": {
   "spec": "刘氏庄园",
   "qid": "Q10938219",
@@ -6658,6 +7017,18 @@
   "license": "CC BY 2.0",
   "w": 640,
   "h": 425
+ },
+ "wiki/wuyi-shan": {
+  "spec": "武夷山",
+  "qid": "Q207692",
+  "label": "武夷山",
+  "desc": "世界文化與自然雙遺產",
+  "file": "Wuyi Mountains Sea of clouds 4.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Wuyi_Mountains_Sea_of_clouds_4.jpg",
+  "artist": "老过",
+  "license": "CC BY 2.5 cn",
+  "w": 640,
+  "h": 426
  },
  "wiki/wuyueguo": {
   "spec": "保俶塔",
@@ -7193,6 +7564,40 @@
   "w": 640,
   "h": 576
  },
+ "wiki/yanfu": {
+  "spec": "严复",
+  "qid": "Q559957",
+  "label": "严复",
+  "desc": "中國思想家、翻譯家（1854－1921）",
+  "file": "Yan fu.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Yan_fu.jpg",
+  "artist": "Anonymous Unknown author",
+  "license": "Public domain",
+  "w": 330,
+  "h": 434
+ },
+ "wiki/yanfu/1": {
+  "spec": "File:Royal Naval College Greenwich view from the Thames.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Royal Naval College Greenwich view from the Thames.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Royal_Naval_College_Greenwich_view_from_the_Thames.jpg",
+  "artist": "Dmitry Tonkonog",
+  "license": "CC BY-SA 3.0",
+  "w": 640,
+  "h": 384
+ },
+ "wiki/yanfu/2": {
+  "spec": "File:Former Residence of Yan Fu in Langguan Alley, 2019-09-29 01.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Former Residence of Yan Fu in Langguan Alley, 2019-09-29 01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Former_Residence_of_Yan_Fu_in_Langguan_Alley,_2019-09-29_01.jpg",
+  "artist": "Siyuwj",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 427
+ },
  "wiki/yangliwei": {
   "spec": "杨利伟",
   "qid": "Q147581",
@@ -7286,6 +7691,40 @@
   "license": "CC BY-SA 3.0",
   "w": 640,
   "h": 853
+ },
+ "wiki/yapian-zhanzheng": {
+  "spec": "File:The Signing of the Treaty of Nanking.jpg",
+  "label": "",
+  "desc": "",
+  "file": "The Signing of the Treaty of Nanking.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Signing_of_the_Treaty_of_Nanking.jpg",
+  "artist": "Painted by Captain John Platt, Bengal Volunteers. Engraved by John Burnet.",
+  "license": "Public domain",
+  "w": 640,
+  "h": 240
+ },
+ "wiki/yapian-zhanzheng/1": {
+  "spec": "File:Destroying Chinese war junks, by E. Duncan (1843).jpg",
+  "label": "",
+  "desc": "",
+  "file": "Destroying Chinese war junks, by E. Duncan (1843).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Destroying_Chinese_war_junks,_by_E._Duncan_(1843).jpg",
+  "artist": "Edward Duncan",
+  "license": "Public domain",
+  "w": 640,
+  "h": 419
+ },
+ "wiki/yapian-zhanzheng/2": {
+  "spec": "魏源",
+  "qid": "Q597003",
+  "label": "魏源",
+  "desc": "晚清思想家",
+  "file": "Wei Yuan.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Wei_Yuan.png",
+  "artist": "叶衍兰",
+  "license": "Public domain",
+  "w": 500,
+  "h": 753
  },
  "wiki/yeshengjun": {
   "spec": "File:Lanmaoa asiatica.jpg",
@@ -7676,6 +8115,40 @@
   "w": 640,
   "h": 480
  },
+ "wiki/zhengchenggong": {
+  "spec": "郑成功",
+  "qid": "Q197615",
+  "label": "郑成功",
+  "desc": "明末清初著名军事家，抗清名将 (1624-1662)",
+  "file": "The Portrait of Koxinga.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Portrait_of_Koxinga.jpg",
+  "artist": "Anonymous Unknown author",
+  "license": "Public domain",
+  "w": 250,
+  "h": 419
+ },
+ "wiki/zhengchenggong/1": {
+  "spec": "File:Fort Zeelandia, Anping District, Tainan City (Taiwan).jpg",
+  "label": "",
+  "desc": "",
+  "file": "Fort Zeelandia, Anping District, Tainan City (Taiwan).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Fort_Zeelandia,_Anping_District,_Tainan_City_(Taiwan).jpg",
+  "artist": "Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 414
+ },
+ "wiki/zhengchenggong/2": {
+  "spec": "File:Statue of Koxinga on Gulangyu 1.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Statue of Koxinga on Gulangyu 1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Statue_of_Koxinga_on_Gulangyu_1.jpg",
+  "artist": "H2v5o68z",
+  "license": "CC0",
+  "w": 640,
+  "h": 853
+ },
  "wiki/zhenghe": {
   "spec": "郑和",
   "qid": "Q7333",
@@ -7858,6 +8331,40 @@
   "license": "CC BY-SA 4.0",
   "w": 640,
   "h": 426
+ },
+ "wiki/zhuxi": {
+  "spec": "朱熹",
+  "qid": "Q9397",
+  "label": "朱熹",
+  "desc": "中國南宋理學家 (1130–1200)",
+  "file": "唯一可靠的朱熹画像.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%E5%94%AF%E4%B8%80%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%9C%B1%E7%86%B9%E7%94%BB%E5%83%8F.jpg",
+  "artist": "向史公哲曰",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 720
+ },
+ "wiki/zhuxi/1": {
+  "spec": "File:Jiuqu Brook in Wuyi Mountains.jpg",
+  "label": "",
+  "desc": "",
+  "file": "Jiuqu Brook in Wuyi Mountains.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Jiuqu_Brook_in_Wuyi_Mountains.jpg",
+  "artist": "John Lian",
+  "license": "CC BY-SA 4.0",
+  "w": 640,
+  "h": 426
+ },
+ "wiki/zhuxi/2": {
+  "spec": "File:White Deer Grotto Academy.jpg",
+  "label": "",
+  "desc": "",
+  "file": "White Deer Grotto Academy.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:White_Deer_Grotto_Academy.jpg",
+  "artist": "武铁辆玻",
+  "license": "CC BY-SA 2.0",
+  "w": 640,
+  "h": 480
  },
  "wiki/zhuyuanzhang": {
   "spec": "明太祖",
